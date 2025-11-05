@@ -1,0 +1,112 @@
+Project: Personal Expense Tracker
+
+Scenario
+
+You're building a simple command-line expense tracker that helps users manage their daily expenses. 
+The system should allow users to record expenses, categorize them, view summaries, 
+and persist data to a CSV file so information isn't lost between sessions.
+
+Requirements
+
+Core Functionality
+
+Add Expense: Users should be able to add a new expense with:
+Description (string)
+Amount (float/int)
+Category (string: food, transport, entertainment, utilities, other)
+Date (string in YYYY-MM-DD format)
+Is recurring? (boolean)
+
+
+View All Expenses: Display all recorded expenses in a readable format
+
+View Expenses by Category: Filter and show expenses for a specific category
+
+Calculate Total Spending:
+
+Total across all categories
+Total per category
+Total for recurring vs. one-time expenses
+
+
+Find Expense: Search for expenses by description (partial match allowed)
+
+Remove Expense: Delete an expense by its index/ID
+
+Data Persistence:
+
+Save all expenses to a CSV file when exiting
+Load expenses from CSV file when starting the program
+
+Budget Warning: Set a monthly budget limit and warn users if they exceed it
+
+Technical Requirements
+
+Data Types to Use:
+
+int/float: Expense amounts, calculations, indexing
+str: Descriptions, categories, dates, user input
+bool: Recurring flag, validation checks, menu loops
+list: Store all expenses, store valid categories
+tuple: Store individual expense data (immutable record)
+set: Track unique categories used, check for duplicates
+dict: Store expense as key-value pairs (alternative to tuple), category-wise summaries
+
+Control Flow:
+
+if/elif/else: Menu selection, input validation, budget checking, category filtering
+for loops: Iterating through expenses, calculating totals, displaying data
+while loops: Main program loop, input validation loops
+
+CSV Operations:
+
+Read expenses from CSV on startup
+Write expenses to CSV on exit or after each addition
+Handle missing file on first run
+
+SOLID Principles to Apply:
+
+Single Responsibility Principle (SRP):
+
+Separate functions for different tasks (adding expense, calculating total, saving to CSV, etc.)
+Each function should do ONE thing well
+
+Open/Closed Principle (OCP):
+
+Design functions to easily add new categories without modifying existing code
+Use data structures that make extension easy
+
+Liskov Substitution Principle (LSP):
+
+If you create variations of expense types, they should work interchangeably
+
+Interface Segregation Principle (ISP):
+
+Create focused functions that don't force unnecessary parameters
+Keep function interfaces clean and minimal
+
+Dependency Inversion Principle (DIP):
+
+High-level operations (like "generate report") shouldn't depend on low-level details (like CSV format)
+Use abstraction where possible
+
+
+Bonus Challenges
+
+Add date range filtering (expenses between two dates)
+Export summary report to a separate text file
+Handle invalid CSV data gracefully
+Add expense editing functionality
+Calculate average daily/weekly spending
+
+Learning Goals
+This project will help you practice:
+
+Working with multiple data types in realistic scenarios
+Understanding when to use lists vs tuples vs sets vs dicts
+Writing clean, modular functions (SRP)
+Input validation and error handling
+File I/O with CSV module
+Building a complete program with a menu-driven interface
+
+Start by planning your data structures and function signatures before writing code!

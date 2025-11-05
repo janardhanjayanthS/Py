@@ -1,0 +1,13 @@
+StudentID,Name,Age,Gender,Course,Score,Grade
+101,Alice Johnson,22,F,Computer Science,88,B
+102,Bob Smith,21,M,Mathematics,92,A
+103,Clara Lee,23,F,Physics,76,C
+104,David Kim,20,M,Engineering,64,D
+105,Eva Brown,22,F,Biology,58,F
+106,Frank Jones,24,M,History,81,B
+107,Grace Li,21,F,Computer Science,95,A
+108,Henry Adams,23,M,Mathematics,73,C
+109,Ivy Wang,22,F,Engineering,67,D
+110,Jack Wilson,20,M,Biology,85,B
+10005,Holland,27,M,Science,99,S
+10006,Cane,33,M,Math,89,A
