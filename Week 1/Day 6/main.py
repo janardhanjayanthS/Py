@@ -1,7 +1,9 @@
 from csv import DictReader
 from typing import Any
+from pydantic import ValidationError
 
 from model import Product
+from log import logger, contruct_log_message
 
 
 def validate_product(product: dict[str, Any]) -> None:
@@ -18,17 +20,22 @@ def validate_product(product: dict[str, Any]) -> None:
             price=product["price"],
         )
         print(product)
-    except Exception as e:
+    except ValidationError as e:
         # log error
+        logger.error(contruct_log_message(
+            product_id=product['product_id'],
+            message=e.errors()[0]['msg'],
+            product=product
+        ))
         print("-" * 5)
         print(product)
-        print(e)
+        print(e.errors())
     else:
         # if quantity is less than 10 add it to low_stock_report.txt
         ...
 
 
-def read_file(filename: str):
+def read_file(filename: str) -> None:
     """
     Reads data from csv file
     Args:
