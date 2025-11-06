@@ -21,7 +21,7 @@ def validate_product(product: dict[str, Any]) -> None:
             price=product["price"],
         )
         if product["quantity"] and check_low_stock(product=product):
-            write_low_stock_report(product=product)
+            append_low_stock_report(product=product)
     except ValidationError as e:
         logger.error(
             contruct_log_message(
@@ -48,7 +48,7 @@ def check_low_stock(product: dict[str, Any]) -> bool | None:
         print(f"Encountered type error: {e}")
 
 
-def write_low_stock_report(product: dict[str, Any]) -> None:
+def append_low_stock_report(product: dict[str, Any]) -> None:
     """
     Writes low stock data to low_stock_report.txt
     if it exists otherwise creates then writes
@@ -57,14 +57,14 @@ def write_low_stock_report(product: dict[str, Any]) -> None:
     """
     filename = "low_stock_report.txt"
     try:
-        write_content(filename, dict_to_str(product=product))
+        append_content(filename, dict_to_str(product=product))
     except FileNotFoundError:
         print("low_stock_report.txt does not exist")
         create_file(filename=filename)
-        write_content(filename, dict_to_str(product=product))
+        append_content(filename, dict_to_str(product=product))
 
 
-def write_content(filename: str, content: str) -> None:
+def append_content(filename: str, content: str) -> None:
     """
     Writes content to file
     Args:
