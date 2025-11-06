@@ -58,6 +58,7 @@ class FoodProduct(BaseProduct):
         """
         Additional Attributes:
             days_to_expire: food's expiry period in days
+            is_vegetarian: food's classification
         """
         super().__init__(
             product_id=product_id,
@@ -82,4 +83,32 @@ class FoodProduct(BaseProduct):
         """
         returns string contining product details
         """
-        return f"ID: {self.product_id} \nName: {self.product_name} \nQantity: {self.quantity} \nprice: {self.price}"
+        return f"ID: {self.product_id} \nName: {self.product_name} \nQantity: {self.quantity} \nprice: {self.price} \nDays to expire: {self.days_to_expire} \nIs Veg: {self.is_vegetarian}"
+
+
+class ElectronicProduct(BaseProduct):
+    def __init__(
+        self,
+        product_id: str,
+        product_name: str,
+        quantity: PositiveInt,
+        price: PositiveFloat,
+        warrenty_period_in_years: PositiveInt,
+    ):
+        """
+        Additional Attributes:
+            warrenty_period_in_years: in years
+        """
+        super().__init__(
+            product_id=product_id,
+            product_name=product_name,
+            quantity=quantity,
+            price=price,
+        )
+        self.warrenty_period_in_years = warrenty_period_in_years
+
+    def details(self) -> str:
+        """
+        returns string contining product details
+        """
+        return f"ID: {self.product_id} \nName: {self.product_name} \nQantity: {self.quantity} \nprice: {self.price} \nWarrenty period: {self.warrenty_period_in_years} years"
