@@ -10,12 +10,22 @@ def validate_product(product: dict[str, Any]) -> None:
     Args:
         product: dictionary containing information about a praticular product
     """
-    Product(
-        product_id=product["product_id"],
-        product_name=product["product_name"],
-        quantity=product["quantity"],
-        price=product["price"],
-    )
+    try:
+        Product(
+            product_id=product["product_id"],
+            product_name=product["product_name"],
+            quantity=product["quantity"],
+            price=product["price"],
+        )
+        print(product)
+    except Exception as e:
+        # log error
+        print("-" * 5)
+        print(product)
+        print(e)
+    else:
+        # if quantity is less than 10 add it to low_stock_report.txt
+        ...
 
 
 def read_file(filename: str):
