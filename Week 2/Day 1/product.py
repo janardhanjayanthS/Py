@@ -14,3 +14,9 @@ class Product(BaseModel):
     product_name: str
     quantity: PositiveInt
     price: PositiveFloat
+
+    def details(self) -> str:
+        """
+        returns string contining product details
+        """ 
+        return f'ID: {self.product_id} \nName: {self.product_name} \nQantity: {self.quantity} \nprice: {self.price}'
