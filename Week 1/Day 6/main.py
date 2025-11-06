@@ -140,7 +140,7 @@ if __name__ == "__main__":
     print("Inventory Data Processor")
     
     while True:
-        choice = input("Enter a product name to search (or) 'e' to exit: ")
+        choice = input("Enter a product name to search (or) 'e' to exit: ").strip()
         if choice in {"e", "E"}:
             break
         else:
