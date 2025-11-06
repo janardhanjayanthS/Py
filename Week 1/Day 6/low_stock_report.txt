@@ -1,0 +1,51 @@
+product_id: P004, product_name: HDMI Adapter, quantity: 5, price: 12.00
+product_id: P008, product_name: Webcam 1080p, quantity: 9, price: 39.99
+product_id: P009, product_name: Ergonomic Chair, quantity: 4, price: 249.00
+product_id: P011, product_name: Portable Charger 10000mAh, quantity: 7, price: 29.99
+product_id: P014, product_name: Wireless Earbuds, quantity: 2, price: 89.99
+product_id: P016, product_name: Monitor 32", quantity: 6, price: 259.00
+product_id: P021, product_name: Power Strip, quantity: 5, price: 19.00
+product_id: P024, product_name: Noise Cancelling Headphones, quantity: 3, price: 299.00
+product_id: P027, product_name: Graphic Tablet, quantity: 8, price: 89.99
+product_id: P028, product_name: Wireless Charger, quantity: 2, price: 24.99
+product_id: P029, product_name: Smartphone Tripod, quantity: 9, price: 14.99
+product_id: P031, product_name: VR Headset, quantity: 4, price: 349.99
+product_id: P032, product_name: Microphone, quantity: 6, price: 59.99
+product_id: P033, product_name: Camera Lens 50mm, quantity: 5, price: 199.00
+product_id: P034, product_name: Camera Lens 85mm, quantity: 3, price: 449.00
+product_id: P042, product_name: WiFi Router, quantity: 6, price: 99.99
+product_id: P043, product_name: Network Switch 8-Port, quantity: 8, price: 44.99
+product_id: P044, product_name: Smart Plug, quantity: 9, price: 14.99
+product_id: P045, product_name: Smart Light Bulb, quantity: 5, price: 12.50
+product_id: P046, product_name: Mini Projector, quantity: 7, price: 189.00
+product_id: P047, product_name: Drawing Monitor, quantity: 2, price: 499.00
+product_id: P050, product_name: Webcam Ring Light, quantity: 9, price: 24.99
+product_id: P058, product_name: Tablet Stylus, quantity: 7, price: 29.99
+product_id: P059, product_name: Smartphone Stand, quantity: 3, price: 15.99
+product_id: P060, product_name: Wireless Router, quantity: 4, price: 129.99
+product_id: P061, product_name: Action Camera, quantity: 9, price: 249.99
+product_id: P062, product_name: Drone 4K, quantity: 3, price: 499.99
+product_id: P063, product_name: Smart Thermostat, quantity: 8, price: 199.99
+product_id: P064, product_name: Portable Monitor, quantity: 7, price: 179.99
+product_id: P066, product_name: Laptop 13", quantity: 9, price: 1099.00
+product_id: P067, product_name: Desktop PC, quantity: 4, price: 1299.00
+product_id: P069, product_name: Graphics Card, quantity: 3, price: 699.00
+product_id: P075, product_name: Power Supply 750W, quantity: 8, price: 109.99
+product_id: P076, product_name: Case Fan, quantity: 6, price: 12.99
+product_id: P077, product_name: PC Case ATX, quantity: 4, price: 99.00
+product_id: P080, product_name: USB-C Dock, quantity: 5, price: 89.99
+product_id: P081, product_name: Smartwatch Charger, quantity: 8, price: 19.99
+product_id: P082, product_name: Webcam Mount, quantity: 4, price: 14.99
+product_id: P083, product_name: Wireless Adapter, quantity: 6, price: 24.99
+product_id: P084, product_name: Projector Screen, quantity: 9, price: 79.99
+product_id: P085, product_name: Surge Protector, quantity: 5, price: 22.99
+product_id: P088, product_name: Wireless Keyboard, quantity: 7, price: 49.99
+product_id: P089, product_name: Laptop Docking Station, quantity: 3, price: 139.99
+product_id: P090, product_name: Smart Speaker, quantity: 6, price: 99.99
+product_id: P091, product_name: Monitor 24", quantity: 8, price: 139.00
+product_id: P093, product_name: Ergonomic Mouse, quantity: 3, price: 69.99
+product_id: P094, product_name: Wireless Presentation Remote, quantity: 4, price: 39.99
+product_id: P095, product_name: Projector Ceiling Mount, quantity: 2, price: 49.99
+product_id: P098, product_name: Laptop Charger, quantity: 8, price: 59.99
+product_id: P099, product_name: Webcam Privacy Shutter, quantity: 5, price: 6.99
+product_id: P100, product_name: Mouse Skates, quantity: 2, price: 4.99

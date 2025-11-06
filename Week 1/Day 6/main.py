@@ -71,8 +71,8 @@ def write_content(filename: str, content: str) -> None:
         filename: file to write
         content: content to write
     """
-    with open(filename, "w") as file:
-        file.write(content)
+    with open(filename, "a") as file:
+        file.write(content + '\n')
 
 
 def create_file(filename: str) -> None:
