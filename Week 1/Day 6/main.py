@@ -138,10 +138,10 @@ if __name__ == "__main__":
     products = get_products("inventory.csv")
     products_set = set(products.keys())
     print("Inventory Data Processor")
+    
     while True:
-        choice = input("Enter a product name or 'e' to exit: ")
-        print(choice)
-        if choice == {"e", "E"}:
+        choice = input("Enter a product name to search (or) 'e' to exit: ")
+        if choice in {"e", "E"}:
             break
         else:
             if choice in products_set:
