@@ -22,7 +22,14 @@ def validate_product(product: dict[str, Any]) -> None:
         )
         if product["quantity"] and check_low_stock(product=product):
             append_low_stock_report(product=product)
+        else:
+            print(
+                f"Requested product {product['product_name']} is ${product['price']} available quantity {product['quantity']}"
+            )
     except ValidationError as e:
+        print(
+            f"Requested product {product['product_name']} has a validation error: {e.errors()[0]['msg']}"
+        )
         logger.error(
             contruct_log_message(
                 product_id=product["product_id"],
@@ -55,6 +62,8 @@ def append_low_stock_report(product: dict[str, Any]) -> None:
     Args:
         product: dictionary representing a row from inventory.csv
     """
+    print(f"Requested product is available in less quantity {product['quantity']}")
+    print(f"Product details: {dict_to_str(product=product)}")
     filename = "low_stock_report.txt"
     try:
         append_content(filename, dict_to_str(product=product))
@@ -72,7 +81,8 @@ def append_content(filename: str, content: str) -> None:
         content: content to write
     """
     with open(filename, "a") as file:
-        file.write(content + '\n')
+        file.write(content + "\n")
+    print(f"success fully appended to {filename}")
 
 
 def create_file(filename: str) -> None:
@@ -85,20 +95,56 @@ def create_file(filename: str) -> None:
         print(f"File {filename} created successfully")
 
 
-def read_file(filename: str) -> None:
+# def read_file(filename: str) -> None:
+#     """
+#     Reads data from csv file
+#     Args:
+#         filename: csv file to read
+#     """
+#     try:
+#         with open(filename, "r") as csv_file:
+#             reader = DictReader(csv_file)
+#             for row in reader:
+#                 # validate_product(product=row)
+#                 ...
+#     except FileNotFoundError as e:
+#         print(f"File not found {e}")
+
+
+def get_products(filename: str) -> dict[str, dict[str, Any]]:
     """
-    Reads data from csv file
+    Returns all the product names from inventory as a set
     Args:
-        filename: csv file to read
+        filename: file name to look for products
+    Return:
+        A dictionary containing product names as key
+        and its information as value
     """
+    result = dict()
+
     try:
         with open(filename, "r") as csv_file:
             reader = DictReader(csv_file)
             for row in reader:
-                validate_product(product=row)
+                result[row["product_name"]] = row
     except FileNotFoundError as e:
         print(f"File not found {e}")
 
+    return result
+
 
 if __name__ == "__main__":
-    read_file("inventory.csv")
+    # read_file("inventory.csv")
+    products = get_products("inventory.csv")
+    products_set = set(products.keys())
+    print("Inventory Data Processor")
+    while True:
+        choice = input("Enter a product name or 'e' to exit: ")
+        print(choice)
+        if choice == {"e", "E"}:
+            break
+        else:
+            if choice in products_set:
+                validate_product(product=products[choice])
+            else:
+                print(f"Cannot find product {choice} from inventory")
