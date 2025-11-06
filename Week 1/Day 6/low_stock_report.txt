@@ -1,0 +1,2 @@
+product_id: P016, product_name: Monitor 32", quantity: 6, price: 259.00
+product_id: P004, product_name: HDMI Adapter, quantity: 5, price: 12.00
