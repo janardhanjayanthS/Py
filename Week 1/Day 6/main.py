@@ -9,7 +9,7 @@ from utility import dict_to_str
 
 def validate_product(product: dict[str, Any]) -> None:
     """
-    validates product
+    validates a product
     Args:
         product: dictionary containing information about a praticular product
     """
@@ -20,40 +20,58 @@ def validate_product(product: dict[str, Any]) -> None:
             quantity=product["quantity"],
             price=product["price"],
         )
-        print(product)
+        if product["quantity"] and check_low_stock(product=product):
+            write_low_stock_report(product=product)
     except ValidationError as e:
-        logger.error(contruct_log_message(
-            product_id=product['product_id'],
-            message=e.errors()[0]['msg'],
-            product=product
-        ))
-    else:
-        if product['quantity'] < 10:
-            write_low_stock_report(product)
+        logger.error(
+            contruct_log_message(
+                product_id=product["product_id"],
+                message=e.errors()[0]["msg"],
+                product=product,
+            )
+        )
+
+
+def check_low_stock(product: dict[str, Any]) -> bool | None:
+    """
+    Checks if the quantity of a product is than 10
+    Args:
+        product: dictionary containing product details
+    Returns:
+        True if quantity is less than 10, False otherwise
+    """
+    try:
+        if int(product["quantity"]) < 10:
+            return True
+        return False
+    except TypeError as e:
+        print(f"Encountered type error: {e}")
+
 
 def write_low_stock_report(product: dict[str, Any]) -> None:
     """
-    Writes low stock data to low_stock_report.txt 
+    Writes low stock data to low_stock_report.txt
     if it exists otherwise creates then writes
     Args:
         product: dictionary representing a row from inventory.csv
     """
-    filename = 'low_stock_report.txt'
+    filename = "low_stock_report.txt"
     try:
         write_content(filename, dict_to_str(product=product))
     except FileNotFoundError:
-        print('low_stock_report.txt does not exist')
+        print("low_stock_report.txt does not exist")
         create_file(filename=filename)
         write_content(filename, dict_to_str(product=product))
+
 
 def write_content(filename: str, content: str) -> None:
     """
     Writes content to file
     Args:
-        filename: file to write 
+        filename: file to write
         content: content to write
     """
-    with open(filename, 'w') as file:
+    with open(filename, "w") as file:
         file.write(content)
 
 
@@ -61,10 +79,11 @@ def create_file(filename: str) -> None:
     """
     creates a file with provided file name
     Args:
-        filename: name of file to create    
+        filename: name of file to create
     """
-    with open(filename, 'x') as _:
-        print(f'File {filename} created successfully')
+    with open(filename, "x") as _:
+        print(f"File {filename} created successfully")
+
 
 def read_file(filename: str) -> None:
     """
