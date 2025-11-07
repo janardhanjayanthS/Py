@@ -40,6 +40,15 @@ class BankAccount:
         """
         return self.__balance
 
+    def _set_balance(self, amount: float) -> None:
+        """
+        updates balance from child classes
+        Args:
+            amount: amount to set
+        """
+        self.__balance = amount
+
+
     def display(self) -> None:
         """
         Displays information about bank account
@@ -84,25 +93,33 @@ class SavingsAccount(BankAccount):
     def __init__(self, name: str) -> None:
         """
         Initializes Savings account
+        Args:
+            name: account holders name
         Attributes:
             _account_type: type of account, set to savings account
             __interest_rate: rate of interest per annum
         """
         super().__init__(name)
-        self._account_type: AccountType = AccountType.SA
+        self._account_type = AccountType.SA
         self.__interest_rate: float = 3
 
     def apply_interst(self) -> None: 
         """
         applys interst rate to account's balance 
         """
-        self.__balance *= self.__interest_rate
+        self._set_balance(round(self._get_balance() * (self.__interest_rate / 100)), 2)
         print(f"Balance after applying interest rate: {self._get_balance()}")
-        print(self.display())
+        self.display()
 
 
 if __name__ == "__main__":
     acc1 = BankAccount(name="Jane Doe")
-    acc1.set_account_type(account_type=AccountType.SA)
+    acc1.set_account_type(account_type=AccountType.FDA)
     acc1.deposit(amount=900.99)
     acc1.display()
+
+    sa_acc = SavingsAccount(name='MnM')
+    sa_acc.withdraw(amount=1000)
+    sa_acc.deposit(amount=1000)
+    sa_acc.withdraw(amount=55)
+    sa_acc.apply_interst()
