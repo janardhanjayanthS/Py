@@ -48,7 +48,6 @@ class BankAccount:
         """
         self.__balance = amount
 
-
     def display(self) -> None:
         """
         Displays information about bank account
@@ -58,9 +57,9 @@ class BankAccount:
             print("Account type is not set")
         else:
             result += f"Account type: {self._account_type.value}"
-        print('*' * 10)
+        print("*" * 10)
         print(result)
-        print('*' * 10)
+        print("*" * 10)
 
     def deposit(self, amount: float) -> None:
         """
@@ -82,7 +81,7 @@ class BankAccount:
             amount: amount to be withdrawn
         """
         if amount > self.__balance:
-            print(f"Insufficient funds, your balance is {self._get_balance()}")
+            print(f"Insufficient funds, your balance is ${self._get_balance()}")
         else:
             self.__balance -= amount
             print(f"Withdrew ${amount}")
@@ -101,24 +100,24 @@ class SavingsAccount(BankAccount):
         """
         super().__init__(name)
         self._account_type = AccountType.SA
-        self.__interest_rate: float = 3
+        self.__interest_rate: float = 0.03
 
-    def apply_interst(self) -> None: 
+    def apply_interst(self) -> None:
         """
-        applys interst rate to account's balance 
+        applys interst rate to account's balance
         """
-        self._set_balance(round(self._get_balance() * (self.__interest_rate / 100), 2))
+        self._set_balance(self._get_balance() + (self._get_balance() * self.__interest_rate))
         print(f"Balance after applying interest rate: {self._get_balance()}")
         self.display()
 
 
 if __name__ == "__main__":
-    acc1 = BankAccount(name="Jane Doe")
-    acc1.set_account_type(account_type=AccountType.FDA)
-    acc1.deposit(amount=900.99)
-    acc1.display()
+    # acc1 = BankAccount(name="Jane Doe")
+    # acc1.set_account_type(account_type=AccountType.FDA)
+    # acc1.deposit(amount=900.99)
+    # acc1.display()
 
-    sa_acc = SavingsAccount(name='MnM')
+    sa_acc = SavingsAccount(name="MnM")
     sa_acc.withdraw(amount=1000)
     sa_acc.deposit(amount=1000)
     sa_acc.withdraw(amount=55)
