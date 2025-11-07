@@ -34,7 +34,7 @@ class BankAccount:
         else:
             print(f"Account type already exists: {self._account_type.value}")
 
-    def __get_balance(self) -> float:
+    def _get_balance(self) -> float:
         """
         Returns accounts balacnce
         """
@@ -44,12 +44,14 @@ class BankAccount:
         """
         Displays information about bank account
         """
-        result = f"Account holder's name: {self.name} \nAccount balance: {self.__get_balance()} \n"
+        result = f"Account holder's name: {self.name} \nAccount balance: {self._get_balance()} \n"
         if self._account_type is None:
             print("Account type is not set")
         else:
             result += f"Account type: {self._account_type.value}"
+        print('*' * 10)
         print(result)
+        print('*' * 10)
 
     def deposit(self, amount: float) -> None:
         """
@@ -60,7 +62,7 @@ class BankAccount:
         if amount > 0:
             self.__balance += amount
             print(f"Deposited: ${amount}")
-            print(f"current balance: ${self.__get_balance()}")
+            print(f"current balance: ${self._get_balance()}")
         else:
             print("Amount cannot be negative or 0")
 
@@ -71,15 +73,36 @@ class BankAccount:
             amount: amount to be withdrawn
         """
         if amount > self.__balance:
-            print(f"Insufficient funds, your balance is {self.__get_balance()}")
+            print(f"Insufficient funds, your balance is {self._get_balance()}")
         else:
             self.__balance -= amount
             print(f"Withdrew ${amount}")
             print(f"current balance: ${self.__balance}")
 
 
-if __name__ == '__main__':
-    acc1 = BankAccount(name='Jane Doe')
+class SavingsAccount(BankAccount):
+    def __init__(self, name: str) -> None:
+        """
+        Initializes Savings account
+        Attributes:
+            _account_type: type of account, set to savings account
+            __interest_rate: rate of interest per annum
+        """
+        super().__init__(name)
+        self._account_type: AccountType = AccountType.SA
+        self.__interest_rate: float = 3
+
+    def apply_interst(self) -> None: 
+        """
+        applys interst rate to account's balance 
+        """
+        self.__balance *= self.__interest_rate
+        print(f"Balance after applying interest rate: {self._get_balance()}")
+        print(self.display())
+
+
+if __name__ == "__main__":
+    acc1 = BankAccount(name="Jane Doe")
     acc1.set_account_type(account_type=AccountType.SA)
     acc1.deposit(amount=900.99)
     acc1.display()
