@@ -107,7 +107,7 @@ class SavingsAccount(BankAccount):
         """
         applys interst rate to account's balance 
         """
-        self._set_balance(round(self._get_balance() * (self.__interest_rate / 100)), 2)
+        self._set_balance(round(self._get_balance() * (self.__interest_rate / 100), 2))
         print(f"Balance after applying interest rate: {self._get_balance()}")
         self.display()
 
