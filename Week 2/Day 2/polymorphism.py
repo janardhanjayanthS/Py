@@ -69,3 +69,4 @@ if __name__ == "__main__":
     
     for shape in shapes:
         print(f'Area of {shape.__class__.__name__} with dimensions {shape.__dict__} is {shape.area()} units')
+        

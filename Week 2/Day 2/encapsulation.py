@@ -1,0 +1,85 @@
+from enum import Enum
+
+
+class AccountType(Enum):
+    SA = "savings account"
+    CA = "current account"
+    FDA = "fixed deposit account"
+    RDA = "recurring deposit account"
+
+
+class BankAccount:
+    def __init__(self, name: str) -> None:
+        """
+        Initializes a bank account
+        Args:
+            name: account holders name
+        Attributes:
+            name: account holders name
+            __balance: (private) account's balance
+            _account_type: type of account
+        """
+        self.name: str = name
+        self.__balance: float = 0
+        self._account_type: AccountType | None = None
+
+    def set_account_type(self, account_type: AccountType) -> None:
+        """
+        sets an account type to current instance
+        Args:
+            account_type: (enum) type of account
+        """
+        if self._account_type is None:
+            self._account_type = account_type
+        else:
+            print(f"Account type already exists: {self._account_type.value}")
+
+    def __get_balance(self) -> float:
+        """
+        Returns accounts balacnce
+        """
+        return self.__balance
+
+    def display(self) -> None:
+        """
+        Displays information about bank account
+        """
+        result = f"Account holder's name: {self.name} \nAccount balance: {self.__get_balance()} \n"
+        if self._account_type is None:
+            print("Account type is not set")
+        else:
+            result += f"Account type: {self._account_type.value}"
+        print(result)
+
+    def deposit(self, amount: float) -> None:
+        """
+        Deposits amount to the bank account
+        Args:
+            amount: amount to be deposited
+        """
+        if amount > 0:
+            self.__balance += amount
+            print(f"Deposited: ${amount}")
+            print(f"current balance: ${self.__get_balance()}")
+        else:
+            print("Amount cannot be negative or 0")
+
+    def withdraw(self, amount: float) -> None:
+        """
+        Withdraws amount from bank account
+        Args:
+            amount: amount to be withdrawn
+        """
+        if amount > self.__balance:
+            print(f"Insufficient funds, your balance is {self.__get_balance()}")
+        else:
+            self.__balance -= amount
+            print(f"Withdrew ${amount}")
+            print(f"current balance: ${self.__balance}")
+
+
+if __name__ == '__main__':
+    acc1 = BankAccount(name='Jane Doe')
+    acc1.set_account_type(account_type=AccountType.SA)
+    acc1.deposit(amount=900.99)
+    acc1.display()
