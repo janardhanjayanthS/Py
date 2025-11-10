@@ -1,1 +1,0 @@
-product_id: P098, product_name: Laptop Charger, quantity: 8, price: 59.99

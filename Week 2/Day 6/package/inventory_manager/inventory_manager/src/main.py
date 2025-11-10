@@ -1,5 +1,5 @@
 from csv import DictReader
-from typing import Any
+from typing import Any, Generator
 from pydantic import ValidationError
 
 from .model import RegularProduct
@@ -111,26 +111,24 @@ def create_file(filename: str) -> None:
 #         print(f"File not found {e}")
 
 
-def get_products(filename: str) -> dict[str, dict[str, Any]]:
+def get_products(filename: str) -> Generator[dict[str, Any], None, None] | None:
     """
     Returns all the product names from inventory as a set
     Args:
         filename: file name to look for products
-    Return:
+    Yields:
         A dictionary containing product names as key
         and its information as value
     """
-    result = dict()
-
     try:
         with open(filename, "r") as csv_file:
             reader = DictReader(csv_file)
             for row in reader:
-                result[row["product_name"]] = row
+                yield row
     except FileNotFoundError as e:
         print(f"File not found {e}")
 
-    return result
+    # return result
 
 
 
@@ -143,8 +141,8 @@ def mainloop(inventory_data: str) -> None:
     # print(os.getcwd())
     # read_file("inventory.csv")
 
-    products = get_products(inventory_data)
-    products_set = set(products.keys())
+    # products = get_products(inventory_data)
+    # products_set = set(products.keys())
     print("Inventory Data Processor")
 
     while True:
@@ -152,11 +150,13 @@ def mainloop(inventory_data: str) -> None:
         if choice in {"e", "E"}:
             break
         else:
-            if choice in products_set:
-                validate_product(product=products[choice])
+            if get_products(inventory_data):
+                for product in get_products(inventory_data):
+                    if product['product_name'] == choice:
+                        validate_product(product=product)
+                else:
+                    print(f"Cannot find product {choice} from inventory")
             else:
-                print(f"Cannot find product {choice} from inventory")
+                print('Generator did not yield any response!')
 
 
-# if __name__ == "__main__":
-#     ...

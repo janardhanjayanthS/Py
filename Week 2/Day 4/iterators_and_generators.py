@@ -1,3 +1,5 @@
+from itertools import 
+
 numbers = (1, 5, 6, 7, 8, 3, 55)
 
 num_iterator = iter(numbers)
@@ -50,8 +52,8 @@ def gen(n):
     yield n + 1
 
 
-for n in gen(5):
-    print(n)
+# for n in gen(5):
+#     print(n)
 
 
 def fibonacci(n):
@@ -62,5 +64,14 @@ def fibonacci(n):
         # n -= 1
 
 
-for n in fibonacci(10):
-    print(n)
+# for n in fibonacci(10):
+#     print(n)
+
+
+def gen1():
+    yield {'abcd': 'content'}
+
+print(gen1())
+print(gen1().__dir__)
+# print(next(gen1()))
+# print(next(gen1()))
