@@ -111,14 +111,13 @@ def create_file(filename: str) -> None:
 #         print(f"File not found {e}")
 
 
-def get_products(filename: str) -> Optional[Iterator[dict[str, Any]]]:
+def get_product(filename: str) -> Optional[Iterator[dict[str, Any]]]:
     """
     Returns all the product names from inventory as a set
     Args:
         filename: file name to look for products
     Yields:
-        A dictionary containing product names as key
-        and its information as value
+        A dictionary containing a product (row from csv)
     """
     try:
         with open(filename, "r") as csv_file:
@@ -142,7 +141,7 @@ def mainloop(inventory_data: str) -> None:
     # print(os.getcwd())
     # read_file("inventory.csv")
 
-    # products = get_products(inventory_data)
+    # products = get_product(inventory_data)
     # products_set = set(products.keys())
     print("Inventory Data Processor")
 
@@ -151,8 +150,8 @@ def mainloop(inventory_data: str) -> None:
         if choice in {"e", "E"}:
             break
         else:
-            if get_products(inventory_data) is not None:
-                for product in get_products(inventory_data): # type: ignore
+            if get_product(inventory_data) is not None:
+                for product in get_product(inventory_data): # type: ignore
                     if product['product_name'] == choice:
                         validate_product(product=product)
                 else:
