@@ -2,6 +2,7 @@ from csv import DictReader
 from typing import Any
 from pydantic import ValidationError
 import os
+from pathlib import Path
 
 from .model import RegularProduct
 from .log import logger, contruct_log_message
@@ -134,12 +135,23 @@ def get_products(filename: str) -> dict[str, dict[str, Any]]:
     return result
 
 
+def get_csv_path() -> str:
+    """
+    generates absolute path of inventory.csv file
+    Returs:
+        str absolute path for inventory.csv file
+    """
+    return str(Path(__file__).parent / "data/inventory.csv")
+
+
 def mainloop() -> None:
     """
     Contians mainloop
     """
+    # print(os.getcwd())
     # read_file("inventory.csv")
-    products = get_products("inventory_manager/inventory_manager/src/inventory.csv")
+
+    products = get_products(get_csv_path())
     products_set = set(products.keys())
     print("Inventory Data Processor")
 
@@ -152,7 +164,6 @@ def mainloop() -> None:
                 validate_product(product=products[choice])
             else:
                 print(f"Cannot find product {choice} from inventory")
-
 
 
 # if __name__ == "__main__":
