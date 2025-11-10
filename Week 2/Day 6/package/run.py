@@ -1,4 +1,4 @@
 from inventory_manager.inventory_manager import mainloop
 
 
-mainloop()
+mainloop(inventory_data='inventory.csv')
