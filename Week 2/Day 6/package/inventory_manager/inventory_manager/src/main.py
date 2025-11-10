@@ -1,5 +1,5 @@
 from csv import DictReader
-from typing import Any, Generator
+from typing import Any, Iterator, Optional
 from pydantic import ValidationError
 
 from .model import RegularProduct
@@ -111,7 +111,7 @@ def create_file(filename: str) -> None:
 #         print(f"File not found {e}")
 
 
-def get_products(filename: str) -> Generator[dict[str, Any], None, None] | None:
+def get_products(filename: str) -> Optional[Iterator[dict[str, Any]]]:
     """
     Returns all the product names from inventory as a set
     Args:
@@ -127,6 +127,7 @@ def get_products(filename: str) -> Generator[dict[str, Any], None, None] | None:
                 yield row
     except FileNotFoundError as e:
         print(f"File not found {e}")
+        return
 
     # return result
 
@@ -150,8 +151,8 @@ def mainloop(inventory_data: str) -> None:
         if choice in {"e", "E"}:
             break
         else:
-            if get_products(inventory_data):
-                for product in get_products(inventory_data):
+            if get_products(inventory_data) is not None:
+                for product in get_products(inventory_data): # type: ignore
                     if product['product_name'] == choice:
                         validate_product(product=product)
                 else:
