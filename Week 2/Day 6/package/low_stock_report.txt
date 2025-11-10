@@ -1,0 +1,1 @@
+product_id: P027, product_name: Graphic Tablet, quantity: 8, price: 89.99

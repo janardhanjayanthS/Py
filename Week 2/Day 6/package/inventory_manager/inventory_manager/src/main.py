@@ -128,9 +128,6 @@ def get_product(filename: str) -> Optional[Iterator[dict[str, Any]]]:
         print(f"File not found {e}")
         return
 
-    # return result
-
-
 
 def mainloop(inventory_data: str) -> None:
     """
@@ -151,12 +148,8 @@ def mainloop(inventory_data: str) -> None:
             break
         else:
             if get_product(inventory_data) is not None:
-                for product in get_product(inventory_data): # type: ignore
-                    if product['product_name'] == choice:
+                for product in get_product(inventory_data):  # type: ignore
+                    if product["product_name"] == choice:
                         validate_product(product=product)
-                else:
-                    print(f"Cannot find product {choice} from inventory")
             else:
-                print('Generator did not yield any response!')
-
-
+                print(f"Cannot find product {choice} from inventory")
