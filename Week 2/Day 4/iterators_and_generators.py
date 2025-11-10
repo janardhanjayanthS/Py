@@ -1,4 +1,3 @@
-from itertools import 
 
 numbers = (1, 5, 6, 7, 8, 3, 55)
 
