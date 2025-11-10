@@ -1,1 +1,0 @@
-product_id: P033, product_name: Camera Lens 50mm, quantity: 5, price: 199.00
