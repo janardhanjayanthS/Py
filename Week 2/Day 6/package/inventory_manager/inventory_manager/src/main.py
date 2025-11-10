@@ -1,10 +1,11 @@
 from csv import DictReader
 from typing import Any
 from pydantic import ValidationError
+import os
 
-from model import RegularProduct
-from log import logger, contruct_log_message
-from utility import dict_to_str
+from .model import RegularProduct
+from .log import logger, contruct_log_message
+from .utility import dict_to_str
 
 
 def validate_product(product: dict[str, Any]) -> None:
@@ -133,9 +134,12 @@ def get_products(filename: str) -> dict[str, dict[str, Any]]:
     return result
 
 
-if __name__ == "__main__":
+def mainloop() -> None:
+    """
+    Contians mainloop
+    """
     # read_file("inventory.csv")
-    products = get_products("inventory.csv")
+    products = get_products("inventory_manager/inventory_manager/src/inventory.csv")
     products_set = set(products.keys())
     print("Inventory Data Processor")
 
@@ -148,3 +152,8 @@ if __name__ == "__main__":
                 validate_product(product=products[choice])
             else:
                 print(f"Cannot find product {choice} from inventory")
+
+
+
+# if __name__ == "__main__":
+#     ...

@@ -1,7 +1,7 @@
 import logging
 from typing import Any
 
-from utility import dict_to_str
+from .utility import dict_to_str
 
 
 logger = logging.getLogger(__name__)
