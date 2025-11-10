@@ -113,7 +113,7 @@ def create_file(filename: str) -> None:
 
 def get_product(filename: str) -> Optional[Iterator[dict[str, Any]]]:
     """
-    Returns all the product names from inventory as a set
+    Yields row from csv file
     Args:
         filename: file name to look for products
     Yields:
