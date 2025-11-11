@@ -1,4 +1,4 @@
-from pydantic import BaseModel, PositiveFloat, PositiveInt
+from pydantic import BaseModel, PositiveFloat, PositiveInt, StrictBool
 from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
 
@@ -62,8 +62,8 @@ class FoodProduct(BaseProduct):
             quantity=product_details.quantity,
             price=product_details.price,
         )
-        self.days_to_expire = product_details.days_to_expire
-        self.is_vegetarian = product_details.is_vegetarian
+        self.days_to_expire: PositiveFloat = product_details.days_to_expire # type: ignore
+        self.is_vegetarian: bool = product_details.is_vegetarian # type: ignore
 
     def get_expiry_date(self) -> str:
         """
@@ -98,7 +98,7 @@ class ElectronicProduct(BaseProduct):
             quantity=product_details.quantity,
             price=product_details.price,
         )
-        self.warrenty_period_in_years = ProductDetails.warrenty_period_in_years
+        self.warrenty_period_in_years: int = ProductDetails.warrenty_period_in_years # type: ignore
 
     def details(self) -> str:
         """

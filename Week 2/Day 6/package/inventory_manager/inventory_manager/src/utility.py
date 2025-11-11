@@ -12,8 +12,17 @@ def dict_to_str(product: dict[str, Any]) -> str:
     """
     result = []
     for key, value in product.items():
-        result.append(f'{key}: {value}')
-    return ', '.join(result)
+        result.append(f"{key}: {value}")
+    return ", ".join(result)
+
+
+def convert_to_bool(data: str) -> bool | None:
+    if data.lower() == "yes":
+        return True
+    elif data.lower() == "no":
+        return False
+    else:
+        print(f"Unknown value for data: {data}")
 
 
 @dataclass
@@ -30,6 +39,7 @@ class ProductDetails:
         is_vegetarian: is the food vegetarian (only for FoodProduct)
         warrenty_period_in_years: warrenty period in years (only for ElectronicProduct)
     """
+
     id: str
     name: str
     type: str
@@ -38,4 +48,3 @@ class ProductDetails:
     days_to_expire: float | None
     is_vegetarian: bool | None
     warrenty_period_in_years: int | None
-    

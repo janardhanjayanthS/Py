@@ -4,7 +4,7 @@ from pydantic import ValidationError
 
 from .model import ProductFactory
 from .log import logger, contruct_log_message
-from .utility import dict_to_str, ProductDetails
+from .utility import dict_to_str, ProductDetails, convert_to_bool
 
 
 def validate_product(product: dict[str, Any]) -> None:
@@ -23,7 +23,7 @@ def validate_product(product: dict[str, Any]) -> None:
                 quantity=product["quantity"],
                 price=product["price"],
                 days_to_expire=product["days_to_expire"],
-                is_vegetarian=product["is_vegetarian"],
+                is_vegetarian=convert_to_bool(data=product["is_vegetarian"]),
                 warrenty_period_in_years=product["warrenty_period_in_years"]
             )
         )
