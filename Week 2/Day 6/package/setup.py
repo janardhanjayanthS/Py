@@ -2,9 +2,9 @@ from setuptools import find_packages, setup
 
 setup(
     name="inventory_manager",
-    version="0.0.2",
-    description="Package to interact with inventory data",
-    long_description="Package to interact with inventory data that uses generators to read from inventory.csv file",
+    version="0.0.3",
+    description="Package to interact with inventory csv data",
+    long_description="Package to manipulate with inventory csv data that uses generators to read from csv file. Can manipulate multiple type - Regular, Food, Electronic - data.",
     package_dir={"": "inventory_manager"},
     packages=find_packages(where="inventory_manager"),
     author="janardhanjayanthS",
