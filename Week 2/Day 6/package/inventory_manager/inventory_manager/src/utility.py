@@ -22,7 +22,8 @@ def convert_to_bool(data: str) -> bool | None:
     elif data.lower() == "no":
         return False
     else:
-        print(f"Unknown value for data: {data}")
+        pass
+        # print(f"Unknown value for data: {data}")
 
 
 @dataclass
@@ -39,7 +40,6 @@ class ProductDetails:
         is_vegetarian: is the food vegetarian (only for FoodProduct)
         warrenty_period_in_years: warrenty period in years (only for ElectronicProduct)
     """
-
     id: str
     name: str
     type: str
@@ -47,4 +47,4 @@ class ProductDetails:
     quantity: int
     days_to_expire: float | None
     is_vegetarian: bool | None
-    warrenty_period_in_years: int | None
+    warranty_period_in_years: int | None

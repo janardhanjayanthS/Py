@@ -1,4 +1,4 @@
-from pydantic import BaseModel, PositiveFloat, PositiveInt, StrictBool
+from pydantic import BaseModel, PositiveFloat, PositiveInt
 from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
 
@@ -26,18 +26,11 @@ class BaseProduct(ABC, BaseModel):
 
 
 class RegularProduct(BaseProduct):
-    def __init__(self, product_details: ProductDetails):
-        """
-        Initializes regular product
-        Args: 
-            product_details: dataclass conatining product information
-        """
-        super().__init__(
-            product_id=ProductDetails.id,
-            product_name=product_details.name,
-            quantity=product_details.quantity,
-            price=product_details.price,
-        )
+    """
+    Initializes regular product
+    Args:
+        product_details: dataclass conatining product information
+    """
 
     def details(self) -> str:
         """
@@ -47,23 +40,17 @@ class RegularProduct(BaseProduct):
 
 
 class FoodProduct(BaseProduct):
-    def __init__(self, product_details: ProductDetails):
-        """
-        Initializes a food product
-        Args: 
-            product_details: dataclass conatining product information
-        Additional Attributes:
-            days_to_expire: food's expiry period in days
-            is_vegetarian: food's classification
-        """
-        super().__init__(
-            product_id=ProductDetails.id,
-            product_name=product_details.name,
-            quantity=product_details.quantity,
-            price=product_details.price,
-        )
-        self.days_to_expire: PositiveFloat = product_details.days_to_expire # type: ignore
-        self.is_vegetarian: bool = product_details.is_vegetarian # type: ignore
+    """
+    Initializes a food product
+    Args:
+        product_details: dataclass conatining product information
+    Additional Attributes:
+        days_to_expire: food's expiry period in days
+        is_vegetarian: food's classification
+    """
+
+    days_to_expire: PositiveFloat  # type: ignore
+    is_vegetarian: bool  # type: ignore
 
     def get_expiry_date(self) -> str:
         """
@@ -72,7 +59,7 @@ class FoodProduct(BaseProduct):
             int representing expiry days
         """
         return datetime.strftime(
-            timedelta(days=self.days_to_expire) + datetime.now(), # type: ignore
+            timedelta(days=self.days_to_expire) + datetime.now(),  # type: ignore
             "%d-%m-%Y",  # type: ignore
         )
 
@@ -84,21 +71,15 @@ class FoodProduct(BaseProduct):
 
 
 class ElectronicProduct(BaseProduct):
-    def __init__(self, product_details: ProductDetails):
-        """
-        Initializes electronic product
-        Args: 
-            product_details: dataclass conatining product information
-        Additional Attributes:
-            warrenty_period_in_years: in years
-        """
-        super().__init__(
-            product_id=ProductDetails.id,
-            product_name=product_details.name,
-            quantity=product_details.quantity,
-            price=product_details.price,
-        )
-        self.warrenty_period_in_years: int = ProductDetails.warrenty_period_in_years # type: ignore
+    """
+    Initializes electronic product
+    Args:
+        product_details: dataclass conatining product information
+    Additional Attributes:
+        warrenty_period_in_years: in years
+    """
+
+    warranty_period_in_years: float
 
     def details(self) -> str:
         """
@@ -114,10 +95,28 @@ class ProductFactory:
 
     def create_product(self, product_details: ProductDetails) -> BaseProduct:
         if product_details.type == "regular":
-            return RegularProduct(product_details=product_details)
+            return RegularProduct(
+                product_id=product_details.id,
+                product_name=product_details.name,
+                quantity=product_details.quantity,
+                price=product_details.price,
+            )
         elif product_details.type == "food":
-            return FoodProduct(product_details=product_details)
+            return FoodProduct(
+                product_id=product_details.id,
+                product_name=product_details.name,
+                quantity=product_details.quantity,
+                price=product_details.price,
+                days_to_expire=product_details.days_to_expire,
+                is_vegetarian=product_details.is_vegetarian,
+            )
         elif product_details.type == "electronic":
-            return ElectronicProduct(product_details=product_details)
+            return ElectronicProduct(
+                product_id=product_details.id,
+                product_name=product_details.name,
+                quantity=product_details.quantity,
+                price=product_details.price,
+                warranty_period_in_years=product_details.warranty_period_in_years,
+            )
         else:
             raise Exception(f"Requested product type: {type} not available")

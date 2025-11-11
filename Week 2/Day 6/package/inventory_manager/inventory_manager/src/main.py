@@ -6,6 +6,8 @@ from .model import ProductFactory
 from .log import logger, contruct_log_message
 from .utility import dict_to_str, ProductDetails, convert_to_bool
 
+product_factory: ProductFactory = ProductFactory()
+
 
 def validate_product(product: dict[str, Any]) -> None:
     """
@@ -13,9 +15,8 @@ def validate_product(product: dict[str, Any]) -> None:
     Args:
         product: dictionary containing information about a praticular product
     """
-    product_factory: ProductFactory = ProductFactory()
     try:
-        product_factory.create_product( 
+        product_factory.create_product(
             product_details=ProductDetails(
                 id=product["product_id"],
                 name=product["product_name"],
@@ -24,7 +25,7 @@ def validate_product(product: dict[str, Any]) -> None:
                 price=product["price"],
                 days_to_expire=product["days_to_expire"],
                 is_vegetarian=convert_to_bool(data=product["is_vegetarian"]),
-                warrenty_period_in_years=product["warrenty_period_in_years"]
+                warranty_period_in_years=product["warranty_period_in_years"],
             )
         )
         if product["quantity"] and check_low_stock(product=product):
@@ -150,6 +151,7 @@ def mainloop(inventory_data: str) -> None:
     print("Inventory Data Processor")
 
     while True:
+        print("-" * 30)
         choice = input("Enter a product name to search (or) 'e' to exit: ").strip()
         if choice in {"e", "E"}:
             break
@@ -158,5 +160,6 @@ def mainloop(inventory_data: str) -> None:
                 for product in get_product(inventory_data):  # type: ignore
                     if product["product_name"] == choice:
                         validate_product(product=product)
+                        print("-" * 30)
             else:
                 print(f"Cannot find product {choice} from inventory")
