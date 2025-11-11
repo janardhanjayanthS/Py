@@ -30,12 +30,7 @@ def validate_product(product: dict[str, Any]) -> None:
                 warranty_period_in_years=product["warranty_period_in_years"],
             )
         )
-        if product["quantity"] and check_low_stock(product=product):
-            append_low_stock_report(product=product)
-        else:
-            print(
-                f"Requested product {product['product_name']} is ${product['price']} available quantity {product['quantity']}"
-            )
+        check_low_stock_or_print_details(product=product)
     except ValidationError as e:
         print(
             f"Requested product {product['product_name']} has a validation error: {e.errors()[0]['msg']}"
@@ -48,6 +43,19 @@ def validate_product(product: dict[str, Any]) -> None:
             )
         )
 
+def check_low_stock_or_print_details(product: dict[str, Any]) -> None:
+    """
+    Checks if prodcut is low, if so then appends it to low stock report
+    else prints product detail
+    Args:
+        product: dictionary containing product information
+    """
+    if product["quantity"] and check_low_stock(product=product):
+        append_low_stock_report(product=product)
+    else:
+        print(
+            f"Requested product {product['product_name']} is ${product['price']} available quantity {product['quantity']}"
+        )
 
 def check_low_stock(product: dict[str, Any]) -> bool | None:
     """
