@@ -2,9 +2,9 @@ from csv import DictReader
 from typing import Any, Iterator, Optional
 from pydantic import ValidationError
 
-from .model import RegularProduct
+from .model import ProductFactory
 from .log import logger, contruct_log_message
-from .utility import dict_to_str
+from .utility import dict_to_str, ProductDetails
 
 
 def validate_product(product: dict[str, Any]) -> None:
@@ -13,12 +13,19 @@ def validate_product(product: dict[str, Any]) -> None:
     Args:
         product: dictionary containing information about a praticular product
     """
+    product_factory: ProductFactory = ProductFactory()
     try:
-        RegularProduct(
-            product_id=product["product_id"],
-            product_name=product["product_name"],
-            quantity=product["quantity"],
-            price=product["price"],
+        product_factory.create_product( 
+            product_details=ProductDetails(
+                id=product["product_id"],
+                name=product["product_name"],
+                type=product["type"],
+                quantity=product["quantity"],
+                price=product["price"],
+                days_to_expire=product["days_to_expire"],
+                is_vegetarian=product["is_vegetarian"],
+                warrenty_period_in_years=product["warrenty_period_in_years"]
+            )
         )
         if product["quantity"] and check_low_stock(product=product):
             append_low_stock_report(product=product)

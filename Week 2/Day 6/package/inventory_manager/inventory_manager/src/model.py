@@ -112,12 +112,12 @@ class ProductFactory:
     Manages product types
     """
 
-    def create_product(self, type: str, product_details: ProductDetails) -> BaseProduct:
-        if type == "regular":
+    def create_product(self, product_details: ProductDetails) -> BaseProduct:
+        if product_details.type == "regular":
             return RegularProduct(product_details=product_details)
-        elif type == "food":
+        elif product_details.type == "food":
             return FoodProduct(product_details=product_details)
-        elif type == "electronic":
+        elif product_details.type == "electronic":
             return ElectronicProduct(product_details=product_details)
         else:
             raise Exception(f"Requested product type: {type} not available")
