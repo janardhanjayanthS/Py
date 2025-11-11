@@ -45,6 +45,6 @@ class ProductDetails:
     type: str
     price: float
     quantity: int
-    days_to_expire: float | None
-    is_vegetarian: bool | None
-    warranty_period_in_years: int | None
+    days_to_expire: float 
+    is_vegetarian: bool | str | None
+    warranty_period_in_years: int 

@@ -5,7 +5,9 @@ from pydantic import ValidationError
 from .model import ProductFactory
 from .log import logger, contruct_log_message
 from .utility import dict_to_str, ProductDetails, convert_to_bool
+from .config import ConfigLoader
 
+config: ConfigLoader = ConfigLoader()
 product_factory: ProductFactory = ProductFactory()
 
 
@@ -56,7 +58,7 @@ def check_low_stock(product: dict[str, Any]) -> bool | None:
         True if quantity is less than 10, False otherwise
     """
     try:
-        if int(product["quantity"]) < 10:
+        if int(product["quantity"]) < config.get_low_quality_threshold():
             return True
         return False
     except TypeError as e:
