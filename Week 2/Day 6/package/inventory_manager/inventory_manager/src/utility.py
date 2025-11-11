@@ -1,4 +1,5 @@
 from typing import Any
+from dataclasses import dataclass
 
 
 def dict_to_str(product: dict[str, Any]) -> str:
@@ -13,3 +14,28 @@ def dict_to_str(product: dict[str, Any]) -> str:
     for key, value in product.items():
         result.append(f'{key}: {value}')
     return ', '.join(result)
+
+
+@dataclass
+class ProductDetails:
+    """
+    Dataclass for product information
+    Args:
+        id: id of product
+        name: name of product
+        type: type of product
+        price: price of product
+        quantity: quantity available
+        days_to_expire: expiration days (only for FoodProduct)
+        is_vegetarian: is the food vegetarian (only for FoodProduct)
+        warrenty_period_in_years: warrenty period in years (only for ElectronicProduct)
+    """
+    id: str
+    name: str
+    type: str
+    price: float
+    quantity: int
+    days_to_expire: float | None
+    is_vegetarian: bool | None
+    warrenty_period_in_years: int | None
+    
