@@ -3,7 +3,7 @@ from typing import Any, Iterator, Optional
 from pydantic import ValidationError
 
 from .model import ProductFactory
-from .log import logger, contruct_log_message
+from .log import logger, construct_log_message
 from .utility import dict_to_str, ProductDetails, convert_to_bool
 from .config import ConfigLoader
 
@@ -36,7 +36,7 @@ def validate_product(product: dict[str, Any]) -> None:
             f"Requested product {product['product_name']} has a validation error: {e.errors()[0]['msg']}"
         )
         logger.error(
-            contruct_log_message(
+            construct_log_message(
                 product_id=product["product_id"],
                 message=e.errors()[0]["msg"],
                 product=product,

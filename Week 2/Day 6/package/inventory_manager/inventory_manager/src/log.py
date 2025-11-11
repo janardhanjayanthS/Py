@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(filename="errors.log", encoding="utf-8", level=logging.ERROR)
 
 
-def contruct_log_message(product_id: str, message: str, product: dict[str, Any]) -> str:
+def construct_log_message(product_id: str, message: str, product: dict[str, Any]) -> str:
     """
     Construcs a log message for an invalid product
     Returns:
