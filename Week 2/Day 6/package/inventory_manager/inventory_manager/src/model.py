@@ -1,6 +1,6 @@
 from pydantic import BaseModel, PositiveFloat, PositiveInt, Field
 from datetime import datetime, timedelta
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from .utility import ProductDetails, ProductTypes
 
@@ -21,9 +21,14 @@ class BaseProduct(ABC, BaseModel):
     price: PositiveFloat
     type: ProductTypes
 
-    @abstractmethod
-    def details(self) -> str:
-        pass
+    def __str__(self):
+        message = ""
+        for key, value in self.__dict__.items():
+            if key == "type":
+                message += f"{key}: {value.value} | "
+            else:
+                message += f"{key}: {value} | "
+        return message
 
 
 class RegularProduct(BaseProduct):
@@ -32,12 +37,6 @@ class RegularProduct(BaseProduct):
     Args:
         product_details: dataclass conatining product information
     """
-
-    def details(self) -> str:
-        """
-        returns string contining product details
-        """
-        return f"ID: {self.product_id} | Name: {self.product_name} | Qantity: {self.quantity} | price: {self.price}"
 
 
 class FoodProduct(BaseProduct):
@@ -64,12 +63,6 @@ class FoodProduct(BaseProduct):
             "%d-%m-%Y",  # type: ignore
         )
 
-    def details(self) -> str:
-        """
-        returns string contining product details
-        """
-        return f"ID: {self.product_id} | Name: {self.product_name} | Qantity: {self.quantity} | price: {self.price} | Days to expire: {self.days_to_expire} | Is Veg: {self.is_vegetarian}"
-
 
 class ElectronicProduct(BaseProduct):
     """
@@ -81,12 +74,6 @@ class ElectronicProduct(BaseProduct):
     """
 
     warranty_period_in_years: float
-
-    def details(self) -> str:
-        """
-        returns string contining product details
-        """
-        return f"ID: {self.product_id} | Name: {self.product_name} | Qantity: {self.quantity} | price: {self.price} | Warrenty period: {self.warranty_period_in_years} years"
 
 
 class ProductFactory:
@@ -110,7 +97,7 @@ class ProductFactory:
                 product_name=product_details.name,
                 quantity=product_details.quantity,
                 price=product_details.price,
-                type=product_details.type
+                type=product_details.type,
             )
         elif product_details.type == ProductTypes.FP.value:
             return FoodProduct(
@@ -120,7 +107,7 @@ class ProductFactory:
                 price=product_details.price,
                 days_to_expire=product_details.days_to_expire,
                 is_vegetarian=product_details.is_vegetarian,  # type: ignore
-                type=product_details.type
+                type=product_details.type,
             )
         elif product_details.type == ProductTypes.EP.value:
             return ElectronicProduct(
@@ -129,8 +116,8 @@ class ProductFactory:
                 quantity=product_details.quantity,
                 price=product_details.price,
                 warranty_period_in_years=product_details.warranty_period_in_years,
-                type=product_details.type
+                type=product_details.type,
             )
         else:
             print(f"Requested product type: {type} not available")
-            return # type: ignore
+            return  # type: ignore

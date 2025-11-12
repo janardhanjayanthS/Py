@@ -7,13 +7,6 @@ num_iterator = iter(numbers)
 # print(num_iterator.__iter__())
 
 # print(next(num_iterator))
-# print(next(num_iterator))
-# print(next(num_iterator))
-# print(next(num_iterator))
-# print(next(num_iterator))
-# print(next(num_iterator))
-# print(next(num_iterator))
-# print(next(num_iterator))
 
 
 class SquareIterator:
@@ -36,10 +29,6 @@ class SquareIterator:
 sq_seq = SquareIterator([1, 5, 9, 21])
 # print(sq_seq.__iter__())
 
-# print(sq_seq.__next__())
-# print(sq_seq.__next__())
-# print(sq_seq.__next__())
-# print(sq_seq.__next__())
 # print(sq_seq.__next__())
 
 
@@ -72,5 +61,4 @@ def gen1():
 
 print(gen1())
 print(gen1().__dir__)
-# print(next(gen1()))
 # print(next(gen1()))

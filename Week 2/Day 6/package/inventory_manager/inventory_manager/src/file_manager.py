@@ -16,7 +16,7 @@ def check_low_stock_or_print_details(product: BaseProduct) -> None:
         if check_low_stock(product_quantity=product.quantity):
             append_low_stock_report(product=product)
         else:
-            product.details()
+            print(product)
 
 
 def check_low_stock(product_quantity: int) -> bool | None:
@@ -45,11 +45,11 @@ def append_low_stock_report(product: BaseProduct) -> None:
     print(f"Product '{product.product_name}' is available in less quantity {product.quantity}")
     filename = "low_stock_report.txt"
     try:
-        append_content(filename, product.details())
+        append_content(filename, f'{product}')
     except FileNotFoundError:
         print("low_stock_report.txt does not exist")
         create_file(filename=filename)
-        append_content(filename, product.details())
+        append_content(filename, f'{product}')
 
 
 def append_content(filename: str, content: str) -> None:

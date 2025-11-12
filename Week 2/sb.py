@@ -1,3 +1,5 @@
+"""SANDBOX"""
+
 from datetime import timedelta, datetime
 from enum import Enum
 from pydantic import BaseModel
@@ -7,10 +9,6 @@ diff = datetime.now() - timedelta(days=10)
 str_diff = datetime.strftime(diff, "%d-%m-%Y")
 # print(diff, type(diff))
 # print(str_diff, type(str_diff))
-
-
-class Sample(BaseModel):
-    name: str
 
 
 # class syntax
@@ -24,12 +22,12 @@ class Color(Enum):
         return [enum.value for enum in cls]
 
 
-if __name__ == "__main__":
-    # s = Sample(name="yelp")
-    # print(s)
-    # print(type(s))
-    print(Color)
-    print(Color.get_values())
+# if __name__ == "__main__":
+#     # s = Sample(name="yelp")
+#     # print(s)
+#     # print(type(s))
+#     print(Color)
+#     print(Color.get_values())
 
 
 # prompts for product details
@@ -174,3 +172,17 @@ if __name__ == "__main__":
 
 
 # ---------------------------------
+
+
+class Sample:
+    def __init__(self) -> None:
+        self.val = '101'
+    
+    def __str__(self) -> str:
+        print(self.__dict__)
+        return f'from __str__ dundder method!!! {self.val}'
+
+
+if __name__ == '__main__':
+    s = Sample()
+    print(s)

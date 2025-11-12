@@ -4,7 +4,7 @@ inv = Inventory()
 inv.load_from_csv(filepath="new_inventory.csv")
 
 print(inv.products)
-# inv.generate_low_quantity_report()
+inv.generate_low_quantity_report()
 
 inv.update_stock(product_id="P196", new_quantity=200)
 

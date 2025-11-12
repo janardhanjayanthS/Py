@@ -81,7 +81,7 @@ class Inventory:
         for product in self.products:
             if product.product_id == product_info["product_id"]:
                 print(
-                    f"Product with: {product_info['product_id']} already exists: {product.details()}"
+                    f"Product with: {product_info['product_id']} already exists: {product}"
                 )
                 return
         product = self.__get_valid_product_or_log_error(row=product_info)
