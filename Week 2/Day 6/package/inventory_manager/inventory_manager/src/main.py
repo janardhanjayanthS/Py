@@ -123,7 +123,6 @@ class Inventory:
             )
             logger.error(
                 construct_log_message(
-                    product_id=product.product_id,
                     message=e.errors()[0]["msg"],
                     product=product,
                 )

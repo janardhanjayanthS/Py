@@ -1,18 +1,21 @@
 import logging
-from typing import Any
 
-from .utility import dict_to_str
+from .model import BaseProduct
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename="errors.log", encoding="utf-8", level=logging.ERROR)
 
 
-def construct_log_message(product_id: str, message: str, product: dict[str, Any]) -> str:
+def construct_log_message(message: str, product: BaseProduct) -> str:
     """
-    Construcs a log message for an invalid product
+    returns a log message for errors.log file
+
+    Args:
+        message: error message by Pydantic
+        product: Product object from model.py
+
     Returns:
-        str containing details for logging
+        str: _description_
     """
-    ...
-    return f"P roduct ID: {product_id} | message: {message} | Row: {dict_to_str(product=product)}"
+    return f"Product ID: {product.product_id} | message: {message} | Row: {product.details()}"
