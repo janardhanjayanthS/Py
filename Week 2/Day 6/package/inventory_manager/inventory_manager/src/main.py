@@ -5,7 +5,6 @@ from pydantic import ValidationError
 from .model import ProductFactory, BaseProduct
 from .log import log_error, construct_log_message
 from .utility import ProductDetails, convert_to_bool
-from .config import ConfigLoader
 from .file_manager import check_low_stock_or_print_details
 
 product_factory: ProductFactory = ProductFactory()
@@ -14,7 +13,6 @@ product_factory: ProductFactory = ProductFactory()
 class Inventory:
     def __init__(self) -> None:
         self.products: list = []
-        self.config: ConfigLoader = ConfigLoader()
         self.product_factory: ProductFactory = ProductFactory()
 
     def load_from_csv(self, filepath: str) -> Optional[Iterator[dict[str, Any]]]:
