@@ -1,5 +1,6 @@
 from typing import Any
 from dataclasses import dataclass
+from enum import Enum
 
 
 def dict_to_str(product: dict[str, Any]) -> str:
@@ -25,6 +26,14 @@ def convert_to_bool(data: str) -> bool | None:
         pass
         # print(f"Unknown value for data: {data}")
 
+class ProductTypes(Enum):
+    RP = 'regular'
+    FP = 'food'
+    EP = 'electronic'
+
+    @classmethod
+    def get_values(cls) -> list[str]:
+        return [enum.value for enum in cls]
 
 @dataclass
 class ProductDetails:
@@ -48,3 +57,5 @@ class ProductDetails:
     days_to_expire: float 
     is_vegetarian: bool | str | None
     warranty_period_in_years: int 
+
+

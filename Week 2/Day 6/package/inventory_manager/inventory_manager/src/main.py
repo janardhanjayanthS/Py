@@ -6,6 +6,7 @@ from .model import ProductFactory, BaseProduct
 from .log import logger, construct_log_message
 from .utility import dict_to_str, ProductDetails, convert_to_bool
 from .config import ConfigLoader
+from .prompt import prompt_id, prompt_name, prompt_quantity, prompt_price
 
 config: ConfigLoader = ConfigLoader()
 product_factory: ProductFactory = ProductFactory()
@@ -180,6 +181,7 @@ def mainloop(inventory_data: str) -> None:
 class Inventory:
     def __init__(self) -> None:
         self.products: list = []
+        self.product_id: set = set()
         self.config: ConfigLoader = ConfigLoader()
         self.product_factory: ProductFactory = ProductFactory()
 
@@ -196,6 +198,7 @@ class Inventory:
                 reader = DictReader(csv_file)
                 for row in reader:
                     self.products.append(self.__get_product_from_dict(row=row))
+                    self.product_id.add(row['product_id'])
         except FileNotFoundError as e:
             print(f"File not found {e}")
             return
@@ -230,6 +233,14 @@ class Inventory:
             product_details (ProductDetails): _description_
         """
         ...
+        # get product details
+        id = prompt_id(self.product_id) 
+        name = prompt_name()
+        quantity = prompt_quantity()
+        price = prompt_price()
+        type = prompt_type()
+        # cretate product object using factory
+        # append it to self.products
 
     def update_stock(self, product_id: str, new_quantity: int) -> None: ...
 
