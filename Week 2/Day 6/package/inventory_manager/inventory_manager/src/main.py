@@ -2,7 +2,7 @@ from csv import DictReader
 from typing import Any, Iterator, Optional
 from pydantic import ValidationError
 
-from .model import ProductFactory
+from .model import ProductFactory, BaseProduct
 from .log import logger, construct_log_message
 from .utility import dict_to_str, ProductDetails, convert_to_bool
 from .config import ConfigLoader
@@ -43,6 +43,7 @@ def validate_product(product: dict[str, Any]) -> None:
             )
         )
 
+
 def check_low_stock_or_print_details(product: dict[str, Any]) -> None:
     """
     Checks if prodcut is low, if so then appends it to low stock report
@@ -56,6 +57,7 @@ def check_low_stock_or_print_details(product: dict[str, Any]) -> None:
         print(
             f"Requested product {product['product_name']} is ${product['price']} available quantity {product['quantity']}"
         )
+
 
 def check_low_stock(product: dict[str, Any]) -> bool | None:
     """
@@ -173,20 +175,62 @@ def mainloop(inventory_data: str) -> None:
                         print("-" * 30)
             else:
                 print(f"Cannot find product {choice} from inventory")
-            
-        
+
+
 class Inventory:
     def __init__(self) -> None:
-        ...
-    
-    def load_from_csv(self, filepath: str) -> None:
-        ...
+        self.products: list = []
+        self.config: ConfigLoader = ConfigLoader()
+        self.product_factory: ProductFactory = ProductFactory()
+
+    def load_from_csv(self, filepath: str) -> Optional[Iterator[dict[str, Any]]]:
+        """
+        loads data from inventory csv, 
+        converts it into product object and adds it to products list
+
+        Args:
+            filepath : path to inventory csv file
+        """
+        try:
+            with open(filepath, "r") as csv_file:
+                reader = DictReader(csv_file)
+                for row in reader:
+                    self.products.append(self.__get_product_from_dict(row=row))
+        except FileNotFoundError as e:
+            print(f"File not found {e}")
+            return
+
+    def __get_product_from_dict(self, row: dict[str, Any]) -> BaseProduct:
+        """
+        returns product object from a row dictionary
+
+        Args:
+            row: Dictionary representing inventory row detail
+
+        Returns:
+            BaseProduct: product object
+        """
+        return self.product_factory.create_product(
+            product_details=ProductDetails(
+                id=row["row_id"],
+                name=row["row_name"],
+                type=row["type"],
+                quantity=row["quantity"],
+                price=row["price"],
+                days_to_expire=row["days_to_expire"],
+                is_vegetarian=convert_to_bool(data=row["is_vegetarian"]),
+                warranty_period_in_years=row["warranty_period_in_years"],
+            )
+        )
 
     def add_product(self, product_details: ProductDetails) -> None:
+        """_summary_
+
+        Args:
+            product_details (ProductDetails): _description_
+        """
         ...
-    
-    def update_stock(self, product_id: str, new_quantity: int) -> None:
-        ...
-    
-    def generate_low_quantity_report(self) -> None:
-        ...
+
+    def update_stock(self, product_id: str, new_quantity: int) -> None: ...
+
+    def generate_low_quantity_report(self) -> None: ...

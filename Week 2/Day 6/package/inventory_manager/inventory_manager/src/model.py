@@ -93,7 +93,19 @@ class ProductFactory:
     Manages product types
     """
 
-    def create_product(self, product_details: ProductDetails):
+    def create_product(self, product_details: ProductDetails) -> BaseProduct:
+        """
+        Creates and returns product object based on product type
+
+        Args:
+            product_details : contains details about the product
+
+        Raises:
+            Exception: if the product type is not defined
+
+        Returns:
+            BaseProduct: the created object type
+        """
         if product_details.type == "regular":
             return RegularProduct(
                 product_id=product_details.id,
@@ -102,7 +114,7 @@ class ProductFactory:
                 price=product_details.price,
             )
         elif product_details.type == "food":
-            FoodProduct(
+            return FoodProduct(
                 product_id=product_details.id,
                 product_name=product_details.name,
                 quantity=product_details.quantity,
@@ -111,7 +123,7 @@ class ProductFactory:
                 is_vegetarian=product_details.is_vegetarian, # type: ignore
             )
         elif product_details.type == "electronic":
-            ElectronicProduct(
+            return ElectronicProduct(
                 product_id=product_details.id,
                 product_name=product_details.name,
                 quantity=product_details.quantity,
