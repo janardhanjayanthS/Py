@@ -2,7 +2,7 @@ from pydantic import BaseModel, PositiveFloat, PositiveInt
 from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
 
-from .utility import ProductDetails
+from .utility import ProductDetails, ProductTypes
 
 
 class BaseProduct(ABC, BaseModel):
@@ -49,8 +49,8 @@ class FoodProduct(BaseProduct):
         is_vegetarian: food's classification
     """
 
-    days_to_expire: PositiveFloat  
-    is_vegetarian: bool  
+    days_to_expire: PositiveInt
+    is_vegetarian: bool
 
     def get_expiry_date(self) -> str:
         """
@@ -100,35 +100,33 @@ class ProductFactory:
         Args:
             product_details : contains details about the product
 
-        Raises:
-            Exception: if the product type is not defined
-
         Returns:
             BaseProduct: the created object type
         """
-        if product_details.type == "regular":
+        if product_details.type == ProductTypes.RP.value:
             return RegularProduct(
                 product_id=product_details.id,
                 product_name=product_details.name,
                 quantity=product_details.quantity,
                 price=product_details.price,
             )
-        elif product_details.type == "food":
+        elif product_details.type == ProductTypes.FP.value:
             return FoodProduct(
                 product_id=product_details.id,
                 product_name=product_details.name,
                 quantity=product_details.quantity,
                 price=product_details.price,
                 days_to_expire=product_details.days_to_expire,
-                is_vegetarian=product_details.is_vegetarian, # type: ignore
+                is_vegetarian=product_details.is_vegetarian,  # type: ignore
             )
-        elif product_details.type == "electronic":
+        elif product_details.type == ProductTypes.EP.value:
             return ElectronicProduct(
                 product_id=product_details.id,
                 product_name=product_details.name,
                 quantity=product_details.quantity,
                 price=product_details.price,
-                warranty_period_in_years=product_details.warranty_period_in_years, 
+                warranty_period_in_years=product_details.warranty_period_in_years,
             )
         else:
-            raise Exception(f"Requested product type: {type} not available")
+            print(f"Requested product type: {type} not available")
+            return # type: ignore
