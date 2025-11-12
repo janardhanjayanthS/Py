@@ -173,3 +173,20 @@ def mainloop(inventory_data: str) -> None:
                         print("-" * 30)
             else:
                 print(f"Cannot find product {choice} from inventory")
+            
+        
+class Inventory:
+    def __init__(self) -> None:
+        ...
+    
+    def load_from_csv(self, filepath: str) -> None:
+        ...
+
+    def add_product(self, product_details: ProductDetails) -> None:
+        ...
+    
+    def update_stock(self, product_id: str, new_quantity: int) -> None:
+        ...
+    
+    def generate_low_quantity_report(self) -> None:
+        ...
