@@ -51,7 +51,7 @@ class ProductDetails:
     """
     id: str
     name: str
-    type: str
+    type: ProductTypes
     price: float
     quantity: int
     days_to_expire: int

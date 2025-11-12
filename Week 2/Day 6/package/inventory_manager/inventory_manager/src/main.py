@@ -4,33 +4,11 @@ from pydantic import ValidationError
 
 from .model import ProductFactory, BaseProduct
 from .log import logger, construct_log_message
-from .utility import dict_to_str, ProductDetails, convert_to_bool
+from .utility import ProductDetails, convert_to_bool
 from .config import ConfigLoader
 from .file_manager import check_low_stock_or_print_details
 
-config: ConfigLoader = ConfigLoader()
 product_factory: ProductFactory = ProductFactory()
-
-
-
-
-
-
-# def read_file(filename: str) -> None:
-#     """
-#     Reads data from csv file
-#     Args:
-#         filename: csv file to read
-#     """
-#     try:
-#         with open(filename, "r") as csv_file:
-#             reader = DictReader(csv_file)
-#             for row in reader:
-#                 # validate_product(product=row)
-#                 ...
-#     except FileNotFoundError as e:
-#         print(f"File not found {e}")
-
 
 
 class Inventory:

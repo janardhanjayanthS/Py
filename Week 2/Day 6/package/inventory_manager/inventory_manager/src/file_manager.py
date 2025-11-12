@@ -1,3 +1,11 @@
+from typing import Any
+
+from .config import ConfigLoader
+from .utility import dict_to_str
+
+
+config: ConfigLoader = ConfigLoader()
+
 
 def check_low_stock_or_print_details(product: dict[str, Any]) -> None:
     """

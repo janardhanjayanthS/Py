@@ -1,4 +1,4 @@
-from pydantic import BaseModel, PositiveFloat, PositiveInt
+from pydantic import BaseModel, PositiveFloat, PositiveInt, Fiel
 from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
 
@@ -19,6 +19,7 @@ class BaseProduct(ABC, BaseModel):
     product_name: str
     quantity: PositiveInt
     price: PositiveFloat
+    type: ProductTypes
 
     @abstractmethod
     def details(self) -> str:
@@ -109,6 +110,7 @@ class ProductFactory:
                 product_name=product_details.name,
                 quantity=product_details.quantity,
                 price=product_details.price,
+                type=product_details.type
             )
         elif product_details.type == ProductTypes.FP.value:
             return FoodProduct(
@@ -118,6 +120,7 @@ class ProductFactory:
                 price=product_details.price,
                 days_to_expire=product_details.days_to_expire,
                 is_vegetarian=product_details.is_vegetarian,  # type: ignore
+                type=product_details.type
             )
         elif product_details.type == ProductTypes.EP.value:
             return ElectronicProduct(
@@ -126,6 +129,7 @@ class ProductFactory:
                 quantity=product_details.quantity,
                 price=product_details.price,
                 warranty_period_in_years=product_details.warranty_period_in_years,
+                type=product_details.type
             )
         else:
             print(f"Requested product type: {type} not available")
