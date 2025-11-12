@@ -111,9 +111,9 @@ class Inventory:
                     type=product.type,
                     quantity=product.quantity,
                     price=product.price,
-                    days_to_expire=product.days_to_expire,
-                    is_vegetarian=product.is_vegetarian,
-                    warranty_period_in_years=product.warranty_period_in_years,
+                    days_to_expire=product.days_to_expire, # type: ignore
+                    is_vegetarian=product.is_vegetarian, # type: ignore
+                    warranty_period_in_years=product.warranty_period_in_years, # type: ignore
                 )
             )
             check_low_stock_or_print_details(product=product)
