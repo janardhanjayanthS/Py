@@ -1,5 +1,6 @@
-from inventory_manager.inventory_manager import mainloop, prompt_id
+from inventory_manager.inventory_manager import Inventory
 
+inv = Inventory()
+inv.load_from_csv(filepath="new_inventory.csv")
 
-# mainloop(inventory_data='new_inventory.csv')
-prompt_id({'a', 'b', 'c'})
+print(inv.products)

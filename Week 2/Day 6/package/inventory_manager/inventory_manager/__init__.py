@@ -1,1 +1,1 @@
-from .src.main import mainloop
+from .src.main import Inventory 

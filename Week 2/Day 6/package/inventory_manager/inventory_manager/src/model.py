@@ -1,4 +1,4 @@
-from pydantic import BaseModel, PositiveFloat, PositiveInt, Fiel
+from pydantic import BaseModel, PositiveFloat, PositiveInt
 from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
 
