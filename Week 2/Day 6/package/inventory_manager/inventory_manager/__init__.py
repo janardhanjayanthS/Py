@@ -1,1 +1,1 @@
-from .src.main import Inventory 
+from .src.main import Inventory

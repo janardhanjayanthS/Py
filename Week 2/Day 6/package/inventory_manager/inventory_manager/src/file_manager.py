@@ -12,10 +12,11 @@ def check_low_stock_or_print_details(product: BaseProduct) -> None:
     Args:
         product: object of Product form model.py
     """
-    if product.quantity and check_low_stock(product_quantity=product.quantity):
-        append_low_stock_report(product=product)
-    else:
-        product.details()
+    if product:
+        if check_low_stock(product_quantity=product.quantity):
+            append_low_stock_report(product=product)
+        else:
+            product.details()
 
 
 def check_low_stock(product_quantity: int) -> bool | None:
@@ -41,8 +42,7 @@ def append_low_stock_report(product: BaseProduct) -> None:
     Args:
         product: object of Product form model.py
     """
-    print(f"Requested product is available in less quantity {product.quantity}")
-    print(f"Product details: {product.details()}")
+    print(f"Product '{product.product_name}' is available in less quantity {product.quantity}")
     filename = "low_stock_report.txt"
     try:
         append_content(filename, product.details())
@@ -61,7 +61,6 @@ def append_content(filename: str, content: str) -> None:
     """
     with open(filename, "a") as file:
         file.write(content + "\n")
-    print(f"success fully appended to {filename}")
 
 
 def create_file(filename: str) -> None:

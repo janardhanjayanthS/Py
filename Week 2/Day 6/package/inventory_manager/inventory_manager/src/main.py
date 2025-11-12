@@ -29,7 +29,7 @@ class Inventory:
             with open(filepath, "r") as csv_file:
                 reader = DictReader(csv_file)
                 for row in reader:
-                    self.products.append(self.__get_valid_product_or_log_error(row=row))
+                    self.add_product(row)
         except FileNotFoundError as e:
             print(f"File not found {e}")
             return
@@ -70,16 +70,26 @@ class Inventory:
                 )
             )
 
-    def add_product(self, product_details: ProductDetails) -> None:
+    def add_product(self, product_info: dict[str, Any]) -> None:
         """
-        add a new product to products list
+        add a new product to products list if product_id does not already exist
 
         Args:
-            product_details: dataclass containing product details
+            product_info: dictionary containing details about the product
+            format: keys -> same as columns in inventory csv
+                    values: strings overall. 
+                            quantity, days_to_expire, warranty_period_in_years: int
+                            price: float  
         """
-        ...
-        product = self.product_factory.create_product(product_details=product_details)
-        self.products.append(product)
+        for product in self.products:
+            if product.product_id == product_info["product_id"]:
+                print(
+                    f"Product with: {product_info['product_id']} already exists: {product.details()}"
+                )
+                return
+        product = self.__get_valid_product_or_log_error(row=product_info)
+        if product:
+            self.products.append(product)
 
     def update_stock(self, product_id: str, new_quantity: int) -> None:
         """

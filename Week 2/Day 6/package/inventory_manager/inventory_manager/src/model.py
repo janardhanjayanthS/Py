@@ -1,4 +1,4 @@
-from pydantic import BaseModel, PositiveFloat, PositiveInt
+from pydantic import BaseModel, PositiveFloat, PositiveInt, Field
 from datetime import datetime, timedelta
 from abc import ABC, abstractmethod
 
@@ -16,7 +16,7 @@ class BaseProduct(ABC, BaseModel):
     """
 
     product_id: str
-    product_name: str
+    product_name: str = Field(..., min_length=1)
     quantity: PositiveInt
     price: PositiveFloat
     type: ProductTypes
@@ -37,7 +37,7 @@ class RegularProduct(BaseProduct):
         """
         returns string contining product details
         """
-        return f"ID: {self.product_id} \nName: {self.product_name} \nQantity: {self.quantity} \nprice: {self.price}"
+        return f"ID: {self.product_id} | Name: {self.product_name} | Qantity: {self.quantity} | price: {self.price}"
 
 
 class FoodProduct(BaseProduct):
@@ -68,7 +68,7 @@ class FoodProduct(BaseProduct):
         """
         returns string contining product details
         """
-        return f"ID: {self.product_id} \nName: {self.product_name} \nQantity: {self.quantity} \nprice: {self.price} \nDays to expire: {self.days_to_expire} \nIs Veg: {self.is_vegetarian}"
+        return f"ID: {self.product_id} | Name: {self.product_name} | Qantity: {self.quantity} | price: {self.price} | Days to expire: {self.days_to_expire} | Is Veg: {self.is_vegetarian}"
 
 
 class ElectronicProduct(BaseProduct):
@@ -86,7 +86,7 @@ class ElectronicProduct(BaseProduct):
         """
         returns string contining product details
         """
-        return f"ID: {self.product_id} \nName: {self.product_name} \nQantity: {self.quantity} \nprice: {self.price} \nWarrenty period: {self.warranty_period_in_years} years"
+        return f"ID: {self.product_id} | Name: {self.product_name} | Qantity: {self.quantity} | price: {self.price} | Warrenty period: {self.warranty_period_in_years} years"
 
 
 class ProductFactory:
