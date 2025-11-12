@@ -7,7 +7,6 @@ from .log import log_error, construct_log_message
 from .utility import ProductDetails, convert_to_bool
 from .file_manager import check_low_stock_or_print_details
 
-product_factory: ProductFactory = ProductFactory()
 
 
 class Inventory:
