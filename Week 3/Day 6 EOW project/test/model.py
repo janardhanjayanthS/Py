@@ -1,4 +1,5 @@
 """Tests for Pydantic model"""
+
 from inventory_manager import BaseProduct, ProductTypes, FoodProduct, ElectronicProduct
 from pydantic import ValidationError
 import pytest
@@ -63,7 +64,8 @@ def test_electronic_product():
     assert product.type == ProductTypes.EP
     assert product.warranty_period_in_years == 1.75
 
-def  test_negative_quantity():
+
+def test_negative_quantity():
     """
     test for negative quantity value of a product
     """
@@ -76,6 +78,7 @@ def  test_negative_quantity():
             type=ProductTypes.RP,
         )
 
+
 def test_negative_price():
     """
     test for negative price value of a product
@@ -84,6 +87,33 @@ def test_negative_price():
         BaseProduct(
             product_id="P01",
             product_name="test_product",
+            quantity=10,
+            price=-10.00,
+            type=ProductTypes.RP,
+        )
+
+
+def test_unknown_product_type():
+    """
+    test for unknown product type
+    """
+    with pytest.raises(ValidationError):
+        BaseProduct(
+            product_id="P01",
+            product_name="test_product",
+            quantity=10,
+            price=-10.00,
+            type="unknown product type",
+        )
+    
+def test_product_with_no_name():
+    """
+    test for product with no name
+    """
+    with pytest.raises(ValidationError):
+        BaseProduct(
+            product_id="P01",
+            product_name="",
             quantity=10,
             price=-10.00,
             type=ProductTypes.RP,
