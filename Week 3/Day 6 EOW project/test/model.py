@@ -103,9 +103,10 @@ def test_unknown_product_type():
             product_name="test_product",
             quantity=10,
             price=-10.00,
-            type="unknown product type",
+            type="unknown product type",  # type: ignore
         )
-    
+
+
 def test_product_with_no_name():
     """
     test for product with no name
@@ -118,3 +119,17 @@ def test_product_with_no_name():
             price=-10.00,
             type=ProductTypes.RP,
         )
+
+
+def test_product_data_string():
+    product = BaseProduct(
+        product_id="P01",
+        product_name="test",
+        quantity=10,
+        price=10.00,
+        type=ProductTypes.RP,
+    )
+    assert (
+        f"{product}"
+        == "product_id: P01 | product_name: test | quantity: 10 | price: 10.0 | type: regular | "
+    )
