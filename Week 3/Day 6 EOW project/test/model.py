@@ -4,6 +4,7 @@ from inventory_manager import BaseProduct, ProductTypes, FoodProduct, Electronic
 from pydantic import ValidationError
 import pytest
 
+
 @pytest.fixture
 def product() -> BaseProduct:
     return BaseProduct(
@@ -13,6 +14,7 @@ def product() -> BaseProduct:
         price=10.00,
         type=ProductTypes.RP,
     )
+
 
 def test_regular_product(product):
     """
@@ -67,22 +69,29 @@ def test_electronic_product():
     assert product.warranty_period_in_years == 1.75
 
 
-def test_negative_quantity(product):
+def test_negative_product_quantity():
     """
     test for negative quantity value of a product
     """
     with pytest.raises(ValidationError):
+        BaseProduct(
+            product_id="P01",
+            product_name="test_product",
+            quantity=-10,
+            price=10.00,
+            type=ProductTypes.RP,
+        )
+
+
+def test_update_to_negative_product_quantity(product):
+    """
+    test for assigning negative quantity value of a product
+    """
+    with pytest.raises(ValidationError):
         product.quantity = -10
-        # BaseProduct(
-        #     product_id="P01",
-        #     product_name="test_product",
-        #     quantity=-10,
-        #     price=10.00,
-        #     type=ProductTypes.RP,
-        # )
 
 
-def test_negative_price():
+def test_negative_product_price():
     """
     test for negative price value of a product
     """
@@ -94,6 +103,14 @@ def test_negative_price():
             price=-10.00,
             type=ProductTypes.RP,
         )
+
+
+def test_update_to_negative_product_price(product):
+    """
+    test for assigning negative price value of a product
+    """
+    with pytest.raises(ValidationError):
+        product.price = -10
 
 
 def test_unknown_product_type():
@@ -110,6 +127,14 @@ def test_unknown_product_type():
         )
 
 
+def test_update_to_unknown_product_type(product):
+    """
+    test for assigning empty product name for a product
+    """
+    with pytest.raises(ValidationError):
+        product.type = "abc"
+
+
 def test_product_with_no_name():
     """
     test for product with no name
@@ -122,6 +147,14 @@ def test_product_with_no_name():
             price=-10.00,
             type=ProductTypes.RP,
         )
+
+
+def test_update_to_unknown_product_name(product):
+    """
+    test for assigning empty product name for a product
+    """
+    with pytest.raises(ValidationError):
+        product.name = ""
 
 
 def test_product_data_string(product):
