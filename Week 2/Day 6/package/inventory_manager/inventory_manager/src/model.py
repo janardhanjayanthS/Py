@@ -5,7 +5,7 @@ from abc import ABC
 from .utility import ProductDetails, ProductTypes
 
 
-class BaseProduct(ABC, BaseModel):
+class BaseProduct(ABC, BaseModel, validate_assignment=True):
     """
     Defines a product model
     Attributes:
@@ -20,9 +20,6 @@ class BaseProduct(ABC, BaseModel):
     quantity: PositiveInt
     price: PositiveFloat
     type: ProductTypes
-
-    class Config:
-        validate_assignment = True
 
     def __str__(self):
         message = ""
