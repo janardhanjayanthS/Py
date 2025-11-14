@@ -5,7 +5,7 @@ from abc import ABC
 from .utility import ProductDetails, ProductTypes
 
 
-class BaseProduct(ABC, BaseModel):
+class BaseProduct(ABC, BaseModel, validate_assignment=True):
     """
     Defines a product model
     Attributes:

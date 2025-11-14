@@ -5,17 +5,30 @@ from pydantic import ValidationError
 import pytest
 
 
-def test_regular_product():
+@pytest.fixture
+def product() -> BaseProduct:
     """
-    tests for a valid regualr product
+    Fixture for a BaseProduct object with 
+    valid attributes
+
+    Returns:
+        BaseProduct object
     """
-    product = BaseProduct(
+    return BaseProduct(
         product_id="P01",
         product_name="test_product",
         quantity=10,
         price=10.00,
         type=ProductTypes.RP,
     )
+
+
+def test_regular_product(product: BaseProduct):
+    """
+    tests for a valid regualr product   
+    Args:
+        prodcut: BaseProduct's object to test
+    """
     assert product.product_id == "P01"
     assert product.product_name == "test_product"
     assert product.quantity == 10
@@ -65,7 +78,7 @@ def test_electronic_product():
     assert product.warranty_period_in_years == 1.75
 
 
-def test_negative_quantity():
+def test_negative_product_quantity():
     """
     test for negative quantity value of a product
     """
@@ -79,7 +92,17 @@ def test_negative_quantity():
         )
 
 
-def test_negative_price():
+def test_update_to_negative_product_quantity(product: BaseProduct):
+    """
+    test for assigning negative quantity value of a product
+    Args:
+        prodcut: BaseProduct's object to test
+    """
+    with pytest.raises(ValidationError):
+        product.quantity = -10
+
+
+def test_negative_product_price():
     """
     test for negative price value of a product
     """
@@ -91,6 +114,16 @@ def test_negative_price():
             price=-10.00,
             type=ProductTypes.RP,
         )
+
+
+def test_update_to_negative_product_price(product: BaseProduct):
+    """
+    test for assigning negative price value of a product
+    Args:
+        prodcut: BaseProduct's object to test
+    """
+    with pytest.raises(ValidationError):
+        product.price = -10
 
 
 def test_unknown_product_type():
@@ -107,6 +140,16 @@ def test_unknown_product_type():
         )
 
 
+def test_update_to_unknown_product_type(product: BaseProduct):
+    """
+    test for assigning empty product name for a product
+    Args:
+        prodcut: BaseProduct's object to test
+    """
+    with pytest.raises(ValidationError):
+        product.type = "abc" # type: ignore
+
+
 def test_product_with_no_name():
     """
     test for product with no name
@@ -121,18 +164,23 @@ def test_product_with_no_name():
         )
 
 
-def test_product_data_string():
+def test_update_to_unknown_product_name(product: BaseProduct):
+    """
+    test for assigning empty product name for a product
+    Args:
+        prodcut: BaseProduct's object to test
+    """
+    with pytest.raises(ValidationError):
+        product.name = "" # type: ignore
+
+
+def test_product_data_string(product: BaseProduct):
     """
     test for product __str__ method
+    Args:
+        prodcut: BaseProduct's object to test
     """
-    product = BaseProduct(
-        product_id="P01",
-        product_name="test",
-        quantity=10,
-        price=10.00,
-        type=ProductTypes.RP,
-    )
     assert (
         f"{product}"
-        == "product_id: P01 | product_name: test | quantity: 10 | price: 10.0 | type: regular | "
+        == "product_id: P01 | product_name: test_product | quantity: 10 | price: 10.0 | type: regular | "
     )
