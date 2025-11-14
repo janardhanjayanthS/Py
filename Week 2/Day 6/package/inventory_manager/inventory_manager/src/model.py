@@ -21,6 +21,9 @@ class BaseProduct(ABC, BaseModel):
     price: PositiveFloat
     type: ProductTypes
 
+    class Config:
+        validate_assignment = True
+
     def __str__(self):
         message = ""
         for key, value in self.__dict__.items():

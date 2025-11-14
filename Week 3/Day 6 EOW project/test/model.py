@@ -4,18 +4,20 @@ from inventory_manager import BaseProduct, ProductTypes, FoodProduct, Electronic
 from pydantic import ValidationError
 import pytest
 
-
-def test_regular_product():
-    """
-    tests for a valid regualr product
-    """
-    product = BaseProduct(
+@pytest.fixture
+def product() -> BaseProduct:
+    return BaseProduct(
         product_id="P01",
         product_name="test_product",
         quantity=10,
         price=10.00,
         type=ProductTypes.RP,
     )
+
+def test_regular_product(product):
+    """
+    tests for a valid regualr product
+    """
     assert product.product_id == "P01"
     assert product.product_name == "test_product"
     assert product.quantity == 10
@@ -65,18 +67,19 @@ def test_electronic_product():
     assert product.warranty_period_in_years == 1.75
 
 
-def test_negative_quantity():
+def test_negative_quantity(product):
     """
     test for negative quantity value of a product
     """
     with pytest.raises(ValidationError):
-        BaseProduct(
-            product_id="P01",
-            product_name="test_product",
-            quantity=-10,
-            price=10.00,
-            type=ProductTypes.RP,
-        )
+        product.quantity = -10
+        # BaseProduct(
+        #     product_id="P01",
+        #     product_name="test_product",
+        #     quantity=-10,
+        #     price=10.00,
+        #     type=ProductTypes.RP,
+        # )
 
 
 def test_negative_price():
@@ -121,18 +124,11 @@ def test_product_with_no_name():
         )
 
 
-def test_product_data_string():
+def test_product_data_string(product):
     """
     test for product __str__ method
     """
-    product = BaseProduct(
-        product_id="P01",
-        product_name="test",
-        quantity=10,
-        price=10.00,
-        type=ProductTypes.RP,
-    )
     assert (
         f"{product}"
-        == "product_id: P01 | product_name: test | quantity: 10 | price: 10.0 | type: regular | "
+        == "product_id: P01 | product_name: test_product | quantity: 10 | price: 10.0 | type: regular | "
     )
