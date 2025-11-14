@@ -23,9 +23,11 @@ def product() -> BaseProduct:
     )
 
 
-def test_regular_product(product):
+def test_regular_product(product: BaseProduct):
     """
-    tests for a valid regualr product
+    tests for a valid regualr product   
+    Args:
+        prodcut: BaseProduct's object to test
     """
     assert product.product_id == "P01"
     assert product.product_name == "test_product"
@@ -90,9 +92,11 @@ def test_negative_product_quantity():
         )
 
 
-def test_update_to_negative_product_quantity(product):
+def test_update_to_negative_product_quantity(product: BaseProduct):
     """
     test for assigning negative quantity value of a product
+    Args:
+        prodcut: BaseProduct's object to test
     """
     with pytest.raises(ValidationError):
         product.quantity = -10
@@ -112,9 +116,11 @@ def test_negative_product_price():
         )
 
 
-def test_update_to_negative_product_price(product):
+def test_update_to_negative_product_price(product: BaseProduct):
     """
     test for assigning negative price value of a product
+    Args:
+        prodcut: BaseProduct's object to test
     """
     with pytest.raises(ValidationError):
         product.price = -10
@@ -134,12 +140,14 @@ def test_unknown_product_type():
         )
 
 
-def test_update_to_unknown_product_type(product):
+def test_update_to_unknown_product_type(product: BaseProduct):
     """
     test for assigning empty product name for a product
+    Args:
+        prodcut: BaseProduct's object to test
     """
     with pytest.raises(ValidationError):
-        product.type = "abc"
+        product.type = "abc" # type: ignore
 
 
 def test_product_with_no_name():
@@ -156,17 +164,21 @@ def test_product_with_no_name():
         )
 
 
-def test_update_to_unknown_product_name(product):
+def test_update_to_unknown_product_name(product: BaseProduct):
     """
     test for assigning empty product name for a product
+    Args:
+        prodcut: BaseProduct's object to test
     """
     with pytest.raises(ValidationError):
-        product.name = ""
+        product.name = "" # type: ignore
 
 
-def test_product_data_string(product):
+def test_product_data_string(product: BaseProduct):
     """
     test for product __str__ method
+    Args:
+        prodcut: BaseProduct's object to test
     """
     assert (
         f"{product}"
