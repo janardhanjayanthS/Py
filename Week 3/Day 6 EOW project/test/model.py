@@ -122,6 +122,9 @@ def test_product_with_no_name():
 
 
 def test_product_data_string():
+    """
+    test for product __str__ method
+    """
     product = BaseProduct(
         product_id="P01",
         product_name="test",
