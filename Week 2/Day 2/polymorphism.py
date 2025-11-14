@@ -66,7 +66,8 @@ if __name__ == "__main__":
     rectangle = rectangel(length=10, width=7)
     triangle = Triangle(height=15, base=1000)
     shapes = [square_5, rectangle, triangle]
-    
+
     for shape in shapes:
-        print(f'Area of {shape.__class__.__name__} with dimensions {shape.__dict__} is {shape.area()} units')
-        
+        print(
+            f"Area of {shape.__class__.__name__} with dimensions {shape.__dict__} is {shape.area()} units"
+        )
