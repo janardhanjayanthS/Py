@@ -16,7 +16,3 @@ Here is the json for creating a new task
 from users prompt: {Task.model_json_schema()}
 """
 
-messages: list[dict[str, Any]] = [
-    {"role": "system", "content": system_prompt},
-    {"role": "user", "content": },
-]
