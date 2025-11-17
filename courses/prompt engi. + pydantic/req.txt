@@ -1,0 +1,31 @@
+Project Requirements: AI To-Do Assistant
+1. Maintain an in-memory list of tasks
+Each task must have:
+id (int)
+task (str)
+done (bool)
+
+2. Create Pydantic models
+AddTaskInput(task: str)
+MarkDoneInput(task_id: int)
+ListTasksInput() (empty)
+
+3. Define three tools
+add_task → adds a new task
+list_tasks → returns all tasks
+mark_done → marks a task as completed
+Each tool must use its corresponding Pydantic model.
+
+4. System prompt requirements
+Assistant is a to-do manager
+Must use tool calling when adding/listing/updating tasks
+Must ask for clarification if user input is unclear
+Must not invent tasks
+
+5. LLM workflow
+Send user message + system prompt + tool specs
+LLM picks a tool and outputs arguments
+Validate with Pydantic
+Execute tool
+Send tool result back to LLM
+LLM generates final answer
