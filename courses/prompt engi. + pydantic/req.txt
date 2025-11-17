@@ -29,3 +29,167 @@ Validate with Pydantic
 Execute tool
 Send tool result back to LLM
 LLM generates final answer
+
+
+full description:
+🎯 Goal
+
+You will build an app where a user can type:
+
+“Add a task to buy milk”
+“Show my tasks”
+“Mark the third task as done”
+
+The LLM will:
+
+Decide which tool to call
+
+Generate the correct JSON arguments
+
+Your Python function (tool) will run
+
+You send the result back to the LLM
+
+LLM replies naturally to the user
+
+📌 Requirements (No code, only tasks)
+1. In-Memory To-Do List
+
+Use a simple Python list:
+
+[
+  {"id": 1, "task": "Buy milk", "done": False},
+  {"id": 2, "task": "Study Python", "done": False}
+]
+
+
+No files.
+No database.
+Just one list inside the script.
+
+2. Pydantic Models
+
+Create Pydantic models for tool inputs:
+
+a) AddTaskInput
+
+task: str
+
+b) ListTasksInput
+
+no fields (empty)
+
+c) MarkDoneInput
+
+task_id: int
+
+These schemas are used in tool calling.
+
+3. Tools (Functions)
+
+Create 3 tools:
+
+1️⃣ add_task
+
+Input → AddTaskInput
+Action → append a new task to the list
+
+2️⃣ list_tasks
+
+Input → ListTasksInput
+Action → return all tasks
+
+3️⃣ mark_done
+
+Input → MarkDoneInput
+Action → set done=True for the matching task
+
+4. System Prompt Requirements
+
+Your system prompt must say:
+
+“You are a to-do assistant.”
+
+“Always use tool calls when user asks to add, list, or update tasks.”
+
+“Return structured function arguments using JSON.”
+
+“If the user request is unclear, ask a clarifying question.”
+
+“Do not invent tasks.”
+
+5. LLM Workflow Requirements
+When the user sends a message:
+
+You send user input + system prompt + tool schemas.
+
+LLM decides if a tool is needed.
+
+LLM outputs JSON tool call like:
+
+{
+  "tool": "add_task",
+  "arguments": {
+    "task": "Buy milk"
+  }
+}
+
+
+You validate arguments with Pydantic.
+
+You run the tool (function).
+
+You send the tool result back to the LLM.
+
+LLM returns a final answer:
+
+“Okay! I added ‘Buy milk’ to your tasks.”
+
+6. Example Interactions That Must Work
+✔ Adding a task
+
+User:
+
+“Add clean the room to my to-do list”
+
+LLM → Calls add_task
+
+✔ Listing tasks
+
+User:
+
+“What tasks do I have?”
+
+LLM → Calls list_tasks
+
+✔ Marking a task as done
+
+User:
+
+“Mark task 2 as completed”
+
+LLM → Calls mark_done
+
+✔ Asking clarifying questions
+
+User:
+
+“Mark it as done”
+
+LLM → Should ask:
+
+“Which task do you want to mark as done?”
+
+(This tests prompt engineering)
+
+7. Optional Add-Ons (for practice)
+
+Add due dates
+
+Add priority
+
+Add delete_task tool
+
+Add clear_completed tool
+
+Add reminders (LLM reasoning + follow-up questions)
