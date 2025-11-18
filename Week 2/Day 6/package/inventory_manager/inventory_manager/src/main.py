@@ -8,7 +8,6 @@ from .utility import ProductDetails, convert_to_bool
 from .file_manager import check_low_stock_or_print_details
 
 
-
 class Inventory:
     def __init__(self) -> None:
         self.products: list = []
@@ -74,19 +73,27 @@ class Inventory:
         Args:
             product_info: dictionary containing details about the product
             format: keys -> same as columns in inventory csv
-                    values: strings overall. 
+                    values: strings overall.
                             quantity, days_to_expire, warranty_period_in_years: int
-                            price: float  
+                            price: float
         """
-        for product in self.products:
-            if product.product_id == product_info["product_id"]:
-                print(
-                    f"Product with: {product_info['product_id']} already exists: {product}"
-                )
-                return
+        self.__check_if_product_exists(product_id=product_info["product_id"])
         product = self.__get_valid_product_or_log_error(row=product_info)
         if product:
             self.products.append(product)
+
+    def __check_if_product_exists(self, product_id) -> None:
+        """
+        Checks if product with an id already exists in the list of products
+        if so then prints its info and returns
+
+        Args:
+            product_id: id of the product to check
+        """
+        for product in self.products:
+            if product.product_id == product_id:
+                print(f"Product with: {product_id} already exists: {product}")
+                return
 
     def update_stock(self, product_id: str, new_quantity: int) -> None:
         """
