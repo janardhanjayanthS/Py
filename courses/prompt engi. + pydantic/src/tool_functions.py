@@ -14,7 +14,7 @@ def add_task(add_args: AddTaskInput):
     print(f"Added new task: {add_args.task}")
 
 
-def list_tasks(list_tasks_args: ListTasksInput):
+def list_tasks():
     """
     Lists all existing tasks from tasks list
     """
@@ -43,5 +43,50 @@ def mark_done(mark_done_args: MarkDoneInput):
     for task in tasks:
         if task.id == mark_done_args.task_id:
             task.done = True
+            print(f"Marked task with id {mark_done_args.id} as completed")
             return
     print(f"Unable to find the requested task with id: {mark_done_args.task_id}")
+
+
+def perform_tool_call(tool_calls: list):
+    """
+    For each call in tool_calls generates corresponding
+    model and calls corresponding fucntion with it
+
+    Args:
+        tool_calls: list containing tool_calls (from LLM)
+    """
+    if tool_calls:
+        for tool_call in tool_calls:
+            if tool_call.function.name == "add_task":
+                call_add_task(tool_call=tool_call)
+            elif tool_call.function.name == "list_tasks":
+                list_tasks()
+            elif tool_call.function.name == "mark_done":
+                call_mark_done(tool_call=tool_call)
+
+
+def call_add_task(tool_call) -> None:
+    """
+    Calls the add_task function with args from tool_call
+
+    Args:
+        tool_call: LLM generated tool call object containing args for add_task function
+    """
+    add_args: AddTaskInput = AddTaskInput.model_validate_json(
+        tool_call.function.arguments
+    )
+    add_task(add_args=add_args)
+
+
+def call_mark_done(tool_call) -> None:
+    """
+    Calls the mark_done function with args from tool_call
+
+    Args:
+        tool_call: LLM generated tool call object containing args for mark_done function
+    """
+    args: MarkDoneInput = MarkDoneInput.model_validate_json(
+        tool_call.function.arguments
+    )
+    mark_done(mark_done_args=args)

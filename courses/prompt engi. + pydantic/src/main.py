@@ -3,6 +3,7 @@ from typing import Any
 from prompts import system_prompt
 from utility import validate_user_input, get_json_from_user_input
 from tools import tool_definition
+from tool_functions import perform_tool_call
 from model import Task
 from dotenv import load_dotenv
 import os
@@ -32,5 +33,11 @@ response = client.chat.completions.create(
     tool_choice='auto'
 )
 
-print(f'Response from llm with tool calling: {response}')
-print(f'Tasks list: {tasks}')
+if __name__ == '__main__':
+    response_message = response.choices[0].message
+    tool_calls: list = getattr(response_message, "tool_calls", [])
+    perform_tool_call(tool_calls=tool_calls)
+    print(f'Response from llm with tool calling: {response}, {type(response)}')
+    print(f'Response message: {response_message}, {type(response_message)}')
+    print(f'Response tool calls: {tool_calls}, {type(tool_calls)}')
+    print(f'Tasks list: {tasks}')
