@@ -11,7 +11,7 @@ manage their to do work.
 Use the appropriate functions from the 'tool_deifinition'
 to perfom task as per the user's plain text.
 
-Generate task ids starting from one, and increament them
+ALWAYS auto Generate task ids starting from one, and increament them
 one for each new task.
 
 Ask for clarification if any user input is

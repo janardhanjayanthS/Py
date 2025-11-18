@@ -1,6 +1,7 @@
-from model import AddTaskInput, ListTasksInput, MarkDoneInput
+from model import AddTaskInput, ListTasksInput, MarkDoneInput, Task
 
 tasks: list = []
+task_id: int = 0
 
 
 def add_task(add_args: AddTaskInput):
@@ -10,8 +11,35 @@ def add_task(add_args: AddTaskInput):
     Args:
         add_args: contains infromation about task
     """
-    tasks.append(add_args)
+    tasks.append(
+        Task(
+            id=get_new_task_id(args_task_id=add_args.id),
+            task=add_args.task,
+            done=add_args.done,
+        )
+    )
     print(f"Added new task: {add_args.task}")
+
+
+def get_new_task_id(args_task_id: int) -> int:
+    """
+    returns a new task id based on task id from args
+    for add_task function
+
+    Args:
+        args_task_id: task id in args of add_task
+
+    Returns:
+        int: task id to use for current task
+    """
+    global task_id
+    if task_id == 0:
+        new_id = args_task_id
+        task_id = 1
+    else:
+        new_id = task_id + 1
+        task_id += 1
+    return new_id
 
 
 def list_tasks():
@@ -59,11 +87,14 @@ def perform_tool_call(tool_calls: list):
     if tool_calls:
         for tool_call in tool_calls:
             if tool_call.function.name == "add_task":
+                print("calling add tasks")
                 call_add_task(tool_call=tool_call)
-            elif tool_call.function.name == "list_tasks":
-                list_tasks()
             elif tool_call.function.name == "mark_done":
+                print("calling mark done")
                 call_mark_done(tool_call=tool_call)
+            elif tool_call.function.name == "list_tasks":
+                print("calling list tasks")
+                list_tasks()
 
 
 def call_add_task(tool_call) -> None:

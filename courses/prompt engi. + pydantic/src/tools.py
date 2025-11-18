@@ -1,6 +1,5 @@
 from typing import Any
 from model import AddTaskInput, ListTasksInput, MarkDoneInput
-from tool_functions import add_task, list_tasks, mark_done
 
 tool_definition: list[Any] = [
     {
@@ -28,4 +27,3 @@ tool_definition: list[Any] = [
         },
     },
 ]
-
