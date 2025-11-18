@@ -57,3 +57,17 @@ def test_load_from_csv_file_not_found(capsys):
 
     captured = capsys.readouterr()
     assert "File not found" in captured.out
+
+def test_load_from_csv_empty_file():
+    """
+    test for load_from_csv from an empty file
+    """
+    csv_data = "product_id,product_name,quantity,price,type,days_to_expire,is_vegetarian,warranty_period_in_years\n"
+
+    inv_object = Inventory()
+    inv_object.add_product = MagicMock()
+
+    with patch('builtins.open', mock_open(read_data=csv_data)):
+        inv_object.load_from_csv('empty_csv_path.csv')
+
+    inv_object.add_product.assert_not_called()
