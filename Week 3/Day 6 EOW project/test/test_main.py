@@ -1,5 +1,5 @@
-from inventory_manager import Inventory
-from unittest.mock import MagicMock, patch, mock_open
+from inventory_manager import Inventory, BaseProduct
+from unittest.mock import MagicMock, patch, mock_open, call
 
 
 class TestLoadFromCSV:
@@ -78,98 +78,92 @@ class TestLoadFromCSV:
 
 
 # Code from claude
-# import pytest
-# from unittest.mock import MagicMock, patch, call
-# from inventory import Inventory
-# from model import BaseProduct
+class TestGenerateLowQuantityReport:
 
+    def test_generate_report_with_no_products(self):
+        """Test report generation when inventory is empty"""
+        inventory = Inventory()
 
-# class TestGenerateLowQuantityReport:
+        # Mock the file_manager function
+        with patch('inventory_manager.check_low_stock_or_print_details') as mock_check:
+            inventory.generate_low_quantity_report()
 
-#     def test_generate_report_with_no_products(self):
-#         """Test report generation when inventory is empty"""
-#         inventory = Inventory()
+        # Verify it was never called (no products)
+        mock_check.assert_not_called()
 
-#         # Mock the file_manager function
-#         with patch('inventory.check_low_stock_or_print_details') as mock_check:
-#             inventory.generate_low_quantity_report()
+    # def test_generate_report_with_single_product(self):
+    #     """Test report generation with one product"""
+    #     inventory = Inventory()
 
-#         # Verify it was never called (no products)
-#         mock_check.assert_not_called()
+    #     # Create a mock product
+    #     mock_product = MagicMock(spec=BaseProduct)
+    #     mock_product.product_id = "P001"
+    #     mock_product.product_name = "Apple"
+    #     mock_product.quantity = 5
 
-#     def test_generate_report_with_single_product(self):
-#         """Test report generation with one product"""
-#         inventory = Inventory()
+    #     inventory.products = [mock_product]
 
-#         # Create a mock product
-#         mock_product = MagicMock(spec=BaseProduct)
-#         mock_product.product_id = "P001"
-#         mock_product.product_name = "Apple"
-#         mock_product.quantity = 5
+    #     # Mock the file_manager function
+    #     with patch('inventory.check_low_stock_or_print_details') as mock_check:
+    #         inventory.generate_low_quantity_report()
 
-#         inventory.products = [mock_product]
+    #     # Verify it was called once with the product
+    #     mock_check.assert_called_once_with(product=mock_product)
 
-#         # Mock the file_manager function
-#         with patch('inventory.check_low_stock_or_print_details') as mock_check:
-#             inventory.generate_low_quantity_report()
+    # def test_generate_report_with_multiple_products(self):
+    #     """Test report generation with multiple products"""
+    #     inventory = Inventory()
 
-#         # Verify it was called once with the product
-#         mock_check.assert_called_once_with(product=mock_product)
+    #     # Create multiple mock products
+    #     product1 = MagicMock(spec=BaseProduct)
+    #     product1.product_id = "P001"
+    #     product1.quantity = 5
 
-#     def test_generate_report_with_multiple_products(self):
-#         """Test report generation with multiple products"""
-#         inventory = Inventory()
+    #     product2 = MagicMock(spec=BaseProduct)
+    #     product2.product_id = "P002"
+    #     product2.quantity = 15
 
-#         # Create multiple mock products
-#         product1 = MagicMock(spec=BaseProduct)
-#         product1.product_id = "P001"
-#         product1.quantity = 5
+    #     product3 = MagicMock(spec=BaseProduct)
+    #     product3.product_id = "P003"
+    #     product3.quantity = 3
 
-#         product2 = MagicMock(spec=BaseProduct)
-#         product2.product_id = "P002"
-#         product2.quantity = 15
+    #     inventory.products = [product1, product2, product3]
 
-#         product3 = MagicMock(spec=BaseProduct)
-#         product3.product_id = "P003"
-#         product3.quantity = 3
+    #     # Mock the file_manager function
+    #     with patch('inventory.check_low_stock_or_print_details') as mock_check:
+    #         inventory.generate_low_quantity_report()
 
-#         inventory.products = [product1, product2, product3]
+    #     # Verify it was called for each product
+    #     assert mock_check.call_count == 3
 
-#         # Mock the file_manager function
-#         with patch('inventory.check_low_stock_or_print_details') as mock_check:
-#             inventory.generate_low_quantity_report()
+    #     # Verify the order and arguments of calls
+    #     expected_calls = [
+    #         call(product=product1),
+    #         call(product=product2),
+    #         call(product=product3)
+    #     ]
+    #     mock_check.assert_has_calls(expected_calls)
 
-#         # Verify it was called for each product
-#         assert mock_check.call_count == 3
+    # def test_generate_report_calls_check_function_for_each_product(self):
+    #     """Test that check function is called for every product in inventory"""
+    #     inventory = Inventory()
 
-#         # Verify the order and arguments of calls
-#         expected_calls = [
-#             call(product=product1),
-#             call(product=product2),
-#             call(product=product3)
-#         ]
-#         mock_check.assert_has_calls(expected_calls)
+    #     # Create 5 mock products
+    #     products = [MagicMock(spec=BaseProduct) for _ in range(5)]
+    #     for i, product in enumerate(products):
+    #         product.product_id = f"P00{i}"
 
-#     def test_generate_report_calls_check_function_for_each_product(self):
-#         """Test that check function is called for every product in inventory"""
-#         inventory = Inventory()
+    #     inventory.products = products
 
-#         # Create 5 mock products
-#         products = [MagicMock(spec=BaseProduct) for _ in range(5)]
-#         for i, product in enumerate(products):
-#             product.product_id = f"P00{i}"
+    #     with patch('inventory.check_low_stock_or_print_details') as mock_check:
+    #         inventory.generate_low_quantity_report()
 
-#         inventory.products = products
+    #     # Verify called exactly 5 times
+    #     assert mock_check.call_count == 5
 
-#         with patch('inventory.check_low_stock_or_print_details') as mock_check:
-#             inventory.generate_low_quantity_report()
-
-#         # Verify called exactly 5 times
-#         assert mock_check.call_count == 5
-
-#         # Verify each product was passed
-#         for product in products:
-#             mock_check.assert_any_call(product=product)
+    #     # Verify each product was passed
+    #     for product in products:
+    #         mock_check.assert_any_call(product=product)
 
 
 # class TestCheckLowStockOrPrintDetails:
