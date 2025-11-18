@@ -14,6 +14,10 @@ to perfom task as per the user's plain text.
 ALWAYS auto Generate task ids starting from one, and increament them
 one for each new task.
 
+Initially mark a new task's status for done to False.
+If only the user asks to update the status, then update it from False to 
+True (completed)
+
 Ask for clarification if any user input is
 is unclear
 
