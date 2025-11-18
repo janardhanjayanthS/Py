@@ -1,5 +1,6 @@
 from model import AddTaskInput, ListTasksInput, MarkDoneInput
-from main import tasks
+
+tasks: list = []
 
 
 def add_task(add_args: AddTaskInput):
@@ -10,6 +11,7 @@ def add_task(add_args: AddTaskInput):
         add_args: contains infromation about task
     """
     tasks.append(add_args)
+    print(f"Added new task: {add_args.task}")
 
 
 def list_tasks(list_tasks_args: ListTasksInput):

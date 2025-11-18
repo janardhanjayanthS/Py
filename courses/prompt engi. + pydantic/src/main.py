@@ -4,28 +4,33 @@ from prompts import system_prompt
 from utility import validate_user_input, get_json_from_user_input
 from tools import tool_definition
 from model import Task
+from dotenv import load_dotenv
+import os
+from tool_functions import tasks
 
-# client = OpenAI()
+load_dotenv()
 
-tasks: list = []
+opne_ai_api_key = os.getenv('OPEN_AI_API_KEY')
 
+client = OpenAI(api_key=opne_ai_api_key)
 
-user_input_json: Task = get_json_from_user_input("string")
-valid_user_input: Task | None = validate_user_input(user_json=user_input_json)
-print(valid_user_input)
+user_message = 'Add a new task to buy grocery'
 
-# messages: list = [
-#     {"role": "system", "content": system_prompt},
-#     {"role": "user", "content": valid_user_input},
-# ]
+task_object_from_user_input: Task = get_json_from_user_input(user_message)
+valid_user_input: Task | None = validate_user_input(model=task_object_from_user_input)
+print(f'Validated user ip: {valid_user_input}, {type(valid_user_input)}')
 
-# response = client.chat.completions.create(
-#     model="chatgpt-4o-latest",
-#     messages=messages,
-#     tools=tool_definition,
-#     tool_choice='auto'
-# )
+messages: list = [
+    {"role": "system", "content": system_prompt},
+    {"role": "user", "content": user_message},
+]
 
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages,
+    tools=tool_definition,
+    tool_choice='auto'
+)
 
-# waiting for openAI api key
-# then implement this project based on req.txt
+print(f'Response from llm with tool calling: {response}')
+print(f'Tasks list: {tasks}')
