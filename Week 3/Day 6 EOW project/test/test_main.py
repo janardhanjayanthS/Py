@@ -21,6 +21,7 @@ def test_load_from_csv_success() -> None:
     assert first_call['product_name'] == 'test_product'
     assert first_call['quantity'] == '100'
     assert first_call['price'] == '20.00'
+    assert first_call['type'] == 'regular'
 
     second_call = inventory_instance.add_product.call_args_list[1][0][0]
     assert second_call['product_id'] == '2'
@@ -30,3 +31,29 @@ def test_load_from_csv_success() -> None:
     assert second_call['type'] == 'food'
     assert second_call['days_to_expire'] == '30'
     assert second_call['is_vegetarian'] == 'No'
+
+    third_call = inventory_instance.add_product.call_args_list[2][0][0]
+    assert third_call['product_id'] == '3'
+    assert third_call['product_name'] == 'test_product_3'
+    assert third_call['quantity'] == '1000'
+    assert third_call['price'] == '1000.00'
+    assert third_call['type'] == 'electronic'
+    assert third_call['warranty_period_in_years'] == '4'
+
+
+def test_load_from_csv_file_not_found(capsys):
+    """
+    test for FileNotFound error handling
+    """
+    inv_instance = Inventory()
+    inv_instance.add_product = MagicMock()
+
+    with patch('builtins.open', side_effect=FileNotFoundError('No such file')):
+        result = inv_instance.load_from_csv("non_existant.csv")
+    
+    assert result is None
+
+    inv_instance.add_product.assert_not_called()
+
+    captured = capsys.readouterr()
+    assert "File not found" in captured.out
