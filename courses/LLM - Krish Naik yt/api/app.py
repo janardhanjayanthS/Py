@@ -20,8 +20,8 @@ add_routes(
 openai_model = ChatOpenAI()
 ollama_model = Ollama(model='gemma3')
 
-prompt_for_openai_model = ChatPromptTemplate.from_template('Create an essay with {} as topic with 100 words')
-prompt_for_ollama_model = ChatPromptTemplate.from_template('Create an poem with {} as topic with 100 words')
+prompt_for_openai_model = ChatPromptTemplate.from_template('Create an essay with {topic} as topic with 100 words')
+prompt_for_ollama_model = ChatPromptTemplate.from_template('Create an poem with {topic} as topic with 100 words')
 
 add_routes(app, prompt_for_openai_model | openai_model, path='/essay')
 
