@@ -118,3 +118,4 @@ class Inventory:
         """
         for product in self.products:
             check_low_stock_or_print_details(product=product)
+
