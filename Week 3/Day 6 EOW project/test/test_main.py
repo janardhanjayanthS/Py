@@ -88,7 +88,7 @@ class TestGenerateLowQuantityReport:
 
         mock_check.assert_not_called()
 
-    def test_generate_report_with_single_product(self):
+    def test_generate_report_with_single_product(self, capsys):
         """Test report generation with one product"""
         inventory = Inventory()
 
@@ -104,8 +104,11 @@ class TestGenerateLowQuantityReport:
         with patch("inventory_manager.check_low_stock_or_print_details") as mock_check:
             inventory.generate_low_quantity_report()
 
-        # Verify it was called once with the product
-        mock_check.assert_not_called()
+            # Verify it was called once with the product
+            mock_check.assert_not_called()
+
+        captured_output = capsys.readouterr()
+        assert "available in less quantity" in captured_output.out
 
     # def test_generate_report_with_multiple_products(self):
     #     """Test report generation with multiple products"""
