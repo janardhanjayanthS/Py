@@ -3,7 +3,6 @@ from inventory_manager import (
     FoodProduct,
 )
 from unittest.mock import create_autospec
-import pytest
 from pathlib import Path
 
 
