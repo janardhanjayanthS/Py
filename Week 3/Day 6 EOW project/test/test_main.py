@@ -1,35 +1,10 @@
 from inventory_manager import (
-    Inventory,
-    BaseProduct,
     ProductTypes,
     FoodProduct,
-    ElectronicProduct,
 )
-from unittest.mock import MagicMock, patch, mock_open, Mock, create_autospec
+from unittest.mock import create_autospec
 import pytest
 from pathlib import Path
-
-
-@pytest.fixture
-def valid_filepath() -> str:
-    """
-    returns a test inventory csv filepath
-
-    Returns:
-        str: test file's path
-    """
-    return "test_inventory.csv"
-
-
-@pytest.fixture
-def inventory_object() -> Inventory:
-    """
-    returns an Inventory instance
-
-    Returns:
-        Inventory's object
-    """
-    return Inventory()
 
 
 class TestLoadFromCSV:
@@ -52,7 +27,7 @@ class TestLoadFromCSV:
         """
         mock_function = create_autospec(inventory_object.load_from_csv)
         mock_function(filepath=valid_filepath)
-        assert mock_function.call_args.kwargs['filepath'].endswith('.csv')
+        assert mock_function.call_args.kwargs["filepath"].endswith(".csv")
 
     def test_load_from_test_csv_file_with_unknown_file(self, inventory_object, capsys):
         """
