@@ -7,3 +7,5 @@
 <MagicMock spec='BaseProduct' id='133466618531808'>
 <MagicMock spec='BaseProduct' id='138180451865120'>
 <MagicMock spec='BaseProduct' id='127033503043888'>
+<MagicMock spec='BaseProduct' id='139689975647840'>
+<MagicMock spec='BaseProduct' id='127399723307648'>
