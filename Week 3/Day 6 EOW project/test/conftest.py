@@ -1,5 +1,22 @@
-from inventory_manager import Inventory
+from inventory_manager import Inventory, BaseProduct, ProductTypes
 import pytest
+
+@pytest.fixture
+def product() -> BaseProduct:
+    """
+    Fixture for a BaseProduct object with 
+    valid attributes
+
+    Returns:
+        BaseProduct object
+    """
+    return BaseProduct(
+        product_id="P01",
+        product_name="test_product",
+        quantity=10,
+        price=10.00,
+        type=ProductTypes.RP,
+    )
 
 
 @pytest.fixture

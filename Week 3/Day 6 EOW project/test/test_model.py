@@ -5,27 +5,9 @@ from pydantic import ValidationError
 import pytest
 
 
-@pytest.fixture
-def product() -> BaseProduct:
-    """
-    Fixture for a BaseProduct object with 
-    valid attributes
-
-    Returns:
-        BaseProduct object
-    """
-    return BaseProduct(
-        product_id="P01",
-        product_name="test_product",
-        quantity=10,
-        price=10.00,
-        type=ProductTypes.RP,
-    )
-
-
 def test_regular_product(product: BaseProduct):
     """
-    tests for a valid regualr product   
+    tests for a valid regualr product
     Args:
         prodcut: BaseProduct's object to test
     """
@@ -147,7 +129,7 @@ def test_update_to_unknown_product_type(product: BaseProduct):
         prodcut: BaseProduct's object to test
     """
     with pytest.raises(ValidationError):
-        product.type = "abc" # type: ignore
+        product.type = "abc"  # type: ignore
 
 
 def test_product_with_no_name():
@@ -171,7 +153,7 @@ def test_update_to_unknown_product_name(product: BaseProduct):
         prodcut: BaseProduct's object to test
     """
     with pytest.raises(ValidationError):
-        product.name = "" # type: ignore
+        product.name = ""  # type: ignore
 
 
 def test_product_data_string(product: BaseProduct):

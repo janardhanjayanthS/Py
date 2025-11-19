@@ -1,7 +1,7 @@
 # Testing Concepts
 
 ## Concepts
- Testing Pyramid
+- Testing Pyramid
 - Test Driven Development
 - Red-Green-Refactor cycle
 - Arrange-Act-Assert pattern
@@ -22,10 +22,10 @@
         2. Green: then implement a simple solution 
         3. Refactor: optimize if needed
 
-4.  A common structure for writing clean and readable tests: Arrange your data, Act by running the code, Assert the expected result.
-    - Arrange: set-up all necessary dependancies (functions, variables, objects, etc...) required for the test 
-    - Act: Perform the openations on the arranged data
-    - Assert: Test outcomes
+4.  Arrang-Act-Assert pattern: A common structure for writing clean and readable tests
+    - Arrange: Arrage your data
+    - Act: by runnig it
+    - Assert: the expected result
 
 5. Need for mocking external dependancies:
     - Mocking helps isolate the unit of code being tested by replacing external systems (APIs, DB, network, file I/O) with fake controlled versions.
