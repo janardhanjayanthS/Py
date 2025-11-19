@@ -1,4 +1,10 @@
-from inventory_manager import Inventory, BaseProduct, ProductTypes, FoodProduct
+from inventory_manager import (
+    Inventory,
+    BaseProduct,
+    ProductTypes,
+    FoodProduct,
+    ElectronicProduct,
+)
 from unittest.mock import MagicMock, patch, mock_open, Mock, create_autospec
 import pytest
 from pathlib import Path
@@ -132,75 +138,28 @@ class TestGenerateLowStockReport:
         assert Path(low_stock_report_filepath).exists()
 
         low_stock_file_content = Path(low_stock_report_filepath).read_text()
-        assert 'low_quantity_prod' in low_stock_file_content
+        assert "low_quantity_prod" in low_stock_file_content
 
 
+# Day 4 Morining
+class TestUpdateStock:
+    def test_update_stock_call(self, inventory_object):
+        """
+        testing update_stock function call
+        """
 
+        mock_function = create_autospec(inventory_object.update_stock)
 
+        mock_function(product_id=200, new_quantity=1500)
+        mock_function.assert_called_once()
+        mock_function.assert_called_once_with(product_id=200, new_quantity=1500)
 
+    def test_update_stock_with_unknown_product(self, inventory_object, capsys):
+        """
+        test update_stock with unknowun product id
+        """
+        inventory_object.update_stock(product_id="p009", new_quantity=2000)
 
+        captured_output = capsys.readouterr()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        assert "Cannot find product" in captured_output.out
