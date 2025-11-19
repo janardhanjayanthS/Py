@@ -1,0 +1,4 @@
+product_id,product_name,quantity,price,type,days_to_expire,is_vegetarian,warranty_period_in_years
+1,test_product,100,20.00,regular,,,
+2,test_product_new,150,400.00,food,30,No,
+3,test_product_3,1000,1000.00,electronic,,,4

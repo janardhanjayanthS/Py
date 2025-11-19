@@ -1,172 +1,376 @@
-from inventory_manager import Inventory, BaseProduct
-from unittest.mock import MagicMock, patch, mock_open
+from inventory_manager import Inventory, BaseProduct, ProductTypes, FoodProduct
+from unittest.mock import MagicMock, patch, mock_open, Mock, create_autospec
+import pytest
+from pathlib import Path
+
+
+@pytest.fixture
+def valid_filepath() -> str:
+    """
+    returns a test inventory csv filepath
+
+    Returns:
+        str: test file's path
+    """
+    return "test_inventory.csv"
+
+
+@pytest.fixture
+def inventory_object() -> Inventory:
+    """
+    returns an Inventory instance
+
+    Returns:
+        Inventory's object
+    """
+    return Inventory()
 
 
 class TestLoadFromCSV:
-    def test_load_from_csv_success(self) -> None:
+    def test_load_from_test_csv_file_success(self, valid_filepath, inventory_object):
         """
-        Tests successfull csv data load
+        test for successful test for loading inventory data
         """
-        csv_data = "product_id,product_name,quantity,price,type,days_to_expire,is_vegetarian,warranty_period_in_years\n1,test_product,100,20.00,regular,,,\n2,test_product_new,150,400.00,food,30,No,\n3,test_product_3,1000,1000.00,electronic,,,4"
+        mock_function = create_autospec(inventory_object.load_from_csv)
 
-        inventory_instance = Inventory()
-        inventory_instance.add_product = MagicMock()
+        mock_function(valid_filepath)
 
-        with patch("builtins.open", mock_open(read_data=csv_data)):
-            inventory_instance.load_from_csv("fake_filepath.csv")
+        mock_function.assert_called_once()
+        mock_function.assert_called_once_with(filepath=valid_filepath)
 
-        assert inventory_instance.add_product.call_count == 3
-
-        first_call = inventory_instance.add_product.call_args_list[0][0][0]
-        assert first_call["product_id"] == "1"
-        assert first_call["product_name"] == "test_product"
-        assert first_call["quantity"] == "100"
-        assert first_call["price"] == "20.00"
-        assert first_call["type"] == "regular"
-
-        second_call = inventory_instance.add_product.call_args_list[1][0][0]
-        assert second_call["product_id"] == "2"
-        assert second_call["product_name"] == "test_product_new"
-        assert second_call["quantity"] == "150"
-        assert second_call["price"] == "400.00"
-        assert second_call["type"] == "food"
-        assert second_call["days_to_expire"] == "30"
-        assert second_call["is_vegetarian"] == "No"
-
-        third_call = inventory_instance.add_product.call_args_list[2][0][0]
-        assert third_call["product_id"] == "3"
-        assert third_call["product_name"] == "test_product_3"
-        assert third_call["quantity"] == "1000"
-        assert third_call["price"] == "1000.00"
-        assert third_call["type"] == "electronic"
-        assert third_call["warranty_period_in_years"] == "4"
-
-    def test_load_from_csv_file_not_found(self, capsys):
+    def test_load_from_test_csv_file_with_unknown_file(self, inventory_object, capsys):
         """
-        test for FileNotFound error handling
+        test for successful test for loading inventory data
         """
-        inv_instance = Inventory()
-        inv_instance.add_product = MagicMock()
-
-        with patch("builtins.open", side_effect=FileNotFoundError("No such file")):
-            result = inv_instance.load_from_csv("non_existant.csv")
-
-        assert result is None
-
-        inv_instance.add_product.assert_not_called()
-
-        captured = capsys.readouterr()
-        assert "File not found" in captured.out
-
-    def test_load_from_csv_empty_file(self):
-        """
-        test for load_from_csv from an empty file
-        """
-        csv_data = "product_id,product_name,quantity,price,type,days_to_expire,is_vegetarian,warranty_period_in_years\n"
-
-        inv_object = Inventory()
-        inv_object.add_product = MagicMock()
-
-        with patch("builtins.open", mock_open(read_data=csv_data)):
-            inv_object.load_from_csv("empty_csv_path.csv")
-
-        inv_object.add_product.assert_not_called()
-
-
-# class TestGenerateLowStockReport:
-#     def test_
-
-
-# Code from claude
-class TestGenerateLowQuantityReport:
-    def test_generate_report_with_no_products(self):
-        """Test report generation when inventory is empty"""
-        inventory = Inventory()
-
-        with patch("inventory_manager.check_low_stock_or_print_details") as mock_check:
-            inventory.generate_low_quantity_report()
-
-        mock_check.assert_not_called()
-
-    def test_generate_report_with_single_product(self, capsys):
-        """Test report generation with one product"""
-        inventory = Inventory()
-
-        mock_product = MagicMock(spec=BaseProduct)
-        mock_product.product_id = "P001"
-        mock_product.product_name = "Apple"
-        mock_product.quantity = 0
-
-        inventory.products = [mock_product]
-
-        with patch("inventory_manager.check_low_stock_or_print_details", mock_open()) as mock_check:
-            inventory.generate_low_quantity_report()
-
-        mock_check.assert_called_once_with(product=mock_product)
+        invalid_filepath: str = ""
+        inventory_object.load_from_csv(invalid_filepath)
 
         captured_output = capsys.readouterr()
-        assert "available in less quantity" in captured_output.out
+        assert "File not found" in captured_output.out
 
-    # def test_generate_report_with_multiple_products(self):
-    #     """Test report generation with multiple products"""
-    #     inventory = Inventory()
+    def test_loading_data_using_load_from_csv_file(
+        self, inventory_object, valid_filepath
+    ):
+        """
+        test for checking the loaded data from csv file
+        """
+        inventory_object.load_from_csv(valid_filepath)
+        products = inventory_object.products
 
-    #     # Create multiple mock products
-    #     product1 = MagicMock(spec=BaseProduct)
-    #     product1.product_id = "P001"
-    #     product1.product_name = "test_prod_1"
-    #     product1.price = 200.00
-    #     product1.quantity = 5
+        first_prodcut = products[0]
+        assert first_prodcut.product_id == "1"
+        assert first_prodcut.product_name == "test_product"
+        assert first_prodcut.quantity == 100
+        assert first_prodcut.price == 20.0
+        assert first_prodcut.type.value == "regular"
 
-    #     product2 = MagicMock(spec=BaseProduct)
-    #     product2.product_id = "P002"
-    #     product1.product_name = "test_prod_2"
-    #     product1.price = 200.00
-    #     product2.quantity = 15
+        second_product = products[1]
+        assert second_product.product_id == "2"
+        assert second_product.product_name == "test_product_new"
+        assert second_product.quantity == 150
+        assert second_product.price == 400.0
+        assert second_product.type.value == "food"
+        assert second_product.days_to_expire == 30
+        assert not second_product.is_vegetarian
 
-    #     product3 = MagicMock(spec=BaseProduct)
-    #     product3.product_id = "P003"
-    #     product1.product_name = "test_prod_3"
-    #     product1.price = 200.00
-    #     product3.quantity = 3
+        third_product = products[2]
+        assert third_product.product_id == "3"
+        assert third_product.product_name == "test_product_3"
+        assert third_product.quantity == 1000
+        assert third_product.price == 1000.0
+        assert third_product.type.value == "electronic"
+        assert third_product.warranty_period_in_years == 4
 
-    #     inventory.products = [product1, product2, product3]
 
-    #     # Mock the file_manager function
-    #     with patch("inventory_manager.check_low_stock_or_print_details") as mock_check:
-    #         inventory.generate_low_quantity_report()
+class TestGenerateLowStockReport:
+    def test_generate_low_stock_report_with_no_products(self, inventory_object):
+        """
+        testing fucntion call with no product
+        """
+        mock_function = create_autospec(inventory_object.generate_low_quantity_report)
 
-    #     # Verify it was called for each product
-    #     assert mock_check.call_count == 3
+        mock_function()
 
-    #     # Verify the order and arguments of calls
-    #     expected_calls = [
-    #         call(product=product1),
-    #         call(product=product2),
-    #         call(product=product3)
-    #     ]
-    #     mock_check.assert_has_calls(expected_calls)
+        mock_function.assert_called_once()
 
-    # def test_generate_report_calls_check_function_for_each_product(self):
-    #     """Test that check function is called for every product in inventory"""
-    #     inventory = Inventory()
+    def test_generate_low_quantity_report_with_valid_products(
+        self, inventory_object, valid_filepath, capsys
+    ):
+        """
+        testing generate low quantity report function with valid products - with quantity more than 10
+        """
+        inventory_object.load_from_csv(valid_filepath)
+        inventory_object.generate_low_quantity_report()
 
-    #     # Create 5 mock products
-    #     products = [MagicMock(spec=BaseProduct) for _ in range(5)]
-    #     for i, product in enumerate(products):
-    #         product.product_id = f"P00{i}"
+        captured_outputs = capsys.readouterr()
+        print(captured_outputs)
 
-    #     inventory.products = products
+        assert "test_product" in captured_outputs.out
 
-    #     with patch('inventory.check_low_stock_or_print_details') as mock_check:
-    #         inventory.generate_low_quantity_report()
+    def test_generate_low_quantity_report_with_low_stock_product(
+        self, inventory_object
+    ):
+        """
+        Testing generate_low_quantity_reprot with a product with less than 10 quantity
+        """
+        low_stock_report_filepath = "low_stock_report.txt"
 
-    #     # Verify called exactly 5 times
-    #     assert mock_check.call_count == 5
+        inventory_object.products.append(
+            FoodProduct(
+                product_id="0006",
+                product_name="low_quantity_prod",
+                quantity=2,
+                price=100.0,
+                type=ProductTypes.FP,
+                days_to_expire=15,
+                is_vegetarian=True,
+            )
+        )
 
-    #     # Verify each product was passed
-    #     for product in products:
-    #         mock_check.assert_any_call(product=product)
+        inventory_object.generate_low_quantity_report()
+
+        assert Path(low_stock_report_filepath).exists()
+
+        low_stock_file_content = Path(low_stock_report_filepath).read_text()
+
+        assert 'low_quantity_prod' in low_stock_file_content
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class TestLoadFromCSV:
+#     def test_load_from_csv_success(self) -> None:
+#         """
+#         Tests successfull csv data load
+#         """
+#         csv_data = "product_id,product_name,quantity,price,type,days_to_expire,is_vegetarian,warranty_period_in_years\n1,test_product,100,20.00,regular,,,\n2,test_product_new,150,400.00,food,30,No,\n3,test_product_3,1000,1000.00,electronic,,,4"
+
+#         inventory_instance = Inventory()
+#         inventory_instance.add_product = MagicMock()
+
+#         with patch("builtins.open", mock_open(read_data=csv_data)):
+#             inventory_instance.load_from_csv("fake_filepath.csv")
+
+#         assert inventory_instance.add_product.call_count == 3
+
+#         first_call = inventory_instance.add_product.call_args_list[0][0][0]
+#         assert first_call["product_id"] == "1"
+#         assert first_call["product_name"] == "test_product"
+#         assert first_call["quantity"] == "100"
+#         assert first_call["price"] == "20.00"
+#         assert first_call["type"] == "regular"
+
+#         second_call = inventory_instance.add_product.call_args_list[1][0][0]
+#         assert second_call["product_id"] == "2"
+#         assert second_call["product_name"] == "test_product_new"
+#         assert second_call["quantity"] == "150"
+#         assert second_call["price"] == "400.00"
+#         assert second_call["type"] == "food"
+#         assert second_call["days_to_expire"] == "30"
+#         assert second_call["is_vegetarian"] == "No"
+
+#         third_call = inventory_instance.add_product.call_args_list[2][0][0]
+#         assert third_call["product_id"] == "3"
+#         assert third_call["product_name"] == "test_product_3"
+#         assert third_call["quantity"] == "1000"
+#         assert third_call["price"] == "1000.00"
+#         assert third_call["type"] == "electronic"
+#         assert third_call["warranty_period_in_years"] == "4"
+
+#     def test_load_from_csv_file_not_found(self, capsys):
+#         """
+#         test for FileNotFound error handling
+#         """
+#         inv_instance = Inventory()
+#         inv_instance.add_product = MagicMock()
+
+#         with patch("builtins.open", side_effect=FileNotFoundError("No such file")):
+#             result = inv_instance.load_from_csv("non_existant.csv")
+
+#         assert result is None
+
+#         inv_instance.add_product.assert_not_called()
+
+#         captured = capsys.readouterr()
+#         assert "File not found" in captured.out
+
+#     def test_load_from_csv_empty_file(self):
+#         """
+#         test for load_from_csv from an empty file
+#         """
+#         csv_data = "product_id,product_name,quantity,price,type,days_to_expire,is_vegetarian,warranty_period_in_years\n"
+
+#         inv_object = Inventory()
+#         inv_object.add_product = MagicMock()
+
+#         with patch("builtins.open", mock_open(read_data=csv_data)):
+#             inv_object.load_from_csv("empty_csv_path.csv")
+
+#         inv_object.add_product.assert_not_called()
+
+
+# # class TestGenerateLowStockReport:
+# #     def test_
+
+
+# # Code from claude
+# class TestGenerateLowQuantityReport:
+#     def test_generate_report_with_no_products(self):
+#         """Test report generation when inventory is empty"""
+#         inventory = Inventory()
+
+#         with patch("inventory_manager.check_low_stock_or_print_details") as mock_check:
+#             inventory.generate_low_quantity_report()
+
+#         mock_check.assert_not_called()
+
+#     def test_generate_report_with_single_product(self, capsys):
+#         """Test report generation with one product"""
+#         inventory = Inventory()
+
+#         mock_product = MagicMock(spec=BaseProduct)
+#         mock_product.product_id = "P001"
+#         mock_product.product_name = "Apple"
+#         mock_product.quantity = 0
+
+#         inventory.products = [mock_product]
+
+#         with patch("inventory_manager.check_low_stock_or_print_details", mock_open()) as mock_check:
+#             inventory.generate_low_quantity_report()
+
+#         mock_check.assert_called_once_with(product=mock_product)
+
+#         captured_output = capsys.readouterr()
+#         assert "available in less quantity" in captured_output.out
+
+# def test_generate_report_with_multiple_products(self):
+#     """Test report generation with multiple products"""
+#     inventory = Inventory()
+
+#     # Create multiple mock products
+#     product1 = MagicMock(spec=BaseProduct)
+#     product1.product_id = "P001"
+#     product1.product_name = "test_prod_1"
+#     product1.price = 200.00
+#     product1.quantity = 5
+
+#     product2 = MagicMock(spec=BaseProduct)
+#     product2.product_id = "P002"
+#     product1.product_name = "test_prod_2"
+#     product1.price = 200.00
+#     product2.quantity = 15
+
+#     product3 = MagicMock(spec=BaseProduct)
+#     product3.product_id = "P003"
+#     product1.product_name = "test_prod_3"
+#     product1.price = 200.00
+#     product3.quantity = 3
+
+#     inventory.products = [product1, product2, product3]
+
+#     # Mock the file_manager function
+#     with patch("inventory_manager.check_low_stock_or_print_details") as mock_check:
+#         inventory.generate_low_quantity_report()
+
+#     # Verify it was called for each product
+#     assert mock_check.call_count == 3
+
+#     # Verify the order and arguments of calls
+#     expected_calls = [
+#         call(product=product1),
+#         call(product=product2),
+#         call(product=product3)
+#     ]
+#     mock_check.assert_has_calls(expected_calls)
+
+# def test_generate_report_calls_check_function_for_each_product(self):
+#     """Test that check function is called for every product in inventory"""
+#     inventory = Inventory()
+
+#     # Create 5 mock products
+#     products = [MagicMock(spec=BaseProduct) for _ in range(5)]
+#     for i, product in enumerate(products):
+#         product.product_id = f"P00{i}"
+
+#     inventory.products = products
+
+#     with patch('inventory.check_low_stock_or_print_details') as mock_check:
+#         inventory.generate_low_quantity_report()
+
+#     # Verify called exactly 5 times
+#     assert mock_check.call_count == 5
+
+#     # Verify each product was passed
+#     for product in products:
+#         mock_check.assert_any_call(product=product)
 
 
 # class TestCheckLowStockOrPrintDetails:
