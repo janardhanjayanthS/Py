@@ -1,11 +1,1 @@
-<MagicMock spec='BaseProduct' id='139764272714416'>
-<MagicMock spec='BaseProduct' id='137912020685584'>
-<MagicMock spec='BaseProduct' id='133123041923568'>
-<MagicMock spec='BaseProduct' id='133258235040576'>
-<MagicMock spec='BaseProduct' id='123276942790384'>
-<MagicMock spec='BaseProduct' id='133617514439568'>
-<MagicMock spec='BaseProduct' id='133466618531808'>
-<MagicMock spec='BaseProduct' id='138180451865120'>
-<MagicMock spec='BaseProduct' id='127033503043888'>
-<MagicMock spec='BaseProduct' id='139689975647840'>
-<MagicMock spec='BaseProduct' id='127399723307648'>
+<MagicMock spec='BaseProduct' id='129374516957728'>

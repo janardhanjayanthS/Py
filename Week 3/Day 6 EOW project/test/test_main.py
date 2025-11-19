@@ -99,8 +99,10 @@ class TestGenerateLowQuantityReport:
 
         inventory.products = [mock_product]
 
-        with patch("inventory_manager.check_low_stock_or_print_details") as mock_check:
+        with patch("inventory_manager.check_low_stock_or_print_details", mock_open()) as mock_check:
             inventory.generate_low_quantity_report()
+
+        mock_check.assert_called_once_with(product=mock_product)
 
         captured_output = capsys.readouterr()
         assert "available in less quantity" in captured_output.out
@@ -112,20 +114,26 @@ class TestGenerateLowQuantityReport:
     #     # Create multiple mock products
     #     product1 = MagicMock(spec=BaseProduct)
     #     product1.product_id = "P001"
+    #     product1.product_name = "test_prod_1"
+    #     product1.price = 200.00
     #     product1.quantity = 5
 
     #     product2 = MagicMock(spec=BaseProduct)
     #     product2.product_id = "P002"
+    #     product1.product_name = "test_prod_2"
+    #     product1.price = 200.00
     #     product2.quantity = 15
 
     #     product3 = MagicMock(spec=BaseProduct)
     #     product3.product_id = "P003"
+    #     product1.product_name = "test_prod_3"
+    #     product1.price = 200.00
     #     product3.quantity = 3
 
     #     inventory.products = [product1, product2, product3]
 
     #     # Mock the file_manager function
-    #     with patch('inventory.check_low_stock_or_print_details') as mock_check:
+    #     with patch("inventory_manager.check_low_stock_or_print_details") as mock_check:
     #         inventory.generate_low_quantity_report()
 
     #     # Verify it was called for each product
