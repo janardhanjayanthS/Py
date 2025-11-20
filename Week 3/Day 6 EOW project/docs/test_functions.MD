@@ -10,6 +10,8 @@
 - assert_called, assert_called_once, assert_called_once_with
 - pytest.raises()
 - mock_function.call_args
+- pytest.mark.parameterize()
+- pytest.raises()
 
 ## Learn
 1. Running tests:   
@@ -42,6 +44,12 @@
 8. mock_funtion.call_args:
     - Contains the arguments passed to a mock function (mock_funtion)
     [example -> Line: 29](../test/test_main.py)
+
+9. pytest.mark.parameterize: is a way to test a function with multiple parameters at once.
+    [example -> Line: 174](../test/test_main.py#L174)
+
+10. pytest.raises(): used to test if a function raises expected error.
+    [example -> Line: 67](../test/test_model.py#L67)
 
 ## Best Practices
 1. Running Tests
@@ -103,6 +111,16 @@
 - Validate both positional (`args`) and keyword (`kwargs`) arguments.
 - Use this when you cannot or do not want to use `assert_called_with()` directly.
 
+9. pytest.mark.parameterize
+- Use clear, descriptive parameter names.
+- Keep test cases readable and simple.
+- Use dictionaries for complex inputs.
+- Ensure parameters represent real, valid scenarios.
+
+10. pytest.raises():
+- Use the most specific exception type.
+- Prefer the context manager form (with pytest.raises(...)).
+- Assert exception messages using match= when relevant.
 
 ### Resources
 [pytest documentation](https://docs.python.org/3/contents.html)

@@ -4,6 +4,7 @@ from inventory_manager import (
 )
 from unittest.mock import create_autospec
 from pathlib import Path
+import pytest
 
 
 class TestLoadFromCSV:
@@ -124,3 +125,103 @@ class TestGenerateLowStockReport:
         low_stock_file_content = Path(low_stock_report_filepath).read_text()
         assert "low_quantity_prod" in low_stock_file_content
 
+
+# Day 4
+class TestUpdateStock:
+    def test_update_stock_call(self, inventory_object):
+        """
+        testing update_stock function call
+        """
+
+        mock_function = create_autospec(inventory_object.update_stock)
+
+        mock_function(product_id=200, new_quantity=1500)
+        mock_function.assert_called_once()
+        mock_function.assert_called_once_with(product_id=200, new_quantity=1500)
+
+    def test_update_stock_with_unknown_product(self, inventory_object, capsys):
+        """
+        test update_stock with unknowun product id
+        """
+        inventory_object.update_stock(product_id="p009", new_quantity=2000)
+
+        captured_output = capsys.readouterr()
+
+        assert "Cannot find product" in captured_output.out
+
+    @pytest.mark.parametrize(
+        "prod_id, new_qty",
+        [
+            ("1", 20),
+            ("2", 200),
+            ("3", 7),
+        ],
+    )
+    def test_update_stock_with_valid_products(
+        self, prod_id, new_qty, inventory_object, valid_filepath, capsys
+    ):
+        """
+        testing update stock for products from test_inventory.csv
+        """
+        inventory_object.load_from_csv(valid_filepath)
+
+        inventory_object.update_stock(product_id=prod_id, new_quantity=new_qty)
+
+        captured_output = capsys.readouterr()
+        assert "Product details before update" in captured_output.out
+        assert "Product details after update" in captured_output.out
+
+    @pytest.mark.parametrize(
+        "prod_id, new_qty",
+        [
+            ("100", 20),
+            ("2000", 200),
+            ("3sadfa", 7),
+        ],
+    )
+    def test_update_stock_with_invalid_products(
+        self, prod_id, new_qty, inventory_object, valid_filepath, capsys
+    ):
+        """
+        test for product stock update with invalid product ids
+        """
+        inventory_object.load_from_csv(valid_filepath)
+
+        inventory_object.update_stock(product_id=prod_id, new_quantity=new_qty)
+
+        captured_output = capsys.readouterr()
+        assert "Cannot find product" in captured_output.out
+
+
+class TestAddProduct:
+    def test_calling_add_product_fucntion(self, inventory_object):
+        """
+        test for adding valid products
+        """
+        mock_function = create_autospec(inventory_object.add_product)
+        mock_function({})
+        mock_function.assert_called_once()
+        mock_function.assert_called_once_with(product_info={})
+
+    def test_produts_added(self, inventory_object, product_dict):
+        """
+        testing the products that has been added using add_product method
+        """
+        inventory_object.add_product(product_dict)
+        sample_product = inventory_object.products[0]
+        assert sample_product.product_id == product_dict["product_id"]
+        assert sample_product.product_name == product_dict["product_name"]
+        assert sample_product.quantity == int(product_dict["quantity"])
+        assert sample_product.price == float(product_dict["price"])
+        assert sample_product.type.value == product_dict["type"]
+
+    def test_add_product_with_invalid_product(
+        self, inventory_object, invalid_product_dict, capsys
+    ):
+        """
+        test for add_product with invalid product detail
+        """
+        inventory_object.add_product(product_info=invalid_product_dict)
+
+        captured_out = capsys.readouterr()  
+        assert "has a validation error" in captured_out.out

@@ -1,10 +1,11 @@
 from inventory_manager import Inventory, BaseProduct, ProductTypes
 import pytest
 
+
 @pytest.fixture
 def product() -> BaseProduct:
     """
-    Fixture for a BaseProduct object with 
+    Fixture for a BaseProduct object with
     valid attributes
 
     Returns:
@@ -39,3 +40,44 @@ def inventory_object() -> Inventory:
         Inventory's object
     """
     return Inventory()
+
+
+@pytest.fixture
+def product_dict() -> dict:
+    """
+    returns product information in dictionary format
+
+    Returns:
+        dict: containing product information
+    """
+    return {
+        "product_id": "0008181",
+        "product_name": "office chair",
+        "price": 8000.0,
+        "quantity": 20,
+        "type": "regular",
+        "days_to_expire": "",
+        "is_vegetarian": "",
+        "warranty_period_in_years": "",
+    }
+
+
+@pytest.fixture
+def invalid_product_dict() -> dict:
+    """
+    retuns dict containing invalid product details,
+    such as missing name, negative price/quantity
+
+    Returns:
+        dict containing details
+    """
+    return {
+        "product_id": "007",
+        "product_name": "",
+        "quantity": "-10",
+        "price": "-10.00",
+        "type": "food",
+        "days_to_expire": "",
+        "is_vegetarian": "",
+        "warranty_period_in_years": "",
+    }
