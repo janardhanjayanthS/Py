@@ -183,7 +183,7 @@ class TestUpdateStock:
         self, prod_id, new_qty, inventory_object, valid_filepath, capsys
     ):
         """
-        testing update stock for products from test_inventory.csv
+        test for product stock update with invalid product ids
         """
         inventory_object.load_from_csv(valid_filepath)
 
