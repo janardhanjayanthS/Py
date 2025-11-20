@@ -209,25 +209,19 @@ class TestAddProduct:
         """
         inventory_object.add_product(product_dict)
         sample_product = inventory_object.products[0]
-        assert sample_product.product_id == product_dict['product_id']
-        assert sample_product.product_name == product_dict['product_name']
-        assert sample_product.quantity == int(product_dict['quantity'])
-        assert sample_product.price == float(product_dict['price'])
-        assert sample_product.type.value == product_dict['type']
-    
-    def test_add_product_with_invalid_product(self, inventory_object, capsys):
+        assert sample_product.product_id == product_dict["product_id"]
+        assert sample_product.product_name == product_dict["product_name"]
+        assert sample_product.quantity == int(product_dict["quantity"])
+        assert sample_product.price == float(product_dict["price"])
+        assert sample_product.type.value == product_dict["type"]
+
+    def test_add_product_with_invalid_product(
+        self, inventory_object, invalid_product_dict, capsys
+    ):
         """
         test for add_product with invalid product detail
         """
-        inventory_object.add_product(product_info={
-            'product_id': '007',
-            'product_name': 'magic box',
-            'quantity': '-10',
-            'price': '-10.00',
-            'type': 'food',
-            'days_to_expire': '',
-            'is_vegetarian': '',
-            'warranty_period_in_years': '',
-        })
-        captured_out = capsys.readouterr()
-        assert 'has a validation error' in captured_out.out
+        inventory_object.add_product(product_info=invalid_product_dict)
+
+        captured_out = capsys.readouterr()  
+        assert "has a validation error" in captured_out.out
