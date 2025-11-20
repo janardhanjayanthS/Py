@@ -5,6 +5,9 @@ from langchain_community.llms import Ollama
 from langserve import add_routes
 import uvicorn
 import os
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path='../.env')
 
 app = FastAPI(
     title="Langchain server",
@@ -17,7 +20,7 @@ add_routes(
     app, ChatOpenAI(), path='/openai'
 )
 
-openai_model = ChatOpenAI()
+openai_model = ChatOpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 ollama_model = Ollama(model='gemma3')
 
 prompt_for_openai_model = ChatPromptTemplate.from_template('Create an essay with {topic} as topic with 100 words')
