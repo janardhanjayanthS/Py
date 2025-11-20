@@ -3,7 +3,6 @@ from inventory_manager import (
     FoodProduct,
 )
 from unittest.mock import create_autospec
-from pydantic import ValidationError
 from pathlib import Path
 import pytest
 
@@ -220,7 +219,6 @@ class TestAddProduct:
         """
         test for add_product with invalid product detail
         """
-        # with pytest.raises(ValidationError):
         inventory_object.add_product(product_info={
             'product_id': '007',
             'product_name': 'magic box',
