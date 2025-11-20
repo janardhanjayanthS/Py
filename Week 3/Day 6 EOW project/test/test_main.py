@@ -3,6 +3,7 @@ from inventory_manager import (
     FoodProduct,
 )
 from unittest.mock import create_autospec
+from pydantic import ValidationError
 from pathlib import Path
 import pytest
 
@@ -192,3 +193,32 @@ class TestUpdateStock:
         captured_output = capsys.readouterr()
         assert "Cannot find product" in captured_output.out
 
+
+class TestAddProduct:
+    def test_calling_add_product_fucntion(self, inventory_object):
+        """
+        test for adding valid products
+        """
+        mock_function = create_autospec(inventory_object.add_product)
+        mock_function({})
+        mock_function.assert_called_once()
+        mock_function.assert_called_once_with(product_info={})
+
+    def test_produts_added(self, inventory_object, product_dict):
+        """
+        testing the products that has been added using add_product method
+        """
+        inventory_object.add_product(product_dict)
+        sample_product = inventory_object.products[0]
+        assert sample_product.product_id == product_dict['product_id']
+        assert sample_product.product_name == product_dict['product_name']
+        assert sample_product.quantity == int(product_dict['quantity'])
+        assert sample_product.price == float(product_dict['price'])
+        assert sample_product.type.value == product_dict['type']
+    
+    def test_add_product_with_invalid_product(self, inventory_object):
+        """
+        test for add_product with invalid product detail
+        """
+        with pytest.raises(ValidationError):
+            inventory_object.add_product()

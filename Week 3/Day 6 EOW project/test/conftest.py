@@ -39,3 +39,22 @@ def inventory_object() -> Inventory:
         Inventory's object
     """
     return Inventory()
+
+@pytest.fixture
+def product_dict() -> dict:
+    """
+    returns product information in dictionary format
+
+    Returns:
+        dict: containing product information
+    """
+    return {
+        'product_id': '0008181',
+        'product_name': 'office chair',
+        'price': 8000.0,
+        'quantity': 20,
+        'type': 'regular',
+        'days_to_expire': '',
+        'is_vegetarian': '',
+        'warranty_period_in_years': ''
+    }
