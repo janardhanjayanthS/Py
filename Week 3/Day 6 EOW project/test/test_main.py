@@ -216,9 +216,20 @@ class TestAddProduct:
         assert sample_product.price == float(product_dict['price'])
         assert sample_product.type.value == product_dict['type']
     
-    def test_add_product_with_invalid_product(self, inventory_object):
+    def test_add_product_with_invalid_product(self, inventory_object, capsys):
         """
         test for add_product with invalid product detail
         """
-        with pytest.raises(ValidationError):
-            inventory_object.add_product()
+        # with pytest.raises(ValidationError):
+        inventory_object.add_product(product_info={
+            'product_id': '007',
+            'product_name': 'magic box',
+            'quantity': '-10',
+            'price': '-10.00',
+            'type': 'food',
+            'days_to_expire': '',
+            'is_vegetarian': '',
+            'warranty_period_in_years': '',
+        })
+        captured_out = capsys.readouterr()
+        assert 'has a validation error' in captured_out.out
