@@ -1,0 +1,35 @@
+# From claude
+
+
+import pytest
+from unittest.mock import Mock, patch, MagicMock
+from langchain_core.documents import Document
+
+# ============================================================================
+# APPROACH 1: Test Individual Components Directly
+# ============================================================================
+
+class TestPDFLoading:
+    """Test PDF loading and text splitting"""
+    
+    @patch('langchain_community.document_loaders.PyPDFLoader')
+    def test_pdf_loader_called_correctly(self, mock_loader):
+        """Test that PDF loader is instantiated with correct path"""
+        from langchain_community.document_loaders import PyPDFLoader
+        
+        # Mock the loader
+        mock_loader_instance = Mock()
+        mock_loader_instance.load.return_value = [
+            Document(page_content="Test content")
+        ]
+        mock_loader.return_value = mock_loader_instance
+
+        # Your code
+        loader = PyPDFLoader('~/Books/algorithms_to_live_by.pdf')
+        documents = loader.load()
+        
+        # Assertions
+        mock_loader.assert_called_once_with('~/Books/algorithms_to_live_by.pdf')
+        assert len(documents) > 0
+
+
