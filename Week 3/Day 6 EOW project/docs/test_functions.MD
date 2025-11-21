@@ -12,6 +12,7 @@
 - mock_function.call_args
 - pytest.mark.parameterize()
 - pytest.raises()
+- pytest coverage
 
 ## Learn
 1. Running tests:   
@@ -50,6 +51,12 @@
 
 10. pytest.raises(): used to test if a function raises expected error.
     [example -> Line: 67](../test/test_model.py#L67)
+
+11. pytest coverage is used to generate test coverage for written tests.
+```bash
+pytest --cov=<package name> # name of the package to test
+pytest --cov=<package name> --cov-report=<file> # html, xml, json
+```
 
 ## Best Practices
 1. Running Tests
