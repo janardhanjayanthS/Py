@@ -31,7 +31,7 @@ def check_low_stock(product_quantity: int) -> bool | None:
         if int(product_quantity) < config.get_low_quality_threshold():
             return True
         return False
-    except TypeError as e:
+    except ValueError as e:
         print(f"Encountered type error: {e}")
 
 
