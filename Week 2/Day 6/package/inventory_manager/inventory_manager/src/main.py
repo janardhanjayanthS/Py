@@ -119,3 +119,16 @@ class Inventory:
         for product in self.products:
             check_low_stock_or_print_details(product=product)
 
+    def get_inventory_value(self) -> float:
+        """
+        estimate of products in inventory
+
+        Returns:
+            float: total price of all products
+        """
+        total: float = 0.0
+
+        for product in self.products:
+            total += product.price
+
+        return total

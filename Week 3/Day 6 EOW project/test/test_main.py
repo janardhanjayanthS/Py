@@ -223,5 +223,18 @@ class TestAddProduct:
         """
         inventory_object.add_product(product_info=invalid_product_dict)
 
-        captured_out = capsys.readouterr()  
+        captured_out = capsys.readouterr()
         assert "has a validation error" in captured_out.out
+
+
+# Day 5
+class TestGetInventoryValue:
+    def test_get_inventory_value_method_call(self, inventory_object):
+        """
+        testing get_inventory_value() fucntion call
+        """
+        mock_fucntion = create_autospec(inventory_object.get_inventory_value)
+
+        mock_fucntion()
+
+        mock_fucntion.assert_called_once()
