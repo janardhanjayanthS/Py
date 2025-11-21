@@ -253,11 +253,18 @@ class TestGetInventoryValue:
         assert inventory_value == products_sum
         assert isinstance(inventory_value, float)
 
-    def test_get_inventory_value_method_with_no_products(
-        self, inventory_object
-    ):
+    def test_get_inventory_value_method_with_no_products(self, inventory_object):
         """
-        testing get_inventory_value() with no values 
-        """ 
+        testing get_inventory_value() with no product
+        """
         inventory_value = inventory_object.get_inventory_value()
-        assert not inventory_value 
+        assert not inventory_value
+
+    def test_get_inventory_value_method_with_invalid_product(self, inventory_object, invalid_product_object):
+        """
+        testing get_inventory_value() with invlaid product
+        (product with no price attribute)
+        """
+        inventory_object.products = [invalid_product_object]
+        with pytest.raises(AttributeError):
+            inventory_object.get_inventory_value()

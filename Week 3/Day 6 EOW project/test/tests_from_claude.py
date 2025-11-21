@@ -69,11 +69,8 @@
 #         inv_object.add_product.assert_not_called()
 
 
-# # class TestGenerateLowStockReport:
-# #     def test_
-
-
 # # Code from claude
+# ------------------------------------------
 # class TestGenerateLowQuantityReport:
 #     def test_generate_report_with_no_products(self):
 #         """Test report generation when inventory is empty"""
