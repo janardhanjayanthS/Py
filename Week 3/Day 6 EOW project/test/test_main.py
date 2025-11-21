@@ -259,8 +259,5 @@ class TestGetInventoryValue:
         """
         testing get_inventory_value() with no values 
         """ 
-        mock_function = create_autospec(inventory_object.get_inventory_value, return_value=0.0)
-
-        inventory_value = mock_function()
-
+        inventory_value = inventory_object.get_inventory_value()
         assert not inventory_value 

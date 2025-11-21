@@ -29,3 +29,4 @@ product_id: 0006 | product_name: low_quantity_prod | quantity: 2 | price: 100.0 
 product_id: 0006 | product_name: low_quantity_prod | quantity: 2 | price: 100.0 | type: food | days_to_expire: 15 | is_vegetarian: True | 
 product_id: 0006 | product_name: low_quantity_prod | quantity: 2 | price: 100.0 | type: food | days_to_expire: 15 | is_vegetarian: True | 
 product_id: 0006 | product_name: low_quantity_prod | quantity: 2 | price: 100.0 | type: food | days_to_expire: 15 | is_vegetarian: True | 
+product_id: 0006 | product_name: low_quantity_prod | quantity: 2 | price: 100.0 | type: food | days_to_expire: 15 | is_vegetarian: True | 
