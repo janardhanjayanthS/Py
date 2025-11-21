@@ -223,5 +223,48 @@ class TestAddProduct:
         """
         inventory_object.add_product(product_info=invalid_product_dict)
 
-        captured_out = capsys.readouterr()  
+        captured_out = capsys.readouterr()
         assert "has a validation error" in captured_out.out
+
+
+# Day 5
+class TestGetInventoryValue:
+    def test_get_inventory_value_method_call(self, inventory_object):
+        """
+        testing get_inventory_value() fucntion call
+        """
+        mock_fucntion = create_autospec(inventory_object.get_inventory_value)
+
+        mock_fucntion()
+
+        mock_fucntion.assert_called_once()
+
+    def test_get_inventory_value_method_with_sample_products(
+        self, inventory_object, valid_filepath
+    ):
+        """
+        testing get_inventory_value() with sample values
+        """
+        inventory_object.load_from_csv(valid_filepath)
+        inventory_value = inventory_object.get_inventory_value()
+
+        products_sum = sum([prod.price for prod in inventory_object.products])
+
+        assert inventory_value == products_sum
+        assert isinstance(inventory_value, float)
+
+    def test_get_inventory_value_method_with_no_products(self, inventory_object):
+        """
+        testing get_inventory_value() with no product
+        """
+        inventory_value = inventory_object.get_inventory_value()
+        assert not inventory_value
+
+    def test_get_inventory_value_method_with_invalid_product(self, inventory_object, invalid_product_object):
+        """
+        testing get_inventory_value() with invlaid product
+        (product with no price attribute)
+        """
+        inventory_object.products = [invalid_product_object]
+        with pytest.raises(AttributeError):
+            inventory_object.get_inventory_value()

@@ -104,7 +104,7 @@ class Inventory:
             new_quantity: current number for stock
         """
         for product in self.products:
-            if product.product_id == product_id:
+            if product.product_id == product_id and product.quantity != new_quantity and new_quantity > 0:
                 print(f"Product details before update: {product}")
                 product.quantity = new_quantity
                 print(f"Product details after update: {product}")
@@ -119,3 +119,16 @@ class Inventory:
         for product in self.products:
             check_low_stock_or_print_details(product=product)
 
+    def get_inventory_value(self) -> float:
+        """
+        estimate of products in inventory
+
+        Returns:
+            float: total price of all products
+        """
+        total: float = 0.0
+
+        for product in self.products:
+            total += product.price
+
+        return total

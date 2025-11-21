@@ -2,6 +2,10 @@ from inventory_manager import Inventory, BaseProduct, ProductTypes
 import pytest
 
 
+class InvalidProduct:
+    pass
+
+
 @pytest.fixture
 def product() -> BaseProduct:
     """
@@ -81,3 +85,10 @@ def invalid_product_dict() -> dict:
         "is_vegetarian": "",
         "warranty_period_in_years": "",
     }
+
+@pytest.fixture
+def invalid_product_object() -> InvalidProduct:
+    """
+    Returns a product object with no attribute
+    """
+    return InvalidProduct()
