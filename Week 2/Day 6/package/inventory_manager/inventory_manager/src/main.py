@@ -104,7 +104,7 @@ class Inventory:
             new_quantity: current number for stock
         """
         for product in self.products:
-            if product.product_id == product_id:
+            if product.product_id == product_id and product.quantity != new_quantity and new_quantity > 0:
                 print(f"Product details before update: {product}")
                 product.quantity = new_quantity
                 print(f"Product details after update: {product}")
