@@ -63,3 +63,93 @@ class TestPDFLoading:
         assert len(split_docs) > 1
         for doc in split_docs:
             assert len(doc.page_content) <= 120
+
+class TestVectorStore:
+    """Test vector store operations"""
+    
+    @pytest.fixture
+    def sample_documents(self):
+        """Create sample documents"""
+        return [
+            Document(page_content="Chapter 1: Introduction to algorithms and optimization."),
+            Document(page_content="The authors are Brian Christian and Tom Griffiths."),
+            Document(page_content="The book contains 11 chapters covering different topics."),
+        ]
+    
+    @patch('langchain_community.vectorstores.LanceDB')
+    @patch('langchain_openai.OpenAIEmbeddings')
+    def test_lancedb_vector_store_creation(self, mock_embeddings, mock_lancedb, sample_documents):
+        """Test LanceDB vector store creation"""
+        # Setup mocks
+        mock_lance_instance = Mock()
+        mock_vector_store = Mock()
+        mock_lance_instance.from_documents.return_value = mock_vector_store
+        mock_lancedb.return_value = mock_lance_instance
+        
+        # Your code
+        from langchain_community.vectorstores import LanceDB
+        emb = mock_embeddings(api_key="test-key")
+        lance_db = LanceDB(uri='./lancedb', embedding=emb)
+        vector_store = lance_db.from_documents(sample_documents, emb)
+        
+        # Assertions
+        assert vector_store == mock_vector_store
+        mock_lancedb.assert_called_once_with(uri='./lancedb', embedding=emb)
+    
+    def test_similarity_search_returns_documents(self, sample_documents):
+        """Test similarity search returns documents"""
+        # Mock vector store
+        mock_db = Mock()
+        mock_db.similarity_search.return_value = sample_documents[:2]
+        
+        # Your code
+        query = 'Who are the authors of the book'
+        result = mock_db.similarity_search(query=query)
+        
+        # Assertions
+        assert len(result) == 2
+        assert all(isinstance(doc, Document) for doc in result)
+        mock_db.similarity_search.assert_called_once_with(query=query)
+
+
+class TestRetriever:
+    """Test retriever configuration"""
+    
+    def test_retriever_configuration(self):
+        """Test retriever is configured correctly"""
+        mock_vector_store = Mock()
+        mock_retriever = Mock()
+        mock_vector_store.as_retriever.return_value = mock_retriever
+        
+        # Your code
+        retriever = mock_vector_store.as_retriever(
+            search_type='similarity',
+            search_kwargs={"k": 3}
+        )
+        
+        # Assertions
+        mock_vector_store.as_retriever.assert_called_once_with(
+            search_type='similarity',
+            search_kwargs={"k": 3}
+        )
+        assert retriever == mock_retriever
+    
+    def test_format_docs_function(self):
+        """Test format_docs helper function"""
+        def format_docs(docs):
+            return '\n\n'.join(doc.page_content for doc in docs)
+        
+        # Test data
+        docs = [
+            Document(page_content="First doc"),
+            Document(page_content="Second doc"),
+            Document(page_content="Third doc"),
+        ]
+        
+        # Test formatting
+        result = format_docs(docs)
+        
+        assert "First doc" in result
+        assert "Second doc" in result
+        assert "Third doc" in result
+        assert result.count("\n\n") == 2  # Two separators for 3 docs
