@@ -3,16 +3,37 @@ import pytest
 
 
 class TestCheckLowStock:
-    def test_check_low_stock_success(self):
+    def test_check_low_stock_with_low_stock(self):
         """
         check for successful low quality check
         """
-        high_qty, low_qty = 100, 1
+        low_qty = 1
 
-        high_qty_result, low_qty_result = check_low_stock(high_qty), check_low_stock(low_qty)
+        low_qty_result = check_low_stock(low_qty)
+
+        assert low_qty_result is True
+
+    def test_check_low_stock_with_high_stock(self):
+        """
+        check for successful high quality check
+        """
+        high_qty = 10000
+
+        high_qty_result = check_low_stock(high_qty)
 
         assert high_qty_result is False
-        assert low_qty_result is True
+    
+        
+    def test_check_low_stock_as_low_qty_threshold(self):
+        """
+        test when qty is same as thershold(10)
+        """
+        qty = 10
+
+        result = check_low_stock(qty)
+
+        assert result is False 
+    
 
     def test_check_low_stock_with_unknown_type(self):
         """
