@@ -238,3 +238,29 @@ class TestGetInventoryValue:
         mock_fucntion()
 
         mock_fucntion.assert_called_once()
+
+    def test_get_inventory_value_method_with_sample_products(
+        self, inventory_object, valid_filepath
+    ):
+        """
+        testing get_inventory_value() with sample values
+        """
+        inventory_object.load_from_csv(valid_filepath)
+        inventory_value = inventory_object.get_inventory_value()
+
+        products_sum = sum([prod.price for prod in inventory_object.products])
+
+        assert inventory_value == products_sum
+        assert isinstance(inventory_value, float)
+
+    def test_get_inventory_value_method_with_no_products(
+        self, inventory_object
+    ):
+        """
+        testing get_inventory_value() with no values 
+        """ 
+        mock_function = create_autospec(inventory_object.get_inventory_value, return_value=0.0)
+
+        inventory_value = mock_function()
+
+        assert not inventory_value 
