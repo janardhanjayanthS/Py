@@ -1,6 +1,4 @@
 # From claude
-
-
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from langchain_core.documents import Document
@@ -32,4 +30,16 @@ class TestPDFLoading:
         mock_loader.assert_called_once_with('~/Books/algorithms_to_live_by.pdf')
         assert len(documents) > 0
 
+    def test_text_splitter_configuration(self):
+        """
+        tests for text splitter configurations (chunk size, chunk overlap) 
+        """
+        from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1024,
+            chunk_overlap=224
+        )
+
+        assert text_splitter._chunk_size == 1024
+        assert text_splitter._chunk_overlap == 224
