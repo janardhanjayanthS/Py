@@ -56,7 +56,7 @@ class FoodProduct(BaseProduct):
         """
         returns exact expiry date
         Returns
-            int representing expiry days
+            str representing expiry date
         """
         return datetime.strftime(
             timedelta(days=self.days_to_expire) + datetime.now(),  # type: ignore

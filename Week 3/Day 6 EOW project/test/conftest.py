@@ -1,4 +1,4 @@
-from inventory_manager import Inventory, BaseProduct, ProductTypes
+from inventory_manager import Inventory, BaseProduct, ProductTypes, FoodProduct
 import pytest
 
 
@@ -21,6 +21,24 @@ def product() -> BaseProduct:
         quantity=10,
         price=10.00,
         type=ProductTypes.RP,
+    )
+
+@pytest.fixture
+def food_product() -> FoodProduct:
+    """
+    sample FoodProduct object with valid attributes
+
+    Returns:
+        FoodProduct's instance
+    """
+    return FoodProduct(
+        product_id="P02",
+        product_name="some_food",
+        quantity=100,
+        price=120.00,
+        type=ProductTypes.FP,
+        days_to_expire=10,
+        is_vegetarian=False,
     )
 
 

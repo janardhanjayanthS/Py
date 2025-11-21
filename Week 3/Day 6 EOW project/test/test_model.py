@@ -1,5 +1,5 @@
 """Tests for Pydantic model"""
-
+from datetime import datetime, timedelta
 from inventory_manager import BaseProduct, ProductTypes, FoodProduct, ElectronicProduct
 from pydantic import ValidationError
 import pytest
@@ -18,19 +18,11 @@ def test_regular_product(product: BaseProduct):
     assert product.type == ProductTypes.RP
 
 
-def test_food_product():
+def test_food_product(food_product):
     """
     tests for a valid food product
     """
-    product = FoodProduct(
-        product_id="P02",
-        product_name="some_food",
-        quantity=100,
-        price=120.00,
-        type=ProductTypes.FP,
-        days_to_expire=10,
-        is_vegetarian=False,
-    )
+    product = food_product
     assert product.product_id == "P02"
     assert product.product_name == "some_food"
     assert product.quantity == 100
@@ -166,3 +158,10 @@ def test_product_data_string(product: BaseProduct):
         f"{product}"
         == "product_id: P01 | product_name: test_product | quantity: 10 | price: 10.0 | type: regular | "
     )
+
+def test_food_product_get_expirey_date(food_product):
+    """
+    test for get_expiry_date of FoodProduct class
+    """
+    expiry_date = food_product.get_expiry_date()
+    assert expiry_date == '01-12-2025' # 10 days from now
