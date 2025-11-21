@@ -43,3 +43,23 @@ class TestPDFLoading:
 
         assert text_splitter._chunk_size == 1024
         assert text_splitter._chunk_overlap == 224
+
+    def test_text_splitting_produces_chunks(self):
+        """Test that text splitting works correctly"""
+        from langchain_text_splitters import RecursiveCharacterTextSplitter
+        
+        # Create sample document
+        long_text = "This is a test. " * 200  # Create long text
+        documents = [Document(page_content=long_text)]
+        
+        # Split documents
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=100,
+            chunk_overlap=20
+        )
+        split_docs = text_splitter.split_documents(documents)
+        
+        # Assertions
+        assert len(split_docs) > 1
+        for doc in split_docs:
+            assert len(doc.page_content) <= 120
