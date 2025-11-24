@@ -1,1 +1,1 @@
-from src.api.main import app
+from src.api.routes.main import app
