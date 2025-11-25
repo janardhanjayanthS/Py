@@ -4,6 +4,7 @@ from tool import search_book, get_books
 from prompt import SYSTEM_PROMPT
 from schema import RuntimeContext
 from utility import load_json
+from langgraph.checkpoint.memory import InMemorySaver
 
 load_dotenv()
 
@@ -16,6 +17,7 @@ if __name__ == "__main__":
         system_prompt=SYSTEM_PROMPT,
         tools=[search_book, get_books],
         context_schema=RuntimeContext,
+        checkpointer=InMemorySaver(),
     )
 
     # define context
@@ -24,9 +26,20 @@ if __name__ == "__main__":
         description="Books inventory data",
     )
 
-    question = "List all the available book titles"
+    question = "List all the available book titles from finance genre"
 
     for step in agent.stream(
-        {"messages": question}, context=context, stream_mode="values"
+        {"messages": question},
+        {"configurable": {"thread_id": "1"}}, 
+        context=context, stream_mode="values"
+    ):
+        step["messages"][-1].pretty_print()
+
+    question = "what is the price of those books"
+
+    for step in agent.stream(
+        {"messages": question},
+        {"configurable": {"thread_id": "1"}}, 
+        context=context, stream_mode="values"
     ):
         step["messages"][-1].pretty_print()
