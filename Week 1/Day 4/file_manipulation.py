@@ -63,7 +63,7 @@ def write_to_file(filename: str, content: str) -> None:
 
 def write_lines_to_file(filename: str, content: list[str]):
     """
-    Writes multiple lines to a file 
+    Writes multiple lines to a file
     Args:
         filename: fullname of the file
         content: list of strings, each element denotes single line
@@ -78,7 +78,7 @@ def write_lines_to_file(filename: str, content: list[str]):
         raise Exception(f'specified file: {filename} not found: {e}')
 
 
-    
+
 if __name__ == '__main__':
     # readlines_from_file('sample.txt')
     # readlines_from_file('test.txt')

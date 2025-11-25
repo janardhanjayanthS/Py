@@ -10,8 +10,8 @@ class Book(BaseModel):
         ge=1900,
         le=dt.now().year,
         description="published year must be between 1900 and current year"
-    ) 
-    in_stock: bool 
+    )
+    in_stock: bool
     isbn: str = Field(
         max_length=13,
         min_length=13
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     library = Library(
         name="Central Library",
         books=[
-            book1, 
+            book1,
             # book2,
             # book_inv
         ]

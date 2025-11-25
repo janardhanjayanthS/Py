@@ -35,7 +35,7 @@ def add_expense():
 def display_expense():
     """
     Displays all the expenses that are stored in expenses.csv file
-    """    
+    """
     expenses = get_expenses()
     if expenses:
         for expense in expenses:
@@ -49,10 +49,10 @@ def display_expense():
     else:
         print('There are no expenses')
 
-    
+
 
 if __name__ == '__main__':
-    
+
     while True:
         print('Expense Tracker: ')
         print('1. Add Expense')
@@ -61,10 +61,10 @@ if __name__ == '__main__':
         choice = int(input('Enter Your choice from 1 to 3: '))
 
         if choice == 1:
-            add_expense()  
+            add_expense()
         elif choice == 2:
-            display_expense()       
+            display_expense()
         elif choice == 3:
             break
         else:
-            print('Enter a valid choice between 1 and 3!') 
+            print('Enter a valid choice between 1 and 3!')

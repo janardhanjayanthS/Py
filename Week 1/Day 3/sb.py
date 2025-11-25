@@ -1,8 +1,8 @@
 
 # def promt_category() -> str | None:
 #     """
-#     prompts for category, if the category is invalid 
-#     it is called 
+#     prompts for category, if the category is invalid
+#     it is called
 #     """
 #     category_dict = {
 #         1: 'food',
@@ -23,7 +23,7 @@
 #                 print('Enter a valid number from 1 to 5')
 #         except ValueError:
 #             print('Enter a valid number from 1 to 5')
-        
+
 # print(promt_category())
 
 from datetime import datetime as dt
@@ -33,4 +33,3 @@ from datetime import datetime as dt
 
 date: str = input("Enter date in 'YYYY-MM-DD' format: ")
 date_object: dt = dt.strptime(date, "%Y-%m-%d")
-

@@ -69,7 +69,7 @@ pip install jupyterlab
 Once Jupyter is installed and the Deno kernel is set up (see Prerequisites), start Jupyter:
 
 ```bash
-# Start Jupyter Lab 
+# Start Jupyter Lab
 jupyter lab
 ```
 
@@ -104,7 +104,7 @@ In Lessons 2-7, you will learn to use some of the building blocks in LangChain. 
  - **L5_tools_with_mcp.ipynb**: Learn to use the Langchain mcp adaptor to access the world of mcp tools.
  - **L6_memory.ipynb**: Learn to give your agent the ability to maintain state between invocations.
  - **L7_structuredOutput.ipynb**: Learn to use your agent to produce structured output.
- - 
+ -
 ### L8-9.ipynb - 🪛 Customize Your Agent 🤖
 Lessons 2-7 covered out-of-the-box features. However, `create_agent` supports pre-built and user-created customization by adding access to the agent via Middleware. This section describes middleware and has two lessons on particular instances of its use.
 

@@ -2,7 +2,7 @@
 def check_leap_year(year: int) -> bool:
     """
     Checks if the given year is a leap year or not
-    Args: 
+    Args:
         year: year to check
     Returns:
         True if leap year else false
@@ -63,6 +63,3 @@ while counter < 10:
     counter += 1
 
 print('counter after while loop: ', counter)
-
-
-

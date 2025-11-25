@@ -15,6 +15,6 @@ class Singleton(type):
 class ConfigLoader(metaclass=Singleton):
     def __init__(self) -> None:
         self.low_quantity_threshold = 10
-    
+
     def get_low_quality_threshold(self) -> int:
         return self.low_quantity_threshold

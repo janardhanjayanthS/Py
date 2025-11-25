@@ -27,7 +27,7 @@ def append_rows(filename: str, content: list[dict]):
         for row in content:
             writer.writerow(row)
 
-    
+
 
 if __name__ == '__main__':
     filename: str = 'student_data.csv'

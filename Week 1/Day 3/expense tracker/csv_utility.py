@@ -21,11 +21,11 @@ def append_expense(expense: Expense):
 
 def get_expenses() -> list[dict[str, str]] | None:
     """
-    This function gets all the expenses stored in the expenses.csv file 
+    This function gets all the expenses stored in the expenses.csv file
     and returns them as a list
     Returns:
         expenses: List containing dict for each expense
-    """ 
+    """
     expenses: list[dict[str, str]] = []
     with open('expenses.csv', 'r') as csv_file:
         reader = csv.DictReader(csv_file)

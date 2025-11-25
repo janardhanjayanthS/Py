@@ -49,7 +49,3 @@ print(f'Set 2: {set2}')
 print('Union: ', set1.union(set2))
 print('Intersection: ', set1.intersection(set2))
 print('Difference: ', set1.difference(set2))
-
-
-
-

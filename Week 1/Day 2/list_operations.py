@@ -43,12 +43,12 @@ def reverse_list(arr: list[Any]) -> list[Any]:
         arr[l], arr[r] = arr[r], arr[l]
         l += 1  # noqa: E741
         r -= 1
-    
+
     return arr
 
 def pop_element(arr: list[Any], index: int | None) -> Any:
     """
-    Remove element from a list if there is index else from last and 
+    Remove element from a list if there is index else from last and
     returns the popped element
     Args:
         arr: list to pop from
@@ -92,4 +92,3 @@ if __name__ == '__main__':
     print(reverse_list(my_list))
     insert_element(my_list, 100, 0)
     print(my_list)
-

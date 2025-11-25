@@ -13,7 +13,7 @@ books: a list of Book objects
 
 When a Book or Library object is created:
 Pydantic should automatically validate all the data.
-If the data is invalid (e.g., negative price or missing title), 
+If the data is invalid (e.g., negative price or missing title),
 it should raise a ValidationError.
 
 Create one valid example and one invalid example to test your models.

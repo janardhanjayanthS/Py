@@ -17,7 +17,7 @@ class Logger(metaclass=Singleton):
         self.logfile_path = 'path/tp/logfile'
 
     def __str__(self) -> str:
-        return f'path to log file: {self.logfile_path}' 
+        return f'path to log file: {self.logfile_path}'
 
     def log(self, message: str) -> None:
         if message:
