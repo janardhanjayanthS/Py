@@ -1,17 +1,16 @@
 from langchain.tools import tool
+from langgraph.runtime import get_runtime
+from schema import RuntimeContext
 from utility import load_json
 
 
-books: list[dict[str, str]] | None = load_json("../data/books.json")
-
-
 @tool(
-        'search for book info',
-        parse_docstring=True,
-        description=(
-            "this tool is for searching books from available books"
-            "use this whenever there is a query about book details -> title, author, year"
-        )
+    "search for book info",
+    parse_docstring=True,
+    description=(
+        "this tool is for searching books from available books"
+        "use this whenever there is a query about book details -> title, author, year"
+    ),
 )
 def search_book(query: str) -> list:
     """
@@ -24,6 +23,8 @@ def search_book(query: str) -> list:
         list[dict]: list containing books as dict
     """
     query = query.lower()
+    runtime = get_runtime(RuntimeContext)
+    books = runtime.context.data
     result = []
 
     for book in books:
