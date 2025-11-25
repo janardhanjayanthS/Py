@@ -35,7 +35,7 @@ if __name__ == "__main__":
     ):
         step["messages"][-1].pretty_print()
 
-    question = "what is the price of those books"
+    question = "what is the total price of those books"
 
     for step in agent.stream(
         {"messages": question},

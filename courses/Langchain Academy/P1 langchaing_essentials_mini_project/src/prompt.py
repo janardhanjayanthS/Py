@@ -18,3 +18,14 @@ preform certain operations.
 use the provided json data for answering user
 queries. 
 """
+
+SEARCH_BOOK_PORMPT = (
+    "this tool is for searching books from available books"
+    "use this whenever there is a query about book details -> title, author, year"
+)
+
+
+GET_BOOKS_PROMPT = (
+    "this tool is for listing all books from available books"
+    "use this tool for listing book details"
+)
