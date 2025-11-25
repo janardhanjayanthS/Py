@@ -16,7 +16,7 @@ def divide(numerator: int | float, denomiator: int | float) -> None:
         print(f'{numerator} divided by {denomiator} is {quotient}')
     finally:
         print('--x---')
-    
+
 divide(5, 3)
 divide(5, 0)
 # divide('b', 'a')

@@ -85,7 +85,7 @@ Rules:
 - Read-only only; no INSERT/UPDATE/DELETE/ALTER/DROP/CREATE/REPLACE/TRUNCATE.
 - Limit to 5 rows unless user explicitly asks otherwise.
 - If the tool returns 'Error:', revise the SQL and try again.
-- Limit the number of attempts to 5. 
+- Limit the number of attempts to 5.
 - If you are not successful after 5 attempts, return a note to the user.
 - Prefer explicit column lists; avoid SELECT *.
 """

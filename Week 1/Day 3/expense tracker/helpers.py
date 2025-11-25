@@ -9,5 +9,3 @@ class Expense:
     category: str
     date: str
     is_recurring: bool
-
-

@@ -56,6 +56,4 @@ class ProductDetails:
     quantity: int
     days_to_expire: int
     is_vegetarian: bool | str | None
-    warranty_period_in_years: int 
-
-
+    warranty_period_in_years: int

@@ -31,4 +31,3 @@ class ListTasksInput:
     """
     Lists all tasks
     """
-

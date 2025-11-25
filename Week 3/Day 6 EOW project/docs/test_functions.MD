@@ -15,12 +15,12 @@
 - pytest coverage
 
 ## Learn
-1. Running tests:   
+1. Running tests:
     ```bash
-    pytest <test_file_name> # to run tests from a single file 
-    pytest # runs tests that starts with test_ name or the files defined in pytest.ini file 
-    pytest <test_file_name> -v # to run tests from a single file with verbos(more printed stuff) 
-    pytest <test_file_name> -s # to run tests from a single file along with the printed outputs on console 
+    pytest <test_file_name> # to run tests from a single file
+    pytest # runs tests that starts with test_ name or the files defined in pytest.ini file
+    pytest <test_file_name> -v # to run tests from a single file with verbos(more printed stuff)
+    pytest <test_file_name> -s # to run tests from a single file along with the printed outputs on console
     ```
 
 2. pytest.fixture:
@@ -31,7 +31,7 @@
 
 4. create_autospec(): used to create a mock object for a fucntion. [example -> Line: 75](../test/test_main.py)
 
-5. capsys, capsys.readouterr(): 
+5. capsys, capsys.readouterr():
     - capsys is parameter to use in a test function
     - capsys.readouterr() is the funtion that gets all the printed outputs within a test funtion.
     [example -> Line: 95](../test/test_main.py)

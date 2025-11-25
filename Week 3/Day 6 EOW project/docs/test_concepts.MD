@@ -19,7 +19,7 @@
 3. Red-Green-Refactor Cycle:
     - Process of implementing TDD.
         1. Red: failing test first
-        2. Green: then implement a simple solution 
+        2. Green: then implement a simple solution
         3. Refactor: optimize if needed
 
 4.  Arrang-Act-Assert pattern: A common structure for writing clean and readable tests

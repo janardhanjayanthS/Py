@@ -40,7 +40,7 @@ dictionary: OrderedDict[int, str] = OrderedDict({
     1: 'a',
     2: 'b',
     3: 'c'
-})  
+})
 
 
 dictionary.pop(2)

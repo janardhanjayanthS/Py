@@ -42,7 +42,7 @@ from the provide context - from below.
 <context>
 {context}
 <context>
-                                      
+
 question: {question}
 """,
 )

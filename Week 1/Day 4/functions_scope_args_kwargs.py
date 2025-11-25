@@ -67,20 +67,3 @@ def display(**kwargs):
 
 
 display(name='Lenovo', color='matt black', model='thinkpad e16 gen3', processor='core ultra 7 255h')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

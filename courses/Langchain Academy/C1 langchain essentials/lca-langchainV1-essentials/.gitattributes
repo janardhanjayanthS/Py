@@ -1,4 +1,3 @@
 
 # prevent git from trying to merge notebook files
 *.ipynb binary
-

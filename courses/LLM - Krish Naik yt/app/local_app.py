@@ -3,7 +3,7 @@ Similar to app.py but implemented with ollama locally
 """
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_community.llms import Ollama  
+from langchain_community.llms import Ollama
 
 import streamlit as st
 import os
@@ -34,4 +34,3 @@ chain = prompt | llm | output_parser
 
 if input_text:
     st.write(chain.invoke({'question': input_text}))
-

@@ -2,8 +2,8 @@ Project: Personal Expense Tracker
 
 Scenario
 
-You're building a simple command-line expense tracker that helps users manage their daily expenses. 
-The system should allow users to record expenses, categorize them, view summaries, 
+You're building a simple command-line expense tracker that helps users manage their daily expenses.
+The system should allow users to record expenses, categorize them, view summaries,
 and persist data to a CSV file so information isn't lost between sessions.
 
 Requirements
