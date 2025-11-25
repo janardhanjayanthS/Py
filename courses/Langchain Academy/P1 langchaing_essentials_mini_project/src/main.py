@@ -5,8 +5,15 @@ from prompt import SYSTEM_PROMPT
 from schema import RuntimeContext
 from utility import load_json
 from langgraph.checkpoint.memory import InMemorySaver
+from langchain.tools import BaseTool
 
 load_dotenv()
+
+TOOL_LIST: list[BaseTool] = [
+    search_book, 
+    get_books, 
+    add_to_reading_list,
+]
 
 
 def mainloop():
@@ -32,7 +39,7 @@ if __name__ == "__main__":
     agent = create_agent(
         model="openai:gpt-4o-mini",
         system_prompt=SYSTEM_PROMPT,
-        tools=[search_book, get_books, add_to_reading_list],
+        tools=TOOL_LIST,
         context_schema=RuntimeContext,
         checkpointer=InMemorySaver(),
     )
