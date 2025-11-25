@@ -1,7 +1,8 @@
 from langchain.tools import tool
-from langgraph.runtime import get_runtime
 from schema import RuntimeContext
-from prompt import SEARCH_BOOK_PORMPT, GET_BOOKS_PROMPT
+from langgraph.runtime import get_runtime
+from prompt import SEARCH_BOOK_PORMPT, GET_BOOKS_PROMPT, ADD_TO_READING_LIST_PROMPT
+from utility import get_books_from_runtime, search_book_using_title
 
 
 @tool(
@@ -20,8 +21,7 @@ def search_book(query: str) -> list:
         list[dict]: list containing books as dict
     """
     query = query.lower()
-    runtime = get_runtime(RuntimeContext)
-    books = runtime.context.data
+    books = get_books_from_runtime()
     result = []
 
     for book in books:
@@ -44,8 +44,32 @@ def get_books() -> list:
     Returns:
         list: of dict containing book detail
     """
-    runtime = get_runtime(RuntimeContext)
-    books = runtime.context.data
+    books = get_books_from_runtime()
     result = [book for book in books if book]
 
     return result
+
+
+@tool(
+    "add_to_reading_list", parse_docstring=True, description=ADD_TO_READING_LIST_PROMPT
+)
+def add_to_reading_list(book_title: str) -> str:
+    """
+    To add a particular book to user's reading list, which is in RuntimeContext
+
+    Args:
+        book_title: title of the book to add
+
+    Returns:
+        str: details about this process (success/fail)
+    """
+    books: list = get_books_from_runtime()
+    reading_list = get_runtime(RuntimeContext).context.reading_list
+    book_details = search_book_using_title(book_title=book_title, books=books)
+
+    if book_details:
+        reading_list.append(book_details)
+        return f'Successfully appended book: {book_details} to reading list'
+    else:
+        return f'Cannot find requested book ({book_title}), try again'
+

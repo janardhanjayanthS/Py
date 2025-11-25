@@ -71,6 +71,7 @@ Type	Requirement
 Middleware	Print tool execution logs + timing
 Dynamic Prompt	If user likes mystery → use more “thriller” tone in recommendations
 HITL	Ask user "Should I add this to your reading history?" before saving
+
 6. Product Behavior
 User Says	System Response
 "I love fantasy books"	Save to memory

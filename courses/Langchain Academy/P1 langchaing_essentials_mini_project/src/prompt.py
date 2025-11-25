@@ -29,3 +29,8 @@ GET_BOOKS_PROMPT = (
     "this tool is for listing all books from available books"
     "use this tool for listing book details"
 )
+
+ADD_TO_READING_LIST_PROMPT = (
+    "this tool is to add a particular book information to reading list"
+    "Use this tool whenever the uses asks to add a book to his/her reading list"
+)

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 
 
@@ -6,3 +6,4 @@ from typing import Optional
 class RuntimeContext:
     data: list[dict[str, str]]
     description: Optional[str] = ""
+    reading_list: list[dict[str, str]] = field(default_factory=list)
