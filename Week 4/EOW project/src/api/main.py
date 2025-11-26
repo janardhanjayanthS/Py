@@ -6,13 +6,13 @@ from ..core.app_config import lifespan
 from ..core.db_config import initialize_table
 from ..models.models import Product
 
-event.listen(Product.__tablename__, "after_create", initialize_table)
+event.listen(Product.__table__, "after_create", initialize_table)
 
 app = FastAPI(lifespan=lifespan)
 
 
-@app.route("/")
-def home() -> dict:
+@app.get("/")
+def home():
     return {"jello": "world"}
 
 
