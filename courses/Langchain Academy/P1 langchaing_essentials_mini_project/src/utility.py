@@ -4,7 +4,7 @@ from typing import Optional
 from schema import RuntimeContext
 
 
-def load_json(filepath: str) -> Optional[list[dict]]:
+def load_json(filepath: str) -> list[dict]:
     """
     loads books data from .json file if book exists
     else raises FileNotFoundError

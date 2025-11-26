@@ -32,5 +32,15 @@ GET_BOOKS_PROMPT = (
 
 ADD_TO_READING_LIST_PROMPT = (
     "this tool is to add a particular book information to reading list"
-    "Use this tool whenever the uses asks to add a book to his/her reading list"
+    "Use this tool whenever the user asks to add a book to his/her reading list"
+)
+
+ADD_TO_FAVORITE_AUTHORS_PROMPT = (
+    "this tool is used to add a specific author to user's favorite"
+    "Use this tool whenever the user asks to add a particular author his favorite or"
+)
+
+ADD_TO_FAVORITE_GENRES_PROMPT = (
+    "this tool is used to add a specific genre to user's favorite"
+    "Use this tool whenever the user asks to add a particular genre his favorite or"
 )

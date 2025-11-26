@@ -1,7 +1,13 @@
 from langchain.tools import tool
 from schema import RuntimeContext
 from langgraph.runtime import get_runtime
-from prompt import SEARCH_BOOK_PORMPT, GET_BOOKS_PROMPT, ADD_TO_READING_LIST_PROMPT
+from prompt import (
+    SEARCH_BOOK_PORMPT,
+    GET_BOOKS_PROMPT,
+    ADD_TO_READING_LIST_PROMPT,
+    ADD_TO_FAVORITE_AUTHORS_PROMPT,
+    ADD_TO_FAVORITE_GENRES_PROMPT,
+)
 from utility import get_books_from_runtime, search_book_using_title
 
 
@@ -69,7 +75,48 @@ def add_to_reading_list(book_title: str) -> str:
 
     if book_details:
         reading_list.append(book_details)
-        return f'Successfully appended book: {book_details} to reading list'
+        return f"Successfully appended book: {book_details} to reading list"
     else:
-        return f'Cannot find requested book ({book_title}), try again'
+        return f"Cannot find requested book ({book_title}), try again"
 
+
+@tool(
+    "add_to_favorite_authors",
+    parse_docstring=True,
+    description=ADD_TO_FAVORITE_AUTHORS_PROMPT,
+)
+def add_to_favorite_authors(author_name: str) -> str:
+    """
+    To add an author's name to favorite_authors (list)
+    in memory
+
+    Args:
+        author_name: name of the author
+
+    Returns:
+        str: result of this tool call (success/fail)
+    """
+    favorite_authors = get_runtime(RuntimeContext).context.favorite_authors
+    favorite_authors.append(author_name)
+    return f"Successfully added {author_name} to your favorites"
+
+
+@tool(
+    "add_to_favorite_genres",
+    parse_docstring=True,
+    description=ADD_TO_FAVORITE_GENRES_PROMPT,
+)
+def add_to_favorite_genre(genre_type: str) -> str:
+    """
+    To add a genre to favorite_genres (list)
+    in memory
+
+    Args:
+        author_name: name of the author
+
+    Returns:
+        str: result of this tool call (success/fail)
+    """
+    favorite_authors = get_runtime(RuntimeContext).context.favorite_genres
+    favorite_authors.append(genre_type)
+    return f"Successfully added {genre_type} to your favorites"

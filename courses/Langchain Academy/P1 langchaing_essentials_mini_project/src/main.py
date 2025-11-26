@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from langchain.agents import create_agent
-from tool import search_book, get_books, add_to_reading_list
+from tool import search_book, get_books, add_to_reading_list, add_to_favorite_authors, add_to_favorite_genre
 from prompt import SYSTEM_PROMPT
 from schema import RuntimeContext
 from utility import load_json
@@ -13,6 +13,8 @@ TOOL_LIST: list[BaseTool] = [
     search_book, 
     get_books, 
     add_to_reading_list,
+    add_to_favorite_genre,
+    add_to_favorite_authors
 ]
 
 
