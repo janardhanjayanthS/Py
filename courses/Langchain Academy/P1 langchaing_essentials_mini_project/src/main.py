@@ -1,8 +1,10 @@
 import asyncio
+from json import dumps
 
 from config import BOOK_MCP_PATH
 from dotenv import load_dotenv
 from langchain.agents import create_agent
+from langchain.agents.middleware import HumanInTheLoopMiddleware
 from langchain.tools import BaseTool
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.checkpoint.memory import InMemorySaver
@@ -54,20 +56,60 @@ async def mainloop():
         tools=TOOL_LIST + open_book_tool,
         context_schema=RuntimeContext,
         checkpointer=InMemorySaver(),
+        middleware=[
+            HumanInTheLoopMiddleware(
+                interrupt_on={
+                    "add_to_reading_list": {"allowed_decisions": ["approve", "reject"]},
+                },
+            ),  # type: ignore
+        ],
     )
 
-    question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
+    config = {"configurable": {"thread_id": "1"}}
 
-    while question not in ["e"]:
-        async for step in agent.astream(
-            {"messages": question},  # type: ignore
-            {"configurable": {"thread_id": "1"}},
-            context=context,
-            stream_mode="values",
-        ):
-            step["messages"][-1].pretty_print()
+    question = result = ""
 
-        question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
+    # question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
+
+    # result = agent.invoke(
+    #     {"messages": [{"role": "user", "content": question}]},
+    #     config=config,
+    #     context=context,
+    # )
+
+    # while True or question not in "e":
+    #     if "__interrupt__" in result:
+    #         description = result["__interrupt__"][-1].value["action_requests"][-1][
+    #             "description"
+    #         ]
+    #         print(description)
+    #         break
+    #     else:
+    #         question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
+
+    #         result = agent.invoke(
+    #             {"messages": [{"role": "user", "content": question}]},
+    #             config=config,
+    #             context=context,
+    #         )
+    #         result["messages"][-1].pretty_print()
+
+    # print(result["messages"][-1].content)
+
+    # while question not in ["e"]:
+    #     async for step in agent.astream(
+    #         {"messages": question},  # type: ignore
+    #         {"configurable": {"thread_id": "1"}},
+    #         context=context,
+    #         stream_mode="values",
+    #     ):
+    #         print(step)
+    #         # step["messages"][-1].pretty_print()
+
+    #     question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
+
+    # TODO: update HITL feat for success and fail
+    # TODO: 
 
 
 if __name__ == "__main__":

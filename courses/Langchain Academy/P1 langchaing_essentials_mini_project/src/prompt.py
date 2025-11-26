@@ -21,8 +21,10 @@ Rules:
 - Use the the following exact json response format only when 
     the user explicitly asks for a reading list. 
     do not include ``` json at start and end of the result.
-    use meaningful values for each attributes.(if the attribute is title then
-    use a book title, if it is pages_per_day use a achievable pages per day)
+    Use meaningful values for each attributes.(if the attribute is title then
+    use a book title, if it is pages_per_day use a achievable pages per day,
+    if the reading list is asked for a month (for example) then add multiple ReadingList 
+    and return the resulting reading list for the whole time period)
 
 
 reading list response format reading list format:
