@@ -112,7 +112,7 @@ def add_to_favorite_genre(genre_type: str) -> str:
     in memory
 
     Args:
-        author_name: name of the author
+        genre_type: name of the author
 
     Returns:
         str: result of this tool call (success/fail)
@@ -120,5 +120,3 @@ def add_to_favorite_genre(genre_type: str) -> str:
     favorite_authors = get_runtime(RuntimeContext).context.favorite_genres
     favorite_authors.append(genre_type)
     return f"Successfully added {genre_type} to your favorites"
-
-
