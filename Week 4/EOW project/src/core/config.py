@@ -1,1 +1,5 @@
-INVENTORY_CSV_FILEPATH = "/home/bitcot/python/Week 2/Day 6/package/new_inventory.csv"
+from pathlib import Path
+
+INVENTORY_CSV_FILEPATH = (
+    Path(__file__).parent.parent.parent / "data" / "new_inventory.csv"
+)

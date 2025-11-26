@@ -40,8 +40,11 @@ def initialize_table(target: Table, connection: Connection, **kw):
 
     if tablename in INITIAL_DATA and len(INITIAL_DATA[tablename]) > 0:
         stmt = insert(target).values(INITIAL_DATA[tablename])
-        connection.execute(stmt)
-        connection.commit()
-        print(
-            f"Successfully seeded {len(INITIAL_DATA[tablename])} values to {tablename}"
-        )
+        try:
+            connection.execute(stmt)
+            connection.commit()
+            print(
+                f"Successfully seeded {len(INITIAL_DATA[tablename])} values to {tablename}"
+            )
+        except Exception as e:
+            print(f"Error: Unexpected exception when interacting with db. {e}")
