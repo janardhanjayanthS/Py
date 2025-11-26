@@ -1,13 +1,14 @@
 import asyncio
-from json import dumps
 
 from config import BOOK_MCP_PATH
 from dotenv import load_dotenv
+from hitl import get_human_approval
 from langchain.agents import create_agent
 from langchain.agents.middleware import HumanInTheLoopMiddleware
 from langchain.tools import BaseTool
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.types import Command
 from prompt import SYSTEM_PROMPT
 from schema import RuntimeContext
 from tool import (
@@ -65,51 +66,67 @@ async def mainloop():
         ],
     )
 
-    config = {"configurable": {"thread_id": "1"}}
+    question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
 
-    question = result = ""
+    while question not in ["e"]:
+        async for step in agent.astream(
+            {"messages": question},  # type: ignore
+            {"configurable": {"thread_id": "1"}},
+            context=context,
+            stream_mode="values",
+        ):
+            if "messages" in step:
+                last_message = step["messages"][-1]
+                last_message.pretty_print()
 
-    # question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
+                if hasattr(last_message, "tool_calls") and last_message.tool_calls:
+                    for tool_call in last_message.tool_calls:
+                        tool_name = tool_call.get("name", "unknown")
+                        tool_args = tool_call.get("args", {})
 
-    # result = agent.invoke(
-    #     {"messages": [{"role": "user", "content": question}]},
-    #     config=config,
-    #     context=context,
-    # )
+                        if tool_name == "add_to_reading_list":
+                            called_add_to_reading_list_tool(agent, tool_name, tool_args)
+                        else:
+                            print(f"Auto executing tool: {tool_name}")
 
-    # while True or question not in "e":
-    #     if "__interrupt__" in result:
-    #         description = result["__interrupt__"][-1].value["action_requests"][-1][
-    #             "description"
-    #         ]
-    #         print(description)
-    #         break
-    #     else:
-    #         question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
+            if hasattr(step, "interrupt") and step.interrupts:
+                print("\n waiting for human response...")
 
-    #         result = agent.invoke(
-    #             {"messages": [{"role": "user", "content": question}]},
-    #             config=config,
-    #             context=context,
-    #         )
-    #         result["messages"][-1].pretty_print()
+        print("\n", "=" * 80)
+        question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
 
-    # print(result["messages"][-1].content)
 
-    # while question not in ["e"]:
-    #     async for step in agent.astream(
-    #         {"messages": question},  # type: ignore
-    #         {"configurable": {"thread_id": "1"}},
-    #         context=context,
-    #         stream_mode="values",
-    #     ):
-    #         print(step)
-    #         # step["messages"][-1].pretty_print()
+def called_add_to_reading_list_tool(agent, tool_name, tool_args):
+    """
+    processes human decision after calling add_to_reading list tool
 
-    #     question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
+    Args:
+        agent: ai agent
+        tool_name: name of the tool
+        tool_args: arguments passed to that tool
+    """
+    human_decision = get_human_approval(tool_name, tool_args)
 
-    # TODO: update HITL feat for success and fail
-    # TODO: 
+    if human_decision == "approval":
+        print("\nHuman approved!")
+    elif human_decision == "reject":
+        print("\nHuman Rejected!")
+        agent.invoke(
+            Command(
+                resume={
+                    "decisions": [
+                        {
+                            "type": "reject",
+                            "message": "Human interviened while adding data to reading list",
+                        }
+                    ]
+                }
+            ),
+            config={"configurable": {"thread_id": "1"}},
+            context=context,
+        )
+    elif human_decision == "modify":
+        print("\nModification required!")
 
 
 if __name__ == "__main__":
