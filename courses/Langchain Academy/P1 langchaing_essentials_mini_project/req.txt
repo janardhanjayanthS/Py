@@ -42,6 +42,7 @@ Implement two:
 Tool Name	Input	Output
 SearchBooks	genre or keyword	5 books with title + author + OpenLibrary URI
 SaveReadingHistory	book title	success message
+
 3. MCP Tool
 
 A simple MCP wrapper to call Open Library book details lookup:
