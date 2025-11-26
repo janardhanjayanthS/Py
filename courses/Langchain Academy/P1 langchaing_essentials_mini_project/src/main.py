@@ -1,3 +1,5 @@
+import asyncio
+
 from config import BOOK_MCP_PATH
 from dotenv import load_dotenv
 from langchain.agents import create_agent
@@ -54,10 +56,10 @@ async def mainloop():
         checkpointer=InMemorySaver(),
     )
 
-    question: str = input("Prompt to LLM/e to exit: ").lower()
+    question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
 
     while question not in ["e"]:
-        for step in agent.stream(
+        async for step in agent.astream(
             {"messages": question},  # type: ignore
             {"configurable": {"thread_id": "1"}},
             context=context,
@@ -69,4 +71,4 @@ async def mainloop():
 
 
 if __name__ == "__main__":
-    await mainloop()
+    asyncio.run(mainloop())

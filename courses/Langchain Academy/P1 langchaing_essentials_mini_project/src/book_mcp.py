@@ -52,7 +52,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     if name != 'get_books':
         raise ValueError(f'Unknown tool name: {name}')
     
-    book_title = arguments['book_title']
+    book_title = arguments['title']
 
     if not book_title:
         return [TextContent(type='text', text='Error: Book title is required')]

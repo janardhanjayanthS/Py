@@ -15,6 +15,9 @@ Ask doubts if the query is not clear.
 Use appropriate tools from the tools list to
 preform certain operations.
 
+If you cannot find any books from the search_for_book_info tool 
+(when this tool returns an empty list) use the MCP tool to get book information 
+
 use the provided json data for answering user
 queries. 
 """
