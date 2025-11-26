@@ -1,23 +1,20 @@
-from csv import DictReader
+import uvicorn
+from fastapi import FastAPI
+from sqlalchemy import event
 
+from ..core.app_config import lifespan
+from ..core.db_config import initialize_table
 from ..models.models import Product
 
+event.listen(Product.__tablename__, "after_create", initialize_table)
 
-def csv_to_db(csv_filepath: str):
-    """
-    reads data from inventory.csv,
-    adds rows from from csv to products table in postgres
-
-    Args:
-        csv_filepath: filepath for inventory.csv
-    """
-    try:
-        with open(csv_filepath) as file:
-            reader = DictReader(file)
-            for row in reader:
-                print(row)
-    except FileNotFoundError as e:
-        print(f"Requested file {csv_filepath} does not exist. {e}")
+app = FastAPI(lifespan=lifespan)
 
 
-csv_to_db("/home/bitcot/python/Week 2/Day 6/package/new_inventory.csv")
+@app.route("/")
+def home() -> dict:
+    return {"jello": "world"}
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=5001)
