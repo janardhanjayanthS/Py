@@ -6,7 +6,7 @@ from os import getenv
 
 load_dotenv("../../.env")
 
-postgresql_pwd = getenv("POSTGRESQL_PWS")
+postgresql_pwd = getenv("POSTGRESQL_PWD")
 
 DATABASE_URL = (
     f"postgresql://postgres:{postgresql_pwd}@localhost:5432/inventory_manager"
