@@ -56,6 +56,14 @@ class ProductCreate(BaseProduct):
             raise ValueError(f"Product must be of the following types: {PRODUCT_TYPES}")
         return t
 
+    def reset_regular_product_attributes(self):
+        """
+        to set is_vegetarian, days_to_expire & warranty_in_years to None
+        for a regular product
+        """
+        if self.type == "regular":
+            self.is_vegetarian = self.days_to_expire = self.warranty_in_years = None
+
 
 class ProductResponse(BaseProduct):
     class Config:

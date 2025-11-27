@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from src.core.api_utility import add_commit_refresh_db, check_if_product_exists
 from src.core.db_config import get_db
 from src.models.models import Product
 from src.schema.product import ProductCreate, ProductResponse
@@ -26,21 +27,12 @@ async def product_with_id(product_id: str, db: Session = Depends(get_db)):
 
 @product.post("/add_product", response_model=ProductResponse)
 async def add_product(product: ProductCreate, db: Session = Depends(get_db)):
-    print(product)
-
-    existing_product = db.query(Product).filter_by(id=product.id).first()
-
-    if existing_product is not None:
-        raise HTTPException(status_code=400, detail="Product id already exists")
+    check_if_product_exists(product=product, db=db)
 
     if product and product.type == "regular":
-        product.is_vegetarian = product.days_to_expire = product.warranty_in_years = (
-            None
-        )
+        product.reset_regular_product_attributes()
 
     db_product = Product(**product.model_dump())
-    db.add(db_product)
-    db.commit()
-    db.refresh(db_product)
+    add_commit_refresh_db(object=db_product, db=db)
 
     return db_product
