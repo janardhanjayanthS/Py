@@ -32,7 +32,7 @@ reading list response format reading list format:
 {ReadingList.model_json_schema()} 
 
 add as many reading list as per requested weeks. I
-n this schema the list the BookInReadingList must be of the following format: 
+n this schema the list the BookInReadingList must be of the following format:
 
 {BookInReadingList.model_json_schema()}
 """
