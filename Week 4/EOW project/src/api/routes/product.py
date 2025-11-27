@@ -12,7 +12,7 @@ product = APIRouter()
 @product.get("/products")
 async def products(db: Session = Depends(get_db)):
     products = db.query(Product).all()
-    return products
+    return {"status": "success", "message": {"products": products}}
 
 
 @product.get("/products/{product_id}")
@@ -20,9 +20,14 @@ async def product_with_id(product_id: str, db: Session = Depends(get_db)):
     product = db.query(Product).filter_by(id=product_id).first()
 
     if product is None:
-        return {"response": f"product with id {product_id} not found"}
+        return {
+            "status": "error",
+            "message": {
+                "response": f"product with id {product_id} not found",
+            },
+        }
 
-    return product
+    return {"status": "success", "message": {"product": product}}
 
 
 @product.post("/add_product", response_model=ProductResponse)
@@ -35,4 +40,4 @@ async def add_product(product: ProductCreate, db: Session = Depends(get_db)):
     db_product = Product(**product.model_dump())
     add_commit_refresh_db(object=db_product, db=db)
 
-    return db_product
+    return {"status": "success", "message": {"inserted_product": db_product}}
