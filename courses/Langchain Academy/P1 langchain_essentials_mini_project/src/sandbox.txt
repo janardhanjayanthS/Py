@@ -1,0 +1,238 @@
+contains commented code from claude
+
+
+# ============================================================================
+# TOOLS REQUIRING APPROVAL
+# ============================================================================
+TOOLS_REQUIRING_APPROVAL = ["add_to_reading_list", "add_to_favorite_authors"]
+
+# ============================================================================
+# GLOBAL VARIABLE TO STORE TOOLS (not in state)
+# ============================================================================
+# Tools are NOT serializable, so we store them globally instead of in state
+ALL_TOOLS = []
+
+
+# ============================================================================
+# GRAPH NODE FUNCTIONS
+# ============================================================================
+
+def call_model(state: MessagesState):
+    """
+    Node that calls the LLM with system prompt and tools.
+    
+    IMPORTANT: We access tools from the global ALL_TOOLS variable,
+    not from state, because tools are not serializable.
+    """
+    messages = state["messages"]
+    
+    # Add system prompt if not already present
+    # Check if first message is a system message
+    if not messages or messages[0].type != "system":
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT}
+        ] + messages
+    
+    # Create LLM with tools (from global variable, not state)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    llm_with_tools = llm.bind_tools(ALL_TOOLS)
+    
+    # Invoke the model
+    response = llm_with_tools.invoke(messages)
+    
+    return {"messages": [response]}
+
+
+def human_approval_node(state: MessagesState):
+    """
+    Human-in-the-loop approval checkpoint.
+    
+    Intercepts tool calls and asks for human approval before execution.
+    """
+    messages = state["messages"]
+    last_message = messages[-1]
+    
+    if not hasattr(last_message, 'tool_calls') or not last_message.tool_calls:
+        return state
+    
+    approved_tool_calls = []
+    rejection_messages = []
+    
+    for tool_call in last_message.tool_calls:
+        tool_name = tool_call["name"]
+        tool_args = tool_call["args"]
+        tool_call_id = tool_call["id"]
+        
+        if tool_name in TOOLS_REQUIRING_APPROVAL:
+            print(f"\n🛑 Intercepting tool call: {tool_name}")
+            
+            decision = get_human_approval(tool_name, tool_args)
+            
+            if decision == "approve":
+                approved_tool_calls.append(tool_call)
+                print(f"✅ Tool '{tool_name}' approved and will be executed")
+                
+            elif decision == "reject":
+                # Create rejection message - this is crucial for OpenAI's message structure
+                rejection_messages.append({
+                    "role": "tool",
+                    "content": f"Action rejected by human. The user did not approve this action.",
+                    "tool_call_id": tool_call_id,
+                    "name": tool_name
+                })
+                print(f"❌ Tool '{tool_name}' rejected by human")
+        else:
+            # Auto-approve tools not requiring approval
+            approved_tool_calls.append(tool_call)
+            print(f"🔄 Auto-approving tool: {tool_name}")
+    
+    # Update tool calls with only approved ones
+    if approved_tool_calls:
+        last_message.tool_calls = approved_tool_calls
+    else:
+        last_message.tool_calls = []
+    
+    # Add rejection messages if any
+    if rejection_messages:
+        return {"messages": messages + rejection_messages}
+    
+    return {"messages": messages}
+
+
+def should_continue(state: MessagesState) -> Literal["human_approval", "end"]:
+    """
+    Router: Decides whether to go to human approval or end.
+    """
+    messages = state["messages"]
+    last_message = messages[-1]
+    
+    if hasattr(last_message, 'tool_calls') and last_message.tool_calls:
+        return "human_approval"
+    
+    return "end"
+
+
+def should_continue_after_approval(state: MessagesState) -> Literal["tools", "model", "end"]:
+    """
+    Router: Decides what to do after human approval.
+    """
+    messages = state["messages"]
+    last_message = messages[-1]
+    
+    # Check if there are approved tool calls to execute
+    if hasattr(last_message, 'tool_calls') and last_message.tool_calls:
+        print(f"\n🔧 Executing {len(last_message.tool_calls)} approved tool(s)...")
+        return "tools"
+    
+    # Check if last message is a rejection (tool message)
+    if len(messages) > 0 and hasattr(messages[-1], 'type') and messages[-1].type == "tool":
+        print("\n🔄 Sending rejection feedback to model...")
+        return "model"
+    
+    print("\n⏹️  No approved tools to execute")
+    return "end"
+
+
+async def mainloop():
+    """
+    Main loop with human-in-the-loop functionality.
+    
+    KEY FIX: Tools are stored in global variable, NOT in state.
+    This prevents serialization errors with the checkpointer.
+    """
+    
+    global ALL_TOOLS
+    
+    # Get MCP tools and store in global variable
+    print("🔧 Loading tools...")
+    open_book_tool = await client.get_tools()
+    ALL_TOOLS = TOOL_LIST + open_book_tool
+    print(f"✅ Loaded {len(ALL_TOOLS)} tools\n")
+    
+    # ========================================================================
+    # BUILD THE LANGGRAPH
+    # ========================================================================
+    
+    workflow = StateGraph(MessagesState)
+    
+    # Add nodes
+    workflow.add_node("model", call_model)
+    workflow.add_node("human_approval", human_approval_node)
+    workflow.add_node("tools", ToolNode(ALL_TOOLS))  # Tools passed directly, not via state
+    
+    # Define edges
+    workflow.add_edge(START, "model")
+    
+    workflow.add_conditional_edges(
+        "model",
+        should_continue,
+        {
+            "human_approval": "human_approval",
+            "end": END
+        }
+    )
+    
+    workflow.add_conditional_edges(
+        "human_approval",
+        should_continue_after_approval,
+        {
+            "tools": "tools",
+            "model": "model",
+            "end": END
+        }
+    )
+    
+    workflow.add_edge("tools", "model")
+    
+    # Compile with checkpointer
+    graph = workflow.compile(checkpointer=InMemorySaver())
+    
+    # ========================================================================
+    # CONVERSATION LOOP
+    # ========================================================================
+    
+    print("=" * 80)
+    print("📚 Book Management Assistant with Human-in-the-Loop")
+    print("=" * 80)
+    print("Features:")
+    print("  • Requires your approval before adding books to reading list")
+    print("  • You can approve or reject each action")
+    print("  • Agent learns from your decisions")
+    print("=" * 80 + "\n")
+    
+    question: str = input("Prompt to LLM [or] 'e' to exit: ")
+
+    while question.lower() not in ["e", "exit"]:
+        print("\n" + "=" * 80)
+        print(f"💬 YOU: {question}")
+        print("=" * 80)
+        
+        # ====================================================================
+        # STREAM THROUGH GRAPH
+        # ====================================================================
+        # NOTE: We only pass messages in state, NOT tools
+        # Tools are accessed from global ALL_TOOLS variable
+        async for event in graph.astream(
+            {"messages": [("user", question)]},
+            config={"configurable": {"thread_id": "1"}},
+            stream_mode="values"
+        ):
+            # Display assistant messages
+            if "messages" in event:
+                last_msg = event["messages"][-1]
+                
+                # Only print content messages (not tool calls/results)
+                if hasattr(last_msg, 'content') and last_msg.content:
+                    # Skip tool result messages
+                    if not (hasattr(last_msg, 'type') and last_msg.type == 'tool'):
+                        # Skip messages with tool calls (they're not final responses)
+                        if not (hasattr(last_msg, 'tool_calls') and last_msg.tool_calls):
+                            print(f"\n🤖 ASSISTANT: {last_msg.content}")
+        
+        print("\n" + "=" * 80)
+        question = input("\nPrompt to LLM [or] 'e' to exit: ")
+    
+    # Cleanup
+    await client.cleanup()
+    print("\n👋 Thanks for using the Book Management Assistant!")
+    
