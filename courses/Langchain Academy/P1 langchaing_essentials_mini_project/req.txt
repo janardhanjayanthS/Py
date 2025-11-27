@@ -1,0 +1,122 @@
+⚡ Project: AI Book Recommendation & Reading Tracker
+
+A small but real-life useful project:
+
+Chat with an AI that recommends books based on interests
+
+Tracks books you read
+
+Fetches new book suggestions from an open-source database (Open Library API)
+
+🔧 Requirements (no code)
+
+What the project must support
+Feature	Concept Covered
+Chat-based AI assistant	Models + Messages
+Streams while responding	Streaming
+Looks up books from Open Library	Tools
+A tool implemented through MCP	MCP Tool
+Tracks reading history	Memory
+Generates structured reading plan	Structured Output
+Confirms before writing to history	Human-in-the-loop
+Adds behavior like logging tool calls	Middleware
+Adjusts prompts based on user interests	Dynamic Prompt
+🧩 Minimum Scope (fits in 40 mins)
+
+1. Memory
+
+Store:
+
+favorite genres
+
+favorite authors
+
+current reading list
+
+Use simple JSON or Python list (no database needed but allowed).
+
+2. Tools
+
+Implement two:
+
+Tool Name	Input	Output
+SearchBooks	genre or keyword	5 books with title + author + OpenLibrary URI
+SaveReadingHistory	book title	success message
+
+3. MCP Tool
+
+A simple MCP wrapper to call Open Library book details lookup:
+
+Input → book title
+
+Output → description, published year, subjects
+
+4. Structured Output
+
+When user says:
+
+"Make a reading plan for me"
+
+Return structured JSON with:
+
+{
+  "week": 1,
+  "books": [
+    {"title": "", "pages_per_day": int},
+    ...
+  ]
+}
+
+5. Agent Customization
+Type        	  Requirement
+
+Middleware	    Print tool execution logs + timing
+
+Dynamic Prompt	If user likes mystery → use more “thriller” tone in recommendations
+
+HITL	          Ask user "Should I add this to your reading history?" before saving
+
+6. Product Behavior
+User Says	System Response
+"I love fantasy books"	Save to memory
+"Suggest books"	SearchBooks tool
+"Tell me about this book"	MCP lookup tool
+"Add it to my reading list"	Ask for confirmation → SaveReadingHistory
+"Plan 1 month of reading"	Structured output plan
+📂 Recommended 40-min Folder Layout
+book_assistant/
+  main.py
+  tools.py
+  memory.json
+  mcp_client.py
+
+
+(Optional) add a basic CLI or FastAPI route for streaming — not required.
+
+🧠 Tips to finish in 40 mins
+Task	Time
+Initialize project & memory file	3 min
+Add chat model + streaming	7 min
+Add 2 tools	10 min
+Add MCP tool	8 min
+Add structured output	5 min
+Add middleware & HITL	5 min
+Quick test run	2 min
+🟢 Why this fits 40 minutes
+
+No frontend required
+
+API access is simple (Open Library = no API key)
+
+Tools are small and fast to implement
+
+Memory is just JSON file or list
+
+No DB setup needed unless you want to extend
+
+When you’re ready, I can provide:
+✔ setup steps
+✔ file-by-file skeleton code
+✔ test checklist
+
+Just say "start" or "give skeleton code" when ready. 🚀
