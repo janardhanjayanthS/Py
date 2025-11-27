@@ -69,9 +69,12 @@ async def mainloop():
     question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
 
     while question not in ["e"]:
+        config = {"configurable": {"thread_id": "1"}}
+        pending_tool_call = None
+
         async for step in agent.astream(
             {"messages": question},  # type: ignore
-            {"configurable": {"thread_id": "1"}},
+            config,
             context=context,
             stream_mode="values",
         ):
@@ -79,54 +82,42 @@ async def mainloop():
                 last_message = step["messages"][-1]
                 last_message.pretty_print()
 
+                # Manual HITL: Intercept tool calls before execution
                 if hasattr(last_message, "tool_calls") and last_message.tool_calls:
                     for tool_call in last_message.tool_calls:
                         tool_name = tool_call.get("name", "unknown")
                         tool_args = tool_call.get("args", {})
 
                         if tool_name == "add_to_reading_list":
-                            called_add_to_reading_list_tool(agent, tool_name, tool_args)
+                            # Intercept and ask for approval
+                            pending_tool_call = {"name": tool_name, "args": tool_args}
+                            break
                         else:
                             print(f"Auto executing tool: {tool_name}")
 
-            if hasattr(step, "interrupt") and step.interrupts:
-                print("\n waiting for human response...")
+        # Handle human-in-the-loop approval
+        if pending_tool_call and pending_tool_call["name"] == "add_to_reading_list":
+            human_decision = get_human_approval(
+                pending_tool_call["name"], pending_tool_call["args"]
+            )
+
+            if human_decision == "approve":
+                print("\nHuman approved! Tool will execute.")
+                # Continue the conversation - tool execution happens automatically
+            elif human_decision == "reject":
+                print("\nHuman Rejected! Tool execution cancelled.")
+                # Send rejection feedback to agent
+                await agent.ainvoke(
+                    {"messages": "User rejected adding the book to reading list"},
+                    config=config,
+                    context=context,
+                )
+            elif human_decision == "modify":
+                print("\nModification required!")
+                # In a full implementation, modify tool_args here
 
         print("\n", "=" * 80)
         question: str = input("Prompt to LLM [or] 'e' to exit: ").lower()
-
-
-def called_add_to_reading_list_tool(agent, tool_name, tool_args):
-    """
-    processes human decision after calling add_to_reading list tool
-
-    Args:
-        agent: ai agent
-        tool_name: name of the tool
-        tool_args: arguments passed to that tool
-    """
-    human_decision = get_human_approval(tool_name, tool_args)
-
-    if human_decision == "approval":
-        print("\nHuman approved!")
-    elif human_decision == "reject":
-        print("\nHuman Rejected!")
-        agent.invoke(
-            Command(
-                resume={
-                    "decisions": [
-                        {
-                            "type": "reject",
-                            "message": "Human interviened while adding data to reading list",
-                        }
-                    ]
-                }
-            ),
-            config={"configurable": {"thread_id": "1"}},
-            context=context,
-        )
-    elif human_decision == "modify":
-        print("\nModification required!")
 
 
 if __name__ == "__main__":
