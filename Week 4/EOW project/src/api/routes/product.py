@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from src.core.api_utility import add_commit_refresh_db, check_if_product_exists
 from src.core.db_config import get_db
+from src.core.log import log_error
 from src.models.models import Product
 from src.schema.product import ProductCreate, ProductResponse
 
@@ -20,10 +21,12 @@ async def product_with_id(product_id: str, db: Session = Depends(get_db)):
     product = db.query(Product).filter_by(id=product_id).first()
 
     if product is None:
+        message = f"product with id {product_id} not found"
+        log_error(message=message)
         return {
             "status": "error",
             "message": {
-                "response": f"product with id {product_id} not found",
+                "response": message,
             },
         }
 
