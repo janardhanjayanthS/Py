@@ -16,11 +16,33 @@ def check_if_product_exists(product: ProductCreate | None, db: Session):
         product: pydnatic product model with its details
         db: database instance in session
     """
-    existing_product = db.query(Product).filter_by(id=product.id).first()
+    existing_product = db.query(Product).filter_by(id=product.id).first()  # type: ignore
     if existing_product is not None:
-        message = f"product with id {product.id} already exists"
+        message = f"product with id {product.id} already exists"  # type: ignore
         log_error(message=message)
-        raise HTTPException(status_code=400, detail=message)
+        raise HTTPException(status_code=400, detail={"message": message})
+
+
+def handle_missing_product(product_id: str, product: Product):
+    """
+    ensures if db returned a valid product,
+    if not then logs & retruns error
+
+    Args:
+        product_id: fetched product id
+        product: fetched product sqlalchemy object
+
+    Returns:
+        dict: fastapi response
+    """
+    message = f"product with id {product_id} not found"
+    log_error(message=message)
+    return {
+        "status": "error",
+        "message": {
+            "response": message,
+        },
+    }
 
 
 def post_product(product: ProductCreate | None, db: Session) -> dict:
@@ -39,7 +61,7 @@ def post_product(product: ProductCreate | None, db: Session) -> dict:
     if product and product.type == "regular":
         product.reset_regular_product_attributes()
 
-    db_product = Product(**product.model_dump())
+    db_product = Product(**product.model_dump())  # type: ignore
     add_commit_refresh_db(object=db_product, db=db)
 
     return {"status": "success", "message": {"inserted_product": db_product}}
@@ -71,29 +93,7 @@ def get_specific_product(product_id: str, db: Session) -> dict:
         dict: fastapi response
     """
     product = db.query(Product).filter_by(id=product_id).first()
-    ensure_product_found(product_id=str(product.id), product=product) # type: ignore
+    if product is None:
+        handle_missing_product(product_id=str(product_id), product=product)  # type: ignore
 
     return {"status": "success", "message": {"product": product}}
-
-
-def ensure_product_found(product_id: str, product: Product):
-    """
-    ensures if db returned a valid product,
-    if not then logs & retruns error
-
-    Args:
-        product_id: fetched product id
-        product: fetched product sqlalchemy object
-
-    Returns:
-        dict: fastapi response
-    """
-    if product is None:
-        message = f"product with id {product_id} not found"
-        log_error(message=message)
-        return {
-            "status": "error",
-            "message": {
-                "response": message,
-            },
-        }

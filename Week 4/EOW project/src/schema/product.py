@@ -65,6 +65,19 @@ class ProductCreate(BaseProduct):
             self.is_vegetarian = self.days_to_expire = self.warranty_in_years = None
 
 
+class ProductUpdate(BaseProduct):
+    """
+    Schema to upgrade product details
+
+    Args:
+        BaseProduct: base class with product attributes
+    """
+
+    name: str | None
+    quantity: str | None
+    price: str | None
+
+
 class ProductResponse(BaseProduct):
     class Config:
         orm_mode = True
