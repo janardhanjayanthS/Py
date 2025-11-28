@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -8,7 +10,7 @@ from src.models.models import Product
 from src.schema.product import ProductCreate
 
 
-def check_if_product_exists(product: ProductCreate | None, db: Session):
+def check_if_product_exists(product: Optional[ProductCreate], db: Session):
     """
     Checks if product already exists in db,
     if so raises HTTP error
@@ -45,7 +47,7 @@ def handle_missing_product(product_id: str):
     }
 
 
-def post_product(product: ProductCreate | None, db: Session) -> dict:
+def post_product(product: Optional[ProductCreate], db: Session) -> dict:
     """
     Inserts product into db
 
