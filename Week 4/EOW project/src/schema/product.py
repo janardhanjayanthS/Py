@@ -65,7 +65,20 @@ class ProductCreate(BaseProduct):
             self.is_vegetarian = self.days_to_expire = self.warranty_in_years = None
 
 
+class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
+    """
+    Schema to upgrade product details
+    """
+
+    name: Optional[str] = Field(None, min_length=5, max_length=100)
+    quantity: Optional[PositiveInt] = None  # type: ignore
+    price: Optional[PositiveFloat] = None  # type: ignore
+    type: Optional[str] = None
+    days_to_expire: Optional[int] = None
+    is_vegetarian: Optional[bool] = None
+    warranty_in_years: Optional[float] = None
+
+
 class ProductResponse(BaseProduct):
     class Config:
-        orm_mode = True
         from_attributes = True
