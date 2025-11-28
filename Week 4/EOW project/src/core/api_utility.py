@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from src.core.db_utility import add_commit_refresh_db
@@ -23,14 +24,13 @@ def check_if_product_exists(product: ProductCreate | None, db: Session):
         raise HTTPException(status_code=400, detail={"message": message})
 
 
-def handle_missing_product(product_id: str, product: Product):
+def handle_missing_product(product_id: str):
     """
     ensures if db returned a valid product,
     if not then logs & retruns error
 
     Args:
         product_id: fetched product id
-        product: fetched product sqlalchemy object
 
     Returns:
         dict: fastapi response
@@ -94,6 +94,32 @@ def get_specific_product(product_id: str, db: Session) -> dict:
     """
     product = db.query(Product).filter_by(id=product_id).first()
     if product is None:
-        handle_missing_product(product_id=str(product_id), product=product)  # type: ignore
+        return handle_missing_product(product_id=str(product_id))
 
     return {"status": "success", "message": {"product": product}}
+
+
+def put_product(product_id: str, product_update: BaseModel, db: Session) -> dict:
+    """
+    update product details
+
+    Args:
+        product_id: id of the product to update
+        product: detail's of product to update
+        db: sqlalchemy db object
+
+    Returns:
+        dict: fastapi response
+    """
+    db_product = db.query(Product).filter_by(id=product_id).first()
+    print("db product: ", db_product)
+    if db_product is None:
+        return handle_missing_product(product_id=product_id)
+
+    update_data = product_update.model_dump(exclude_unset=True)  # type: ignore
+    for field, value in update_data.items():
+        setattr(db_product, field, value)
+
+    db.commit()
+    db.refresh(db_product)
+    return {"status": "success", "message": {"updated_product": db_product}}
