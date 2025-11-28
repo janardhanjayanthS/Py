@@ -1,4 +1,7 @@
+from os import getenv
+
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from sqlalchemy import event
 
@@ -8,7 +11,12 @@ from src.models.models import Product
 
 from .routes import product
 
-event.listen(Product.__table__, "after_create", initialize_table)
+load_dotenv()
+
+TESTING = getenv("TESTING")
+
+if TESTING != "1":
+    event.listen(Product.__table__, "after_create", initialize_table)
 
 app = FastAPI(lifespan=lifespan)
 

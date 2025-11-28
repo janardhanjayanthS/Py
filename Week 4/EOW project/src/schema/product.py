@@ -1,6 +1,13 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field, PositiveFloat, PositiveInt, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    PositiveFloat,
+    PositiveInt,
+    field_validator,
+)
 
 PRODUCT_TYPES = {"food", "regular", "electronic"}
 
@@ -80,5 +87,4 @@ class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
 
 
 class ProductResponse(BaseProduct):
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

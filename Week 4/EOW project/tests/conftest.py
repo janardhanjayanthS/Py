@@ -55,7 +55,7 @@ def client(test_db):
 
     def override_get_db():
         try:
-            test_db
+            yield test_db
         finally:
             test_db.close()
 
