@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
+    delete_product,
     get_all_products,
     get_specific_product,
     post_product,
@@ -37,7 +38,7 @@ async def products(
     }
 
 
-@product.put("/product/{product_id}")
+@product.put("/product")
 async def update_product(
     product_id: str, product_update: ProductUpdate, db: Session = Depends(get_db)
 ):
@@ -50,3 +51,15 @@ async def update_product(
         db: sqlalchemy db object. Defaults to Depends(get_db).
     """
     return put_product(product_id=product_id, product_update=product_update, db=db)
+
+
+@product.delete("/product")
+async def remove_product(product_id: str, db: Session = Depends(get_db)):
+    """
+    To update product information
+
+    Args:
+        product_id: id of the product to update
+        db: sqlalchemy db object. Defaults to Depends(get_db).
+    """
+    return delete_product(product_id=product_id, db=db)

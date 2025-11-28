@@ -64,7 +64,7 @@ def post_product(product: ProductCreate | None, db: Session) -> dict:
     db_product = Product(**product.model_dump())  # type: ignore
     add_commit_refresh_db(object=db_product, db=db)
 
-    return {"status": "success", "message": {"inserted_product": db_product}}
+    return {"status": "success", "message": {"inserted product": db_product}}
 
 
 def get_all_products(db: Session) -> dict:
@@ -112,7 +112,6 @@ def put_product(product_id: str, product_update: BaseModel, db: Session) -> dict
         dict: fastapi response
     """
     db_product = db.query(Product).filter_by(id=product_id).first()
-    print("db product: ", db_product)
     if db_product is None:
         return handle_missing_product(product_id=product_id)
 
@@ -122,4 +121,24 @@ def put_product(product_id: str, product_update: BaseModel, db: Session) -> dict
 
     db.commit()
     db.refresh(db_product)
-    return {"status": "success", "message": {"updated_product": db_product}}
+    return {"status": "success", "message": {"updated product": db_product}}
+
+
+def delete_product(product_id: str, db: Session) -> dict:
+    """
+    delete a product from db
+
+    Args:
+        product_id: id of the product to update
+        db: sqlalchemy db object
+
+    Returns:
+        dict: fastapi response
+    """
+    db_product = db.query(Product).filter_by(id=product_id).first()
+    if db_product is None:
+        return handle_missing_product(product_id=product_id)
+
+    db.delete(db_product)
+    db.commit()
+    return {"status": "success", "message": {"deleted product": db_product}}
