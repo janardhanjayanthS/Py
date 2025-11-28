@@ -97,3 +97,10 @@ class TestProductEndPoints:
         )
 
         assert response.status_code == 200
+        data = response.json()["message"]["updated product"]
+
+        assert data["name"] == update_data["name"]
+        assert data["quantity"] == update_data["quantity"]
+        assert data["price"] == update_data["price"]
+
+    
