@@ -81,5 +81,4 @@ class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
 
 class ProductResponse(BaseProduct):
     class Config:
-        orm_mode = True
         from_attributes = True

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
@@ -56,10 +56,10 @@ async def update_product(
 @product.delete("/product")
 async def remove_product(product_id: str, db: Session = Depends(get_db)):
     """
-    To update product information
+    To delete a product from db
 
     Args:
-        product_id: id of the product to update
+        product_id: id of the product to delete
         db: sqlalchemy db object. Defaults to Depends(get_db).
     """
     return delete_product(product_id=product_id, db=db)
