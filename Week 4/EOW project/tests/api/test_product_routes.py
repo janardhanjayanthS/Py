@@ -81,14 +81,13 @@ class TestProductEndPoints:
         assert received_product["name"] == sample_product.name
         assert received_product["type"] == sample_product.type
 
-    def test_update_product_integration(self, client, test_db, sample_product):
+    def test_update_product_integration(self, client, sample_product):
         """
         Testing PUT product end point
 
         Args:
             client: test application
-            test_db: test db object
-            sample_product (_type_): _description_
+            sample_product: sample product from fixture
         """
         update_data = {"name": "Updated Product Name", "quantity": 15, "price": 149.99}
 
@@ -103,4 +102,19 @@ class TestProductEndPoints:
         assert data["quantity"] == update_data["quantity"]
         assert data["price"] == update_data["price"]
 
-    
+    def test_delete_product_integration(self, client, test_db, sample_product):
+        """
+        Test for DELETE specific product using its id
+
+        Args:
+            client: test application
+            sample_product: sample product from fixture
+            test_db: test db instance
+        """
+        response = client.delete(f"/product?product_id={sample_product.id}")
+
+        assert response.status_code == 200
+
+        deleted_product = test_db.query(Product).filter_by(id=sample_product.id).first()
+
+        assert deleted_product is None
