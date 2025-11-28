@@ -60,6 +60,40 @@ class TestProductEndPoints:
         assert response.status_code == 200
 
         data = response.json()
+        received_products = data["message"]["products"]
+        assert len(received_products) == 2
+        assert received_products[0]["name"] == "Product 1"
+        assert received_products[1]["name"] == "Product 2"
 
-        assert len(data["message"]["products"]) == 2
-        
+    def test_get_speficif_product(self, client, sample_product):
+        """
+        Testing GET specific product using its id
+
+        Args:
+            client: test application
+            sample_product: sample sqlalchemy db Product instanc
+        """
+        response = client.get(f"/products?product_id={sample_product.id}")
+
+        assert response.status_code == 200
+        received_product = response.json()["message"]["product"]
+
+        assert received_product["name"] == sample_product.name
+        assert received_product["type"] == sample_product.type
+
+    def test_update_product_integration(self, client, test_db, sample_product):
+        """
+        Testing PUT product end point
+
+        Args:
+            client: test application
+            test_db: test db object
+            sample_product (_type_): _description_
+        """
+        update_data = {"name": "Updated Product Name", "quantity": 15, "price": 149.99}
+
+        response = client.put(
+            f"/product?product_id={sample_product.id}", json=update_data
+        )
+
+        assert response.status_code == 200

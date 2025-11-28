@@ -63,3 +63,15 @@ def client(test_db):
     with TestClient(app=app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def sample_product(test_db):
+    """Create a sample product in the database"""
+    product = Product(
+        id="prod-001", name="Test Product", quantity=10, price=99.99, type="regular"
+    )
+    test_db.add(product)
+    test_db.commit()
+    test_db.refresh(product)
+    return product
