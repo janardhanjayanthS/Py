@@ -1,12 +1,18 @@
 from datetime import datetime, timedelta
+from os import getenv
 from typing import Optional
 
+from dotenv import load_dotenv
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 
-from src.core.jwt_config import ALGORITHM, JWT_SECRET_KEY
-from src.core.log import log_error
 from src.schema.token import TokenData
+
+load_dotenv()
+
+JWT_SECRET_KEY = getenv("JWT_SECRET_KEY", "")
+ALGORITHM = "SHA256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:

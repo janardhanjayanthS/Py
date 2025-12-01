@@ -10,7 +10,7 @@ from src.core.api_utility import (
     post_product,
     put_product,
 )
-from src.core.db_config import get_db
+from src.core.database import get_db
 from src.schema.product import ProductCreate, ProductUpdate
 
 product = APIRouter()

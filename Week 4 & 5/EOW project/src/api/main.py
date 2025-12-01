@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from sqlalchemy import event
 
-from src.core.app_config import lifespan
-from src.core.db_config import initialize_table
+from src.core.config import lifespan
+from src.core.database import initialize_table
 from src.models.models import Product
 
 from .routes import product

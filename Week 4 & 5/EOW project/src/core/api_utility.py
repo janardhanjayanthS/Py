@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from src.core.db_utility import add_commit_refresh_db
+from src.core.database import add_commit_refresh_db
 from src.core.log import log_error
 from src.models.models import Product, User
 from src.schema.product import ProductCreate

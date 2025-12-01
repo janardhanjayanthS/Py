@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import check_if_user_email_exists
-from src.core.db_config import get_db
+from src.core.database import get_db
 from src.schema.user import UserRegister
 
 user = APIRouter()
