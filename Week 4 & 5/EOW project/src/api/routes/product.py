@@ -11,7 +11,7 @@ from src.core.api_utility import (
     put_product,
 )
 from src.core.database import get_db
-from src.core.decorators import auth_user
+from src.core.decorators import auth_user, get_current_user
 from src.models.models import User
 from src.schema.product import ProductCreate, ProductUpdate
 
@@ -27,9 +27,6 @@ async def products(
     product: Optional[ProductCreate] = None,
     db: Session = Depends(get_db),
 ):
-
-    print(f'User email: {request.state.email}')
-
     if request.method == "POST":
         return post_product(product=product, db=db)
 
@@ -46,7 +43,10 @@ async def products(
 
 @product.put("/product")
 async def update_product(
-    product_id: str, product_update: ProductUpdate, db: Session = Depends(get_db)
+    product_id: str,
+    product_update: ProductUpdate,
+    db: Session = Depends(get_db),
+    currnet_user: User = Depends(get_current_user),
 ):
     """
     To update product information
@@ -60,7 +60,11 @@ async def update_product(
 
 
 @product.delete("/product")
-async def remove_product(product_id: str, db: Session = Depends(get_db)):
+async def remove_product(
+    product_id: str,
+    db: Session = Depends(get_db),
+    currnet_user: User = Depends(get_current_user),
+):
     """
     To delete a product from db
 
