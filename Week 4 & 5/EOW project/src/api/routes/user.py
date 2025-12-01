@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import check_if_user_email_exists
-from src.core.database import get_db
+from src.core.database import add_commit_refresh_db, get_db, hash_password
+from src.models.models import User
 from src.schema.user import UserRegister
 
 user = APIRouter()
@@ -18,4 +19,12 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
             detail=f"User with email {create_user.email} already exists",
         )
 
-    return {"register": "user"}
+    db_user = User(
+        name=create_user.name,
+        email=create_user.email,
+        password=hash_password(create_user.password),
+    )
+
+    add_commit_refresh_db(object=db_user, db=db)
+
+    return {"status": "success", "message": {"registered user": db_user}}
