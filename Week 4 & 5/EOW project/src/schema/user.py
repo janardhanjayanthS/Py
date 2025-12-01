@@ -19,9 +19,10 @@ class UserRegister(BaseUser):
     """
 
 
-class UserLogin(BaseUser):
+class UserLogin(BaseModel):
     """
     Pydantic model for validating user's data when log in
     """
 
-    name: Optional[str]
+    email: EmailStr
+    password: str
