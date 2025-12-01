@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from jose import JWTError, jwt, TokenData
+from fastapi import HTTPException, status
+from jose import JWTError, jwt
 
 from src.core.jwt_config import ALGORITHM, JWT_SECRET_KEY
+from src.core.log import log_error
+from src.schema.token import TokenData
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -26,4 +29,32 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     encode_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
     return encode_jwt
 
-def decode_access_token(token: str) -> 
+
+def decode_access_token(token: str) -> TokenData:
+    """
+    Decodes incoming jwt token
+
+    Args:
+        token: JWT token
+
+    Returns:
+        TokenData: pydantic model containing token details
+
+    Raises:
+        HTTPException: if invalid/expired token
+    """
+    try:
+        payload: dict = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub", "")
+
+        if email is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+            )
+        return TokenData(email=email)
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )

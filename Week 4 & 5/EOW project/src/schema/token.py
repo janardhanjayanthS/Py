@@ -9,7 +9,7 @@ class Token(BaseModel):
     access_token: str
     token_type: Optional[str] = "JWt"
 
-class TokenData(Token):
+class TokenData(BaseModel):
     """
     Token model for data extracted from jwt
     """
