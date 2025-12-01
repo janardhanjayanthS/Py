@@ -46,4 +46,6 @@ async def login_user(user: UserLogin, db: Session = Depends(get_db)):
         data={"sub": user.email}, expires_delta=access_token_expires
     )
 
+    # cannot copy from postman
+    print(access_token)
     return {"access_tokem": access_token, "token_type": "Bearer"}

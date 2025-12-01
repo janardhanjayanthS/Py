@@ -11,6 +11,8 @@ from src.core.api_utility import (
     put_product,
 )
 from src.core.database import get_db
+from src.core.decorators import auth_user
+from src.models.models import User
 from src.schema.product import ProductCreate, ProductUpdate
 
 product = APIRouter()
@@ -18,12 +20,16 @@ product = APIRouter()
 
 @product.get("/products")
 @product.post("/products")
+@auth_user
 async def products(
     request: Request,
     product_id: Optional[str] = "",
     product: Optional[ProductCreate] = None,
     db: Session = Depends(get_db),
 ):
+
+    print(f'User email: {request.state.email}')
+
     if request.method == "POST":
         return post_product(product=product, db=db)
 

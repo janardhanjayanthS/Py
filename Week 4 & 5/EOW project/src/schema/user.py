@@ -22,8 +22,8 @@ class UserRegister(BaseUser):
     @field_validator("password")
     @classmethod
     def validate_password_strength(cls, pwd: str) -> str:
-        pwt_strength = check_password_strength(password=pwd)
-        if pwt_strength:
+        pwd_strength = check_password_strength(password=pwd)
+        if pwd_strength:
             raise WeakPasswordException(
                 f"Your password must include a digit, a lowercase letter, an uppercase letter, and a special character. You entered: {pwd}"
             )
