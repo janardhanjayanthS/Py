@@ -4,7 +4,7 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI
 
-from .db_config import Base, engine
+from src.core.database import Base, engine
 
 INVENTORY_CSV_FILEPATH = str(
     (Path(__file__).parent.parent.parent / "data" / "new_inventory.csv")
