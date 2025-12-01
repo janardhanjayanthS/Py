@@ -1,3 +1,5 @@
+import re
+
 from inventory_manager import Inventory
 
 
@@ -34,3 +36,17 @@ def get_initial_product_data_from_csv(csv_filepath: str) -> dict[str, list]:
             }
         )
     return initial_data
+
+
+def password_strength(password):
+    if len(password) < 8:
+        return "Too short"
+    if not re.search(r"[a-z]", password):
+        return "No lowercase letter"
+    if not re.search(r"[A-Z]", password):
+        return "No uppercase letter"
+    if not re.search(r"\d", password):
+        return "No digit"
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        return "No special character"
+    return "Strong password"
