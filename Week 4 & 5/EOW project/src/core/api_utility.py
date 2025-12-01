@@ -6,8 +6,9 @@ from sqlalchemy.orm import Session
 
 from src.core.db_utility import add_commit_refresh_db
 from src.core.log import log_error
-from src.models.models import Product
+from src.models.models import Product, User
 from src.schema.product import ProductCreate
+from src.schema.user import UserRegister
 
 
 def check_if_product_exists(product: Optional[ProductCreate], db: Session):
@@ -45,6 +46,20 @@ def handle_missing_product(product_id: str):
             "response": message,
         },
     }
+
+
+def check_if_user_email_exists(user: UserRegister, db: Session) -> bool:
+    """
+    Checks if user's email address already exists in db
+    Args:
+        user: User object containing user details
+        db: sqlalchemy db object
+
+    Returns:
+        bool: true if user already exists, false otherwise
+    """
+    existing_user = db.query(User).filter_by(email=user.email).first()
+    return True if existing_user else False
 
 
 def post_product(product: Optional[ProductCreate], db: Session) -> dict:
