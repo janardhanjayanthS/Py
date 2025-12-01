@@ -9,9 +9,10 @@ from src.core.log import log_error
 from src.models.models import Product, User
 from src.schema.product import ProductCreate
 from src.schema.user import UserRegister
+from src.core.database import verify_password
 
 
-def check_if_product_exists(product: Optional[ProductCreate], db: Session):
+def check_existin_product_using_id(product: Optional[ProductCreate], db: Session):
     """
     Checks if product already exists in db,
     if so raises HTTP error
@@ -48,7 +49,7 @@ def handle_missing_product(product_id: str):
     }
 
 
-def check_if_user_email_exists(user: UserRegister, db: Session) -> bool:
+def check_existing_user_using_email(user: UserRegister, db: Session) -> bool:
     """
     Checks if user's email address already exists in db
     Args:
@@ -62,6 +63,30 @@ def check_if_user_email_exists(user: UserRegister, db: Session) -> bool:
     return True if existing_user else False
 
 
+def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
+    """
+    Verify user credentials, 
+    return user if authenticate
+
+    Args:
+        db: sqlalchemy db object
+        email: user's email id
+        password: user's passowrd   
+
+    Returns:
+        User: valid user object with user data
+    """
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        return None
+
+    if not verify_password(plain_password=password, hashed_password=str(user.password)):
+        return None
+
+    return user
+    
+
+
 def post_product(product: Optional[ProductCreate], db: Session) -> dict:
     """
     Inserts product into db
@@ -73,7 +98,7 @@ def post_product(product: Optional[ProductCreate], db: Session) -> dict:
     Returns:
         dict: fastapi response
     """
-    check_if_product_exists(product=product, db=db)
+    check_existin_product_using_id(product=product, db=db)
 
     if product and product.type == "regular":
         product.reset_regular_product_attributes()
