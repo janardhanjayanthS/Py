@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from src.core.excptions import WeakPasswordException
-from src.core.utility import password_strength
+from src.core.utility import check_password_strength
 
 
 class BaseUser(BaseModel):
@@ -22,8 +22,8 @@ class UserRegister(BaseUser):
     @field_validator("password")
     @classmethod
     def validate_password_strength(cls, pwd: str) -> str:
-        pwt_strength = password_strength(password=pwd)
-        if pwt_strength != "Strong password":
+        pwt_strength = check_password_strength(password=pwd)
+        if pwt_strength:
             raise WeakPasswordException(
                 f"Your password must include a digit, a lowercase letter, an uppercase letter, and a special character. You entered: {pwd}"
             )

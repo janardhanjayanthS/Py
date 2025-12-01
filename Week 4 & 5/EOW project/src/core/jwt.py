@@ -25,15 +25,27 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     """
     to_encode = data.copy()
 
-    if expires_delta:
-        expire = datetime.now() + expires_delta
-    else:
-        expire = datetime.now() + timedelta(minutes=30)
-
-    to_encode["exp"] = expire
+    to_encode["exp"] = get_expiration_time(expires_delta=expires_delta)
 
     encode_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
     return encode_jwt
+
+
+def get_expiration_time(expires_delta: timedelta | None) -> datetime:
+    """
+    gets expiration time for jwt token,
+    calcualted based on param or set to 30 from current time
+
+    Args:
+        expires_delta: expiration duration for jwt
+
+    Returns:
+        datetime: result jwt expiration timestamp
+    """
+    if expires_delta:
+        return datetime.now() + expires_delta
+    else:
+        return datetime.now() + timedelta(minutes=30)
 
 
 def decode_access_token(token: str) -> TokenData:

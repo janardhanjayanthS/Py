@@ -38,15 +38,24 @@ def get_initial_product_data_from_csv(csv_filepath: str) -> dict[str, list]:
     return initial_data
 
 
-def password_strength(password):
+def check_password_strength(password) -> bool:
+    """
+    Checks if user's password is strong
+
+    Args:
+        password: plain text password
+
+    Returns:
+        bool: returns True if password is strong, False otherwise
+    """
     if len(password) < 8:
-        return "Too short"
+        return False
     if not re.search(r"[a-z]", password):
-        return "No lowercase letter"
+        return False
     if not re.search(r"[A-Z]", password):
-        return "No uppercase letter"
+        return False
     if not re.search(r"\d", password):
-        return "No digit"
+        return False
     if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-        return "No special character"
-    return "Strong password"
+        return False
+    return True
