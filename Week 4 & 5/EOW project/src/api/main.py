@@ -10,6 +10,7 @@ from src.core.db_config import initialize_table
 from src.models.models import Product
 
 from .routes import product
+from .routes import user
 
 load_dotenv()
 
@@ -21,6 +22,7 @@ if TESTING != "1":
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(product.product)
+app.include_router(user.user)
 
 
 @app.get("/")
