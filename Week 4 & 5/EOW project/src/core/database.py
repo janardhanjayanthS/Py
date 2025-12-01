@@ -8,7 +8,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 from sqlalchemy.schema import Table
 
-from src.core.config import INVENTORY_CSV_FILEPATH
+from src.core.constants import INVENTORY_CSV_FILEPATH
 from src.core.log import log_error
 from src.core.utility import get_initial_product_data_from_csv
 
