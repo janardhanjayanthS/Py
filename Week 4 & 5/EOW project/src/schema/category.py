@@ -14,7 +14,7 @@ class CategoryCreate(BaseCategory):
     model for creating new category
     """
 
-    name: str = Field(min_length=5, max_length=25)
+    name: str = Field(min_length=3, max_length=25)
 
 
 class CategoryUpdate(BaseModel):

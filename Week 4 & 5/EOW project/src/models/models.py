@@ -13,6 +13,13 @@ class User(Base):
     password: Mapped[str] = mapped_column(nullable=False)
 
 
+class Category(Base):
+    __tablename__ = "product_category"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(25), unique=True)
+
+
 class Product(Base):
     __tablename__ = "product"
 
@@ -30,10 +37,3 @@ class Product(Base):
         ForeignKey("product_category.id"), nullable=False
     )
     category: Mapped["Category"] = relationship()
-
-
-class Category(Base):
-    __tablename__ = "product_category"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(25), unique=True)

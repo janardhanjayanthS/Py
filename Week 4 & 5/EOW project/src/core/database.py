@@ -4,13 +4,11 @@ from dotenv import load_dotenv
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy import create_engine, insert
-from sqlalchemy.engine import Connection
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
-from sqlalchemy.schema import Table
 
 from src.core.constants import INVENTORY_CSV_FILEPATH
 from src.core.log import log_error
-from src.core.utility import get_initial_product_data_from_csv
+from src.core.utility import get_initial_data_from_csv
 
 load_dotenv()
 
@@ -38,30 +36,23 @@ def get_db():
         db.close()
 
 
-def initialize_table(target: Table, connection: Connection, **kw):
-    """
-    Used for db seeding
-    receives a target table, a connection and inserts
-    data into that table
+def seed_db():
+    initial_data = get_initial_data_from_csv(INVENTORY_CSV_FILEPATH)
 
-    Args:
-        target: target table name
-        connection: connection to db
-        initial_data: dictionary containing data to insert into target table
-    """
-    tablename = target.name
-    INITIAL_DATA = get_initial_product_data_from_csv(INVENTORY_CSV_FILEPATH)
-
-    if tablename in INITIAL_DATA and len(INITIAL_DATA[tablename]) > 0:
-        stmt = insert(target).values(INITIAL_DATA[tablename])
-        try:
-            connection.execute(stmt)
-            connection.commit()
-            print(
-                f"Successfully seeded {len(INITIAL_DATA[tablename])} values to {tablename}"
-            )
-        except Exception as e:
-            print(f"Error: Unexpected exception when interacting with db. {e}")
+    with engine.connect() as connection:
+        for tablename in ["product_category", "product"]:
+            if tablename in initial_data and len(initial_data[tablename]) > 0:
+                target = Base.metadata.tables[tablename]
+                stmt = insert(target).values(initial_data[tablename])
+                try:
+                    connection.execute(stmt)
+                    connection.commit()
+                    print(
+                        f"Successfully seeded {len(initial_data[tablename])} values to {tablename}"
+                    )
+                except Exception as e:
+                    connection.rollback()
+                    print(f"Error: Unexpected exception when interacting with db. {e}")
 
 
 def add_commit_refresh_db(object: BaseModel, db: Session):

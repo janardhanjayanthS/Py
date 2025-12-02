@@ -3,7 +3,25 @@ import re
 from inventory_manager import Inventory
 
 
-def get_initial_product_data_from_csv(csv_filepath: str) -> dict[str, list]:
+def get_initial_data_from_csv(csv_filepath: str) -> dict[str, list]:
+    initial_data: dict[str, list] = {"product": [], "product_category": []}
+    inv = Inventory()
+    inv.load_from_csv(csv_filepath)
+    get_initial_product_category_data(products=inv.products, initial_data=initial_data)
+    get_initial_product_data(products=inv.products, initial_data=initial_data)
+    return initial_data
+
+
+def get_initial_product_category_data(products: list, initial_data: dict):
+    unique_categories = set()
+    for product in products:
+        unique_categories.add(product.type.value)
+
+    for i, category in enumerate(unique_categories, start=1):
+        initial_data["product_category"].append({"id": i, "name": category})
+
+
+def get_initial_product_data(products: list, initial_data: dict):
     """
     reads data from inventory.csv using Inventory() from inventory_manager package (from EOW Week2)
 
@@ -13,17 +31,16 @@ def get_initial_product_data_from_csv(csv_filepath: str) -> dict[str, list]:
     Returns:
         dict: containing table name as key (eg: product) and list of dict for each product
     """
-    initial_data: dict[str, list] = {"product": []}
-    inv = Inventory()
-    inv.load_from_csv(csv_filepath)
-    for product in inv.products:
+    for product in products:
         initial_data["product"].append(
             {
                 "id": product.product_id,
                 "name": product.product_name,
                 "quantity": product.quantity,
                 "price": product.price,
-                "type": product.type.value,
+                "category_id": get_category_id_from_type(
+                    type=product.type.value, initial_data=initial_data
+                ),
                 "days_to_expire": product.days_to_expire
                 if product.type.value == "food"
                 else None,
@@ -35,7 +52,13 @@ def get_initial_product_data_from_csv(csv_filepath: str) -> dict[str, list]:
                 else None,
             }
         )
-    return initial_data
+
+
+def get_category_id_from_type(type: str, initial_data: dict):
+    for category in initial_data["product_category"]:
+        if category["name"] == type:
+            return category["id"]
+    return None
 
 
 def check_password_strength(password) -> bool:
