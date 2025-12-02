@@ -86,11 +86,14 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
     return user
 
 
-def post_product(product: Optional[ProductCreate], db: Session) -> dict:
+def post_product(
+    user_email: str, product: Optional[ProductCreate], db: Session
+) -> dict:
     """
     Inserts product into db
 
     Args:
+        user_email: current user's email id
         product: Pydnatic product model
         db: sqlalchemy db object
 
@@ -105,28 +108,36 @@ def post_product(product: Optional[ProductCreate], db: Session) -> dict:
     db_product = Product(**product.model_dump())  # type: ignore
     add_commit_refresh_db(object=db_product, db=db)
 
-    return {"status": SUCCESS, "message": {"inserted product": db_product}}
+    return {
+        "status": SUCCESS,
+        "message": {"user email": user_email, "inserted product": db_product},
+    }
 
 
-def get_all_products(db: Session) -> dict:
+def get_all_products(user_email: str, db: Session) -> dict:
     """
     To fetch all products from database
 
     Args:
+        user_email: current user's email id
         db: sqlalchemy db object
 
     Returns:
         dict: fastapi response
     """
     products = db.query(Product).all()
-    return {"status": SUCCESS, "message": {"products": products}}
+    return {
+        "status": SUCCESS,
+        "message": {"user email": user_email, "products": products},
+    }
 
 
-def get_specific_product(product_id: str, db: Session) -> dict:
+def get_specific_product(user_email: str, product_id: str, db: Session) -> dict:
     """
     Fetches a specific product from db
 
     Args:
+        user_email: current user's email id
         product_id: id to the product to select
         db: sqlalchemy db object
 
@@ -137,14 +148,20 @@ def get_specific_product(product_id: str, db: Session) -> dict:
     if product is None:
         return handle_missing_product(product_id=str(product_id))
 
-    return {"status": SUCCESS, "message": {"product": product}}
+    return {
+        "status": SUCCESS,
+        "message": {"user_email": user_email, "product": product},
+    }
 
 
-def put_product(product_id: str, product_update: BaseModel, db: Session) -> dict:
+def put_product(
+    current_user: User, product_id: str, product_update: BaseModel, db: Session
+) -> dict:
     """
     update product details
 
     Args:
+        current_user: User instance of current user
         product_id: id of the product to update
         product: detail's of product to update
         db: sqlalchemy db object
@@ -162,14 +179,18 @@ def put_product(product_id: str, product_update: BaseModel, db: Session) -> dict
 
     db.commit()
     db.refresh(db_product)
-    return {"status": SUCCESS, "message": {"updated product": db_product}}
+    return {
+        "status": SUCCESS,
+        "message": {"user email": current_user.email, "updated product": db_product},
+    }
 
 
-def delete_product(product_id: str, db: Session) -> dict:
+def delete_product(current_user: User, product_id: str, db: Session) -> dict:
     """
     delete a product from db
 
     Args:
+        current_user: User instance of current user
         product_id: id of the product to update
         db: sqlalchemy db object
 
@@ -182,4 +203,7 @@ def delete_product(product_id: str, db: Session) -> dict:
 
     db.delete(db_product)
     db.commit()
-    return {"status": SUCCESS, "message": {"deleted product": db_product}}
+    return {
+        "status": SUCCESS,
+        "message": {"user email": current_user.email, "deleted product": db_product},
+    }
