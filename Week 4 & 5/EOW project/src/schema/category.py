@@ -15,3 +15,12 @@ class CategoryCreate(BaseCategory):
     """
 
     name: str = Field(min_length=5, max_length=25)
+
+
+class CategoryUpdate(BaseModel):
+    """
+    Model for category update
+    """
+
+    id: int
+    name: str

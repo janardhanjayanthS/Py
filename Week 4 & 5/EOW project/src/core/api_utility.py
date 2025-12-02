@@ -5,7 +5,11 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from src.core.constants import ResponseStatus
-from src.core.database import add_commit_refresh_db, hash_password, verify_password
+from src.core.database import (
+    add_commit_refresh_db,
+    hash_password,
+    verify_password,
+)
 from src.core.log import log_error
 from src.models.models import Category, Product, User
 from src.schema.category import BaseCategory
@@ -14,15 +18,30 @@ from src.schema.user import UserEdit, UserRegister
 
 
 def check_existing_category_using_name(category: BaseCategory, db: Session):
-    existing_category = (
-        db.query(Category).filter(Category.name == category.name).first()
-    )
-    if existing_category:
+    existing_category = get_category_by_name(category_name=category.name, db=db)
+    if existing_category is not None:
         message = f"Category with name - {category.name} - already exists in db"
         log_error(message=message)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
         )
+
+
+def get_category_by_name(category_name: str, db: Session) -> Category | None:
+    """
+    Gets category (db object) using name
+
+    Args:
+        category_name: name of category to look for
+        db: database instance in session
+
+    Returns:
+        category from db if exists else None
+    """
+    existing_category = (
+        db.query(Category).filter(Category.name == category_name).first()
+    )
+    return existing_category if existing_category else None
 
 
 def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
