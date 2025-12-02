@@ -16,7 +16,7 @@ from src.core.database import (
     get_db,
     hash_password,
 )
-from src.core.decorators import get_admin, get_current_user
+from src.core.decorators import get_current_admin, get_current_user
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
 from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserResponse
@@ -96,7 +96,7 @@ async def update_user_detail(
 @user.delete("/user/delete", response_model=WrapperUserResponse)
 async def remove_user(
     user_id: int,
-    current_user: User = Depends(get_admin),
+    current_user: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     user = db.query(User).filter(User.id == user_id).first()

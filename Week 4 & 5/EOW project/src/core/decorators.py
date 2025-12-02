@@ -87,7 +87,7 @@ def get_user_from_token(credentials: HTTPAuthorizationCredentials, db: Session) 
     return user
 
 
-async def get_current_user(
+def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
 ):
@@ -101,7 +101,7 @@ async def get_current_user(
     return get_user_from_token(credentials=credentials, db=db)
 
 
-async def get_admin(
+def get_current_admin(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
 ):
