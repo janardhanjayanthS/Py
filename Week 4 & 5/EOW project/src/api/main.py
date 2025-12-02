@@ -11,7 +11,7 @@ from src.core.database import initialize_table
 from src.core.excptions import WeakPasswordException
 from src.models.models import Product
 
-from .routes import product, user
+from .routes import category, product, user
 
 load_dotenv()
 
@@ -24,6 +24,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(product.product)
 app.include_router(user.user)
+app.include_router(category.category)
 
 
 @app.exception_handler(WeakPasswordException)

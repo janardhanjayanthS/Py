@@ -29,7 +29,7 @@ class Product(Base):
     category_id: Mapped[int] = mapped_column(
         ForeignKey("product_category.id"), nullable=False
     )
-    category = Mapped["Category"] = relationship()
+    category: Mapped["Category"] = relationship()
 
 
 class Category(Base):

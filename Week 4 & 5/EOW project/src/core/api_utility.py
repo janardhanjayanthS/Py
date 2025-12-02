@@ -1,18 +1,31 @@
 from typing import Optional
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from src.core.constants import ResponseStatus
 from src.core.database import add_commit_refresh_db, hash_password, verify_password
 from src.core.log import log_error
-from src.models.models import Product, User
+from src.models.models import Category, Product, User
+from src.schema.category import BaseCategory
 from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister
 
 
-def check_existin_product_using_id(product: Optional[ProductCreate], db: Session):
+def check_existing_category_using_name(category: BaseCategory, db: Session):
+    existing_category = (
+        db.query(Category).filter(Category.name == category.name).first()
+    )
+    if existing_category:
+        message = f"Category with name - {category.name} - already exists in db"
+        log_error(message=message)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
+        )
+
+
+def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
     """
     Checks if product already exists in db,
     if so raises HTTP error
@@ -157,7 +170,7 @@ def post_product(
     Returns:
         dict: fastapi response
     """
-    check_existin_product_using_id(product=product, db=db)
+    check_existing_product_using_id(product=product, db=db)
 
     if product and product.type == "regular":
         product.reset_regular_product_attributes()
