@@ -3,11 +3,13 @@ from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
     check_existing_category_using_name,
+    get_category_by_id,
     get_category_by_name,
 )
 from src.core.constants import ResponseStatus
 from src.core.database import add_commit_refresh_db, get_db
-from src.models.models import Category
+from src.core.decorators import get_current_admin
+from src.models.models import Category, User
 from src.schema.category import CategoryCreate, CategoryUpdate
 
 category = APIRouter()
@@ -52,10 +54,8 @@ async def add_category(category_create: CategoryCreate, db: Session = Depends(ge
 async def update_category(
     category_update: CategoryUpdate, db: Session = Depends(get_db)
 ):
-    existing_category = (
-        db.query(Category).filter(Category.id == category_update.id).first()
-    )
-    if not existing_category:
+    existing_category = get_category_by_id(category_id=category_update.id, db=db)
+    if not existing_category or existing_category is None:
         return {
             "status": ResponseStatus.E.value,
             "message": {
@@ -83,4 +83,23 @@ async def update_category(
     }
 
 
-# @category.delete("/category/delete")
+@category.delete("/category/delete")
+async def delete_category(
+    category_id: int,
+    current_user: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    category = get_category_by_id(category_id=category_id, db=db)
+    if not category or category is None:
+        return {
+            "status": ResponseStatus.E.value,
+            "message": {"response": f"Unable to find category with id - {category_id}"},
+        }
+
+    db.delete(category)
+    db.commit()
+
+    return {
+        "status": ResponseStatus.S.value,
+        "message": {"user email": current_user.email, "deleted category": category},
+    }

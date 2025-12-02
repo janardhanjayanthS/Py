@@ -17,7 +17,31 @@ from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister
 
 
+def get_category_by_id(category_id: int, db: Session) -> Category | None:
+    """
+    Gets category by id
+
+    Args:
+        category_id: category id to search db
+        db: database instance in session
+
+    Returns:
+        returns category object if exists else None
+    """
+    return db.query(Category).filter_by(id=category_id).first()
+
+
 def check_existing_category_using_name(category: BaseCategory, db: Session):
+    """
+    checks db if category exists by name
+
+    Args:
+        category: category pydantic model
+        db: database instance in session
+
+    Raises:
+        HTTPException: if no category in db
+    """
     existing_category = get_category_by_name(category_name=category.name, db=db)
     if existing_category is not None:
         message = f"Category with name - {category.name} - already exists in db"
