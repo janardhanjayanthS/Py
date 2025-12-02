@@ -1,5 +1,5 @@
-from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.core.database import Base
 
@@ -22,7 +22,18 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
     price: Mapped[float] = mapped_column(nullable=False)
-    type: Mapped[str] = mapped_column(String(10), nullable=False)
     days_to_expire: Mapped[int | None] = mapped_column(nullable=True)
     is_vegetarian: Mapped[bool | None] = mapped_column(nullable=True)
     warranty_in_years: Mapped[float | None] = mapped_column(nullable=True)
+
+    category_id: Mapped[int] = mapped_column(
+        ForeignKey("product_category.id"), nullable=False
+    )
+    category = Mapped["Category"] = relationship()
+
+
+class Category(Base):
+    __tablename__ = "product_category"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(25), unique=True)
