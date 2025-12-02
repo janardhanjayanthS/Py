@@ -3,13 +3,22 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.core.api_utility import authenticate_user, check_existing_user_using_email
+from src.core.api_utility import (
+    authenticate_user,
+    check_existing_user_using_email,
+    update_user_name,
+    update_user_password,
+)
 from src.core.constants import ResponseStatus
-from src.core.database import add_commit_refresh_db, get_db, hash_password
+from src.core.database import (
+    add_commit_refresh_db,
+    get_db,
+    hash_password,
+)
 from src.core.decorators import get_current_user
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
-from src.schema.user import UserEdit, UserLogin, UserRegister
+from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserResponse
 
 user = APIRouter()
 
@@ -53,7 +62,7 @@ async def login_user(user: UserLogin, db: Session = Depends(get_db)):
     return {"access_tokem": access_token, "token_type": "Bearer"}
 
 
-@user.get("/user/all")
+@user.get("/user/all", response_model=WrapperUserResponse)
 async def get_all_users(
     current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
 ):
@@ -64,11 +73,20 @@ async def get_all_users(
     }
 
 
-@user.patch("/user/update")
+@user.patch("/user/update", response_model=WrapperUserResponse)
 async def update_user_detail(
     update_details: UserEdit,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     print(f"Update details: {update_details}")
-    return {"update user": "!"}
+    message = update_user_name(
+        current_user=current_user, update_details=update_details
+    ) + update_user_password(current_user=current_user, update_details=update_details)
+    db.commit()
+    db.refresh(current_user)
+
+    return {
+        "status": ResponseStatus.S.value,
+        "message": {"update status": message, "updated user detail": current_user},
+    }

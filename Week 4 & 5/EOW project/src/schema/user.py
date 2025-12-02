@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from src.core.excptions import WeakPasswordException
 from src.core.utility import check_password_strength
@@ -61,3 +61,24 @@ class UserEdit(BaseModel):
     @classmethod
     def validate_password_strength(cls, pwd: str) -> str:
         return validate_password(password=pwd)
+
+
+class UserResponse(BaseModel):
+    """
+    Pydantic model for user response (json) to hide password hash
+    """
+
+    id: int
+    name: str
+    email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class WrapperUserResponse(BaseModel):
+    """
+    Wrapper model around UserResponse to match the response json format
+    """
+
+    response: str
+    message: dict[str, str | list[UserResponse] | UserResponse]
