@@ -9,7 +9,7 @@ from src.core.database import add_commit_refresh_db, get_db, hash_password
 from src.core.decorators import get_current_user
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
-from src.schema.user import UserLogin, UserRegister
+from src.schema.user import UserEdit, UserLogin, UserRegister
 
 user = APIRouter()
 
@@ -62,3 +62,13 @@ async def get_all_users(
         "response": ResponseStatus.S.value,
         "message": {"user email": current_user.email, "users": all_users},
     }
+
+
+@user.patch("/user/update")
+async def update_user_detail(
+    update_details: UserEdit,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    print(f"Update details: {update_details}")
+    return {"update user": "!"}
