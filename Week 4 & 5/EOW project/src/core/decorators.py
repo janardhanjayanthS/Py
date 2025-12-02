@@ -61,7 +61,33 @@ def auth_user(func: Callable) -> Callable:
 security = HTTPBearer()
 
 
-async def get_current_user(
+def get_user_from_token(credentials: HTTPAuthorizationCredentials, db: Session) -> User:
+    """
+    Returns user (db instance) from JWT token
+
+    Args:
+        credentials: jwt credentials. Defaults to Depends(security).
+        db: database object in session. Defaults to Depends(get_db).
+
+    Returns:
+        User: db instance of user
+
+    Raises:
+        HTTPException: if cannot find user from database
+    """
+    token = credentials.credentials
+    token_data = decode_access_token(token=token)
+    user = db.query(User).filter_by(email=token_data.email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+        )
+
+    return user
+
+
+def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
 ):
@@ -72,13 +98,24 @@ async def get_current_user(
         credentials: jwt credentials. Defaults to Depends(security).
         db: database object in session. Defaults to Depends(get_db).
     """
-    token = credentials.credentials
-    token_data = decode_access_token(token=token)
-    user = db.query(User).filter_by(email=token_data.email).first()
+    return get_user_from_token(credentials=credentials, db=db)
 
-    if not user:
+
+def get_current_admin(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db),
+):
+    """
+    Dependency that gets current user from JWT token
+
+    Args:
+        credentials: jwt credentials. Defaults to Depends(security).
+        db: database object in session. Defaults to Depends(get_db).
+    """
+    user = get_user_from_token(credentials=credentials, db=db)
+    if user.id != 1:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Current user is not Admin"
         )
 
     return user

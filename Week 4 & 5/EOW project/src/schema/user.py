@@ -1,7 +1,18 @@
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from src.core.excptions import WeakPasswordException
 from src.core.utility import check_password_strength
+
+
+def validate_password(password: str) -> str:
+    pwd_strength = check_password_strength(password=password)
+    if not pwd_strength:
+        raise WeakPasswordException(
+            f"Your password must include a digit, a lowercase letter, an uppercase letter, and a special character. You entered: {password}"
+        )
+    return password
 
 
 class BaseUser(BaseModel):
@@ -22,12 +33,7 @@ class UserRegister(BaseUser):
     @field_validator("password")
     @classmethod
     def validate_password_strength(cls, pwd: str) -> str:
-        pwd_strength = check_password_strength(password=pwd)
-        if pwd_strength:
-            raise WeakPasswordException(
-                f"Your password must include a digit, a lowercase letter, an uppercase letter, and a special character. You entered: {pwd}"
-            )
-        return pwd
+        return validate_password(password=pwd)
 
 
 class UserLogin(BaseModel):
@@ -37,3 +43,42 @@ class UserLogin(BaseModel):
 
     email: EmailStr
     password: str
+
+
+class UserEdit(BaseModel):
+    """
+    Pydantic model for editing user information
+
+    Attributes:
+        new_name: name to update
+        new_password: password to update
+    """
+
+    new_name: Optional[str] = None
+    new_password: Optional[str] = None
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_password_strength(cls, pwd: str) -> str:
+        return validate_password(password=pwd)
+
+
+class UserResponse(BaseModel):
+    """
+    Pydantic model for user response (json) to hide password hash
+    """
+
+    id: int
+    name: str
+    email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class WrapperUserResponse(BaseModel):
+    """
+    Wrapper model around UserResponse to match the response json format
+    """
+
+    status: str
+    message: dict[str, str | list[UserResponse] | UserResponse]

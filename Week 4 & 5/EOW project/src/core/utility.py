@@ -48,14 +48,15 @@ def check_password_strength(password) -> bool:
     Returns:
         bool: returns True if password is strong, False otherwise
     """
-    if len(password) < 8:
-        return False
-    if not re.search(r"[a-z]", password):
-        return False
-    if not re.search(r"[A-Z]", password):
-        return False
-    if not re.search(r"\d", password):
-        return False
-    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+
+    if (
+        not password
+        or password is None
+        or len(password) < 8
+        or not re.search(r"[a-z]", password)
+        or not re.search(r"[A-Z]", password)
+        or not re.search(r"\d", password)
+        or not re.search(r'[!@#$%^&*(),.?":{}|<>]', password)
+    ):
         return False
     return True
