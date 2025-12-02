@@ -30,8 +30,7 @@ def check_existin_product_using_id(product: Optional[ProductCreate], db: Session
 
 def handle_missing_product(product_id: str):
     """
-    ensures if db returned a valid product,
-    if not then logs & retruns error
+    logs & retruns error of missing product
 
     Args:
         product_id: fetched product id
@@ -103,7 +102,7 @@ def update_user_name(current_user: User, update_details: UserEdit) -> str:
     ):
         current_user.name = update_details.new_name
         return f"updated user's name to {update_details.new_name}. "
-    return ""
+    return "existing name and new name are same. "
 
 
 def update_user_password(current_user: User, update_details: UserEdit) -> str:
@@ -111,7 +110,7 @@ def update_user_password(current_user: User, update_details: UserEdit) -> str:
     Update user's password to a new password
 
     Args:
-        current_user: current logged in user's db instance
+        current_user: current logged in user's db instance tf
         update_details: user details to update
 
     Returns:
@@ -123,7 +122,25 @@ def update_user_password(current_user: User, update_details: UserEdit) -> str:
     ):
         current_user.password = hash_password(update_details.new_password)
         return "password updated"
-    return ""
+    return "same password"
+
+
+def handle_missing_user(user_id: int) -> dict:
+    """
+    Log and return response for missing user
+
+    Args:
+        user_id: missing user's id
+
+    Returns:
+        dict: response describing missing user
+    """
+    message = f"Unable to find user with id: {user_id}"
+    log_error(message)
+    return {
+        "status": ResponseStatus.E.value,
+        "message": {"response": message},
+    }
 
 
 def post_product(

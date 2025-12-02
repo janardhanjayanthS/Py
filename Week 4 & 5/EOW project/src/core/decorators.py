@@ -82,3 +82,31 @@ async def get_current_user(
         )
 
     return user
+
+
+async def get_admin(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db),
+):
+    """
+    Dependency that gets current user from JWT token
+
+    Args:
+        credentials: jwt credentials. Defaults to Depends(security).
+        db: database object in session. Defaults to Depends(get_db).
+    """
+    token = credentials.credentials
+    token_data = decode_access_token(token=token)
+    user = db.query(User).filter_by(email=token_data.email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+        )
+
+    if user.id != 1:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Current user is not Admin"
+        )
+
+    return user

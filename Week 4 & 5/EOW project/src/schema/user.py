@@ -8,7 +8,7 @@ from src.core.utility import check_password_strength
 
 def validate_password(password: str) -> str:
     pwd_strength = check_password_strength(password=password)
-    if pwd_strength:
+    if not pwd_strength:
         raise WeakPasswordException(
             f"Your password must include a digit, a lowercase letter, an uppercase letter, and a special character. You entered: {password}"
         )
@@ -80,5 +80,5 @@ class WrapperUserResponse(BaseModel):
     Wrapper model around UserResponse to match the response json format
     """
 
-    response: str
+    status: str
     message: dict[str, str | list[UserResponse] | UserResponse]

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from src.core.api_utility import (
     authenticate_user,
     check_existing_user_using_email,
+    handle_missing_user,
     update_user_name,
     update_user_password,
 )
@@ -15,7 +16,7 @@ from src.core.database import (
     get_db,
     hash_password,
 )
-from src.core.decorators import get_current_user
+from src.core.decorators import get_admin, get_current_user
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
 from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserResponse
@@ -23,7 +24,7 @@ from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserRespon
 user = APIRouter()
 
 
-@user.post("/user/register")
+@user.post("/user/register", response_model=WrapperUserResponse)
 async def register_user(create_user: UserRegister, db: Session = Depends(get_db)):
     if check_existing_user_using_email(user=create_user, db=db):
         raise HTTPException(
@@ -89,4 +90,23 @@ async def update_user_detail(
     return {
         "status": ResponseStatus.S.value,
         "message": {"update status": message, "updated user detail": current_user},
+    }
+
+
+@user.delete("/user/delete", response_model=WrapperUserResponse)
+async def remove_user(
+    user_id: int,
+    current_user: User = Depends(get_admin),
+    db: Session = Depends(get_db),
+):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return handle_missing_user(user_id=user_id)
+
+    db.delete(user)
+    db.commit()
+
+    return {
+        "status": ResponseStatus.S.value,
+        "message": {"user email": current_user.email, "deleted account": user},
     }
