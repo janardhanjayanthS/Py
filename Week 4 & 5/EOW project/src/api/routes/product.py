@@ -10,6 +10,7 @@ from src.core.api_utility import (
     post_product,
     put_product,
 )
+from src.core.constants import SUCCESS
 from src.core.database import get_db
 from src.core.decorators import auth_user, get_current_user
 from src.models.models import User
@@ -36,7 +37,7 @@ async def products(
         return get_all_products(db=db)
 
     return {
-        "status": "error",
+        "status": SUCCESS,
         "message": {"response": f"Unrecognized HTTP method {request.method}"},
     }
 

@@ -4,12 +4,12 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from src.core.database import add_commit_refresh_db
+from src.core.constants import ERROR, SUCCESS
+from src.core.database import add_commit_refresh_db, verify_password
 from src.core.log import log_error
 from src.models.models import Product, User
 from src.schema.product import ProductCreate
 from src.schema.user import UserRegister
-from src.core.database import verify_password
 
 
 def check_existin_product_using_id(product: Optional[ProductCreate], db: Session):
@@ -42,7 +42,7 @@ def handle_missing_product(product_id: str):
     message = f"product with id {product_id} not found"
     log_error(message=message)
     return {
-        "status": "error",
+        "status": ERROR,
         "message": {
             "response": message,
         },
@@ -65,13 +65,13 @@ def check_existing_user_using_email(user: UserRegister, db: Session) -> bool:
 
 def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
     """
-    Verify user credentials, 
+    Verify user credentials,
     return user if authenticate
 
     Args:
         db: sqlalchemy db object
         email: user's email id
-        password: user's passowrd   
+        password: user's passowrd
 
     Returns:
         User: valid user object with user data
@@ -84,7 +84,6 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
         return None
 
     return user
-    
 
 
 def post_product(product: Optional[ProductCreate], db: Session) -> dict:
@@ -106,7 +105,7 @@ def post_product(product: Optional[ProductCreate], db: Session) -> dict:
     db_product = Product(**product.model_dump())  # type: ignore
     add_commit_refresh_db(object=db_product, db=db)
 
-    return {"status": "success", "message": {"inserted product": db_product}}
+    return {"status": SUCCESS, "message": {"inserted product": db_product}}
 
 
 def get_all_products(db: Session) -> dict:
@@ -120,7 +119,7 @@ def get_all_products(db: Session) -> dict:
         dict: fastapi response
     """
     products = db.query(Product).all()
-    return {"status": "success", "message": {"products": products}}
+    return {"status": SUCCESS, "message": {"products": products}}
 
 
 def get_specific_product(product_id: str, db: Session) -> dict:
@@ -138,7 +137,7 @@ def get_specific_product(product_id: str, db: Session) -> dict:
     if product is None:
         return handle_missing_product(product_id=str(product_id))
 
-    return {"status": "success", "message": {"product": product}}
+    return {"status": SUCCESS, "message": {"product": product}}
 
 
 def put_product(product_id: str, product_update: BaseModel, db: Session) -> dict:
@@ -163,7 +162,7 @@ def put_product(product_id: str, product_update: BaseModel, db: Session) -> dict
 
     db.commit()
     db.refresh(db_product)
-    return {"status": "success", "message": {"updated product": db_product}}
+    return {"status": SUCCESS, "message": {"updated product": db_product}}
 
 
 def delete_product(product_id: str, db: Session) -> dict:
@@ -183,4 +182,4 @@ def delete_product(product_id: str, db: Session) -> dict:
 
     db.delete(db_product)
     db.commit()
-    return {"status": "success", "message": {"deleted product": db_product}}
+    return {"status": SUCCESS, "message": {"deleted product": db_product}}
