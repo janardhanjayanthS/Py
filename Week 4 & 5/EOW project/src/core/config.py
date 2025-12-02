@@ -3,7 +3,7 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI
 
-from .db_config import Base, engine
+from src.core.database import Base, engine
 
 
 @asynccontextmanager
