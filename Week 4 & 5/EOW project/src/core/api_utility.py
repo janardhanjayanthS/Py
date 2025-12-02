@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from src.core.constants import ERROR, SUCCESS
+from src.core.constants import ResponseStatus
 from src.core.database import add_commit_refresh_db, verify_password
 from src.core.log import log_error
 from src.models.models import Product, User
@@ -42,7 +42,7 @@ def handle_missing_product(product_id: str):
     message = f"product with id {product_id} not found"
     log_error(message=message)
     return {
-        "status": ERROR,
+        "status": ResponseStatus.E.value,
         "message": {
             "response": message,
         },
@@ -109,7 +109,7 @@ def post_product(
     add_commit_refresh_db(object=db_product, db=db)
 
     return {
-        "status": SUCCESS,
+        "status": ResponseStatus.S.value,
         "message": {"user email": user_email, "inserted product": db_product},
     }
 
@@ -127,7 +127,7 @@ def get_all_products(user_email: str, db: Session) -> dict:
     """
     products = db.query(Product).all()
     return {
-        "status": SUCCESS,
+        "status": ResponseStatus.S.value,
         "message": {"user email": user_email, "products": products},
     }
 
@@ -149,7 +149,7 @@ def get_specific_product(user_email: str, product_id: str, db: Session) -> dict:
         return handle_missing_product(product_id=str(product_id))
 
     return {
-        "status": SUCCESS,
+        "status": ResponseStatus.S.value,
         "message": {"user_email": user_email, "product": product},
     }
 
@@ -180,7 +180,7 @@ def put_product(
     db.commit()
     db.refresh(db_product)
     return {
-        "status": SUCCESS,
+        "status": ResponseStatus.S.value,
         "message": {"user email": current_user.email, "updated product": db_product},
     }
 
@@ -204,6 +204,6 @@ def delete_product(current_user: User, product_id: str, db: Session) -> dict:
     db.delete(db_product)
     db.commit()
     return {
-        "status": SUCCESS,
+        "status": ResponseStatus.S.value,
         "message": {"user email": current_user.email, "deleted product": db_product},
     }
