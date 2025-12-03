@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
+    check_existing_category_using_id,
     check_existing_category_using_name,
     get_category_by_id,
     get_category_by_name,
@@ -42,6 +43,7 @@ async def get_specifc_category(category_id: int, db: Session = Depends(get_db)):
 @category.post("/category")
 async def add_category(category_create: CategoryCreate, db: Session = Depends(get_db)):
     check_existing_category_using_name(category=category_create, db=db)
+    check_existing_category_using_id(category=category_create, db=db)
     db_category = Category(**category_create.model_dump())
     add_commit_refresh_db(object=db_category, db=db)
     return {

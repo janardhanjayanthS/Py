@@ -51,6 +51,26 @@ def check_existing_category_using_name(category: BaseCategory, db: Session):
         )
 
 
+def check_existing_category_using_id(category: BaseCategory, db: Session):
+    """
+    checks db if category exists by name
+
+    Args:
+        category: category pydantic model
+        db: database instance in session
+
+    Raises:
+        HTTPException: if no category in db
+    """
+    existing_category = get_category_by_id(category_id=category.id, db=db)
+    if existing_category is not None:
+        message = f"Category with id - {category.id} - already exists in db"
+        log_error(message=message)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
+        )
+
+
 def get_category_by_name(category_name: str, db: Session) -> Category | None:
     """
     Gets category (db object) using name

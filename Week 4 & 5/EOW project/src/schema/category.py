@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field
+from typing import Optional
+
+from pydantic import BaseModel
 
 
 class BaseCategory(BaseModel):
@@ -14,7 +16,7 @@ class CategoryCreate(BaseCategory):
     model for creating new category
     """
 
-    name: str = Field(min_length=3, max_length=25)
+    id: Optional[int] = None
 
 
 class CategoryUpdate(BaseModel):
