@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from src.core.api_utility import (
     authenticate_user,
     check_existing_user_using_email,
+    fetch_user_by_email,
     handle_missing_user,
     update_user_name,
     update_user_password,
@@ -16,7 +17,7 @@ from src.core.database import (
     get_db,
     hash_password,
 )
-from src.core.decorators import auth_admin, get_current_user
+from src.core.decorators import authorize_admin, authorize_manager, authorize_staff
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
 from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserResponse
@@ -25,6 +26,8 @@ user = APIRouter()
 
 
 @user.post("/user/register", response_model=WrapperUserResponse)
+@authorize_admin
+@authorize_manager
 async def register_user(create_user: UserRegister, db: Session = Depends(get_db)):
     if check_existing_user_using_email(user=create_user, db=db):
         raise HTTPException(
@@ -45,6 +48,9 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
 
 
 @user.post("/user/login")
+@authorize_admin
+@authorize_manager
+@authorize_staff
 async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
     user = authenticate_user(
         db=db, email=user_login.email, password=user_login.password
@@ -68,23 +74,28 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
 
 
 @user.get("/user/all", response_model=WrapperUserResponse)
-async def get_all_users(
-    current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
-):
+@authorize_admin
+@authorize_manager
+@authorize_staff
+async def get_all_users(request: Request, db: Session = Depends(get_db)):
+    current_user_email = request.state.email
     all_users = db.query(User).all()
     return {
         "response": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "users": all_users},
+        "message": {"user email": current_user_email, "users": all_users},
     }
 
 
 @user.patch("/user/update", response_model=WrapperUserResponse)
+@authorize_admin
+@authorize_manager
 async def update_user_detail(
+    request: Request,
     update_details: UserEdit,
-    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    print(f"Update details: {update_details}")
+    current_user = fetch_user_by_email(email_id=request.state.email)
+
     message = update_user_name(
         current_user=current_user, update_details=update_details
     ) + update_user_password(current_user=current_user, update_details=update_details)
@@ -98,7 +109,7 @@ async def update_user_detail(
 
 
 @user.delete("/user/delete", response_model=WrapperUserResponse)
-@auth_admin
+@authorize_admin
 async def remove_user(
     request: Request,
     user_id: int,

@@ -134,8 +134,22 @@ def check_existing_user_using_email(user: UserRegister, db: Session) -> bool:
     Returns:
         bool: true if user already exists, false otherwise
     """
-    existing_user = db.query(User).filter_by(email=user.email).first()
+    existing_user = fetch_user_by_email(email_id=user.email, db=db)
     return True if existing_user else False
+
+
+def fetch_user_by_email(email_id: str, db: Session) -> User | None:
+    """
+    gets User object with specific email from db
+
+    Args:
+        email_id: email id of user to search
+        db: sqlalchemy db object
+
+    Returns:
+        User | None: user object if user exists else None
+    """
+    return db.query(User).filter_by(email=email_id).first()
 
 
 def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
