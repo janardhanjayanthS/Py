@@ -1,7 +1,6 @@
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, status
-from requests.sessions import Request
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
@@ -103,7 +102,6 @@ async def update_user_detail(
 async def remove_user(
     request: Request,
     user_id: int,
-    # current_user: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     current_user_email = request.state.email
@@ -116,5 +114,5 @@ async def remove_user(
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user_email.email, "deleted account": user},
+        "message": {"user email": current_user_email, "deleted account": user},
     }
