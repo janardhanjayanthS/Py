@@ -36,6 +36,7 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
         name=create_user.name,
         email=create_user.email,
         password=hash_password(create_user.password),
+        role=create_user.role.value,
     )
 
     add_commit_refresh_db(object=db_user, db=db)
@@ -44,8 +45,10 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
 
 
 @user.post("/user/login")
-async def login_user(user: UserLogin, db: Session = Depends(get_db)):
-    user = authenticate_user(db=db, email=user.email, password=user.password)
+async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
+    user = authenticate_user(
+        db=db, email=user_login.email, password=user_login.password
+    )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -55,7 +58,8 @@ async def login_user(user: UserLogin, db: Session = Depends(get_db)):
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
+        data={"sub": user.email, "role": user.role},
+        expires_delta=access_token_expires,
     )
 
     # cannot copy from postman
