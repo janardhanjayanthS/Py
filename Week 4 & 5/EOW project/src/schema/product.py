@@ -6,7 +6,6 @@ from pydantic import (
     Field,
     PositiveFloat,
     PositiveInt,
-    field_validator,
 )
 
 PRODUCT_TYPES = {"food", "regular", "electronic"}
@@ -20,14 +19,14 @@ class BaseProduct(BaseModel):
         BaseModel (_type_): _description_
     """
 
-    id: str
-    name: str = Field(min_length=5, max_length=100)
+    id: int
+    name: str
     quantity: PositiveInt
     price: PositiveFloat
-    type: str
+    category_id: int
 
 
-class ProductCreate(BaseProduct):
+class ProductCreate(BaseModel):
     """
     Schema for creating POST new product to
     the db
@@ -39,40 +38,13 @@ class ProductCreate(BaseProduct):
         ValueError: if validation checks fail
     """
 
-    days_to_expire: Optional[int] = None
-    is_vegetarian: Optional[bool] = None
-    warranty_in_years: Optional[float] = None
-
-    @field_validator("type")
-    @classmethod
-    def validate_product_type(cls, t: str) -> str:
-        """
-        Custom validation to check if given product
-        is one of existing product type
-
-        Args:
-            t: product type
-
-        Raises:
-            ValueError: if given unknown type
-
-        Returns:
-            str: product type
-        """
-        if t not in PRODUCT_TYPES:
-            raise ValueError(f"Product must be of the following types: {PRODUCT_TYPES}")
-        return t
-
-    def reset_regular_product_attributes(self):
-        """
-        to set is_vegetarian, days_to_expire & warranty_in_years to None
-        for a regular product
-        """
-        if self.type == "regular":
-            self.is_vegetarian = self.days_to_expire = self.warranty_in_years = None
+    name: str
+    quantity: PositiveInt
+    price: PositiveFloat
+    category_id: int
 
 
-class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
+class ProductUpdate(BaseModel):
     """
     Schema to upgrade product details
     """
@@ -80,10 +52,7 @@ class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
     name: Optional[str] = Field(None, min_length=5, max_length=100)
     quantity: Optional[PositiveInt] = None  # type: ignore
     price: Optional[PositiveFloat] = None  # type: ignore
-    type: Optional[str] = None
-    days_to_expire: Optional[int] = None
-    is_vegetarian: Optional[bool] = None
-    warranty_in_years: Optional[float] = None
+    category_id: Optional[int] = None
 
 
 class ProductResponse(BaseProduct):

@@ -6,14 +6,17 @@ from sqlalchemy.orm import Session
 from src.core.api_utility import (
     delete_product,
     get_all_products,
+    get_category_by_id,
+    get_category_specific_products,
     get_specific_product,
+    handle_missing_product,
     post_product,
     put_product,
 )
 from src.core.constants import ResponseStatus
 from src.core.database import get_db
 from src.core.decorators import auth_user, get_current_user
-from src.models.models import User
+from src.models.models import Product, User
 from src.schema.product import ProductCreate, ProductUpdate
 
 product = APIRouter()
@@ -25,6 +28,7 @@ product = APIRouter()
 async def products(
     request: Request,
     product_id: Optional[str] = "",
+    category_id: Optional[int] = None,
     product: Optional[ProductCreate] = None,
     db: Session = Depends(get_db),
 ):
@@ -36,6 +40,10 @@ async def products(
         if product_id and product_id is not None:
             return get_specific_product(
                 user_email=current_user_email, product_id=product_id, db=db
+            )
+        elif category_id and category_id is not None:
+            return get_category_specific_products(
+                user_email=current_user_email, category_id=category_id, db=db
             )
         return get_all_products(user_email=current_user_email, db=db)
 
@@ -84,3 +92,37 @@ async def remove_product(
         current_user: user object returned from JWT
     """
     return delete_product(current_user=current_user, product_id=product_id, db=db)
+
+
+@product.patch("/product/update_category")
+async def update_product_category(
+    product_id: str,
+    category_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    category = get_category_by_id(category_id=category_id, db=db)
+    if not category:
+        return {
+            "status": ResponseStatus.E.value,
+            "message": {
+                "user email": current_user.email,
+                "response": f"Cannot find category with id: {category_id}",
+            },
+        }
+
+    product = db.query(Product).filter_by(id=product_id).first()
+    if not product:
+        return handle_missing_product(product_id=product_id)
+
+    product.category_id = category.id
+    db.commit()
+    db.refresh(product)
+
+    return {
+        "status": ResponseStatus.S.value,
+        "message": {
+            "user email": current_user.email,
+            f"updated product to {category.name} category": product,
+        },
+    }

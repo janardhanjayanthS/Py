@@ -3,7 +3,25 @@ import re
 from inventory_manager import Inventory
 
 
-def get_initial_product_data_from_csv(csv_filepath: str) -> dict[str, list]:
+def get_initial_data_from_csv(csv_filepath: str) -> dict[str, list]:
+    initial_data: dict[str, list] = {"product": [], "product_category": []}
+    inv = Inventory()
+    inv.load_from_csv(csv_filepath)
+    get_initial_product_category_data(products=inv.products, initial_data=initial_data)
+    get_initial_product_data(products=inv.products, initial_data=initial_data)
+    return initial_data
+
+
+def get_initial_product_category_data(products: list, initial_data: dict):
+    unique_categories = set()
+    for product in products:
+        unique_categories.add(product.type.value)
+
+    for i, category in enumerate(unique_categories, start=1):
+        initial_data["product_category"].append({"id": i, "name": category})
+
+
+def get_initial_product_data(products: list, initial_data: dict):
     """
     reads data from inventory.csv using Inventory() from inventory_manager package (from EOW Week2)
 
@@ -13,29 +31,50 @@ def get_initial_product_data_from_csv(csv_filepath: str) -> dict[str, list]:
     Returns:
         dict: containing table name as key (eg: product) and list of dict for each product
     """
-    initial_data: dict[str, list] = {"product": []}
-    inv = Inventory()
-    inv.load_from_csv(csv_filepath)
-    for product in inv.products:
+    for product in products:
         initial_data["product"].append(
             {
-                "id": product.product_id,
+                "id": get_integer_product_id(product_id=product.product_id),
                 "name": product.product_name,
                 "quantity": product.quantity,
                 "price": product.price,
-                "type": product.type.value,
-                "days_to_expire": product.days_to_expire
-                if product.type.value == "food"
-                else None,
-                "is_vegetarian": product.is_vegetarian
-                if product.type.value == "food"
-                else None,
-                "warranty_in_years": product.warranty_period_in_years
-                if product.type.value == "electronic"
-                else None,
+                "category_id": get_category_id_from_type(
+                    type=product.type.value, initial_data=initial_data
+                ),
             }
         )
-    return initial_data
+
+
+def get_integer_product_id(product_id: str) -> int:
+    """
+    gets integer number from string product_id
+    eg:
+    P001 -> 1
+
+    Args:
+        product_id: string product id
+
+    Returns:
+        int: int version of product_id
+    """
+    return int(product_id[1:])
+
+
+def get_category_id_from_type(type: str, initial_data: dict) -> int | None:
+    """
+    gets category id for a specific product type (from csv)
+
+    Args:
+        type: product type as string
+        initial_data: dict containing all product_category information
+
+    Returns:
+        int | None: category id if exists else None
+    """
+    for category in initial_data["product_category"]:
+        if category["name"] == type:
+            return category["id"]
+    return None
 
 
 def check_password_strength(password) -> bool:

@@ -1,25 +1,36 @@
-from sqlalchemy import Column, String, Integer, Float, Boolean
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.core.database import Base
 
 
 class User(Base):
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), unique=True, nullable=False)
-    email = Column(String(150), unique=True, nullable=False)
-    password = Column(String, nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(String(150), unique=True, nullable=False)
+    password: Mapped[str] = mapped_column(nullable=False)
+
+
+class Category(Base):
+    __tablename__ = "product_category"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(25), unique=True)
 
 
 class Product(Base):
-    __tablename__ = 'product'
+    __tablename__ = "product"
 
-    id = Column(String(10), primary_key=True, unique=True, index=True)
-    name = Column(String(100), nullable=False)
-    quantity = Column(Integer, nullable=False)
-    price = Column(Float, nullable=False)
-    type = Column(String(10), nullable=False)
-    days_to_expire = Column(Integer, nullable=True)
-    is_vegetarian = Column(Boolean, nullable=True)
-    warranty_in_years = Column(Float, nullable=True)
+    id: Mapped[int] = mapped_column(
+        primary_key=True, unique=True, index=True, autoincrement=True
+    )
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    quantity: Mapped[int] = mapped_column(nullable=False)
+    price: Mapped[float] = mapped_column(nullable=False)
+
+    category_id: Mapped[int] = mapped_column(
+        ForeignKey("product_category.id", ondelete="CASCADE"), nullable=False
+    )
+    category: Mapped["Category"] = relationship()

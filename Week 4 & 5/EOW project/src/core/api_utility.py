@@ -1,18 +1,94 @@
 from typing import Optional
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from src.core.constants import ResponseStatus
-from src.core.database import add_commit_refresh_db, hash_password, verify_password
+from src.core.database import (
+    add_commit_refresh_db,
+    hash_password,
+    verify_password,
+)
 from src.core.log import log_error
-from src.models.models import Product, User
+from src.models.models import Category, Product, User
+from src.schema.category import BaseCategory
 from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister
 
 
-def check_existin_product_using_id(product: Optional[ProductCreate], db: Session):
+def get_category_by_id(category_id: int, db: Session) -> Category | None:
+    """
+    Gets category by id
+
+    Args:
+        category_id: category id to search db
+        db: database instance in session
+
+    Returns:
+        returns category object if exists else None
+    """
+    return db.query(Category).filter_by(id=category_id).first()
+
+
+def check_existing_category_using_name(category: BaseCategory, db: Session):
+    """
+    checks db if category exists by name
+
+    Args:
+        category: category pydantic model
+        db: database instance in session
+
+    Raises:
+        HTTPException: if no category in db
+    """
+    existing_category = get_category_by_name(category_name=category.name, db=db)
+    if existing_category is not None:
+        message = f"Category with name - {category.name} - already exists in db"
+        log_error(message=message)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
+        )
+
+
+def check_existing_category_using_id(category: BaseCategory, db: Session):
+    """
+    checks db if category exists by name
+
+    Args:
+        category: category pydantic model
+        db: database instance in session
+
+    Raises:
+        HTTPException: if no category in db
+    """
+    existing_category = get_category_by_id(category_id=category.id, db=db)
+    if existing_category is not None:
+        message = f"Category with id - {category.id} - already exists in db"
+        log_error(message=message)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
+        )
+
+
+def get_category_by_name(category_name: str, db: Session) -> Category | None:
+    """
+    Gets category (db object) using name
+
+    Args:
+        category_name: name of category to look for
+        db: database instance in session
+
+    Returns:
+        category from db if exists else None
+    """
+    existing_category = (
+        db.query(Category).filter(Category.name == category_name).first()
+    )
+    return existing_category if existing_category else None
+
+
+def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
     """
     Checks if product already exists in db,
     if so raises HTTP error
@@ -143,6 +219,24 @@ def handle_missing_user(user_id: int) -> dict:
     }
 
 
+def handle_missing_category(category_id: int):
+    """
+    Log and return response for missing category
+
+    Args:
+        category_id: missing category's id
+
+    Returns:
+        dict: response describing missing category
+    """
+    message = f"Cannot find category with id: {category_id}"
+    log_error(message)
+    return {
+        "status": ResponseStatus.E.value,
+        "message": {"response": message},
+    }
+
+
 def post_product(
     user_email: str, product: Optional[ProductCreate], db: Session
 ) -> dict:
@@ -157,10 +251,11 @@ def post_product(
     Returns:
         dict: fastapi response
     """
-    check_existin_product_using_id(product=product, db=db)
+    # check_existing_product_using_id(product=product, db=db) -> what if 2 same products
 
-    if product and product.type == "regular":
-        product.reset_regular_product_attributes()
+    category = db.query(Category).filter(Category.id == product.category_id).first()
+    if not category:
+        return handle_missing_category(category_id=product.category_id)
 
     db_product = Product(**product.model_dump())  # type: ignore
     add_commit_refresh_db(object=db_product, db=db)
@@ -208,6 +303,28 @@ def get_specific_product(user_email: str, product_id: str, db: Session) -> dict:
     return {
         "status": ResponseStatus.S.value,
         "message": {"user_email": user_email, "product": product},
+    }
+
+
+def get_category_specific_products(user_email: str, category_id: int, db: Session):
+    """
+    Fetches a products under a specific category from db
+
+    Args:
+        user_email: current user's email id
+        category_id: category id to filter
+        db: sqlalchemy db object
+
+    Returns:
+        dict: fastapi response
+    """
+    products = db.query(Product).filter_by(category_id=category_id).all()
+    return {
+        "status": ResponseStatus.S.value,
+        "message": {
+            "user_email": user_email,
+            f"products with category id: {category_id}": products,
+        },
     }
 
 
