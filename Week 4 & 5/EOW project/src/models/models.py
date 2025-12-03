@@ -31,6 +31,6 @@ class Product(Base):
     price: Mapped[float] = mapped_column(nullable=False)
 
     category_id: Mapped[int] = mapped_column(
-        ForeignKey("product_category.id"), nullable=False
+        ForeignKey("product_category.id", ondelete="CASCADE"), nullable=False
     )
     category: Mapped["Category"] = relationship()
