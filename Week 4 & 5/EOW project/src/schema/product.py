@@ -20,7 +20,7 @@ class BaseProduct(BaseModel):
     """
 
     id: str
-    name: str = Field(min_length=5, max_length=100)
+    name: str
     quantity: PositiveInt
     price: PositiveFloat
     category_id: int
