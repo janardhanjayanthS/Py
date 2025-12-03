@@ -97,7 +97,7 @@ async def remove_product(
         db: sqlalchemy db object. Defaults to Depends(get_db).
         current_user: user object returned from JWT
     """
-    current_user_email = request.state.user_email
+    current_user_email = request.state.email
     return delete_product(current_user=current_user_email, product_id=product_id, db=db)
 
 
@@ -110,7 +110,7 @@ async def update_product_category(
     category_id: int,
     db: Session = Depends(get_db),
 ):
-    current_user_email = request.state.user_email
+    current_user_email = request.state.email
     category = get_category_by_id(category_id=category_id, db=db)
     if not category:
         return {

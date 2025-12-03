@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
@@ -9,14 +9,17 @@ from src.core.api_utility import (
 )
 from src.core.constants import ResponseStatus
 from src.core.database import add_commit_refresh_db, get_db
-from src.core.decorators import get_current_admin
-from src.models.models import Category, User
+from src.core.decorators import authorize_admin, authorize_manager, authorize_staff
+from src.models.models import Category
 from src.schema.category import CategoryCreate, CategoryUpdate
 
 category = APIRouter()
 
 
 @category.get("/category/all")
+@authorize_admin
+@authorize_manager
+@authorize_staff
 async def get_all_category(db: Session = Depends(get_db)):
     all_categories = db.query(Category).all()
     return {
@@ -26,6 +29,9 @@ async def get_all_category(db: Session = Depends(get_db)):
 
 
 @category.get("/category")
+@authorize_admin
+@authorize_manager
+@authorize_staff
 async def get_specifc_category(category_id: int, db: Session = Depends(get_db)):
     category = db.query(Category).filter_by(id=category_id).first()
     if not category:
@@ -41,6 +47,8 @@ async def get_specifc_category(category_id: int, db: Session = Depends(get_db)):
 
 
 @category.post("/category")
+@authorize_admin
+@authorize_manager
 async def add_category(category_create: CategoryCreate, db: Session = Depends(get_db)):
     check_existing_category_using_name(category=category_create, db=db)
     check_existing_category_using_id(category=category_create, db=db)
@@ -53,6 +61,8 @@ async def add_category(category_create: CategoryCreate, db: Session = Depends(ge
 
 
 @category.put("/category/update")
+@authorize_admin
+@authorize_manager
 async def update_category(
     category_update: CategoryUpdate, db: Session = Depends(get_db)
 ):
@@ -86,16 +96,21 @@ async def update_category(
 
 
 @category.delete("/category/delete")
+@authorize_admin
 async def delete_category(
+    request: Request,
     category_id: int,
-    current_user: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
+    current_user_email = request.state.email
     category = get_category_by_id(category_id=category_id, db=db)
     if not category or category is None:
         return {
             "status": ResponseStatus.E.value,
-            "message": {"response": f"Unable to find category with id - {category_id}"},
+            "message": {
+                "user email": current_user_email,
+                "response": f"Unable to find category with id - {category_id}",
+            },
         }
 
     db.delete(category)
@@ -103,5 +118,5 @@ async def delete_category(
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "deleted category": category},
+        "message": {"user email": current_user_email, "deleted category": category},
     }
