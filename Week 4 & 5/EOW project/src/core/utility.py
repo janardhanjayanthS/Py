@@ -41,15 +41,6 @@ def get_initial_product_data(products: list, initial_data: dict):
                 "category_id": get_category_id_from_type(
                     type=product.type.value, initial_data=initial_data
                 ),
-                "days_to_expire": product.days_to_expire
-                if product.type.value == "food"
-                else None,
-                "is_vegetarian": product.is_vegetarian
-                if product.type.value == "food"
-                else None,
-                "warranty_in_years": product.warranty_period_in_years
-                if product.type.value == "electronic"
-                else None,
             }
         )
 

@@ -29,9 +29,6 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
     price: Mapped[float] = mapped_column(nullable=False)
-    days_to_expire: Mapped[int | None] = mapped_column(nullable=True)
-    is_vegetarian: Mapped[bool | None] = mapped_column(nullable=True)
-    warranty_in_years: Mapped[float | None] = mapped_column(nullable=True)
 
     category_id: Mapped[int] = mapped_column(
         ForeignKey("product_category.id"), nullable=False

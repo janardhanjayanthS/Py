@@ -30,6 +30,7 @@ async def products(
 ):
     current_user_email: str = request.state.email
     if request.method == "POST":
+        print("posting product")
         return post_product(user_email=current_user_email, product=product, db=db)
 
     elif request.method == "GET":

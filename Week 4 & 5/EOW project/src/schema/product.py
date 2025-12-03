@@ -6,7 +6,6 @@ from pydantic import (
     Field,
     PositiveFloat,
     PositiveInt,
-    field_validator,
 )
 
 PRODUCT_TYPES = {"food", "regular", "electronic"}
@@ -24,7 +23,7 @@ class BaseProduct(BaseModel):
     name: str = Field(min_length=5, max_length=100)
     quantity: PositiveInt
     price: PositiveFloat
-    type: str
+    category_id: int
 
 
 class ProductCreate(BaseProduct):
@@ -43,34 +42,6 @@ class ProductCreate(BaseProduct):
     is_vegetarian: Optional[bool] = None
     warranty_in_years: Optional[float] = None
 
-    @field_validator("type")
-    @classmethod
-    def validate_product_type(cls, t: str) -> str:
-        """
-        Custom validation to check if given product
-        is one of existing product type
-
-        Args:
-            t: product type
-
-        Raises:
-            ValueError: if given unknown type
-
-        Returns:
-            str: product type
-        """
-        if t not in PRODUCT_TYPES:
-            raise ValueError(f"Product must be of the following types: {PRODUCT_TYPES}")
-        return t
-
-    def reset_regular_product_attributes(self):
-        """
-        to set is_vegetarian, days_to_expire & warranty_in_years to None
-        for a regular product
-        """
-        if self.type == "regular":
-            self.is_vegetarian = self.days_to_expire = self.warranty_in_years = None
-
 
 class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
     """
@@ -80,10 +51,7 @@ class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
     name: Optional[str] = Field(None, min_length=5, max_length=100)
     quantity: Optional[PositiveInt] = None  # type: ignore
     price: Optional[PositiveFloat] = None  # type: ignore
-    type: Optional[str] = None
-    days_to_expire: Optional[int] = None
-    is_vegetarian: Optional[bool] = None
-    warranty_in_years: Optional[float] = None
+    category_id: Optional[int] = None
 
 
 class ProductResponse(BaseProduct):

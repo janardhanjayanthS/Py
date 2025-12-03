@@ -199,6 +199,15 @@ def handle_missing_user(user_id: int) -> dict:
     }
 
 
+def handle_missing_category(category_id: int, db: Session):
+    message = f"Cannot find category with id: {category_id}"
+    log_error(message)
+    return {
+        "status": ResponseStatus.E.value,
+        "message": {"response": message},
+    }
+
+
 def post_product(
     user_email: str, product: Optional[ProductCreate], db: Session
 ) -> dict:
@@ -214,9 +223,9 @@ def post_product(
         dict: fastapi response
     """
     check_existing_product_using_id(product=product, db=db)
-
-    if product and product.type == "regular":
-        product.reset_regular_product_attributes()
+    category = db.query(Category).filter(Category.id == product.category_id).first()
+    if not category:
+        return handle_missing_category(category_id=product.category_id)
 
     db_product = Product(**product.model_dump())  # type: ignore
     add_commit_refresh_db(object=db_product, db=db)
