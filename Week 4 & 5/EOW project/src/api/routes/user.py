@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from requests.sessions import Request
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
@@ -16,7 +17,7 @@ from src.core.database import (
     get_db,
     hash_password,
 )
-from src.core.decorators import get_current_admin, get_current_user
+from src.core.decorators import auth_admin, get_current_user
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
 from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserResponse
@@ -98,11 +99,14 @@ async def update_user_detail(
 
 
 @user.delete("/user/delete", response_model=WrapperUserResponse)
+@auth_admin
 async def remove_user(
+    request: Request,
     user_id: int,
-    current_user: User = Depends(get_current_admin),
+    # current_user: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
+    current_user_email = request.state.email
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         return handle_missing_user(user_id=user_id)
@@ -112,5 +116,5 @@ async def remove_user(
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "deleted account": user},
+        "message": {"user email": current_user_email.email, "deleted account": user},
     }

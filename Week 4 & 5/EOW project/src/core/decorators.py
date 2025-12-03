@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from src.core.database import get_db
 from src.core.jwt import decode_access_token
 from src.models.models import User
+from src.schema.user import UserRole
 
 
 def auth_user(func: Callable) -> Callable:
@@ -52,6 +53,66 @@ def auth_user(func: Callable) -> Callable:
             )
 
         request.state.email = user_email
+        return await func(*args, **kwargs)
+
+    return wrapper
+
+
+def get_request_and_authorization_from_jwt(kwargs):
+    request: Optional[Request] = kwargs.get("request")
+    if not request:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Request object missing",
+        )
+
+    authorization = request.header.get("Authorization")
+    if not authorization:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authorization header missing",
+        )
+
+    print(f"Authorization: {authorization}")
+    print(f"request: {request}")
+    return request, authorization
+
+
+def auth_admin(func: Callable):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        request, authorization = get_request_and_authorization_from_jwt(kwargs=kwargs)
+        try:
+            scheme, token = authorization.split()
+            if scheme.lower() != "bearer":
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid authorization scheme",
+                )
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authorization header format",
+            )
+
+        token_data = decode_access_token(token=token)
+        user_email = token_data.email
+        user_role = token_data.role
+
+        if not user_email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+            )
+
+        if user_role != UserRole.A.value:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Unauthorized to perform action",
+            )
+
+        request.state.email = user_email
+        request.state.role = user_role
+
         return await func(*args, **kwargs)
 
     return wrapper
