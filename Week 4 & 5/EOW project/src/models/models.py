@@ -11,6 +11,9 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(150), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
+    role: Mapped[str] = mapped_column(
+        String(10), nullable=False, server_default="staff"
+    )
 
 
 class Category(Base):
