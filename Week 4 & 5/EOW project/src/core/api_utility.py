@@ -329,13 +329,13 @@ def get_category_specific_products(user_email: str, category_id: int, db: Sessio
 
 
 def put_product(
-    current_user: User, product_id: str, product_update: BaseModel, db: Session
+    current_user_email: str, product_id: str, product_update: BaseModel, db: Session
 ) -> dict:
     """
     update product details
 
     Args:
-        current_user: User instance of current user
+        current_user_email: email id of user in session
         product_id: id of the product to update
         product: detail's of product to update
         db: sqlalchemy db object
@@ -355,16 +355,16 @@ def put_product(
     db.refresh(db_product)
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "updated product": db_product},
+        "message": {"user email": current_user_email, "updated product": db_product},
     }
 
 
-def delete_product(current_user: User, product_id: str, db: Session) -> dict:
+def delete_product(current_user_email: str, product_id: str, db: Session) -> dict:
     """
     delete a product from db
 
     Args:
-        current_user: User instance of current user
+        current_user_email: email id of user in session
         product_id: id of the product to update
         db: sqlalchemy db object
 
@@ -379,5 +379,5 @@ def delete_product(current_user: User, product_id: str, db: Session) -> dict:
     db.commit()
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "deleted product": db_product},
+        "message": {"user email": current_user_email, "deleted product": db_product},
     }
