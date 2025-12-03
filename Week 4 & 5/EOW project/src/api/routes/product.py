@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from src.core.api_utility import (
     delete_product,
     get_all_products,
+    get_category_specific_products,
     get_specific_product,
     post_product,
     put_product,
@@ -25,18 +26,22 @@ product = APIRouter()
 async def products(
     request: Request,
     product_id: Optional[str] = "",
+    category_id: Optional[int] = None,
     product: Optional[ProductCreate] = None,
     db: Session = Depends(get_db),
 ):
     current_user_email: str = request.state.email
     if request.method == "POST":
-        print("posting product")
         return post_product(user_email=current_user_email, product=product, db=db)
 
     elif request.method == "GET":
         if product_id and product_id is not None:
             return get_specific_product(
                 user_email=current_user_email, product_id=product_id, db=db
+            )
+        elif category_id and category_id is not None:
+            return get_category_specific_products(
+                user_email=current_user_email, category_id=category_id, db=db
             )
         return get_all_products(user_email=current_user_email, db=db)
 

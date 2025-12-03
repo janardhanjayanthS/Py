@@ -200,6 +200,15 @@ def handle_missing_user(user_id: int) -> dict:
 
 
 def handle_missing_category(category_id: int, db: Session):
+    """
+    Log and return response for missing category
+
+    Args:
+        category_id: missing category's id
+
+    Returns:
+        dict: response describing missing category
+    """
     message = f"Cannot find category with id: {category_id}"
     log_error(message)
     return {
@@ -273,6 +282,28 @@ def get_specific_product(user_email: str, product_id: str, db: Session) -> dict:
     return {
         "status": ResponseStatus.S.value,
         "message": {"user_email": user_email, "product": product},
+    }
+
+
+def get_category_specific_products(user_email: str, category_id: int, db: Session):
+    """
+    Fetches a products under a specific category from db
+
+    Args:
+        user_email: current user's email id
+        category_id: category id to filter
+        db: sqlalchemy db object
+
+    Returns:
+        dict: fastapi response
+    """
+    products = db.query(Product).filter_by(category_id=category_id).all()
+    return {
+        "status": ResponseStatus.S.value,
+        "message": {
+            "user_email": user_email,
+            f"products with category id: {category_id}": products,
+        },
     }
 
 

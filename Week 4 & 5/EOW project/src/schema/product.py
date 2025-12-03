@@ -38,10 +38,6 @@ class ProductCreate(BaseProduct):
         ValueError: if validation checks fail
     """
 
-    days_to_expire: Optional[int] = None
-    is_vegetarian: Optional[bool] = None
-    warranty_in_years: Optional[float] = None
-
 
 class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
     """
