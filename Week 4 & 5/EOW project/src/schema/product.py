@@ -39,7 +39,7 @@ class ProductCreate(BaseProduct):
     """
 
 
-class ProductUpdate(BaseModel):  # Don't inherit from BaseProduct
+class ProductUpdate(BaseModel):
     """
     Schema to upgrade product details
     """

@@ -34,7 +34,7 @@ def get_initial_product_data(products: list, initial_data: dict):
     for product in products:
         initial_data["product"].append(
             {
-                "id": product.product_id,
+                "id": get_integer_product_id(product_id=product.product_id),
                 "name": product.product_name,
                 "quantity": product.quantity,
                 "price": product.price,
@@ -45,7 +45,32 @@ def get_initial_product_data(products: list, initial_data: dict):
         )
 
 
-def get_category_id_from_type(type: str, initial_data: dict):
+def get_integer_product_id(product_id: str) -> int:
+    """
+    gets integer number from string product_id
+    eg:
+    P001 -> 1
+
+    Args:
+        product_id: string product id
+
+    Returns:
+        int: int version of product_id
+    """
+    return int(product_id[1:])
+
+
+def get_category_id_from_type(type: str, initial_data: dict) -> int | None:
+    """
+    gets category id for a specific product type (from csv)
+
+    Args:
+        type: product type as string
+        initial_data: dict containing all product_category information
+
+    Returns:
+        int | None: category id if exists else None
+    """
     for category in initial_data["product_category"]:
         if category["name"] == type:
             return category["id"]

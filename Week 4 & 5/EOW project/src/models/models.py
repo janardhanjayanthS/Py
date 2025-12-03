@@ -23,9 +23,7 @@ class Category(Base):
 class Product(Base):
     __tablename__ = "product"
 
-    id: Mapped[str] = mapped_column(
-        String(10), primary_key=True, unique=True, index=True
-    )
+    id: Mapped[int] = mapped_column(primary_key=True, unique=True, index=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
     price: Mapped[float] = mapped_column(nullable=False)

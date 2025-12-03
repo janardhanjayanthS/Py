@@ -16,6 +16,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     # For seeding: run after alembic migration or first app start up
     # from src.core.database import seed_db
+    #
     # seed_db()
 
     yield  # Application runs here
