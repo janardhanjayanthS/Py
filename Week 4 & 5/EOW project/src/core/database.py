@@ -3,7 +3,7 @@ from os import getenv
 from dotenv import load_dotenv
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from sqlalchemy import create_engine, insert
+from sqlalchemy import create_engine, insert, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 from src.core.constants import INVENTORY_CSV_FILEPATH
@@ -38,7 +38,6 @@ def get_db():
 
 def seed_db():
     initial_data = get_initial_data_from_csv(INVENTORY_CSV_FILEPATH)
-
     with engine.connect() as connection:
         for tablename in ["product_category", "product"]:
             if tablename in initial_data and len(initial_data[tablename]) > 0:
@@ -53,6 +52,26 @@ def seed_db():
                 except Exception as e:
                     connection.rollback()
                     print(f"Error: Unexpected exception when interacting with db. {e}")
+
+        # Reset sequences with COALESCE to handle empty tables
+        try:
+            connection.execute(
+                text(
+                    "SELECT setval(pg_get_serial_sequence('product', 'id'), "
+                    "COALESCE((SELECT MAX(id) FROM product), 1), true);"
+                )
+            )
+            connection.execute(
+                text(
+                    "SELECT setval(pg_get_serial_sequence('product_category', 'id'), "
+                    "COALESCE((SELECT MAX(id) FROM product_category), 1), true);"
+                )
+            )
+            connection.commit()
+            print("Successfully reset sequences")
+        except Exception as e:
+            connection.rollback()
+            print(f"Error resetting sequences: {e}")
 
 
 def add_commit_refresh_db(object: BaseModel, db: Session):

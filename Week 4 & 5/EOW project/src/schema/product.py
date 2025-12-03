@@ -19,14 +19,14 @@ class BaseProduct(BaseModel):
         BaseModel (_type_): _description_
     """
 
-    id: str
+    id: int
     name: str
     quantity: PositiveInt
     price: PositiveFloat
     category_id: int
 
 
-class ProductCreate(BaseProduct):
+class ProductCreate(BaseModel):
     """
     Schema for creating POST new product to
     the db
@@ -37,6 +37,11 @@ class ProductCreate(BaseProduct):
     Raises:
         ValueError: if validation checks fail
     """
+
+    name: str
+    quantity: PositiveInt
+    price: PositiveFloat
+    category_id: int
 
 
 class ProductUpdate(BaseModel):

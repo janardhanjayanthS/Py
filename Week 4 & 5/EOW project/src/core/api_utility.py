@@ -219,7 +219,7 @@ def handle_missing_user(user_id: int) -> dict:
     }
 
 
-def handle_missing_category(category_id: int, db: Session):
+def handle_missing_category(category_id: int):
     """
     Log and return response for missing category
 
@@ -251,7 +251,8 @@ def post_product(
     Returns:
         dict: fastapi response
     """
-    check_existing_product_using_id(product=product, db=db)
+    # check_existing_product_using_id(product=product, db=db) -> what if 2 same products
+
     category = db.query(Category).filter(Category.id == product.category_id).first()
     if not category:
         return handle_missing_category(category_id=product.category_id)
