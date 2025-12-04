@@ -88,22 +88,6 @@ def get_category_by_name(category_name: str, db: Session) -> Category | None:
     return existing_category if existing_category else None
 
 
-def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
-    """
-    Checks if product already exists in db,
-    if so raises HTTP error
-
-    Args:
-        product: pydnatic product model with its details
-        db: database instance in session
-    """
-    existing_product = db.query(Product).filter_by(id=product.id).first()  # type: ignore
-    if existing_product is not None:
-        message = f"product with id {product.id} already exists"  # type: ignore
-        log_error(message=message)
-        raise HTTPException(status_code=400, detail={"message": message})
-
-
 def check_existing_product_using_name(product: Optional[ProductCreate], db: Session):
     """
     Checks if product already exists in db,
@@ -112,10 +96,30 @@ def check_existing_product_using_name(product: Optional[ProductCreate], db: Sess
     Args:
         product: pydnatic product model with its details
         db: database instance in session
+    Raises:
+        HTTPException: if product does not exist
     """
-    existing_product = db.query(Product).filter_by(name=product.id).first()  # type: ignore
+    existing_product = db.query(Product).filter_by(name=product.name).first()
     if existing_product is not None:
-        message = f"product with id {product.id} already exists"  # type: ignore
+        message = f"product with name {product.name} already exists"
+        log_error(message=message)
+        raise HTTPException(status_code=400, detail={"message": message})
+
+
+def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
+    """
+    Checks if product already exists in db,
+    if so raises HTTP error
+
+    Args:
+        product: pydnatic product model with its details
+        db: database instance in session
+    Raises:
+        HTTPException: if product does not exist
+    """
+    existing_product = db.query(Product).filter_by(id=product.id).first()
+    if existing_product is not None:
+        message = f"product with id {product.id} already exists"
         log_error(message=message)
         raise HTTPException(status_code=400, detail={"message": message})
 
@@ -282,6 +286,7 @@ def post_product(
         dict: fastapi response
     """
     check_existing_product_using_name(product=product, db=db)
+    check_existing_product_using_id(product=product, db=db)
 
     category = db.query(Category).filter(Category.id == product.category_id).first()
     if not category:
