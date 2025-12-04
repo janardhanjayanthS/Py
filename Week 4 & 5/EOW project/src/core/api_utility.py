@@ -104,6 +104,22 @@ def check_existing_product_using_id(product: Optional[ProductCreate], db: Sessio
         raise HTTPException(status_code=400, detail={"message": message})
 
 
+def check_existing_product_using_name(product: Optional[ProductCreate], db: Session):
+    """
+    Checks if product already exists in db,
+    if so raises HTTP error
+
+    Args:
+        product: pydnatic product model with its details
+        db: database instance in session
+    """
+    existing_product = db.query(Product).filter_by(name=product.id).first()  # type: ignore
+    if existing_product is not None:
+        message = f"product with id {product.id} already exists"  # type: ignore
+        log_error(message=message)
+        raise HTTPException(status_code=400, detail={"message": message})
+
+
 def handle_missing_product(product_id: str):
     """
     logs & retruns error of missing product
@@ -265,7 +281,7 @@ def post_product(
     Returns:
         dict: fastapi response
     """
-    # check_existing_product_using_id(product=product, db=db) -> what if 2 same products
+    check_existing_product_using_name(product=product, db=db)
 
     category = db.query(Category).filter(Category.id == product.category_id).first()
     if not category:

@@ -78,7 +78,7 @@ async def get_all_users(request: Request, db: Session = Depends(get_db)):
     current_user_email = request.state.email
     all_users = db.query(User).all()
     return {
-        "response": ResponseStatus.S.value,
+        "status": ResponseStatus.S.value,
         "message": {"user email": current_user_email, "users": all_users},
     }
 
