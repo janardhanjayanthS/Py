@@ -326,8 +326,10 @@ def apply_discount_or_tax(product: Product) -> Product:
     price = ConcretePrice(amount=product.price)
     if product.id % 2 == 0:
         price = TaxDecorator(price=price, tax_percentage=0.2)
+        product.price_type = "taxed"
     else:
         price = DiscountDecorator(price=price, discount_percentage=0.2)
+        product.price_type = "discounted"
     product.price = price.get_amount()
     return product
 

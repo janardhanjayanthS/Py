@@ -8,8 +8,6 @@ from pydantic import (
     PositiveInt,
 )
 
-PRODUCT_TYPES = {"food", "regular", "electronic"}
-
 
 class BaseProduct(BaseModel):
     """
