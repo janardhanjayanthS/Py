@@ -40,7 +40,7 @@ def authorize_admin(func: Callable) -> Callable:
         if user_role != UserRole.ADMIN.value:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you role is {user_role}",
+                detail=f"Unauthorized to perform action, you are a {user_role}",
             )
 
         request.state.email = user_email
@@ -80,7 +80,7 @@ def authorize_manager(func: Callable):
         if user_role != UserRole.MANAGER.value:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you role is {user_role}",
+                detail=f"Unauthorized to perform action, you are a {user_role}",
             )
 
         request.state.email = user_email
@@ -120,7 +120,7 @@ def authorize_staff(func: Callable):
         if user_role != UserRole.STAFF.value:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you role is {user_role}",
+                detail=f"Unauthorized to perform action, you are a {user_role}",
             )
 
         request.state.email = user_email
