@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel
@@ -15,6 +15,14 @@ from src.models.models import Category, Product, User
 from src.schema.category import BaseCategory
 from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister
+
+
+def check_id_type(id: Any):
+    if id and not isinstance(id, int):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"id should be type int but got type: {id.__class__.__name__}",
+        )
 
 
 def get_category_by_id(category_id: int, db: Session) -> Category | None:
@@ -319,7 +327,7 @@ def get_all_products(user_email: str, db: Session) -> dict:
     }
 
 
-def get_specific_product(user_email: str, product_id: str, db: Session) -> dict:
+def get_specific_product(user_email: str, product_id: int, db: Session) -> dict:
     """
     Fetches a specific product from db
 
@@ -331,6 +339,7 @@ def get_specific_product(user_email: str, product_id: str, db: Session) -> dict:
     Returns:
         dict: fastapi response
     """
+    check_id_type(id=product_id)
     product = db.query(Product).filter_by(id=product_id).first()
     if product is None:
         return handle_missing_product(product_id=str(product_id))
@@ -364,7 +373,7 @@ def get_category_specific_products(user_email: str, category_id: int, db: Sessio
 
 
 def put_product(
-    current_user_email: str, product_id: str, product_update: BaseModel, db: Session
+    current_user_email: str, product_id: int, product_update: BaseModel, db: Session
 ) -> dict:
     """
     update product details
@@ -378,6 +387,7 @@ def put_product(
     Returns:
         dict: fastapi response
     """
+    check_id_type(id=product_id)
     db_product = db.query(Product).filter_by(id=product_id).first()
     if db_product is None:
         return handle_missing_product(product_id=product_id)
@@ -394,7 +404,7 @@ def put_product(
     }
 
 
-def delete_product(current_user_email: str, product_id: str, db: Session) -> dict:
+def delete_product(current_user_email: str, product_id: int, db: Session) -> dict:
     """
     delete a product from db
 
@@ -406,6 +416,7 @@ def delete_product(current_user_email: str, product_id: str, db: Session) -> dic
     Returns:
         dict: fastapi response
     """
+    check_id_type(id=product_id)
     db_product = db.query(Product).filter_by(id=product_id).first()
     if db_product is None:
         return handle_missing_product(product_id=product_id)

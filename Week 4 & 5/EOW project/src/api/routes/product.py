@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
+    check_id_type,
     delete_product,
     get_all_products,
     get_category_by_id,
@@ -33,10 +34,12 @@ async def get_products(
 ):
     current_user_email: str = request.state.email
     if product_id and product_id is not None:
+        check_id_type(id=product_id)
         return get_specific_product(
             user_email=current_user_email, product_id=product_id, db=db
         )
     elif category_id and category_id is not None:
+        check_id_type(id=category_id)
         return get_category_specific_products(
             user_email=current_user_email, category_id=category_id, db=db
         )
@@ -58,7 +61,7 @@ async def post_products(
 @required_roles(UserRole.ADMIN, UserRole.MANAGER)
 async def update_product(
     request: Request,
-    product_id: str,
+    product_id: int,
     product_update: ProductUpdate,
     db: Session = Depends(get_db),
 ):
@@ -70,9 +73,9 @@ async def update_product(
         product_update: update product schema
         db: sqlalchemy db object. Defaults to Depends(get_db).
     """
-    current_user_email = request.state.user_email
+    current_user_email = request.state.email
     return put_product(
-        current_user=current_user_email,
+        current_user_email=current_user_email,
         product_id=product_id,
         product_update=product_update,
         db=db,
@@ -83,7 +86,7 @@ async def update_product(
 @required_roles(UserRole.ADMIN)
 async def remove_product(
     request: Request,
-    product_id: str,
+    product_id: int,
     db: Session = Depends(get_db),
 ):
     """
@@ -94,19 +97,23 @@ async def remove_product(
         db: sqlalchemy db object. Defaults to Depends(get_db).
         current_user: user object returned from JWT
     """
+    check_id_type(id=product_id)
     current_user_email = request.state.email
-    return delete_product(current_user=current_user_email, product_id=product_id, db=db)
+    return delete_product(
+        current_user_email == current_user_email, product_id=product_id, db=db
+    )
 
 
 @product.patch("/product/update_category")
 @required_roles(UserRole.ADMIN, UserRole.MANAGER)
 async def update_product_category(
     request: Request,
-    product_id: str,
+    product_id: int,
     category_id: int,
     db: Session = Depends(get_db),
 ):
     current_user_email = request.state.email
+    check_id_type(id=category_id)
     category = get_category_by_id(category_id=category_id, db=db)
     if not category:
         return {
@@ -117,6 +124,7 @@ async def update_product_category(
             },
         }
 
+    check_id_type(id=product_id)
     product = db.query(Product).filter_by(id=product_id).first()
     if not product:
         return handle_missing_product(product_id=product_id)
