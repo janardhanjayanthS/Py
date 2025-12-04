@@ -17,7 +17,11 @@ from src.core.database import (
     get_db,
     hash_password,
 )
-from src.core.decorators import authorize_admin, authorize_manager, authorize_staff
+from src.core.decorators import (
+    authorize_admin,
+    authorize_manager_and_above,
+    authorize_staff_and_above,
+)
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
 from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserResponse
@@ -69,9 +73,7 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
 
 
 @user.get("/user/all", response_model=WrapperUserResponse)
-@authorize_admin
-@authorize_manager
-@authorize_staff
+@authorize_staff_and_above
 async def get_all_users(request: Request, db: Session = Depends(get_db)):
     current_user_email = request.state.email
     all_users = db.query(User).all()
@@ -82,8 +84,7 @@ async def get_all_users(request: Request, db: Session = Depends(get_db)):
 
 
 @user.patch("/user/update", response_model=WrapperUserResponse)
-@authorize_admin
-@authorize_manager
+@authorize_manager_and_above
 async def update_user_detail(
     request: Request,
     update_details: UserEdit,

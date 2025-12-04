@@ -15,7 +15,11 @@ from src.core.api_utility import (
 )
 from src.core.constants import ResponseStatus
 from src.core.database import get_db
-from src.core.decorators import authorize_admin, authorize_manager, authorize_staff
+from src.core.decorators import (
+    authorize_admin,
+    authorize_manager_and_above,
+    authorize_staff_and_above,
+)
 from src.models.models import Product
 from src.schema.product import ProductCreate, ProductUpdate
 
@@ -23,9 +27,7 @@ product = APIRouter()
 
 
 @product.get("/products")
-@authorize_admin
-@authorize_staff
-@authorize_manager
+@authorize_staff_and_above
 async def get_products(
     request: Request,
     product_id: Optional[str] = "",
@@ -45,8 +47,7 @@ async def get_products(
 
 
 @product.post("/products")
-@authorize_manager
-@authorize_admin
+@authorize_manager_and_above
 async def post_products(
     request: Request,
     product: Optional[ProductCreate] = None,
@@ -57,8 +58,7 @@ async def post_products(
 
 
 @product.put("/product")
-@authorize_manager
-@authorize_admin
+@authorize_manager_and_above
 async def update_product(
     request: Request,
     product_id: str,
@@ -102,8 +102,7 @@ async def remove_product(
 
 
 @product.patch("/product/update_category")
-@authorize_admin
-@authorize_manager
+@authorize_manager_and_above
 async def update_product_category(
     request: Request,
     product_id: str,

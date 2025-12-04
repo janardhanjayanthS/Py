@@ -51,9 +51,9 @@ def authorize_admin(func: Callable) -> Callable:
     return wrapper
 
 
-def authorize_manager(func: Callable):
+def authorize_manager_and_above(func: Callable):
     """
-    Decorator for authorizing admin
+    Decorator for authorizing manager
 
     Args:
         func: function/end point to use this decorator
@@ -77,7 +77,7 @@ def authorize_manager(func: Callable):
 
         handle_missing_email_in_request(user_email=user_email)
 
-        if user_role != UserRole.MANAGER.value:
+        if user_role not in [UserRole.MANAGER.value, UserRole.ADMIN.value]:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f"Unauthorized to perform action, you are a {user_role}",
@@ -91,9 +91,9 @@ def authorize_manager(func: Callable):
     return wrapper
 
 
-def authorize_staff(func: Callable):
+def authorize_staff_and_above(func: Callable):
     """
-    Decorator for authorizing admin
+    Decorator for authorizing staff
 
     Args:
         func: function/end point to use this decorator
@@ -117,7 +117,7 @@ def authorize_staff(func: Callable):
 
         handle_missing_email_in_request(user_email=user_email)
 
-        if user_role != UserRole.STAFF.value:
+        if user_role not in UserRole.get_values():
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f"Unauthorized to perform action, you are a {user_role}",
