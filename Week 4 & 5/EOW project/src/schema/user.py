@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
@@ -15,6 +18,43 @@ def validate_password(password: str) -> str:
     return password
 
 
+class UserRole(Enum):
+    """
+    Enum for user roles - RBAC
+
+    Attributes:
+        ADMIN: admin role - GET/POST/PUT/PATCH/DELETE
+        MANAGER: manager role - GET/POST/PUT/PATCH
+        STAFF: staff role - GET
+    """
+
+    ADMIN: str = "admin"
+    MANAGER: str = "manager"
+    STAFF: str = "staff"
+
+    @staticmethod
+    def get_all_values() -> list[str]:
+        """
+        Returns list of values of all available enums
+        Returns:
+            list[str]: list containing enum values
+        """
+        return [role.value for role in UserRole]
+
+    @staticmethod
+    def get_values(roles: tuple[UserRole]) -> tuple[str]:
+        """
+        Returns value of enums from a tuple of enum objects
+
+        Args:
+            roles: tuple with enum objects
+
+        Returns:
+            tuple[str]: tuple with enum strings
+        """
+        return (role.value for role in roles)
+
+
 class BaseUser(BaseModel):
     """
     Base model for user
@@ -23,6 +63,7 @@ class BaseUser(BaseModel):
     name: str = Field(min_length=5, max_length=100)
     email: EmailStr
     password: str
+    role: UserRole
 
 
 class UserRegister(BaseUser):
@@ -71,6 +112,7 @@ class UserResponse(BaseModel):
     id: int
     name: str
     email: str
+    role: str
 
     model_config = ConfigDict(from_attributes=True)
 

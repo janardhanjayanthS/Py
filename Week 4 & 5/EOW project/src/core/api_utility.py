@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel
@@ -15,6 +15,14 @@ from src.models.models import Category, Product, User
 from src.schema.category import BaseCategory
 from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister
+
+
+def check_id_type(id: Any):
+    if id and not isinstance(id, int):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=f"id should be type int but got type: {id.__class__.__name__}",
+        )
 
 
 def get_category_by_id(category_id: int, db: Session) -> Category | None:
@@ -88,6 +96,24 @@ def get_category_by_name(category_name: str, db: Session) -> Category | None:
     return existing_category if existing_category else None
 
 
+def check_existing_product_using_name(product: Optional[ProductCreate], db: Session):
+    """
+    Checks if product already exists in db,
+    if so raises HTTP error
+
+    Args:
+        product: pydnatic product model with its details
+        db: database instance in session
+    Raises:
+        HTTPException: if product does not exist
+    """
+    existing_product = db.query(Product).filter_by(name=product.name).first()
+    if existing_product is not None:
+        message = f"product with name {product.name} already exists"
+        log_error(message=message)
+        raise HTTPException(status_code=400, detail={"message": message})
+
+
 def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
     """
     Checks if product already exists in db,
@@ -96,10 +122,12 @@ def check_existing_product_using_id(product: Optional[ProductCreate], db: Sessio
     Args:
         product: pydnatic product model with its details
         db: database instance in session
+    Raises:
+        HTTPException: if product does not exist
     """
-    existing_product = db.query(Product).filter_by(id=product.id).first()  # type: ignore
+    existing_product = db.query(Product).filter_by(id=product.id).first()
     if existing_product is not None:
-        message = f"product with id {product.id} already exists"  # type: ignore
+        message = f"product with id {product.id} already exists"
         log_error(message=message)
         raise HTTPException(status_code=400, detail={"message": message})
 
@@ -134,8 +162,22 @@ def check_existing_user_using_email(user: UserRegister, db: Session) -> bool:
     Returns:
         bool: true if user already exists, false otherwise
     """
-    existing_user = db.query(User).filter_by(email=user.email).first()
+    existing_user = fetch_user_by_email(email_id=user.email, db=db)
     return True if existing_user else False
+
+
+def fetch_user_by_email(email_id: str, db: Session) -> User | None:
+    """
+    gets User object with specific email from db
+
+    Args:
+        email_id: email id of user to search
+        db: sqlalchemy db object
+
+    Returns:
+        User | None: user object if user exists else None
+    """
+    return db.query(User).filter_by(email=email_id).first()
 
 
 def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
@@ -251,7 +293,8 @@ def post_product(
     Returns:
         dict: fastapi response
     """
-    # check_existing_product_using_id(product=product, db=db) -> what if 2 same products
+    check_existing_product_using_name(product=product, db=db)
+    check_existing_product_using_id(product=product, db=db)
 
     category = db.query(Category).filter(Category.id == product.category_id).first()
     if not category:
@@ -284,7 +327,7 @@ def get_all_products(user_email: str, db: Session) -> dict:
     }
 
 
-def get_specific_product(user_email: str, product_id: str, db: Session) -> dict:
+def get_specific_product(user_email: str, product_id: int, db: Session) -> dict:
     """
     Fetches a specific product from db
 
@@ -296,6 +339,7 @@ def get_specific_product(user_email: str, product_id: str, db: Session) -> dict:
     Returns:
         dict: fastapi response
     """
+    check_id_type(id=product_id)
     product = db.query(Product).filter_by(id=product_id).first()
     if product is None:
         return handle_missing_product(product_id=str(product_id))
@@ -329,13 +373,13 @@ def get_category_specific_products(user_email: str, category_id: int, db: Sessio
 
 
 def put_product(
-    current_user: User, product_id: str, product_update: BaseModel, db: Session
+    current_user_email: str, product_id: int, product_update: BaseModel, db: Session
 ) -> dict:
     """
     update product details
 
     Args:
-        current_user: User instance of current user
+        current_user_email: email id of user in session
         product_id: id of the product to update
         product: detail's of product to update
         db: sqlalchemy db object
@@ -343,6 +387,7 @@ def put_product(
     Returns:
         dict: fastapi response
     """
+    check_id_type(id=product_id)
     db_product = db.query(Product).filter_by(id=product_id).first()
     if db_product is None:
         return handle_missing_product(product_id=product_id)
@@ -355,22 +400,23 @@ def put_product(
     db.refresh(db_product)
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "updated product": db_product},
+        "message": {"user email": current_user_email, "updated product": db_product},
     }
 
 
-def delete_product(current_user: User, product_id: str, db: Session) -> dict:
+def delete_product(current_user_email: str, product_id: int, db: Session) -> dict:
     """
     delete a product from db
 
     Args:
-        current_user: User instance of current user
+        current_user_email: email id of user in session
         product_id: id of the product to update
         db: sqlalchemy db object
 
     Returns:
         dict: fastapi response
     """
+    check_id_type(id=product_id)
     db_product = db.query(Product).filter_by(id=product_id).first()
     if db_product is None:
         return handle_missing_product(product_id=product_id)
@@ -379,5 +425,5 @@ def delete_product(current_user: User, product_id: str, db: Session) -> dict:
     db.commit()
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "deleted product": db_product},
+        "message": {"user email": current_user_email, "deleted product": db_product},
     }

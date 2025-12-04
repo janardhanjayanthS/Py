@@ -27,6 +27,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
     to_encode["exp"] = get_expiration_time(expires_delta=expires_delta)
 
+    print(f"To encode: {to_encode}")
     encode_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
     return encode_jwt
 
@@ -64,13 +65,22 @@ def decode_access_token(token: str) -> TokenData:
     try:
         payload: dict = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
         email: str = payload.get("sub", "")
+        role: str = payload.get("role", "")
 
         if email is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Could not validate credentials",
             )
-        return TokenData(email=email)
+
+        if role is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+            )
+
+        return TokenData(email=email, role=role)
+
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

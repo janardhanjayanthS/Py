@@ -38,6 +38,7 @@ class ProductCreate(BaseModel):
         ValueError: if validation checks fail
     """
 
+    id: Optional[int] = None
     name: str
     quantity: PositiveInt
     price: PositiveFloat

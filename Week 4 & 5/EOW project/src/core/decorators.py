@@ -8,53 +8,145 @@ from sqlalchemy.orm import Session
 from src.core.database import get_db
 from src.core.jwt import decode_access_token
 from src.models.models import User
+from src.schema.user import UserRole
 
 
-def auth_user(func: Callable) -> Callable:
-    @wraps(func)
-    async def wrapper(
-        *args,
-        **kwargs,
-    ):
-        request: Optional[Request] = kwargs.get("request")
-        if not request:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Request object missing",
-            )
+def required_roles(*allowed_roles):
+    """
+    Decorator for authorizing roles
 
-        authorization = request.headers.get("Authorization")
-        if not authorization:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Authorization header missing",
-            )
+    Args:
+        *allowed_roles: list of UserRole enum
+    """
 
-        try:
-            scheme, token = authorization.split()
-            if scheme.lower() != "bearer":
+    def decorator(func: Callable) -> Callable:
+        """
+        Decorator for authorizing user
+
+        Args:
+            func: function/end point to use this decorator
+
+        Returns:
+            Callable: Returns wrapper
+
+        Raises:
+            HTTPException: If user's role is not Admin
+        """
+
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            request = get_request_from_jwt(kwargs=kwargs)
+            authorization = get_authorization_from_request(request=request)
+            token = verify_scheme_and_return_token(authorization=authorization)
+
+            token_data = decode_access_token(token=token)
+            user_email = token_data.email
+            user_role = token_data.role
+
+            handle_missing_email_in_request(user_email=user_email)
+
+            if user_role not in UserRole.get_values(roles=allowed_roles):
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Invalid authorization scheme",
+                    detail=f"Unauthorized to perform action, you are a {user_role}",
                 )
-        except ValueError:
+
+            request.state.email = user_email
+            request.state.role = user_role
+
+            return await func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
+def handle_missing_email_in_request(user_email: str) -> None:
+    """
+    Handles missing email in request
+
+    Args:
+        user_email: email id of user
+
+    Raises:
+        HTTPException: if user_email(param) is empty
+    """
+    if not user_email:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+        )
+
+
+def get_authorization_from_request(request: Request) -> str:
+    """
+    Gets the authorization string from request
+
+    Args:
+        request: request from client
+
+    Returns:
+        str: authorization string if exists
+
+    Raises:
+        HTTPException: [TODO:throw]
+    """
+    authorization = request.headers.get("Authorization")
+    if not authorization:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authorization header missing",
+        )
+    return authorization
+
+
+def get_request_from_jwt(kwargs: dict) -> Request:
+    """
+    gets Request object from client's request
+
+    Args:
+        kwargs: keword arguments dictionary
+
+    Returns:
+        Request: object if exists
+
+    Raises:
+        HTTPException: If there is'nt a request object
+    """
+    request: Optional[Request] = kwargs.get("request")
+    if not request:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Request object missing",
+        )
+    return request
+
+
+def verify_scheme_and_return_token(authorization: str) -> str:
+    """
+    Verifies scheme from authorization string
+
+    Args:
+        authorization: string containing scheme and JWT
+
+    Returns:
+        str: JWT token
+
+    Raises:
+        HTTPException: if there is any problem with scheme
+    """
+    try:
+        scheme, token = authorization.split()
+        if scheme.lower() != "bearer":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authorization header format",
+                detail="Invalid authorization scheme",
             )
-
-        token_data = decode_access_token(token=token)
-        user_email = token_data.email
-
-        if not user_email:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
-            )
-
-        request.state.email = user_email
-        return await func(*args, **kwargs)
-
-    return wrapper
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authorization header format",
+        )
+    return token
 
 
 # Another way

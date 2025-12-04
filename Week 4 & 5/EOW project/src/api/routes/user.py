@@ -1,11 +1,12 @@
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from src.core.api_utility import (
     authenticate_user,
     check_existing_user_using_email,
+    fetch_user_by_email,
     handle_missing_user,
     update_user_name,
     update_user_password,
@@ -16,10 +17,18 @@ from src.core.database import (
     get_db,
     hash_password,
 )
-from src.core.decorators import get_current_admin, get_current_user
+from src.core.decorators import (
+    required_roles,
+)
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
-from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserResponse
+from src.schema.user import (
+    UserEdit,
+    UserLogin,
+    UserRegister,
+    UserRole,
+    WrapperUserResponse,
+)
 
 user = APIRouter()
 
@@ -36,6 +45,7 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
         name=create_user.name,
         email=create_user.email,
         password=hash_password(create_user.password),
+        role=create_user.role.value,
     )
 
     add_commit_refresh_db(object=db_user, db=db)
@@ -44,8 +54,10 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
 
 
 @user.post("/user/login")
-async def login_user(user: UserLogin, db: Session = Depends(get_db)):
-    user = authenticate_user(db=db, email=user.email, password=user.password)
+async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
+    user = authenticate_user(
+        db=db, email=user_login.email, password=user_login.password
+    )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -55,7 +67,8 @@ async def login_user(user: UserLogin, db: Session = Depends(get_db)):
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.email}, expires_delta=access_token_expires
+        data={"sub": user.email, "role": user.role},
+        expires_delta=access_token_expires,
     )
 
     # cannot copy from postman
@@ -64,23 +77,25 @@ async def login_user(user: UserLogin, db: Session = Depends(get_db)):
 
 
 @user.get("/user/all", response_model=WrapperUserResponse)
-async def get_all_users(
-    current_user: User = Depends(get_current_user), db: Session = Depends(get_db)
-):
+@required_roles(UserRole.MANAGER, UserRole.ADMIN, UserRole.STAFF)
+async def get_all_users(request: Request, db: Session = Depends(get_db)):
+    current_user_email = request.state.email
     all_users = db.query(User).all()
     return {
-        "response": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "users": all_users},
+        "status": ResponseStatus.S.value,
+        "message": {"user email": current_user_email, "users": all_users},
     }
 
 
 @user.patch("/user/update", response_model=WrapperUserResponse)
+@required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def update_user_detail(
+    request: Request,
     update_details: UserEdit,
-    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    print(f"Update details: {update_details}")
+    current_user = fetch_user_by_email(email_id=request.state.email)
+
     message = update_user_name(
         current_user=current_user, update_details=update_details
     ) + update_user_password(current_user=current_user, update_details=update_details)
@@ -94,11 +109,13 @@ async def update_user_detail(
 
 
 @user.delete("/user/delete", response_model=WrapperUserResponse)
+@required_roles(UserRole.ADMIN)
 async def remove_user(
+    request: Request,
     user_id: int,
-    current_user: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
+    current_user_email = request.state.email
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         return handle_missing_user(user_id=user_id)
@@ -108,5 +125,5 @@ async def remove_user(
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user.email, "deleted account": user},
+        "message": {"user email": current_user_email, "deleted account": user},
     }
