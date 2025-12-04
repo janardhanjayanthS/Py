@@ -18,13 +18,17 @@ from src.core.database import (
     hash_password,
 )
 from src.core.decorators import (
-    authorize_admin,
-    authorize_manager_and_above,
-    authorize_staff_and_above,
+    required_roles,
 )
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
-from src.schema.user import UserEdit, UserLogin, UserRegister, WrapperUserResponse
+from src.schema.user import (
+    UserEdit,
+    UserLogin,
+    UserRegister,
+    UserRole,
+    WrapperUserResponse,
+)
 
 user = APIRouter()
 
@@ -73,7 +77,7 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
 
 
 @user.get("/user/all", response_model=WrapperUserResponse)
-@authorize_staff_and_above
+@required_roles(UserRole.MANAGER, UserRole.ADMIN, UserRole.STAFF)
 async def get_all_users(request: Request, db: Session = Depends(get_db)):
     current_user_email = request.state.email
     all_users = db.query(User).all()
@@ -84,7 +88,7 @@ async def get_all_users(request: Request, db: Session = Depends(get_db)):
 
 
 @user.patch("/user/update", response_model=WrapperUserResponse)
-@authorize_manager_and_above
+@required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def update_user_detail(
     request: Request,
     update_details: UserEdit,
@@ -105,7 +109,7 @@ async def update_user_detail(
 
 
 @user.delete("/user/delete", response_model=WrapperUserResponse)
-@authorize_admin
+@required_roles(UserRole.ADMIN)
 async def remove_user(
     request: Request,
     user_id: int,

@@ -11,124 +11,54 @@ from src.models.models import User
 from src.schema.user import UserRole
 
 
-def authorize_admin(func: Callable) -> Callable:
+def required_roles(*allowed_roles):
     """
-    Decorator for authorizing admin
+    Decorator for authorizing roles
 
     Args:
-        func: function/end point to use this decorator
-
-    Returns:
-        Callable: Returns wrapper
-
-    Raises:
-        HTTPException: If user's role is not Admin
+        *allowed_roles: list of UserRole enum
     """
 
-    @wraps(func)
-    async def wrapper(*args, **kwargs):
-        request = get_request_from_jwt(kwargs=kwargs)
-        authorization = get_authorization_from_request(request=request)
-        token = verify_scheme_and_return_token(authorization=authorization)
+    def decorator(func: Callable) -> Callable:
+        """
+        Decorator for authorizing user
 
-        token_data = decode_access_token(token=token)
-        user_email = token_data.email
-        user_role = token_data.role
+        Args:
+            func: function/end point to use this decorator
 
-        handle_missing_email_in_request(user_email=user_email)
+        Returns:
+            Callable: Returns wrapper
 
-        if user_role != UserRole.ADMIN.value:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you are a {user_role}",
-            )
+        Raises:
+            HTTPException: If user's role is not Admin
+        """
 
-        request.state.email = user_email
-        request.state.role = user_role
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            request = get_request_from_jwt(kwargs=kwargs)
+            authorization = get_authorization_from_request(request=request)
+            token = verify_scheme_and_return_token(authorization=authorization)
 
-        return await func(*args, **kwargs)
+            token_data = decode_access_token(token=token)
+            user_email = token_data.email
+            user_role = token_data.role
 
-    return wrapper
+            handle_missing_email_in_request(user_email=user_email)
 
+            if user_role not in UserRole.get_values(roles=allowed_roles):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=f"Unauthorized to perform action, you are a {user_role}",
+                )
 
-def authorize_manager_and_above(func: Callable):
-    """
-    Decorator for authorizing manager
+            request.state.email = user_email
+            request.state.role = user_role
 
-    Args:
-        func: function/end point to use this decorator
+            return await func(*args, **kwargs)
 
-    Returns:
-        Callable: Returns wrapper
+        return wrapper
 
-    Raises:
-        HTTPException: If user's role is not manager
-    """
-
-    @wraps(func)
-    async def wrapper(*args, **kwargs):
-        request = get_request_from_jwt(kwargs=kwargs)
-        authorization = get_authorization_from_request(request=request)
-        token = verify_scheme_and_return_token(authorization=authorization)
-
-        token_data = decode_access_token(token=token)
-        user_email = token_data.email
-        user_role = token_data.role
-
-        handle_missing_email_in_request(user_email=user_email)
-
-        if user_role not in [UserRole.MANAGER.value, UserRole.ADMIN.value]:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you are a {user_role}",
-            )
-
-        request.state.email = user_email
-        request.state.role = user_role
-
-        return await func(*args, **kwargs)
-
-    return wrapper
-
-
-def authorize_staff_and_above(func: Callable):
-    """
-    Decorator for authorizing staff
-
-    Args:
-        func: function/end point to use this decorator
-
-    Returns:
-        Callable: Returns wrapper
-
-    Raises:
-        HTTPException: If user's role is not staff
-    """
-
-    @wraps(func)
-    async def wrapper(*args, **kwargs):
-        request = get_request_from_jwt(kwargs=kwargs)
-        authorization = get_authorization_from_request(request=request)
-        token = verify_scheme_and_return_token(authorization=authorization)
-
-        token_data = decode_access_token(token=token)
-        user_email = token_data.email
-        user_role = token_data.role
-
-        handle_missing_email_in_request(user_email=user_email)
-
-        if user_role not in UserRole.get_values():
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you are a {user_role}",
-            )
-
-        request.state.email = user_email
-        request.state.role = user_role
-
-        return await func(*args, **kwargs)
-
-    return wrapper
+    return decorator
 
 
 def handle_missing_email_in_request(user_email: str) -> None:

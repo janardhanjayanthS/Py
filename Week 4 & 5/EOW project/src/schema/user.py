@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 from typing import Optional
 
@@ -31,8 +33,26 @@ class UserRole(Enum):
     STAFF: str = "staff"
 
     @staticmethod
-    def get_values() -> list[str]:
+    def get_all_values() -> list[str]:
+        """
+        Returns list of values of all available enums
+        Returns:
+            list[str]: list containing enum values
+        """
         return [role.value for role in UserRole]
+
+    @staticmethod
+    def get_values(roles: tuple[UserRole]) -> tuple[str]:
+        """
+        Returns value of enums from a tuple of enum objects
+
+        Args:
+            roles: tuple with enum objects
+
+        Returns:
+            tuple[str]: tuple with enum strings
+        """
+        return (role.value for role in roles)
 
 
 class BaseUser(BaseModel):

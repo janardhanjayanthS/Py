@@ -9,19 +9,16 @@ from src.core.api_utility import (
 )
 from src.core.constants import ResponseStatus
 from src.core.database import add_commit_refresh_db, get_db
-from src.core.decorators import (
-    authorize_admin,
-    authorize_manager_and_above,
-    authorize_staff_and_above,
-)
+from src.core.decorators import required_roles
 from src.models.models import Category
 from src.schema.category import CategoryCreate, CategoryUpdate
+from src.schema.user import UserRole
 
 category = APIRouter()
 
 
 @category.get("/category/all")
-@authorize_staff_and_above
+@required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
 async def get_all_category(db: Session = Depends(get_db)):
     all_categories = db.query(Category).all()
     return {
@@ -31,7 +28,7 @@ async def get_all_category(db: Session = Depends(get_db)):
 
 
 @category.get("/category")
-@authorize_staff_and_above
+@required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
 async def get_specifc_category(category_id: int, db: Session = Depends(get_db)):
     category = db.query(Category).filter_by(id=category_id).first()
     if not category:
@@ -47,7 +44,7 @@ async def get_specifc_category(category_id: int, db: Session = Depends(get_db)):
 
 
 @category.post("/category")
-@authorize_manager_and_above
+@required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def add_category(category_create: CategoryCreate, db: Session = Depends(get_db)):
     check_existing_category_using_name(category=category_create, db=db)
     check_existing_category_using_id(category=category_create, db=db)
@@ -60,7 +57,7 @@ async def add_category(category_create: CategoryCreate, db: Session = Depends(ge
 
 
 @category.put("/category/update")
-@authorize_manager_and_above
+@required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def update_category(
     category_update: CategoryUpdate, db: Session = Depends(get_db)
 ):
@@ -94,7 +91,7 @@ async def update_category(
 
 
 @category.delete("/category/delete")
-@authorize_admin
+@required_roles(UserRole.ADMIN)
 async def delete_category(
     request: Request,
     category_id: int,
