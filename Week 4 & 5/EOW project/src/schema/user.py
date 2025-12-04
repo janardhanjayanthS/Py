@@ -21,14 +21,14 @@ class UserRole(Enum):
     Enum for user roles - RBAC
 
     Attributes:
-        A: admin role - GET/POST/PUT/PATCH/DELETE
-        M: manager role - GET/POST/PUT/PATCH
-        S: staff role - GET
+        ADMIN: admin role - GET/POST/PUT/PATCH/DELETE
+        MANAGER: manager role - GET/POST/PUT/PATCH
+        STAFF: staff role - GET
     """
 
-    A: str = "admin"
-    M: str = "manager"
-    S: str = "staff"
+    ADMIN: str = "admin"
+    MANAGER: str = "manager"
+    STAFF: str = "staff"
 
     @staticmethod
     def get_values() -> list[str]:

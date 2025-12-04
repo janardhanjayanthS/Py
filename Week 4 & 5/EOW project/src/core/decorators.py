@@ -11,7 +11,20 @@ from src.models.models import User
 from src.schema.user import UserRole
 
 
-def authorize_admin(func: Callable):
+def authorize_admin(func: Callable) -> Callable:
+    """
+    Decorator for authorizing admin
+
+    Args:
+        func: function/end point to use this decorator
+
+    Returns:
+        Callable: Returns wrapper
+
+    Raises:
+        HTTPException: If user's role is not Admin
+    """
+
     @wraps(func)
     async def wrapper(*args, **kwargs):
         request = get_request_from_jwt(kwargs=kwargs)
@@ -22,15 +35,12 @@ def authorize_admin(func: Callable):
         user_email = token_data.email
         user_role = token_data.role
 
-        if not user_email:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
-            )
+        handle_missing_email_in_request(user_email=user_email)
 
-        if user_role != UserRole.A.value:
+        if user_role != UserRole.ADMIN.value:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you are {user_role}",
+                detail=f"Unauthorized to perform action, you role is {user_role}",
             )
 
         request.state.email = user_email
@@ -42,6 +52,19 @@ def authorize_admin(func: Callable):
 
 
 def authorize_manager(func: Callable):
+    """
+    Decorator for authorizing admin
+
+    Args:
+        func: function/end point to use this decorator
+
+    Returns:
+        Callable: Returns wrapper
+
+    Raises:
+        HTTPException: If user's role is not manager
+    """
+
     @wraps(func)
     async def wrapper(*args, **kwargs):
         request = get_request_from_jwt(kwargs=kwargs)
@@ -52,15 +75,12 @@ def authorize_manager(func: Callable):
         user_email = token_data.email
         user_role = token_data.role
 
-        if not user_email:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
-            )
+        handle_missing_email_in_request(user_email=user_email)
 
-        if user_role != UserRole.M.value:
+        if user_role != UserRole.MANAGER.value:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you are {user_role}",
+                detail=f"Unauthorized to perform action, you role is {user_role}",
             )
 
         request.state.email = user_email
@@ -72,6 +92,19 @@ def authorize_manager(func: Callable):
 
 
 def authorize_staff(func: Callable):
+    """
+    Decorator for authorizing admin
+
+    Args:
+        func: function/end point to use this decorator
+
+    Returns:
+        Callable: Returns wrapper
+
+    Raises:
+        HTTPException: If user's role is not staff
+    """
+
     @wraps(func)
     async def wrapper(*args, **kwargs):
         request = get_request_from_jwt(kwargs=kwargs)
@@ -82,15 +115,12 @@ def authorize_staff(func: Callable):
         user_email = token_data.email
         user_role = token_data.role
 
-        if not user_email:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
-            )
+        handle_missing_email_in_request(user_email=user_email)
 
-        if user_role != UserRole.S.value:
+        if user_role != UserRole.STAFF.value:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Unauthorized to perform action, you are {user_role}",
+                detail=f"Unauthorized to perform action, you role is {user_role}",
             )
 
         request.state.email = user_email
@@ -99,6 +129,22 @@ def authorize_staff(func: Callable):
         return await func(*args, **kwargs)
 
     return wrapper
+
+
+def handle_missing_email_in_request(user_email: str) -> None:
+    """
+    Handles missing email in request
+
+    Args:
+        user_email: email id of user
+
+    Raises:
+        HTTPException: if user_email(param) is empty
+    """
+    if not user_email:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+        )
 
 
 def get_authorization_from_request(request: Request) -> str:

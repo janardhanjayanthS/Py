@@ -26,8 +26,6 @@ user = APIRouter()
 
 
 @user.post("/user/register", response_model=WrapperUserResponse)
-@authorize_admin
-@authorize_manager
 async def register_user(create_user: UserRegister, db: Session = Depends(get_db)):
     if check_existing_user_using_email(user=create_user, db=db):
         raise HTTPException(
@@ -48,9 +46,6 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
 
 
 @user.post("/user/login")
-@authorize_admin
-@authorize_manager
-@authorize_staff
 async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
     user = authenticate_user(
         db=db, email=user_login.email, password=user_login.password
