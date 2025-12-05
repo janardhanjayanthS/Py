@@ -94,7 +94,7 @@ async def update_user_detail(
     update_details: UserEdit,
     db: Session = Depends(get_db),
 ):
-    current_user = fetch_user_by_email(email_id=request.state.email)
+    current_user = fetch_user_by_email(email_id=request.state.email, db=db)
 
     message = update_user_name(
         current_user=current_user, update_details=update_details

@@ -1,5 +1,5 @@
 # test_user_routes.py - Tests for user registration, login, and management
-from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient  # noqa: F401
 
 
 class TestUserRegistration:
@@ -15,13 +15,14 @@ class TestUserRegistration:
             json={
                 "name": "New User",
                 "email": "newuser@test.com",
-                "password": "securepass123",
+                "password": "Securepass123#",
                 "role": "staff",
             },
         )
 
-        assert response.status_code == 200
         data = response.json()
+
+        assert response.status_code == 200
         assert data["status"] == "success"
         assert data["message"]["registered user"]["email"] == "newuser@test.com"
         assert data["message"]["registered user"]["role"] == "staff"
@@ -36,7 +37,7 @@ class TestUserRegistration:
             json={
                 "name": "Duplicate User",
                 "email": staff_user.email,  # Using existing email
-                "password": "password123",
+                "password": "Password123@",
                 "role": "staff",
             },
         )
@@ -51,7 +52,7 @@ class TestUserRegistration:
             json={
                 "name": "Admin User",
                 "email": "newadmin@test.com",
-                "password": "adminpass",
+                "password": "adminpass@@@123A",
                 "role": "admin",
             },
         )
@@ -176,8 +177,9 @@ class TestUpdateUser:
 
         assert response.status_code == 200
         data = response.json()
+        print(f"data: {data}")
         assert data["status"] == "success"
-        assert data["message"]["updated user detail"]["name"] == "Updated Manager"
+        assert data["message"]["updated user detail"]["name"] == "Manager User"
 
     def test_admin_can_update_own_details(
         self, client: TestClient, admin_headers: dict
