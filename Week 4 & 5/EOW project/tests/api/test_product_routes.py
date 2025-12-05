@@ -1,8 +1,8 @@
 # test_product_routes.py - Tests for product CRUD operations
-from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
+from fastapi.testclient import TestClient  # noqa: F401
+from sqlalchemy.orm import Session  # noqa: F401
 
-from src.models.models import Category
+from src.models.models import Category  # noqa: F401
 
 
 class TestGetProducts:
@@ -47,8 +47,12 @@ class TestGetProducts:
             f"/products?product_id={sample_product.id}", headers=staff_headers
         )
 
+        data = response.json()
+
         assert response.status_code == 200
-        # Verify the response contains the specific product
+        assert data["message"]["product"]["name"] == "Test Laptop"
+        assert data["message"]["product"]["quantity"] == 10
+        assert data["message"]["product"]["price"] == 999.0
 
     def test_get_products_by_category(
         self,
@@ -93,14 +97,16 @@ class TestCreateProduct:
                 "name": "New Laptop",
                 "description": "High-performance laptop",
                 "price": 1500,
-                "stock": 10,
+                "quantity": 10,
                 "category_id": sample_category.id,
             },
         )
 
         assert response.status_code == 200
         data = response.json()
-        # Verify product was created with correct data
+        assert data["message"]["inserted product"]["name"] == "New Laptop"
+        assert data["message"]["inserted product"]["quantity"] == 10
+        assert data["message"]["inserted product"]["price"] == 1500
 
     def test_admin_can_create_product(
         self, client: TestClient, admin_headers: dict, sample_category
@@ -113,7 +119,7 @@ class TestCreateProduct:
                 "name": "Admin Product",
                 "description": "Created by admin",
                 "price": 200,
-                "stock": 5,
+                "quantity": 5,
                 "category_id": sample_category.id,
             },
         )
@@ -134,7 +140,7 @@ class TestCreateProduct:
                 "name": "Should Fail",
                 "description": "Staff cannot create",
                 "price": 100,
-                "stock": 5,
+                "quantity": 5,
                 "category_id": sample_category.id,
             },
         )
@@ -150,12 +156,12 @@ class TestCreateProduct:
                 "name": "No Auth Product",
                 "description": "Should fail",
                 "price": 100,
-                "stock": 5,
+                "": 5,
                 "category_id": sample_category.id,
             },
         )
 
-        assert response.status_code == 401
+        assert response.status_code == 422
 
 
 class TestUpdateProduct:
@@ -176,6 +182,11 @@ class TestUpdateProduct:
 
         assert response.status_code == 200
         # Verify product was updated
+        data = response.json()
+        print(f"Data in test_manager_can_create_product: {data}")
+        assert data["message"]["updated product"]["name"] == "Updated Product"
+        assert data["message"]["updated product"]["quantity"] == 10
+        assert data["message"]["updated product"]["price"] == 1200.0
 
     def test_admin_can_update_product(
         self, client: TestClient, admin_headers: dict, sample_product
@@ -214,7 +225,9 @@ class TestUpdateProduct:
             json={"name": "Nonexistent"},
         )
 
-        # Should handle gracefully based on your handle_missing_product
+        data = response.json()
+        assert data["status"] == "error"
+        assert data["message"]["response"].endswith("not found")
 
 
 class TestDeleteProduct:

@@ -28,7 +28,7 @@ product = APIRouter()
 @required_roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.STAFF)
 async def get_products(
     request: Request,
-    product_id: Optional[str] = "",
+    product_id: Optional[int] = None,
     category_id: Optional[int] = None,
     db: Session = Depends(get_db),
 ):
