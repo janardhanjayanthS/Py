@@ -19,54 +19,68 @@ category = APIRouter()
 
 @category.get("/category/all")
 @required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
-async def get_all_category(db: Session = Depends(get_db)):
+async def get_all_category(request: Request, db: Session = Depends(get_db)):
+    current_user_email = request.state.email
     all_categories = db.query(Category).all()
     return {
         "status": ResponseStatus.S.value,
-        "message": {"all categories": all_categories},
+        "message": {
+            "current user's email": current_user_email,
+            "all categories": all_categories,
+        },
     }
 
 
 @category.get("/category")
 @required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
-async def get_specifc_category(category_id: int, db: Session = Depends(get_db)):
+async def get_specifc_category(
+    request: Request, category_id: int, db: Session = Depends(get_db)
+):
     category = db.query(Category).filter_by(id=category_id).first()
     if not category:
         return {
             "status": ResponseStatus.E.value,
-            "message": {"response": f"Unable to find category with id - {category_id}"},
+            "message": {
+                "response": f"Unable to find category with id - {category_id}",
+            },
         }
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"requested category": category},
+        "message": {
+            "requested category": category,
+        },
     }
 
 
 @category.post("/category")
 @required_roles(UserRole.MANAGER, UserRole.ADMIN)
-async def add_category(category_create: CategoryCreate, db: Session = Depends(get_db)):
+async def add_category(
+    request: Request, category_create: CategoryCreate, db: Session = Depends(get_db)
+):
     check_existing_category_using_name(category=category_create, db=db)
     check_existing_category_using_id(category=category_create, db=db)
     db_category = Category(**category_create.model_dump())
     add_commit_refresh_db(object=db_category, db=db)
     return {
         "status": ResponseStatus.S.value,
-        "message": {"new category": db_category},
+        "message": {
+            "new category": db_category,
+        },
     }
 
 
 @category.put("/category/update")
 @required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def update_category(
-    category_update: CategoryUpdate, db: Session = Depends(get_db)
+    request: Request, category_update: CategoryUpdate, db: Session = Depends(get_db)
 ):
     existing_category = get_category_by_id(category_id=category_update.id, db=db)
     if not existing_category or existing_category is None:
         return {
             "status": ResponseStatus.E.value,
             "message": {
-                "response": f"Unable to find category with id - {category_update.id}"
+                "response": f"Unable to find category with id - {category_update.id}",
             },
         }
 
@@ -86,7 +100,9 @@ async def update_category(
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"updated category details": category_update},
+        "message": {
+            "updated category details": category_update,
+        },
     }
 
 
@@ -97,13 +113,11 @@ async def delete_category(
     category_id: int,
     db: Session = Depends(get_db),
 ):
-    current_user_email = request.state.email
     category = get_category_by_id(category_id=category_id, db=db)
     if not category or category is None:
         return {
             "status": ResponseStatus.E.value,
             "message": {
-                "user email": current_user_email,
                 "response": f"Unable to find category with id - {category_id}",
             },
         }
@@ -113,5 +127,5 @@ async def delete_category(
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user_email, "deleted category": category},
+        "message": {"deleted category": category},
     }

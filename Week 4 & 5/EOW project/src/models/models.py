@@ -1,5 +1,5 @@
 from sqlalchemy import ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.core.database import Base
 
@@ -39,4 +39,3 @@ class Product(Base):
     category_id: Mapped[int] = mapped_column(
         ForeignKey("product_category.id", ondelete="CASCADE"), nullable=False
     )
-    category: Mapped["Category"] = relationship()

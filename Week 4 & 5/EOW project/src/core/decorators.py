@@ -30,13 +30,18 @@ def required_roles(*allowed_roles):
             Callable: Returns wrapper
 
         Raises:
-            HTTPException: If user's role is not Admin
+            HTTPException: If user's role is not authorized
         """
 
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            request = get_request_from_jwt(kwargs=kwargs)
+            # Try to get from kwargs first (production)
+            request = kwargs.get("request", None)
+
+            handle_missing_request_object(request=request)
+
             authorization = get_authorization_from_request(request=request)
+
             token = verify_scheme_and_return_token(authorization=authorization)
 
             token_data = decode_access_token(token=token)
@@ -45,12 +50,14 @@ def required_roles(*allowed_roles):
 
             handle_missing_email_in_request(user_email=user_email)
 
+            # Check if user role is authorized
             if user_role not in UserRole.get_values(roles=allowed_roles):
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail=f"Unauthorized to perform action, you are a {user_role}",
                 )
 
+            # Set user info on request state
             request.state.email = user_email
             request.state.role = user_role
 
@@ -59,6 +66,23 @@ def required_roles(*allowed_roles):
         return wrapper
 
     return decorator
+
+
+def handle_missing_request_object(request: Request) -> None:
+    """
+    Raises error if request object is not found in kwargs, and args
+
+    Args:
+        request: request object from client's request
+
+    Raises:
+        HTTPException: if request object is None
+    """
+    if not request:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Request object missing",
+        )
 
 
 def handle_missing_email_in_request(user_email: str) -> None:
