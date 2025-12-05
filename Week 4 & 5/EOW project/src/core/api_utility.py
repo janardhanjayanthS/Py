@@ -10,6 +10,7 @@ from src.core.database import (
     hash_password,
     verify_password,
 )
+from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
 from src.core.log import log_error
 from src.models.models import Category, Product, User
 from src.schema.category import BaseCategory
@@ -300,13 +301,37 @@ def post_product(
     if not category:
         return handle_missing_category(category_id=product.category_id)
 
-    db_product = Product(**product.model_dump())  # type: ignore
+    db_product = Product(**product.model_dump())
+    if product.id is not None:
+        db_product = apply_discount_or_tax(product=db_product)
+
     add_commit_refresh_db(object=db_product, db=db)
 
     return {
         "status": ResponseStatus.S.value,
         "message": {"user email": user_email, "inserted product": db_product},
     }
+
+
+def apply_discount_or_tax(product: Product) -> Product:
+    """
+    Applies dicount or tax to product's price
+
+    Args:
+        product: db product object
+
+    Returns:
+        Product: db product object
+    """
+    price = ConcretePrice(amount=product.price)
+    if product.id % 2 == 0:
+        price = TaxDecorator(price=price, tax_percentage=0.2)
+        product.price_type = "taxed"
+    else:
+        price = DiscountDecorator(price=price, discount_percentage=0.2)
+        product.price_type = "discounted"
+    product.price = price.get_amount()
+    return product
 
 
 def get_all_products(user_email: str, db: Session) -> dict:

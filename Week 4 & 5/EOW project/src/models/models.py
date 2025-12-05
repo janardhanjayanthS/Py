@@ -32,6 +32,9 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
     price: Mapped[float] = mapped_column(nullable=False)
+    price_type: Mapped[str] = mapped_column(
+        String(50), nullable=False, server_default="regular"
+    )
 
     category_id: Mapped[int] = mapped_column(
         ForeignKey("product_category.id", ondelete="CASCADE"), nullable=False
