@@ -36,13 +36,11 @@ async def get_all_category(request: Request, db: Session = Depends(get_db)):
 async def get_specifc_category(
     request: Request, category_id: int, db: Session = Depends(get_db)
 ):
-    current_user_email = request.state.email
     category = db.query(Category).filter_by(id=category_id).first()
     if not category:
         return {
             "status": ResponseStatus.E.value,
             "message": {
-                "current user's email": current_user_email,
                 "response": f"Unable to find category with id - {category_id}",
             },
         }
@@ -50,7 +48,6 @@ async def get_specifc_category(
     return {
         "status": ResponseStatus.S.value,
         "message": {
-            "current user's email": current_user_email,
             "requested category": category,
         },
     }
@@ -61,7 +58,6 @@ async def get_specifc_category(
 async def add_category(
     request: Request, category_create: CategoryCreate, db: Session = Depends(get_db)
 ):
-    current_user_email = request.state.email
     check_existing_category_using_name(category=category_create, db=db)
     check_existing_category_using_id(category=category_create, db=db)
     db_category = Category(**category_create.model_dump())
@@ -69,7 +65,6 @@ async def add_category(
     return {
         "status": ResponseStatus.S.value,
         "message": {
-            "current user's email": current_user_email,
             "new category": db_category,
         },
     }
@@ -80,13 +75,11 @@ async def add_category(
 async def update_category(
     request: Request, category_update: CategoryUpdate, db: Session = Depends(get_db)
 ):
-    current_user_email = request.state.email
     existing_category = get_category_by_id(category_id=category_update.id, db=db)
     if not existing_category or existing_category is None:
         return {
             "status": ResponseStatus.E.value,
             "message": {
-                "current user's email": current_user_email,
                 "response": f"Unable to find category with id - {category_update.id}",
             },
         }
@@ -96,7 +89,6 @@ async def update_category(
         return {
             "status": ResponseStatus.E.value,
             "message": {
-                "current user's email": current_user_email,
                 "response": "found existing category with same name",
                 "category": category_by_name,
             },
@@ -109,7 +101,6 @@ async def update_category(
     return {
         "status": ResponseStatus.S.value,
         "message": {
-            "current user's email": current_user_email,
             "updated category details": category_update,
         },
     }
@@ -122,13 +113,11 @@ async def delete_category(
     category_id: int,
     db: Session = Depends(get_db),
 ):
-    current_user_email = request.state.email
     category = get_category_by_id(category_id=category_id, db=db)
     if not category or category is None:
         return {
             "status": ResponseStatus.E.value,
             "message": {
-                "user email": current_user_email,
                 "response": f"Unable to find category with id - {category_id}",
             },
         }
@@ -138,5 +127,5 @@ async def delete_category(
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user_email, "deleted category": category},
+        "message": {"deleted category": category},
     }
