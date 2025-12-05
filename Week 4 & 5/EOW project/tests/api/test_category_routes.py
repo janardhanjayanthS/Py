@@ -1,8 +1,8 @@
 # test_category_routes.py - Complete tests for category management
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session  # noqa: F401
 
-from src.models.models import Category
+from src.models.models import Category, Product  # noqa: F401
 
 
 class TestGetAllCategories:
@@ -17,6 +17,8 @@ class TestGetAllCategories:
         This is a read-only operation accessible to all users.
         """
         response = client.get("/category/all", headers=staff_headers)
+
+        print("response", response.json())
 
         assert response.status_code == 200
         data = response.json()
@@ -563,19 +565,194 @@ class TestDeleteCategory:
     ):
         """
         Test deleting a category that has products associated with it.
-        This tests cascade delete behavior or foreign key constraints.
+        Since you're using ON DELETE CASCADE, deleting the category should:
+        1. Successfully delete the category (200 status)
+        2. Automatically delete all associated products (cascade behavior)
+        3. Verify products are also deleted from database
         """
-        # sample_product is linked to sample_category
+        # Store IDs before objects are detached
         category_id = sample_product.category_id
+        product_id = sample_product.id
 
+        # Verify category and product exist before deletion
+        category_before = test_db.query(Category).filter_by(id=category_id).first()
+        product_before = test_db.query(Product).filter_by(id=product_id).first()
+        assert category_before is not None, "Category should exist before deletion"
+        assert product_before is not None, "Product should exist before deletion"
+
+        # Delete the category
         response = client.delete(
             f"/category/delete?category_id={category_id}", headers=admin_headers
         )
 
-        # Behavior depends on your database constraints
-        # Either succeeds with cascade delete, or fails with FK error
-        # Adjust assertion based on your expected behavior
-        assert response.status_code in [200, 400, 500]
+        # Should succeed because of CASCADE DELETE
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "success"
+        assert "deleted category" in data["message"]
+
+        # IMPORTANT: Expire all objects and refresh session
+        test_db.expire_all()
+
+        # Verify category is deleted
+        category_after = test_db.query(Category).filter_by(id=category_id).first()
+        assert category_after is None, "Category should be deleted from database"
+
+        # Verify associated product is also deleted (CASCADE behavior)
+        product_after = test_db.query(Product).filter_by(id=product_id).first()
+        assert product_after is None, (
+            "Product should be cascade deleted when category is deleted"
+        )
+
+        print(
+            f"✅ Category {category_id} and its associated product {product_id} successfully deleted via CASCADE"
+        )
+
+    def test_delete_category_cascades_multiple_products(
+        self, client: TestClient, admin_headers: dict, test_db: Session, sample_category
+    ):
+        """
+        Test that deleting a category cascades to ALL associated products.
+        Create multiple products in same category, delete category, verify all products deleted.
+        """
+        # Store category ID before potential detachment
+        category_id = sample_category.id
+
+        # Create multiple products in the same category
+        product_ids = []
+        for i in range(3):
+            product = Product(
+                id=100 + i,
+                name=f"Test Product {i}",
+                price=100 * (i + 1),
+                quantity=10,
+                category_id=category_id,
+            )
+            test_db.add(product)
+            product_ids.append(100 + i)  # Store ID, not object reference
+        test_db.commit()
+
+        # Verify all products exist
+        for product_id in product_ids:
+            assert test_db.query(Product).filter_by(id=product_id).first() is not None
+
+        # Delete the category
+        response = client.delete(
+            f"/category/delete?category_id={category_id}", headers=admin_headers
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "success"
+
+        # Expire session to force fresh queries
+        test_db.expire_all()
+
+        # Verify category is deleted
+        deleted_category = test_db.query(Category).filter_by(id=category_id).first()
+        assert deleted_category is None
+
+        # Verify ALL products are cascade deleted
+        for product_id in product_ids:
+            deleted_product = test_db.query(Product).filter_by(id=product_id).first()
+            assert deleted_product is None, (
+                f"Product {product_id} should be cascade deleted"
+            )
+
+        print(
+            f"✅ Category and all {len(product_ids)} associated products successfully cascade deleted"
+        )
+
+    def test_cascade_delete_preserves_other_categories_products(
+        self, client: TestClient, admin_headers: dict, test_db: Session
+    ):
+        """
+        Test that CASCADE DELETE only affects products in the deleted category.
+        Products in other categories should remain untouched.
+        """
+        # Create two categories
+        category1 = Category(id=200, name="electronics")
+        category2 = Category(id=201, name="furniture")
+        test_db.add(category1)
+        test_db.add(category2)
+        test_db.commit()
+
+        # Store IDs immediately
+        cat1_id = 200
+        cat2_id = 201
+
+        # Create products in each category
+        product_cat1 = Product(
+            id=200, name="Laptop", price=1000, quantity=5, category_id=cat1_id
+        )
+        product_cat2 = Product(
+            id=201, name="Chair", price=200, quantity=10, category_id=cat2_id
+        )
+        test_db.add(product_cat1)
+        test_db.add(product_cat2)
+        test_db.commit()
+
+        # Store product IDs
+        prod1_id = 200
+        prod2_id = 201
+
+        # Delete category1
+        response = client.delete(
+            f"/category/delete?category_id={cat1_id}", headers=admin_headers
+        )
+        assert response.status_code == 200
+
+        # Expire session
+        test_db.expire_all()
+
+        # Verify category1 and its product are deleted
+        assert test_db.query(Category).filter_by(id=cat1_id).first() is None
+        assert test_db.query(Product).filter_by(id=prod1_id).first() is None
+
+        # Verify category2 and its product still exist (NOT affected by cascade)
+        assert test_db.query(Category).filter_by(id=cat2_id).first() is not None
+        assert test_db.query(Product).filter_by(id=prod2_id).first() is not None
+
+        print(
+            "✅ CASCADE DELETE only affected target category, other categories preserved"
+        )
+
+    def test_cascade_delete_empty_category(
+        self, client: TestClient, admin_headers: dict, test_db: Session
+    ):
+        """
+        Test deleting a category with no products.
+        Should succeed normally without cascade complications.
+        """
+        # Create category with no products
+        empty_category = Category(id=300, name="empty_category")
+        test_db.add(empty_category)
+        test_db.commit()
+
+        category_id = 300
+
+        # Verify no products in this category
+        products_count = (
+            test_db.query(Product).filter_by(category_id=category_id).count()
+        )
+        assert products_count == 0
+
+        # Delete the empty category
+        response = client.delete(
+            f"/category/delete?category_id={category_id}", headers=admin_headers
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "success"
+
+        # Expire session
+        test_db.expire_all()
+
+        # Verify deletion
+        assert test_db.query(Category).filter_by(id=category_id).first() is None
+
+        print("✅ Empty category deleted successfully without cascade issues")
 
     def test_cannot_delete_same_category_twice(
         self, client: TestClient, admin_headers: dict, test_db: Session
@@ -711,45 +888,3 @@ class TestCategoryIntegrationWorkflows:
             f"/category/delete?category_id={sample_category.id}", headers=staff_headers
         )
         assert delete_response.status_code == 401
-
-
-# ============================================================================
-# HOW TO RUN THESE TESTS
-# ============================================================================
-"""
-Run all category tests:
-    pytest test_category_routes.py -v
-
-Run specific test class:
-    pytest test_category_routes.py::TestCreateCategory -v
-
-Run specific test:
-    pytest test_category_routes.py::TestCreateCategory::test_manager_can_create_category -v
-
-Run with coverage:
-    pytest test_category_routes.py --cov=src.api --cov-report=html
-
-Run tests matching pattern:
-    pytest test_category_routes.py -k "delete" -v
-
-Run with detailed output:
-    pytest test_category_routes.py -v -s
-
-Run and stop on first failure:
-    pytest test_category_routes.py -v -x
-
-EXPECTED TEST RESULTS:
-✅ Staff: Can view categories (GET)
-❌ Staff: Cannot create/update/delete categories
-✅ Manager: Can view, create, and update categories
-❌ Manager: Cannot delete categories
-✅ Admin: Can perform all CRUD operations
-
-This file contains 40+ comprehensive tests covering:
-- All CRUD operations (Create, Read, Update, Delete)
-- Role-based access control (staff, manager, admin)
-- Authentication and authorization
-- Edge cases (duplicate names/IDs, nonexistent categories)
-- Integration workflows
-- Error handling
-"""

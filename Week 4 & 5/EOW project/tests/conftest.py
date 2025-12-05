@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
@@ -20,6 +20,26 @@ engine = create_engine(
     poolclass=StaticPool,
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_conn, connection_record):
+    """
+    Enable foreign key constraints.
+
+    - For SQLite: Explicitly enables foreign keys (required)
+    - For PostgreSQL: This is a no-op (foreign keys are always enabled)
+
+    This makes the code portable across both databases.
+    """
+    # Check if it's SQLite by trying to execute PRAGMA
+    try:
+        cursor = dbapi_conn.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+    except Exception:
+        # Not SQLite (probably PostgreSQL), which is fine - FK already enabled
+        pass
 
 
 @pytest.fixture
@@ -216,9 +236,8 @@ def sample_product(test_db: Session, sample_category: Category) -> Product:
     product = Product(
         id=1,
         name="Test Laptop",
-        description="A test laptop",
         price=999,
-        stock=10,
+        quantity=10,
         category_id=sample_category.id,
     )
     test_db.add(product)
@@ -237,25 +256,22 @@ def multiple_products(test_db: Session, sample_category: Category) -> list:
         Product(
             id=1,
             name="Laptop",
-            description="Gaming laptop",
             price=1500,
-            stock=5,
+            quantity=5,
             category_id=sample_category.id,
         ),
         Product(
             id=2,
             name="Mouse",
-            description="Wireless mouse",
             price=50,
-            stock=20,
+            quantity=20,
             category_id=sample_category.id,
         ),
         Product(
             id=3,
             name="Keyboard",
-            description="Mechanical keyboard",
             price=100,
-            stock=15,
+            quantity=15,
             category_id=sample_category.id,
         ),
     ]
