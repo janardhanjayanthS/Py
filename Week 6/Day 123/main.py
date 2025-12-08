@@ -1,0 +1,29 @@
+from constants import OPENAI_API_KEY
+from openai import OpenAI
+from openai.types.responses import Response
+from prompt import SYSTEM_PROMPT_FEW_SHOT
+from utility import print_token_information
+
+client = OpenAI(api_key=OPENAI_API_KEY)
+
+
+def get_completion_from_messages(
+    messages, model="gpt-3.5-turbo", temperature=0, max_tokens=500
+) -> Response:
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+    print_token_information(response=response)
+    return response.choices[0].message.content
+
+
+if __name__ == "__main__":
+    messages: list[dict[str, str]] = [
+        {"role": "system", "content": SYSTEM_PROMPT_FEW_SHOT}
+    ]
+    user_input: str = input("Enter Password to validate: ")
+    messages.append({"role": "user", "content": user_input})
+    print(get_completion_from_messages(messages=messages, model="gpt-4o-mini"))
