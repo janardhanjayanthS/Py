@@ -12,14 +12,8 @@ from src.core.api_utility import (
     update_user_password,
 )
 from src.core.constants import ResponseStatus
-from src.core.database import (
-    add_commit_refresh_db,
-    get_db,
-    hash_password,
-)
-from src.core.decorators import (
-    required_roles,
-)
+from src.core.database import add_commit_refresh_db, get_db, hash_password
+from src.core.decorators import required_roles
 from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
 from src.models.models import User
 from src.schema.user import (
