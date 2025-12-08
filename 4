@@ -24,7 +24,6 @@ def get_completion_from_messages(
         response = client.chat.completions.create(
             model=model,
             messages=messages,
-            reasoning_effort="medium",
         )
     print("cost: $", Decimal(calculate_token_cost(response=response, model_name=model)))
     return response.choices[0].message.content
@@ -36,13 +35,7 @@ if __name__ == "__main__":
     ]
     user_input: str = input("Enter Password to validate: ")
     messages.append({"role": "user", "content": user_input})
-    print(
-        get_completion_from_messages(
-            messages=messages, model="gpt-4o-mini", temperature=0.5
-        )
-    )
+    print(get_completion_from_messages(messages=messages, model="gpt-4o-mini"))
     print(get_completion_from_messages(messages=messages, model="gpt-5.1"))
     print(get_completion_from_messages(messages=messages, model="gpt-5-nano"))
-    print(
-        get_completion_from_messages(messages=messages, model="gpt-4.1", temperature=1)
-    )
+    print(get_completion_from_messages(messages=messages, model="gpt-4.1"))
