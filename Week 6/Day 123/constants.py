@@ -19,5 +19,6 @@ MODEL_COST_PER_MILLION_TOKENS: dict[str, dict[str, float]] = {
     GPT_4_1: {"i": 2.0, "o": 8.0},
     GPT_5_NANO: {"i": 0.05, "o": 0.40},
 }
+
 GPT_4_MODELS = {GPT_4o_MINI, GPT_4_1}
 GPT_5_MODELS = {GPT_5_1, GPT_5_NANO}

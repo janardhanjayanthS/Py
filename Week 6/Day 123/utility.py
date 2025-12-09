@@ -97,7 +97,7 @@ def get_gpt5_reasoning_token(response: Response) -> int:
     return response.usage.completion_tokens_details.reasoning_tokens
 
 
-def get_input_cost_for_model(model_name: str) -> float | None:
+def get_input_cost_for_model(model_name: str) -> Optional[float]:
     """Retrieve the input token cost per million tokens for a given model.
 
     Args:
