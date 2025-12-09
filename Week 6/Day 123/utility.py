@@ -1,3 +1,5 @@
+from typing import Optional
+
 from constants import MODEL_COST_PER_MILLION_TOKENS
 from openai.types.responses import Response
 
@@ -113,7 +115,7 @@ def get_input_cost_for_model(model_name: str) -> float | None:
         print(f"Error: {e}")
 
 
-def get_output_cost_for_model(model_name: str) -> float | None:
+def get_output_cost_for_model(model_name: str) -> Optional[float]:
     """Retrieve the output token cost per million tokens for a given model.
 
     Args:
