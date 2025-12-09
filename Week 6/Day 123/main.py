@@ -1,13 +1,11 @@
 from decimal import Decimal
 from typing import Optional
 
-from constants import GPT_4_MODELS, GPT_5_MODELS, OPENAI_API_KEY
-from openai import OpenAI
+from constants import GPT_4_MODELS, GPT_5_MODELS, client
+from evaluation import evaluate_llm_response
 from openai.types.responses import Response
 from prompt import SYSTEM_PROMPT_FEW_SHOT
 from utility import calculate_token_cost
-
-client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 def get_completion_from_messages(
@@ -37,8 +35,13 @@ def get_completion_from_messages(
         print(f"Model {model} not found")
         return
 
+    llm_response = response.choices[0].message.content
+    evaluation_score = evaluate_llm_response(
+        llm_response=llm_response, user_query=messages[-1]["content"]
+    )
+    print(f"Evaluation score: {evaluation_score}")
     print("cost: $", Decimal(calculate_token_cost(response=response, model_name=model)))
-    return response.choices[0].message.content
+    return llm_response
 
 
 if __name__ == "__main__":

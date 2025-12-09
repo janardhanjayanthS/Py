@@ -76,7 +76,7 @@ def get_gpt5_output_cost(model_name: str, response: Response) -> float:
     reasoning_tokens = get_gpt5_reasoning_token(response=response)
     output_tokens = get_output_token_from_response(response=response)
     total_output_tokens = reasoning_tokens + output_tokens
-    return total_output_tokens + (
+    return total_output_tokens * (
         get_output_cost_for_model(model_name=model_name) / 1_000_000
     )
 

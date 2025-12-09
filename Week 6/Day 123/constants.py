@@ -1,12 +1,15 @@
 from os import getenv
 
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv()
 
 
 OPENAI_API_KEY = getenv("OPENAI_API_KEY")
 DELIMITER = "####"
+
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 GPT_4o_MINI = "gpt-4o-mini"
 GPT_4_1 = "gpt-4.1"
