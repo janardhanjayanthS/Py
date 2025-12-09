@@ -1,6 +1,6 @@
 from typing import Optional
 
-from constants import MODEL_COST_PER_MILLION_TOKENS
+from constants import GPT_5_MODELS, MODEL_COST_PER_MILLION_TOKENS
 from openai.types.responses import Response
 
 
@@ -50,7 +50,7 @@ def calculate_token_cost(response: Response, model_name: str) -> float:
     input_cost = input_tokens * (
         get_input_cost_for_model(model_name=model_name) / 1_000_000
     )
-    if "5" in model_name:
+    if model_name in GPT_5_MODELS:
         output_cost = get_gpt5_output_cost(model_name=model_name, response=response)
     else:
         output_cost = output_tokens * (
@@ -73,7 +73,6 @@ def get_gpt5_output_cost(model_name: str, response: Response) -> float:
     Returns:
         float: The total output cost for the GPT-5 model response.
     """
-    print(f"Calculating full output cost for: {model_name}")
     reasoning_tokens = get_gpt5_reasoning_token(response=response)
     output_tokens = get_output_token_from_response(response=response)
     total_output_tokens = reasoning_tokens + output_tokens
