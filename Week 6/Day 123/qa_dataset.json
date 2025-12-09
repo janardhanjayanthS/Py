@@ -1,0 +1,52 @@
+[
+    {
+        "question": "password",
+        "output": "weak",
+        "reason": "Too short and lacks uppercase letters, numbers, and special characters."
+    },
+    {
+        "question": "Password123",
+        "output": "weak",
+        "reason": "Contains uppercase and numbers but no special characters and is predictable."
+    },
+    {
+        "question": "P@ssw0rd",
+        "output": "weak",
+        "reason": "Commonly used password pattern despite having mixed characters."
+    },
+    {
+        "question": "S3cure!",
+        "output": "weak",
+        "reason": "Too short even though it contains uppercase, numbers, and special characters."
+    },
+    {
+        "question": "MySecurePassword",
+        "output": "weak",
+        "reason": "Lacks numbers and special characters."
+    },
+    {
+        "question": "MyS3curePassword!",
+        "output": "strong",
+        "reason": "Long enough and includes uppercase letters, lowercase letters, numbers, and special characters."
+    },
+    {
+        "question": "A9$fK2!zQp",
+        "output": "strong",
+        "reason": "High entropy password with mixed character types and sufficient length."
+    },
+    {
+        "question": "12345678",
+        "output": "weak",
+        "reason": "Only numeric characters and highly predictable."
+    },
+    {
+        "question": "Qwerty@123",
+        "output": "weak",
+        "reason": "Uses a common keyboard pattern despite having special characters."
+    },
+    {
+        "question": "xT9!Lm2#Qz8@",
+        "output": "strong",
+        "reason": "Random, long, and includes uppercase, lowercase, numbers, and special characters."
+    }
+]
