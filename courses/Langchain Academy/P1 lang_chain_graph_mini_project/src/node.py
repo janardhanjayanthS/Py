@@ -2,13 +2,12 @@ from json import dumps
 from typing import Literal
 
 from config import BOOK_MCP_PATH
-from langchain.agents import create_agent
 from langchain_core.messages import SystemMessage, ToolMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
+from langchain_openai import ChatOpenAI
 from langgraph.types import Command, interrupt
 from lg_utility import AgentState
 from prompt import SYSTEM_PROMPT
-from schema import BaseTool
 from tool import (
     add_to_favorite_authors,
     add_to_favorite_genre,
@@ -17,7 +16,7 @@ from tool import (
     search_book,
 )
 
-TOOL_LIST: list[BaseTool] = [
+TOOL_LIST: list = [
     search_book,
     get_books,
     add_to_reading_list,
@@ -35,11 +34,8 @@ async def agent_reasoning_node(state: AgentState) -> AgentState:
     system_message = SystemMessage(content=SYSTEM_PROMPT)
     open_book_tool = await client.get_tools()
 
-    agent = create_agent(
-        model="openai:gpt-4o-mini",
-        system_prompt=SYSTEM_PROMPT,
-        tools=TOOL_LIST + open_book_tool,
-    )
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    agent = llm.bind_tools(TOOL_LIST + open_book_tool)
 
     response = await agent.ainvoke([system_message] + messages)
 
@@ -55,7 +51,7 @@ async def agent_reasoning_node(state: AgentState) -> AgentState:
 
     return AgentState(
         messages=[response],
-        pending_tools_calls=pending_tools,
+        pending_tool_calls=pending_tools,
         iteration_count=state["iteration_count"] + 1,
         should_exit=should_exit,
     )
@@ -98,7 +94,7 @@ def request_approval_node(state: AgentState) -> AgentState:
 
 async def execute_tools_node(
     state: AgentState,
-) -> Command[Literal["agent_node", "end"]]:
+) -> Command[Literal["agent_node"]]:
     print("\n⚙️  Executing tools...")
     tool_messages = []
 

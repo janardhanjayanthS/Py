@@ -1,6 +1,6 @@
 from typing import Literal
 
-from IPython.display import Image, display
+from IPython.display import Image
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 from lg_utility import AgentState
@@ -26,7 +26,8 @@ def get_compiled_graph():
 
 def display_graph(graph) -> None:
     # don't know if this works in terminal
-    display(Image(graph.get_graph().draw_mermaid_png()))
+    with open("data/graph_img.png", "wb") as file:
+        file.write(Image(graph.get_graph().draw_mermaid_png()))
 
 
 def build_graph(builder: StateGraph) -> None:

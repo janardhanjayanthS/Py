@@ -13,7 +13,7 @@ async def mainloop():
     turn_count = 1
     while True:
         turn_count += 1
-        user_input = input("Prompt to llm [or] 'e' to exit")
+        user_input = input("Prompt to llm [or] 'e' to exit: ")
 
         if user_input.lower() == "e":
             print("Tata")
@@ -23,7 +23,7 @@ async def mainloop():
             continue
 
         initial_state = {
-            "messages": HumanMessage(content=user_input),
+            "messages": [HumanMessage(content=user_input)],
             "pending_tool_calls": [],
             "awaiting_approval": False,
             "iteration_count": 0,
