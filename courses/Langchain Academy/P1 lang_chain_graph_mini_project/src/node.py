@@ -1,10 +1,11 @@
+from json import dumps
 from typing import Literal
 
 from config import BOOK_MCP_PATH
 from langchain.agents import create_agent
 from langchain_core.messages import SystemMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
-from langgraph.types import Command
+from langgraph.types import Command, interrupt
 from lg_utility import AgentState
 from prompt import SYSTEM_PROMPT
 from schema import BaseTool
@@ -77,4 +78,19 @@ async def check_approval_node(
         return Command(goto="request_approval", update={"awaiting_approval": True})
     else:
         print("INSENSITIVE action")
-        return Command(goto="request_approval", update={"awaiting_approval": False})
+        return Command(goto="execute_tools", update={"awaiting_approval": False})
+
+
+def request_approval_node(state: AgentState) -> AgentState:
+    print("🚨 APPROVAL REQUIRED")
+    for tc in state["pending_tool_calls"]:
+        print(f"Tool name: {tc['name']}")
+        print(f"Tool args: {dumps(tc['args'], indent=2)}")
+
+    approval = interrupt(
+        value={"type": "approval_request", "actions": state["pending_tool_calls"]}
+    )
+    print("\nApprove? (y/n): ", end="")
+    user_approval = input().lower().strip() == "y"
+
+    return {"approval_granted": user_approval, "awaiting_approval": False}
