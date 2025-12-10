@@ -1,7 +1,10 @@
+from typing import Literal
+
 from config import BOOK_MCP_PATH
 from langchain.agents import create_agent
 from langchain_core.messages import SystemMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
+from langgraph.types import Command
 from lg_utility import AgentState
 from prompt import SYSTEM_PROMPT
 from schema import BaseTool
@@ -55,3 +58,23 @@ async def agent_reasoning_node(state: AgentState) -> AgentState:
         iteration_count=state["iteration_count"] + 1,
         should_exit=should_exit,
     )
+
+
+async def check_approval_node(
+    state: AgentState,
+) -> Command[Literal["request_approval", "execute_tools"]]:
+    sensitive_tools = {
+        "add_to_reading_list",
+        "add_to_favorite_authors",
+        "add_to_favorite_genre",
+    }
+    needs_approval = any(
+        tc["name"] in sensitive_tools for tc in state["pending_tool_calls"]
+    )
+
+    if needs_approval:
+        print("SENSITIVE action")
+        return Command(goto="request_approval", update={"awaiting_approval": True})
+    else:
+        print("INSENSITIVE action")
+        return Command(goto="request_approval", update={"awaiting_approval": False})
