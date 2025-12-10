@@ -96,20 +96,32 @@ def request_approval_node(state: AgentState) -> AgentState:
     return {"approval_granted": user_approval, "awaiting_approval": False}
 
 
-async def execute_tools_node(state: AgentState) -> Command[Literal['agent_node', 'end']]:
+async def execute_tools_node(
+    state: AgentState,
+) -> Command[Literal["agent_node", "end"]]:
     print("\n⚙️  Executing tools...")
     tool_messages = []
 
-    for tool_call in state['pending_tool_calls']:
-        tool_name = tool_call['name']
+    for tool_call in state["pending_tool_calls"]:
+        tool_name = tool_call["name"]
         tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
 
         try:
-            result = tool_func.invoke(tool_call['args'])
+            result = tool_func.invoke(tool_call["args"])
 
             tool_msg = ToolMessage(
-                    content = str(result),
-                    tool_call_id=tool_call['id'],
-                    name=tool_name
-                )
+                content=str(result), tool_call_id=tool_call["id"], name=tool_name
+            )
             tool_messages.append(tool_msg)
+            print(f"{tool_name} completed")
+        except Exception as e:
+            error_msg = f"Error: {e}"
+            tool_msg = ToolMessage(
+                content=error_msg, tool_call_id=tool_call["id"], name=tool_name
+            )
+            tool_messages.append(tool_msg)
+            print(f"{tool_name} failed to execute, error msg: {error_msg}")
+
+    return Command(
+        goto="agent_node", update={"messages": tool_messages, "pending_tool_calls": []}
+    )
