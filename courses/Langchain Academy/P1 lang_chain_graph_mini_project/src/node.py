@@ -3,7 +3,7 @@ from typing import Literal
 
 from config import BOOK_MCP_PATH
 from langchain.agents import create_agent
-from langchain_core.messages import SystemMessage
+from langchain_core.messages import SystemMessage, ToolMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.types import Command, interrupt
 from lg_utility import AgentState
@@ -94,3 +94,22 @@ def request_approval_node(state: AgentState) -> AgentState:
     user_approval = input().lower().strip() == "y"
 
     return {"approval_granted": user_approval, "awaiting_approval": False}
+
+
+async def execute_tools_node(state: AgentState) -> Command[Literal['agent_node', 'end']]:
+    print("\n⚙️  Executing tools...")
+    tool_messages = []
+
+    for tool_call in state['pending_tool_calls']:
+        tool_name = tool_call['name']
+        tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
+
+        try:
+            result = tool_func.invoke(tool_call['args'])
+
+            tool_msg = ToolMessage(
+                    content = str(result),
+                    tool_call_id=tool_call['id'],
+                    name=tool_name
+                )
+            tool_messages.append(tool_msg)
