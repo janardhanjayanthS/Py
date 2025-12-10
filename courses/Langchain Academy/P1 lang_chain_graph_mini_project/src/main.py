@@ -4,12 +4,10 @@ from config import BOOK_MCP_PATH
 from dotenv import load_dotenv
 from hitl import get_human_approval
 from langchain.agents import create_agent
-from langchain.agents.middleware import HumanInTheLoopMiddleware
 from langchain.tools import BaseTool
 from langchain_core.messages import ToolMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.checkpoint.memory import InMemorySaver
-from langgraph.types import Command
 from prompt import SYSTEM_PROMPT
 from schema import RuntimeContext
 from tool import (
