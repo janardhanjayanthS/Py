@@ -25,6 +25,8 @@ Rules:
     use a book title, if it is pages_per_day use a achievable pages per day,
     if the reading list is asked for a month (for example) then add multiple ReadingList 
     and return the resulting reading list for the whole time period)
+- If there is a 'e' or if the user wants to exit or end the conversation, 
+    acknowledge this and prepare to end the conversation.
 
 
 reading list response format reading list format:
