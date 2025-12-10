@@ -125,3 +125,7 @@ async def execute_tools_node(
     return Command(
         goto="agent_node", update={"messages": tool_messages, "pending_tool_calls": []}
     )
+
+
+def finalize_node(state: AgentState) -> AgentState:
+    return {"iteration_count": 0}
