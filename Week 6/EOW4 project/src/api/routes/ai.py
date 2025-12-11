@@ -1,7 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, File, UploadFile
 from langchain_core.messages import HumanMessage
 from src.core.ai_utility import calculate_token_cost, get_agent
 from src.core.constants import MESSAGES, AIModels, ResponseType
+from src.core.database import add_file_as_embedding
 from src.schema.ai import Query
 
 ai = APIRouter()
@@ -35,4 +36,13 @@ async def query_response(query: Query):
 
 
 @ai.post("/ai/pdf")
-async def search_from_pdf(query: Query): ...
+async def search_from_pdf(file: UploadFile = File(...)):
+    if not file.filename.endswith(".pdf"):
+        return {
+            "response": ResponseType.ERROR.value,
+            "message": "Only supports pdf files",
+        }
+
+    contents = await file.read()
+    add_file_as_embedding(contents=contents, filename=file.filename)
+    return {}

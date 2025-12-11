@@ -15,10 +15,10 @@ class ResponseType(Enum):
 
 # DB
 PG_PWD = getenv("POSTGRESQL_PWD")
-connection = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
 
 # AI
 OPENAI_API_KEY = getenv("OPENAI_API_KEY")
+OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
 
 
 class AIModels(Enum):
