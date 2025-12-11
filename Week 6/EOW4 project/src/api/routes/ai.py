@@ -14,13 +14,25 @@ async def query_response(query: Query):
 
     ai_model: AIModels = AIModels.GPT_4o_MINI
 
-    agent = get_agent(ai_model=ai_model)
-    agent_response = agent.invoke(MESSAGES)
+    try:
+        agent = get_agent(ai_model=ai_model)
+        agent_response = agent.invoke(MESSAGES)
 
-    ai_reply = agent_response.content
-    token_cost = calculate_token_cost(agent_response.usage_metadata, ai_model=ai_model)
+        ai_reply = agent_response.content
+        token_cost = calculate_token_cost(
+            agent_response.usage_metadata, ai_model=ai_model
+        )
 
-    return {
-        "response": ResponseType.SUCCESS.value,
-        "message": {"ai response": ai_reply, "token cost": token_cost},
-    }
+        return {
+            "response": ResponseType.SUCCESS.value,
+            "message": {"ai response": ai_reply, "token cost": token_cost},
+        }
+    except Exception as e:
+        return {
+            "response": ResponseType.ERROR.value,
+            "message": f"{e}",
+        }
+
+
+@ai.post("/ai/pdf")
+async def search_from_pdf(query: Query): ...
