@@ -1,7 +1,11 @@
+import logging
+
 from constants import OPENAI_API_KEY, connection
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
+
+logging.basicConfig(level=logging.INFO)
 
 embeddings = OpenAIEmbeddings(model="text-embedding-3-large", api_key=OPENAI_API_KEY)
 collection_name = "my_docs"
@@ -26,8 +30,9 @@ documents = [
 ]
 
 if __name__ == "__main__":
+    # to add documents to vector_db in pgadmin
     # vector.add_documents(documents=documents)
     results = vector.similarity_search(query="tell me about databases", k=2)
     for result in results:
-        print(result)
+        logging.info(result)
 
