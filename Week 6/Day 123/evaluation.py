@@ -2,6 +2,7 @@ from json import JSONDecodeError, load
 from typing import Optional
 
 from constants import GPT_4o_MINI, client
+from langchain_core.prompts import PromptTemplate
 from prompt import SYSTEM_PROMPT_EVALUATION, USER_MESSAGE_EVALUATION
 
 
@@ -56,7 +57,12 @@ def get_user_message_for_evaluation_model(user_query: str, llm_response: str) ->
     if qa_data is None:
         raise ValueError("Failed to load Q&A dataset. Cannot proceed with evaluation.")
 
-    formatted_user_message_for_evaluation_model = USER_MESSAGE_EVALUATION.format(
+    eval_prompt_template = PromptTemplate(
+        input_variables=["user_message", "ideal", "llm_response"],
+        template=USER_MESSAGE_EVALUATION,
+    )
+
+    formatted_user_message_for_evaluation_model = eval_prompt_template.format(
         user_message=user_query, ideal=qa_data, llm_response=llm_response
     )
     return formatted_user_message_for_evaluation_model
