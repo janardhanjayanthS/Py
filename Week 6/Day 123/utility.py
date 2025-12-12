@@ -100,7 +100,10 @@ def get_gpt5_reasoning_token(response: Response) -> int:
     Returns:
         int: The number of reasoning tokens used by the model.
     """
-    return response.usage_metadata["output_token_details"]["reasoning"]
+    try:
+        return response.usage_metadata["output_token_details"]["reasoning"]
+    except KeyError as e:
+        logger.error(f"KeyError: {e}")
 
 
 def get_input_cost_for_model(model_name: str) -> Optional[float]:
