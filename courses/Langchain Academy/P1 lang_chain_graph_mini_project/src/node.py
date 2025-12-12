@@ -101,9 +101,12 @@ async def execute_tools_node(
     for tool_call in state["pending_tool_calls"]:
         tool_name = tool_call["name"]
         tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
+        print(f"Tool name: {tool_name}")
+        print(f"Tool func: {tool_func}")
 
         try:
             result = tool_func.invoke(tool_call["args"])
+            print(f"Tool func result: {result}")
 
             tool_msg = ToolMessage(
                 content=str(result), tool_call_id=tool_call["id"], name=tool_name
