@@ -1,7 +1,7 @@
 from fastapi import APIRouter, File, Form, UploadFile
 from langchain_core.messages import HumanMessage
 from src.core.ai_utility import calculate_token_cost, get_agent
-from src.core.constants import MESSAGES, AIModels, ResponseType
+from src.core.constants import MESSAGES, AIModels, ResponseType, logger
 from src.core.database import (
     add_file_as_embedding,
     get_formatted_ai_response,
@@ -48,7 +48,7 @@ async def search_from_pdf(query: str = Form(...), file: UploadFile = File(...)):
         }
 
     contents = await file.read()
-    print(f"Search query: {query}")
+    logger.info(f"Search query: {query}")
     file_add_response = add_file_as_embedding(contents=contents, filename=file.filename)
     query_result = query_relavent_contents(query=query)
     if query_result[0]:
