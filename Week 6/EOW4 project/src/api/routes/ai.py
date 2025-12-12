@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, Form, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
 from langchain_core.messages import HumanMessage
 from src.core.ai_utility import calculate_token_cost, get_agent
 from src.core.constants import MESSAGES, AIModels, ResponseType, logger
@@ -42,36 +42,45 @@ async def query_response(query: Query):
 @ai.post("/ai/pdf")
 async def search_from_pdf(query: str = Form(...), file: UploadFile = File(...)):
     if not file.filename.endswith(".pdf"):
+        message = "Only supports pdf files"
+        logger.error(message)
         return {
             "response": ResponseType.ERROR.value,
-            "message": "Only supports pdf files",
+            "message": message,
         }
 
-    contents = await file.read()
-    logger.info(f"Search query: {query}")
-    file_add_response = add_file_as_embedding(contents=contents, filename=file.filename)
-    query_result = query_relavent_contents(query=query)
-    if query_result[0]:
-        agent_response = get_formatted_ai_response(
-            results=query_result[1],
-            query=query,
-            ai_model=get_agent(ai_model=AIModels.GPT_4o_MINI),
+    try:
+        contents = await file.read()
+        logger.info(f"Search query: {query}")
+        file_add_response = add_file_as_embedding(
+            contents=contents, filename=file.filename
         )
-        token_cost = calculate_token_cost(
-            agent_response.usage_metadata, ai_model=AIModels.GPT_4o_MINI
-        )
+        query_result = query_relavent_contents(query=query)
+        if query_result[0]:
+            agent_response = get_formatted_ai_response(
+                results=query_result[1],
+                query=query,
+                ai_model=get_agent(ai_model=AIModels.GPT_4o_MINI),
+            )
+            token_cost = calculate_token_cost(
+                agent_response.usage_metadata, ai_model=AIModels.GPT_4o_MINI
+            )
+            return {
+                "response": ResponseType.SUCCESS.value,
+                "message": {
+                    "token cost": token_cost,
+                    "file response": file_add_response,
+                    "query response": agent_response.content,
+                },
+            }
         return {
-            "response": ResponseType.SUCCESS.value,
+            "response": ResponseType.ERROR.value,
             "message": {
-                "token cost": token_cost,
                 "file response": file_add_response,
-                "query response": agent_response.content,
+                "query response": "cannot find results for your query",
             },
         }
-    return {
-        "response": ResponseType.ERROR.value,
-        "message": {
-            "file response": file_add_response,
-            "query response": "cannot find results for your query",
-        },
-    }
+    except Exception as e:
+        message = f"Error {e}"
+        logger.error(message)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=message)

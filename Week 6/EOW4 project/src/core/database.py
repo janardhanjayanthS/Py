@@ -14,6 +14,7 @@ from src.core.constants import (
     OPENAI_API_KEY,
     OPENAI_EMBEDDING_MODEL,
     PG_PWD,
+    logger,
 )
 
 connection = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
@@ -81,7 +82,7 @@ def check_existing_file(filename: str) -> bool:
                 exists = len(results) > 0
                 return exists
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error(f"Error: {e}")
         return False
 
 
