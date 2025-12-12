@@ -3,6 +3,7 @@ from typing import Optional
 
 from constants import GPT_4_MODELS, GPT_5_MODELS, client
 from evaluation import evaluate_llm_response
+from langchain_core.messages import HumanMessage, SystemMessage
 from openai.types.responses import Response
 from prompt import SYSTEM_PROMPT_FEW_SHOT
 from utility import calculate_token_cost
@@ -45,11 +46,9 @@ def get_completion_from_messages(
 
 
 if __name__ == "__main__":
-    messages: list[dict[str, str]] = [
-        {"role": "system", "content": SYSTEM_PROMPT_FEW_SHOT}
-    ]
+    messages = [SystemMessage(content=SYSTEM_PROMPT_FEW_SHOT)]
     user_input: str = input("Enter Password to validate: ")
-    messages.append({"role": "user", "content": user_input})
+    messages.append(HumanMessage(content=user_input))
     print(
         get_completion_from_messages(
             messages=messages, model="gpt-4o-mini", temperature=0.5
