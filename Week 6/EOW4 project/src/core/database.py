@@ -1,12 +1,18 @@
 import io
 from ast import Bytes
 
+import psycopg
 import pyPDF2
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
-from src.core.constants import OPENAI_API_KEY, OPENAI_EMBEDDING_MODEL, PG_PWD
+from src.core.constants import (
+    FILTER_METADATA_BY_FILENAME_QUERY,
+    OPENAI_API_KEY,
+    OPENAI_EMBEDDING_MODEL,
+    PG_PWD,
+)
 
 connection = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
 
@@ -31,9 +37,27 @@ vector_store = PGVector(
 )
 
 
-def add_file_as_embedding(contents: Bytes, filename: str) -> None:
+def add_file_as_embedding(contents: Bytes, filename: str) -> bool:
+    if check_existing_file(filename=filename):
+        return False
     documents = get_documents_from_file_content(content=contents, filename=filename)
     vector_store.add_documents(documents)
+    return True
+
+
+def check_existing_file(filename: str) -> bool:
+    pg_connection = connection.replace("postgresql+psycopg://", "postgresql://")
+    try:
+        with psycopg.connect(pg_connection) as conn:
+            with conn.cursor() as cur:
+                cur.execute(FILTER_METADATA_BY_FILENAME_QUERY, (filename,))
+                results = cur.fetchall()
+                print(f"DB results: {results}")
+                exists = len(results) > 0
+                return exists
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
 
 
 def get_documents_from_file_content(content: Bytes, filename: str) -> list[Document]:

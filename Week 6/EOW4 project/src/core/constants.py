@@ -16,6 +16,12 @@ class ResponseType(Enum):
 # DB
 PG_PWD = getenv("POSTGRESQL_PWD")
 
+FILTER_METADATA_BY_FILENAME_QUERY = """ 
+SELECT id, document, cmetadata 
+FROM langchain_pg_embedding 
+WHERE cmetadata->>'filename' = %s
+"""
+
 # AI
 OPENAI_API_KEY = getenv("OPENAI_API_KEY")
 OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
