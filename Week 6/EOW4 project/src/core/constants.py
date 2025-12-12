@@ -3,7 +3,10 @@ from enum import Enum
 from os import getenv
 
 from dotenv import load_dotenv
+from langchain.embeddings import OpenAIEmbeddings
 from langchain_core.messages import SystemMessage
+from langchain_postgres import PGVector
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 load_dotenv()
 
@@ -23,27 +26,31 @@ class ResponseType(Enum):
     ERROR = "error"
 
 
-# DB
-PG_PWD = getenv("POSTGRESQL_PWD")
+CHUNK_SIZE = 1000
+CHUNK_OVERLAP = 200
 
-FILTER_METADATA_BY_FILENAME_QUERY = """ 
-SELECT id, document, cmetadata 
-FROM langchain_pg_embedding 
-WHERE cmetadata->>'source' = %s
-"""
+TEXT_SPLITTER = RecursiveCharacterTextSplitter(
+    chunk_size=CHUNK_SIZE,
+    chunk_overlap=CHUNK_OVERLAP,
+    length_function=len,
+    separators=["\n\n", "\n", " ", ""],
+)
+
 
 # AI
-OPENAI_API_KEY = getenv("OPENAI_API_KEY")
-OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
-
-
 class AIModels(Enum):
     GPT_4o_MINI = "gpt-4o-mini"
+
+
+OPENAI_API_KEY = getenv("OPENAI_API_KEY")
+OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
 
 
 MODEL_COST_PER_MILLION_TOKENS: dict[str, dict[str, float]] = {
     AIModels.GPT_4o_MINI.value: {"i": 0.15, "o": 0.60},
 }
+
+EMBEDDING = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL, api_key=OPENAI_API_KEY)
 
 
 SYSTEM_PROMPT = """
@@ -72,3 +79,21 @@ Instructions:
     readable sentence.
 
 Answer:"""
+
+# DB
+PG_PWD = getenv("POSTGRESQL_PWD")
+
+FILTER_METADATA_BY_FILENAME_QUERY = """ 
+SELECT id, document, cmetadata 
+FROM langchain_pg_embedding 
+WHERE cmetadata->>'source' = %s
+"""
+
+CONNECTION = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
+
+VECTOR_STORE = PGVector(
+    embeddings=EMBEDDING,
+    collection_name="uploaded_documents",
+    connection=CONNECTION,
+    use_jsonb=True,
+)
