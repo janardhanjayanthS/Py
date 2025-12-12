@@ -7,11 +7,14 @@ from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from src.core.ai_utility import get_agent
 from src.core.constants import (
+    DOCUMENT_FORMAT_PROMPT,
     FILTER_METADATA_BY_FILENAME_QUERY,
     OPENAI_API_KEY,
     OPENAI_EMBEDDING_MODEL,
     PG_PWD,
+    AIModels,
 )
 
 connection = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
@@ -37,12 +40,39 @@ vector_store = PGVector(
 )
 
 
-def add_file_as_embedding(contents: Bytes, filename: str) -> bool:
+def query_relavent_contents(query: str, k: int = 5) -> list[str]:
+    results = vector_store.similarity_search(query=query, k=k)
+    formatted_results = format_results_using_llm(
+        results=results,
+        query=query,
+        ai_model=get_agent(ai_model=get_agent(AIModels.GPT_4o_MINI)),
+    )
+
+
+def format_results_using_llm(results: list[Document], query: str, ai_model) -> str:
+    if not results:
+        return "No relevant contents for your query"
+
+    context_parts = []
+    for i, doc in enumerate(results, 1):
+        source = doc.metadata.get("source", "Unknown")
+        page = doc.metadata.get("page", "N/A")
+        content = doc.page_content[:500]
+
+        context_parts.append(f"Source {i}: {source}, Page {page}\n{content}\n")
+
+    context = "\n---\n".join(context_parts)
+    updated_prompt = DOCUMENT_FORMAT_PROMPT.format(query=query, context=context)
+    ai_response = ai_model.invoke(updated_prompt)
+    print(ai_response)
+
+
+def add_file_as_embedding(contents: Bytes, filename: str) -> str:
     if check_existing_file(filename=filename):
-        return False
+        return f"File - {filename} - already exists"
     documents = get_documents_from_file_content(content=contents, filename=filename)
     vector_store.add_documents(documents)
-    return True
+    return f"File - {filename} - added successfully"
 
 
 def check_existing_file(filename: str) -> bool:
@@ -52,7 +82,6 @@ def check_existing_file(filename: str) -> bool:
             with conn.cursor() as cur:
                 cur.execute(FILTER_METADATA_BY_FILENAME_QUERY, (filename,))
                 results = cur.fetchall()
-                print(f"DB results: {results}")
                 exists = len(results) > 0
                 return exists
     except Exception as e:

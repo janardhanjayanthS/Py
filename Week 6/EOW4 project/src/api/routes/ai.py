@@ -2,7 +2,7 @@ from fastapi import APIRouter, File, Form, UploadFile
 from langchain_core.messages import HumanMessage
 from src.core.ai_utility import calculate_token_cost, get_agent
 from src.core.constants import MESSAGES, AIModels, ResponseType
-from src.core.database import add_file_as_embedding
+from src.core.database import add_file_as_embedding, query_relavent_contents
 from src.schema.ai import Query
 
 ai = APIRouter()
@@ -45,13 +45,9 @@ async def search_from_pdf(query: str = Form(...), file: UploadFile = File(...)):
 
     contents = await file.read()
     print(f"Search query: {query}")
-    if add_file_as_embedding(contents=contents, filename=file.filename):
-        # query from that file
-        return {
-            "response": ResponseType.SUCCESS.value,
-            "message": "",
-        }
+    file_add_response = add_file_as_embedding(contents=contents, filename=file.filename)
+    query_relavent_contents(query=query)
     return {
-        "response": ResponseType.ERROR.value,
-        "message": "Uploaded file already exists in db",
+        "response": ResponseType.SUCCESS.value,
+        "message": {"file response": file_add_response},
     }

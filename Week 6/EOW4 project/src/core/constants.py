@@ -3,6 +3,7 @@ from os import getenv
 
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage
+from langchain.
 
 load_dotenv()
 
@@ -41,3 +42,21 @@ You are a helpful assistant agent, answer the question
 carefully with precise answer. 
 """
 MESSAGES = [SystemMessage(content=SYSTEM_PROMPT)]
+
+DOCUMENT_FORMAT_PROMPT = """Based on the following search results, 
+provide a clear and concise answer to the user's question.
+
+User's Question: {query}
+
+Search Results:
+{context}
+
+Instructions:
+1. Synthesize the information from the search results
+2. Provide a clear, direct answer to the question
+3. Reference which source(s) the information came from 
+    (e.g., "According to algorithms_to_live_by.pdf, page 358...")
+4. If the results don't fully answer the question, acknowledge that
+5. Keep the response concise but informative
+
+Answer:"""
