@@ -3,7 +3,6 @@ from os import getenv
 
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage
-from langchain.
 
 load_dotenv()
 
@@ -58,5 +57,8 @@ Instructions:
     (e.g., "According to algorithms_to_live_by.pdf, page 358...")
 4. If the results don't fully answer the question, acknowledge that
 5. Keep the response concise but informative
+6. Make sure that the response content does not contain any special 
+    characters for formatting (\\n, \\t, etc...). give the result as a 
+    readable sentence.
 
 Answer:"""

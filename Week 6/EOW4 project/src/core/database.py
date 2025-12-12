@@ -4,17 +4,16 @@ from ast import Bytes
 import psycopg
 import pypdf
 from langchain_core.documents import Document
+from langchain_core.messages import AIMessage
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from src.core.ai_utility import get_agent
 from src.core.constants import (
     DOCUMENT_FORMAT_PROMPT,
     FILTER_METADATA_BY_FILENAME_QUERY,
     OPENAI_API_KEY,
     OPENAI_EMBEDDING_MODEL,
     PG_PWD,
-    AIModels,
 )
 
 connection = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
@@ -40,19 +39,16 @@ vector_store = PGVector(
 )
 
 
-def query_relavent_contents(query: str, k: int = 5) -> list[str]:
+def query_relavent_contents(query: str, k: int = 5) -> bool:
     results = vector_store.similarity_search(query=query, k=k)
-    formatted_results = format_results_using_llm(
-        results=results,
-        query=query,
-        ai_model=get_agent(ai_model=get_agent(AIModels.GPT_4o_MINI)),
-    )
-
-
-def format_results_using_llm(results: list[Document], query: str, ai_model) -> str:
     if not results:
-        return "No relevant contents for your query"
+        return [False, None]
+    return [True, results]
 
+
+def get_formatted_ai_response(
+    results: list[Document], query: str, ai_model
+) -> AIMessage:
     context_parts = []
     for i, doc in enumerate(results, 1):
         source = doc.metadata.get("source", "Unknown")
@@ -64,7 +60,7 @@ def format_results_using_llm(results: list[Document], query: str, ai_model) -> s
     context = "\n---\n".join(context_parts)
     updated_prompt = DOCUMENT_FORMAT_PROMPT.format(query=query, context=context)
     ai_response = ai_model.invoke(updated_prompt)
-    print(ai_response)
+    return ai_response
 
 
 def add_file_as_embedding(contents: Bytes, filename: str) -> str:
