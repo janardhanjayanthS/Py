@@ -17,6 +17,7 @@ async def mainloop():
 
         if user_input.lower() == "e":
             print("Tata")
+            break
 
         if not user_input:
             print("please enter a message")
@@ -35,21 +36,20 @@ async def mainloop():
             async for event in agent.astream(
                 initial_state, config, stream_mode="values"
             ):
-                print(f"Event: {event}")
-                if "messages" in event and event["messages"]:
-                    last_msg = event["messages"][-1]
+                final_output = event
 
-                    if isinstance(last_msg, AIMessage) and last_msg.content:
-                        if (
-                            not hasattr(last_msg, "tool_calls")
-                            or not last_msg.tool_calls
-                        ):
-                            print(f"\n Assistant: {last_msg.content}")
-                    elif isinstance(last_msg, ToolMessage):
-                        pass
+            if final_output and "messages" in final_output:
+                last_msg = final_output["messages"][-1]
 
-                if event.get("should_exit"):
-                    print("detected exit request, type 'e' to confirm")
+                if isinstance(last_msg, AIMessage) and last_msg.content:
+                    if not hasattr(last_msg, "tool_calls") or not last_msg.tool_calls:
+                        print(f"\nAssistant: {last_msg.content}")
+                        print("-" * 100)
+                elif isinstance(last_msg, ToolMessage):
+                    pass
+
+            if event.get("should_exit"):
+                print("detected exit request, type 'e' to confirm")
         except Exception as e:
             print(f"Error: {e}")
 
@@ -59,3 +59,5 @@ async def mainloop():
 
 if __name__ == "__main__":
     asyncio.run(mainloop())
+    # TOFIX:
+    # - list all books tool is not working!

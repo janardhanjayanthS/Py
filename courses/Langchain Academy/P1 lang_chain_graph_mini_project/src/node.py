@@ -1,7 +1,7 @@
 from json import dumps
 from typing import Literal
 
-from config import BOOK_MCP_PATH
+from config import BOOK_MCP_PATH, OPENAI_API_KEY
 from langchain_core.messages import SystemMessage, ToolMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_openai import ChatOpenAI
@@ -34,7 +34,7 @@ async def agent_reasoning_node(state: AgentState) -> AgentState:
     system_message = SystemMessage(content=SYSTEM_PROMPT)
     open_book_tool = await client.get_tools()
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=OPENAI_API_KEY)
     agent = llm.bind_tools(TOOL_LIST + open_book_tool)
 
     response = await agent.ainvoke([system_message] + messages)
