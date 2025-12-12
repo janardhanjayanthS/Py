@@ -19,7 +19,7 @@ PG_PWD = getenv("POSTGRESQL_PWD")
 FILTER_METADATA_BY_FILENAME_QUERY = """ 
 SELECT id, document, cmetadata 
 FROM langchain_pg_embedding 
-WHERE cmetadata->>'filename' = %s
+WHERE cmetadata->>'source' = %s
 """
 
 # AI

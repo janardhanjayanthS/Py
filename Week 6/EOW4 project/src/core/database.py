@@ -2,11 +2,11 @@ import io
 from ast import Bytes
 
 import psycopg
-import pyPDF2
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+import pypdf
 from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src.core.constants import (
     FILTER_METADATA_BY_FILENAME_QUERY,
     OPENAI_API_KEY,
@@ -62,7 +62,7 @@ def check_existing_file(filename: str) -> bool:
 
 def get_documents_from_file_content(content: Bytes, filename: str) -> list[Document]:
     pdf_file = io.BytesIO(content)
-    pdf_reader = pyPDF2.PdfReader(pdf_file)
+    pdf_reader = pypdf.PdfReader(pdf_file)
 
     page_documents = []
 
@@ -76,6 +76,5 @@ def get_documents_from_file_content(content: Bytes, filename: str) -> list[Docum
                 )
             )
 
-    # chunked document
-    chunked_document = text_splitter.split_document(page_documents)
+    chunked_document = text_splitter.split_documents(page_documents)
     return chunked_document

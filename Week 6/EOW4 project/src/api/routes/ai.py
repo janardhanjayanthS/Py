@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile
+from fastapi import APIRouter, File, Form, UploadFile
 from langchain_core.messages import HumanMessage
 from src.core.ai_utility import calculate_token_cost, get_agent
 from src.core.constants import MESSAGES, AIModels, ResponseType
@@ -36,7 +36,7 @@ async def query_response(query: Query):
 
 
 @ai.post("/ai/pdf")
-async def search_from_pdf(file: UploadFile = File(...)):
+async def search_from_pdf(query: str = Form(...), file: UploadFile = File(...)):
     if not file.filename.endswith(".pdf"):
         return {
             "response": ResponseType.ERROR.value,
@@ -44,5 +44,14 @@ async def search_from_pdf(file: UploadFile = File(...)):
         }
 
     contents = await file.read()
-    add_file_as_embedding(contents=contents, filename=file.filename)
-    return {}
+    print(f"Search query: {query}")
+    if add_file_as_embedding(contents=contents, filename=file.filename):
+        # query from that file
+        return {
+            "response": ResponseType.SUCCESS.value,
+            "message": "",
+        }
+    return {
+        "response": ResponseType.ERROR.value,
+        "message": "Uploaded file already exists in db",
+    }
