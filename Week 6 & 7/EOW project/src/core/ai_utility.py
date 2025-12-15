@@ -1,33 +1,65 @@
 from decimal import Decimal
 
 from langchain_core.documents import Document
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda
 from langchain_openai import ChatOpenAI
 from src.core.constants import (
     CONTEXTUALIZE_PROMPT,
-    DOCUMENT_FORMAT_PROMPT,
+    HISTORY,
     MODEL_COST_PER_MILLION_TOKENS,
     OPENAI_API_KEY,
     QA_PROMPT,
     RETRIEVER,
     AIModels,
-    logger,
 )
+from src.schema.ai import Query
+
+
+def update_history(result, query: Query):
+    """Appends the user's query and the AI's response to the global conversation history.
+
+    This function is typically called after a successful LLM interaction to maintain
+    the context for future turns in a conversational application.
+
+    Args:
+        result: The result object from the LLM call, expected to have a 'content' attribute (like an AIMessage).
+        query: The user's input object, expected to have a 'query' attribute containing the question string.
+    """
+    HISTORY.append(HumanMessage(query.query))
+    HISTORY.append(AIMessage(result.content))
 
 
 def get_contextualize_rag_chain():
+    """Constructs the chain responsible for rewriting a follow-up question into a standalone,
+    contextualized question based on the chat history.
+
+    This chain is a key component of the Conversational RAG pattern.
+
+    Returns:
+        A LangChain Runnable (LCEL chain) that takes chat history and the current question
+        as input and outputs the reformulated question string.
+    """
     chain = CONTEXTUALIZE_PROMPT | get_agent(AIModels.GPT_4o_MINI) | StrOutputParser()
     return chain
 
 
 def get_conversational_rag_chain():
+    """Constructs the main Conversational Retrieval-Augmented Generation (RAG) chain.
+
+    This chain orchestrates the entire RAG process: it retrieves contextualized documents,
+    inserts them into the final QA prompt, and uses an LLM to generate the final answer.
+
+    Returns:
+        A LangChain Runnable (LCEL chain) that accepts a dictionary with 'question' and
+        'chat_history' and returns the final AIMessage response.
+    """
     chain = (
         {
             "context": RunnableLambda(contextualized_retrival) | format_docs,
             "question": lambda x: x["question"],
-            "chat_history": lambda x: x.get("question", []),
+            "chat_history": lambda x: x.get("chat_history", []),
         }
         | QA_PROMPT
         | get_agent(AIModels.GPT_4o_MINI)
@@ -36,11 +68,33 @@ def get_conversational_rag_chain():
 
 
 def format_docs(docs: Document):
+    """Formats a list of LangChain Document objects into a single, combined string.
+
+    This function is used to 'stuff' the document contents into the context variable
+    of the final prompt template.
+
+    Args:
+        docs: A list of Document objects retrieved from the vector store.
+
+    Returns:
+        A single string containing the concatenated page content of all documents,
+        separated by double newlines.
+    """
     return "\n\n".join(doc.page_content for doc in docs)
 
 
 def contextualized_retrival(input_dict):
-    print(f"Input dict: {input_dict}")
+    """Decides whether to retrieve documents using the original question or a reformulated question.
+
+    If chat history is present, it calls the contextualization chain to generate a standalone
+    question. It then uses the result to query the global retriever.
+
+    Args:
+        input_dict: A dictionary containing the current 'question' and 'chat_history'.
+
+    Returns:
+        A list of Document objects retrieved from the global RETRIEVER.
+    """
     chat_history = input_dict.get("chat_history", [])
     question = input_dict["question"]
 
@@ -48,7 +102,6 @@ def contextualized_retrival(input_dict):
         reformulated_question = get_contextualize_rag_chain().invoke(
             {"chat_history": chat_history, "question": question}
         )
-        logger.info(f"Reformulated quetion: {reformulated_question}")
     else:
         reformulated_question = question
 
@@ -131,32 +184,3 @@ def get_input_token_cost(input_tokens: int, ai_model: AIModels) -> float:
         MODEL_COST_PER_MILLION_TOKENS[ai_model.value]["i"] / 1_000_000
     )
     return input_token_cost
-
-
-def get_formatted_ai_response(
-    results: list[Document], query: str, ai_model
-) -> AIMessage:
-    """Formats the retrieved document chunks and query into a prompt and generates
-    a coherent response using the LLM (Large Language Model).
-
-    This function implements the Retrieval-Augmented Generation (RAG) pattern.
-
-    Args:
-        results: A list of Document objects retrieved from the vector store.
-        query: The original user's question.
-        ai_model: The initialized LLM instance used for generating the final answer.
-
-    Returns:
-        An AIMessage object containing the final, human-readable answer synthesized
-        from the retrieved context and the query.
-    """
-    context_parts = []
-    for i, doc in enumerate(results, 1):
-        source = doc.metadata.get("source", "Unknown")
-        page = doc.metadata.get("page", "N/A")
-        content = doc.page_content[:500]
-        context_parts.append(f"Source {i}: {source}, Page {page}\n{content}\n")
-    context = "\n---\n".join(context_parts)
-    updated_prompt = DOCUMENT_FORMAT_PROMPT.format(query=query, context=context)
-    ai_response = ai_model.invoke(updated_prompt)
-    return ai_response

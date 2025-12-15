@@ -4,6 +4,7 @@ from src.core.ai_utility import (
     calculate_token_cost,
     get_agent,
     get_conversational_rag_chain,
+    update_history,
 )
 from src.core.constants import HISTORY, MESSAGES, AIModels, ResponseType, logger
 from src.core.database import (
@@ -44,35 +45,21 @@ async def query_response(query: Query):
 @ai.post("/ai/db_query")
 async def search_from_db(query: Query):
     try:
-        # query_result = query_relavent_contents(query=query.query)
-        result = get_conversational_rag_chain(
+        result = get_conversational_rag_chain().invoke(
             {"question": query.query, "chat_history": HISTORY}
         )
-        logger.info(result)
+        update_history(result=result, query=query)
+        token_cost = calculate_token_cost(
+            result.usage_metadata, ai_model=AIModels.GPT_4o_MINI
+        )
 
-        return {}
-        # if query_result[0]:
-        #     agent_response = get_formatted_ai_response(
-        #         results=query_result[1],
-        #         query=query,
-        #         ai_model=get_agent(ai_model=AIModels.GPT_4o_MINI),
-        #     )
-        #     token_cost = calculate_token_cost(
-        #         agent_response.usage_metadata, ai_model=AIModels.GPT_4o_MINI
-        #     )
-        #     return {
-        #         "response": ResponseType.SUCCESS.value,
-        #         "message": {
-        #             "token cost": token_cost,
-        #             "query response": agent_response.content,
-        #         },
-        #     }
-        # return {
-        #     "response": ResponseType.ERROR.value,
-        #     "message": {
-        #         "query response": "cannot find results for your query",
-        #     },
-        # }
+        return {
+            "response": ResponseType.SUCCESS.value,
+            "message": {
+                "token cost": token_cost,
+                "query response": result.content,
+            },
+        }
     except Exception as e:
         message = f"Error {e}"
         logger.error(message)
