@@ -1,11 +1,14 @@
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from langchain_core.messages import HumanMessage
-from src.core.ai_utility import calculate_token_cost, get_agent
+from src.core.ai_utility import (
+    calculate_token_cost,
+    get_agent,
+    get_formatted_ai_response,
+)
 from src.core.constants import MESSAGES, AIModels, ResponseType, logger
 from src.core.database import (
     add_file_as_embedding,
     add_web_content_as_embedding,
-    get_formatted_ai_response,
     query_relavent_contents,
 )
 from src.schema.ai import BlogLink, Query
