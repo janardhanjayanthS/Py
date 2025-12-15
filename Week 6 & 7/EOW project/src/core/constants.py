@@ -4,6 +4,7 @@ from os import getenv
 
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -80,6 +81,38 @@ Instructions:
 
 Answer:"""
 
+
+CONTEXTUALIZE_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """
+                Given a chat history and the latest user question 
+                which might reference context in the chat history, formulate a standalone 
+                question which can be understood without the chat history. 
+                Do NOT answer the question, just reformulate it if needed and otherwise 
+                return it as is.
+            """,
+        ),
+        MessagesPlaceholder("chat_history"),  # This will hold the conversation
+        ("human", "{question}"),
+    ]
+)
+
+QA_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """Answer the question based on the following context:
+
+{context}""",
+        ),
+        MessagesPlaceholder("chat_history"),
+        ("human", "{question}"),
+    ]
+)
+
+
 # DB
 PG_PWD = getenv("POSTGRESQL_PWD")
 
@@ -97,3 +130,7 @@ VECTOR_STORE = PGVector(
     connection=CONNECTION,
     use_jsonb=True,
 )
+
+RETRIEVER = VECTOR_STORE.as_retriever(search_kwargs={"k": 10})
+
+HISTORY = []

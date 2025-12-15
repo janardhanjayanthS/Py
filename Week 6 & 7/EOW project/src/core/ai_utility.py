@@ -1,13 +1,59 @@
 from decimal import Decimal
 
+from langchain_core.documents import Document
 from langchain_core.messages import AIMessage
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableLambda
 from langchain_openai import ChatOpenAI
 from src.core.constants import (
+    CONTEXTUALIZE_PROMPT,
     DOCUMENT_FORMAT_PROMPT,
     MODEL_COST_PER_MILLION_TOKENS,
     OPENAI_API_KEY,
+    QA_PROMPT,
+    RETRIEVER,
     AIModels,
+    logger,
 )
+
+
+def get_contextualize_rag_chain():
+    chain = CONTEXTUALIZE_PROMPT | get_agent(AIModels.GPT_4o_MINI) | StrOutputParser()
+    return chain
+
+
+def get_conversational_rag_chain():
+    chain = (
+        {
+            "context": RunnableLambda(contextualized_retrival) | format_docs,
+            "question": lambda x: x["question"],
+            "chat_history": lambda x: x.get("question", []),
+        }
+        | QA_PROMPT
+        | get_agent(AIModels.GPT_4o_MINI)
+    )
+    return chain
+
+
+def format_docs(docs: Document):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+
+def contextualized_retrival(input_dict):
+    print(f"Input dict: {input_dict}")
+    chat_history = input_dict.get("chat_history", [])
+    question = input_dict["question"]
+
+    if chat_history:
+        reformulated_question = get_contextualize_rag_chain().invoke(
+            {"chat_history": chat_history, "question": question}
+        )
+        logger.info(f"Reformulated quetion: {reformulated_question}")
+    else:
+        reformulated_question = question
+
+    docs = RETRIEVER.invoke(reformulated_question)
+    return docs
 
 
 def get_agent(ai_model: AIModels):

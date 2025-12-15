@@ -3,13 +3,12 @@ from langchain_core.messages import HumanMessage
 from src.core.ai_utility import (
     calculate_token_cost,
     get_agent,
-    get_formatted_ai_response,
+    get_conversational_rag_chain,
 )
-from src.core.constants import MESSAGES, AIModels, ResponseType, logger
+from src.core.constants import HISTORY, MESSAGES, AIModels, ResponseType, logger
 from src.core.database import (
     add_file_as_embedding,
     add_web_content_as_embedding,
-    query_relavent_contents,
 )
 from src.schema.ai import BlogLink, Query
 
@@ -45,29 +44,35 @@ async def query_response(query: Query):
 @ai.post("/ai/db_query")
 async def search_from_db(query: Query):
     try:
-        query_result = query_relavent_contents(query=query.query)
-        if query_result[0]:
-            agent_response = get_formatted_ai_response(
-                results=query_result[1],
-                query=query,
-                ai_model=get_agent(ai_model=AIModels.GPT_4o_MINI),
-            )
-            token_cost = calculate_token_cost(
-                agent_response.usage_metadata, ai_model=AIModels.GPT_4o_MINI
-            )
-            return {
-                "response": ResponseType.SUCCESS.value,
-                "message": {
-                    "token cost": token_cost,
-                    "query response": agent_response.content,
-                },
-            }
-        return {
-            "response": ResponseType.ERROR.value,
-            "message": {
-                "query response": "cannot find results for your query",
-            },
-        }
+        # query_result = query_relavent_contents(query=query.query)
+        result = get_conversational_rag_chain(
+            {"question": query.query, "chat_history": HISTORY}
+        )
+        logger.info(result)
+
+        return {}
+        # if query_result[0]:
+        #     agent_response = get_formatted_ai_response(
+        #         results=query_result[1],
+        #         query=query,
+        #         ai_model=get_agent(ai_model=AIModels.GPT_4o_MINI),
+        #     )
+        #     token_cost = calculate_token_cost(
+        #         agent_response.usage_metadata, ai_model=AIModels.GPT_4o_MINI
+        #     )
+        #     return {
+        #         "response": ResponseType.SUCCESS.value,
+        #         "message": {
+        #             "token cost": token_cost,
+        #             "query response": agent_response.content,
+        #         },
+        #     }
+        # return {
+        #     "response": ResponseType.ERROR.value,
+        #     "message": {
+        #         "query response": "cannot find results for your query",
+        #     },
+        # }
     except Exception as e:
         message = f"Error {e}"
         logger.error(message)
