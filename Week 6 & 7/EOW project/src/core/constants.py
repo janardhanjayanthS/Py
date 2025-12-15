@@ -58,28 +58,8 @@ SYSTEM_PROMPT = """
 You are a helpful assistant agent, answer the question 
 carefully with precise answer. 
 """
+
 MESSAGES = [SystemMessage(content=SYSTEM_PROMPT)]
-
-DOCUMENT_FORMAT_PROMPT = """Based on the following search results, 
-provide a clear and concise answer to the user's question.
-
-User's Question: {query}
-
-Search Results:
-{context}
-
-Instructions:
-1. Synthesize the information from the search results
-2. Provide a clear, direct answer to the question
-3. Reference which source(s) the information came from 
-    (e.g., "According to algorithms_to_live_by.pdf, page 358...")
-4. If the results don't fully answer the question, acknowledge that
-5. Keep the response concise but informative
-6. Make sure that the response content does not contain any special 
-    characters for formatting (\\n, \\t, etc...). give the result as a 
-    readable sentence.
-
-Answer:"""
 
 
 CONTEXTUALIZE_PROMPT = ChatPromptTemplate.from_messages(
@@ -103,9 +83,16 @@ QA_PROMPT = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            """Answer the question based on the following context:
+            """
+            Answer the question based on the following context:
 
-{context}""",
+            {context}
+            
+            Rules:
+                -   If the question is out-of-context then reply that 
+                    you do not have references to get answer.
+
+            """,
         ),
         MessagesPlaceholder("chat_history"),
         ("human", "{question}"),

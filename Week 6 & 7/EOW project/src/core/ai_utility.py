@@ -14,6 +14,7 @@ from src.core.constants import (
     QA_PROMPT,
     RETRIEVER,
     AIModels,
+    logger,
 )
 from src.schema.ai import Query
 
@@ -42,6 +43,7 @@ def get_contextualize_rag_chain():
         A LangChain Runnable (LCEL chain) that takes chat history and the current question
         as input and outputs the reformulated question string.
     """
+    logger.info("invoked contextualize rag")
     chain = CONTEXTUALIZE_PROMPT | get_agent(AIModels.GPT_4o_MINI) | StrOutputParser()
     return chain
 
@@ -56,6 +58,7 @@ def get_conversational_rag_chain():
         A LangChain Runnable (LCEL chain) that accepts a dictionary with 'question' and
         'chat_history' and returns the final AIMessage response.
     """
+    logger.info("invoked conversational rag")
     chain = (
         {
             "context": RunnableLambda(contextualized_retrival) | format_docs,
@@ -96,6 +99,7 @@ def contextualized_retrival(input_dict):
     Returns:
         A list of Document objects retrieved from the global RETRIEVER.
     """
+    logger.info(f"context dict: {input_dict}")
     chat_history = input_dict.get("chat_history", [])
     question = input_dict["question"]
 
@@ -105,6 +109,7 @@ def contextualized_retrival(input_dict):
         )
     else:
         reformulated_question = question
+    logger.info(f"Reformulated question: {question}")
 
     docs = RETRIEVER.invoke(reformulated_question)
     return docs
@@ -190,15 +195,8 @@ def get_input_token_cost(input_tokens: int, ai_model: AIModels) -> float:
 def clean_llm_output(text: str) -> str:
     """Removes Markdown bold markers and cleans up all extraneous whitespace
     and special characters."""
-
-    # 1. Remove Markdown Bold markers (**)
-    # The regex r'\*(\*)*' finds pairs of asterisks used for bold/italic.
     cleaned_text = re.sub(r"\*\*", "", text)
-
-    # 2. Replace all whitespace characters (\s includes \n, \t, \r, space) with a single space.
     cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
-
-    # 3. Optional: Remove any remaining single asterisks or underscores if they are not intentional
-    # cleaned_text = cleaned_text.replace('*', '').replace('_', '')
+    cleaned_text = cleaned_text.replace("*", "").replace("_", "")
 
     return cleaned_text
