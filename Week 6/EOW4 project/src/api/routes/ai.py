@@ -14,8 +14,7 @@ ai = APIRouter()
 
 @ai.post("/ai/query")
 async def query_response(query: Query):
-    user_query = query.query
-    MESSAGES.append(HumanMessage(content=user_query))
+    MESSAGES.append(HumanMessage(content=query.query))
 
     ai_model: AIModels = AIModels.GPT_4o_MINI
 
@@ -42,7 +41,7 @@ async def query_response(query: Query):
 @ai.post("/ai/db_query")
 async def search_from_db(query: Query):
     try:
-        query_result = query_relavent_contents(query=query)
+        query_result = query_relavent_contents(query=query.query)
         if query_result[0]:
             agent_response = get_formatted_ai_response(
                 results=query_result[1],
