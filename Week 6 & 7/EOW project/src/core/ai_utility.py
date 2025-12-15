@@ -197,6 +197,6 @@ def clean_llm_output(text: str) -> str:
     and special characters."""
     cleaned_text = re.sub(r"\*\*", "", text)
     cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
-    cleaned_text = cleaned_text.replace("*", "").replace("_", "")
+    cleaned_text = cleaned_text.replace("*", "").replace("_", "").replace("\\", "")
 
     return cleaned_text
