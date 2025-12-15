@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-from langchain_core.documents import Document
 from langchain_core.messages import AIMessage
 from langchain_openai import ChatOpenAI
 from src.core.constants import (
