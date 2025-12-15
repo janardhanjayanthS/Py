@@ -83,6 +83,19 @@ def add_file_as_embedding(contents: Bytes, filename: str) -> str:
 
 
 async def add_web_content_as_embedding(url: str) -> str:
+    """Fetches web content from a given URL, processes it, and embeds it into the vector store.
+
+    This function first checks if the URL has already been processed and stored. If not,
+    it loads the content, splits it into smaller chunks, generates embeddings for the
+    chunks, and adds them to the VECTOR_STORE.
+
+    Args:
+        url: The URL of the web page whose content is to be embedded.
+
+    Returns:
+        A string message indicating whether the content was successfully added or
+        if it already existed in the store.
+    """
     if check_existing_src(src=url):
         return f"web - {url} - already exists"
     loader = WebBaseLoader([url])
