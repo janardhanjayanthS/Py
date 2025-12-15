@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 
 
 class Query(BaseModel):
@@ -7,3 +7,7 @@ class Query(BaseModel):
     """
 
     query: str = Field(min_length=1)
+
+
+class BlogLink(BaseModel):
+    url: HttpUrl

@@ -83,7 +83,7 @@ Answer:"""
 # DB
 PG_PWD = getenv("POSTGRESQL_PWD")
 
-FILTER_METADATA_BY_FILENAME_QUERY = """ 
+FILTER_METADATA_BY_SOURCE_QUERY = """ 
 SELECT id, document, cmetadata 
 FROM langchain_pg_embedding 
 WHERE cmetadata->>'source' = %s

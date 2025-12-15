@@ -4,10 +4,11 @@ from src.core.ai_utility import calculate_token_cost, get_agent
 from src.core.constants import MESSAGES, AIModels, ResponseType, logger
 from src.core.database import (
     add_file_as_embedding,
+    add_web_content_as_embedding,
     get_formatted_ai_response,
     query_relavent_contents,
 )
-from src.schema.ai import Query
+from src.schema.ai import BlogLink, Query
 
 ai = APIRouter()
 
@@ -71,7 +72,7 @@ async def search_from_db(query: Query):
 
 
 @ai.post("/ai/upload_file")
-async def upload_to_db(file: UploadFile = File(...)):
+async def upload_pdf_to_db(file: UploadFile = File(...)):
     if not file.filename.endswith(".pdf"):
         message = "Only supports pdf files"
         logger.error(message)
@@ -88,7 +89,23 @@ async def upload_to_db(file: UploadFile = File(...)):
         return {
             "response": ResponseType.SUCCESS.value,
             "message": {
-                "file response": file_add_response,
+                "db response": file_add_response,
+            },
+        }
+    except Exception as e:
+        message = f"Error {e}"
+        logger.error(message)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=message)
+
+
+@ai.post("/ai/upload_blog")
+async def upload_blog_to_db(blog_url: BlogLink):
+    try:
+        web_upload_result = add_web_content_as_embedding(url=str(blog_url.url))
+        return {
+            "response": ResponseType.SUCCESS.value,
+            "message": {
+                "db response": web_upload_result,
             },
         }
     except Exception as e:

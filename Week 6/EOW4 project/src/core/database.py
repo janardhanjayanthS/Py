@@ -3,12 +3,13 @@ from ast import Bytes
 
 import psycopg
 import pypdf
+from langchain_community.document_loaders import WebBaseLoader
 from langchain_core.documents import Document
 from langchain_core.messages import AIMessage
 from src.core.constants import (
     CONNECTION,
     DOCUMENT_FORMAT_PROMPT,
-    FILTER_METADATA_BY_FILENAME_QUERY,
+    FILTER_METADATA_BY_SOURCE_QUERY,
     TEXT_SPLITTER,
     VECTOR_STORE,
     logger,
@@ -74,19 +75,29 @@ def add_file_as_embedding(contents: Bytes, filename: str) -> str:
         A string message indicating whether the file was successfully added or
         if it already existed.
     """
-    if check_existing_file(filename=filename):
+    if check_existing_src(src=filename):
         return f"File - {filename} - already exists"
     documents = get_documents_from_file_content(content=contents, filename=filename)
     VECTOR_STORE.add_documents(documents)
     return f"File - {filename} - added successfully"
 
 
-def check_existing_file(filename: str) -> bool:
+async def add_web_content_as_embedding(url: str) -> str:
+    if check_existing_src(src=url):
+        return f"web - {url} - already exists"
+    loader = WebBaseLoader([url])
+    docs = await loader.aload()
+    blog_document_chunks = TEXT_SPLITTER.split_documents(docs)
+    VECTOR_STORE.add_documents(blog_document_chunks)
+    return f"web - {url} - added successfully"
+
+
+def check_existing_src(src: str) -> bool:
     """Checks the database directly to see if any document chunks exist with the
-    given filename in their metadata.
+    given source in their metadata.
 
     Args:
-        filename: The name of the file to check for existence.
+        source: The name of the file to check for existence.
 
     Returns:
         True if the file is found in the database, False otherwise or if an
@@ -96,7 +107,7 @@ def check_existing_file(filename: str) -> bool:
     try:
         with psycopg.connect(pg_connection) as conn:
             with conn.cursor() as cur:
-                cur.execute(FILTER_METADATA_BY_FILENAME_QUERY, (filename,))
+                cur.execute(FILTER_METADATA_BY_SOURCE_QUERY, (src,))
                 results = cur.fetchall()
                 exists = len(results) > 0
                 return exists
