@@ -2,6 +2,7 @@ from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from langchain_core.messages import HumanMessage
 from src.core.ai_utility import (
     calculate_token_cost,
+    clean_llm_output,
     get_agent,
     get_conversational_rag_chain,
     update_history,
@@ -57,7 +58,7 @@ async def search_from_db(query: Query):
             "response": ResponseType.SUCCESS.value,
             "message": {
                 "token cost": token_cost,
-                "query response": result.content,
+                "query response": clean_llm_output(result.content),
             },
         }
     except Exception as e:

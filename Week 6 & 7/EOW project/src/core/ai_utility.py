@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 
 from langchain_core.documents import Document
@@ -28,7 +29,7 @@ def update_history(result, query: Query):
         query: The user's input object, expected to have a 'query' attribute containing the question string.
     """
     HISTORY.append(HumanMessage(query.query))
-    HISTORY.append(AIMessage(result.content))
+    HISTORY.append(AIMessage(clean_llm_output(result.content)))
 
 
 def get_contextualize_rag_chain():
@@ -184,3 +185,20 @@ def get_input_token_cost(input_tokens: int, ai_model: AIModels) -> float:
         MODEL_COST_PER_MILLION_TOKENS[ai_model.value]["i"] / 1_000_000
     )
     return input_token_cost
+
+
+def clean_llm_output(text: str) -> str:
+    """Removes Markdown bold markers and cleans up all extraneous whitespace
+    and special characters."""
+
+    # 1. Remove Markdown Bold markers (**)
+    # The regex r'\*(\*)*' finds pairs of asterisks used for bold/italic.
+    cleaned_text = re.sub(r"\*\*", "", text)
+
+    # 2. Replace all whitespace characters (\s includes \n, \t, \r, space) with a single space.
+    cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()
+
+    # 3. Optional: Remove any remaining single asterisks or underscores if they are not intentional
+    # cleaned_text = cleaned_text.replace('*', '').replace('_', '')
+
+    return cleaned_text
