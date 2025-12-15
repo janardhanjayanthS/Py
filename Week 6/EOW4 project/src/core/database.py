@@ -5,10 +5,8 @@ import psycopg
 import pypdf
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_core.documents import Document
-from langchain_core.messages import AIMessage
 from src.core.constants import (
     CONNECTION,
-    DOCUMENT_FORMAT_PROMPT,
     FILTER_METADATA_BY_SOURCE_QUERY,
     TEXT_SPLITTER,
     VECTOR_STORE,
@@ -32,35 +30,6 @@ def query_relavent_contents(query: str, k: int = 5) -> bool:
     if not results:
         return [False, None]
     return [True, results]
-
-
-def get_formatted_ai_response(
-    results: list[Document], query: str, ai_model
-) -> AIMessage:
-    """Formats the retrieved document chunks and query into a prompt and generates
-    a coherent response using the LLM (Large Language Model).
-
-    This function implements the Retrieval-Augmented Generation (RAG) pattern.
-
-    Args:
-        results: A list of Document objects retrieved from the vector store.
-        query: The original user's question.
-        ai_model: The initialized LLM instance used for generating the final answer.
-
-    Returns:
-        An AIMessage object containing the final, human-readable answer synthesized
-        from the retrieved context and the query.
-    """
-    context_parts = []
-    for i, doc in enumerate(results, 1):
-        source = doc.metadata.get("source", "Unknown")
-        page = doc.metadata.get("page", "N/A")
-        content = doc.page_content[:500]
-        context_parts.append(f"Source {i}: {source}, Page {page}\n{content}\n")
-    context = "\n---\n".join(context_parts)
-    updated_prompt = DOCUMENT_FORMAT_PROMPT.format(query=query, context=context)
-    ai_response = ai_model.invoke(updated_prompt)
-    return ai_response
 
 
 def add_file_as_embedding(contents: Bytes, filename: str) -> str:

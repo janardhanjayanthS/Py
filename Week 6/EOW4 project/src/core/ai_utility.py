@@ -1,7 +1,13 @@
 from decimal import Decimal
 
+from langchain_core.messages import AIMessage
 from langchain_openai import ChatOpenAI
-from src.core.constants import MODEL_COST_PER_MILLION_TOKENS, OPENAI_API_KEY, AIModels
+from src.core.constants import (
+    DOCUMENT_FORMAT_PROMPT,
+    MODEL_COST_PER_MILLION_TOKENS,
+    OPENAI_API_KEY,
+    AIModels,
+)
 
 
 def get_agent(ai_model: AIModels):
@@ -79,3 +85,32 @@ def get_input_token_cost(input_tokens: int, ai_model: AIModels) -> float:
         MODEL_COST_PER_MILLION_TOKENS[ai_model.value]["i"] / 1_000_000
     )
     return input_token_cost
+
+
+def get_formatted_ai_response(
+    results: list[Document], query: str, ai_model
+) -> AIMessage:
+    """Formats the retrieved document chunks and query into a prompt and generates
+    a coherent response using the LLM (Large Language Model).
+
+    This function implements the Retrieval-Augmented Generation (RAG) pattern.
+
+    Args:
+        results: A list of Document objects retrieved from the vector store.
+        query: The original user's question.
+        ai_model: The initialized LLM instance used for generating the final answer.
+
+    Returns:
+        An AIMessage object containing the final, human-readable answer synthesized
+        from the retrieved context and the query.
+    """
+    context_parts = []
+    for i, doc in enumerate(results, 1):
+        source = doc.metadata.get("source", "Unknown")
+        page = doc.metadata.get("page", "N/A")
+        content = doc.page_content[:500]
+        context_parts.append(f"Source {i}: {source}, Page {page}\n{content}\n")
+    context = "\n---\n".join(context_parts)
+    updated_prompt = DOCUMENT_FORMAT_PROMPT.format(query=query, context=context)
+    ai_response = ai_model.invoke(updated_prompt)
+    return ai_response
