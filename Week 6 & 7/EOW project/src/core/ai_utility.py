@@ -109,7 +109,7 @@ def contextualized_retrival(input_dict):
         )
     else:
         reformulated_question = question
-    logger.info(f"Reformulated question: {question}")
+    logger.info(f"Reformulated question: {reformulated_question}")
 
     docs = RETRIEVER.invoke(reformulated_question)
     pretty_print_documents(docs=docs)
