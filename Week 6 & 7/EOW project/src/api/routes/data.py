@@ -4,7 +4,7 @@ from src.core.database import (
     add_file_as_embedding,
     add_web_content_as_embedding,
 )
-from src.schema.ai import BlogLink
+from src.schema.ai import WebLink
 
 data = APIRouter()
 
@@ -54,7 +54,7 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
 
 
 @data.post("/data/upload_web_content")
-async def upload_blog_to_db(blog_url: BlogLink):
+async def upload_blog_to_db(blog_url: WebLink):
     """
     Fetches content from a specified URL (e.g., a blog) and stores it as
     embeddings in the vector database.

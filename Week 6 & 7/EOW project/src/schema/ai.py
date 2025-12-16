@@ -9,5 +9,9 @@ class Query(BaseModel):
     query: str = Field(min_length=1)
 
 
-class BlogLink(BaseModel):
+class WebLink(BaseModel):
+    """
+    pydantic model for web url
+    """
+
     url: HttpUrl
