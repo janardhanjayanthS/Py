@@ -1,9 +1,11 @@
 import uvicorn
 from fastapi import FastAPI
-from src.api.routes import ai
+from src.api.routes import ai, chat, data
 
 app = FastAPI()
 app.include_router(ai.ai)
+app.include_router(chat.chat)
+app.include_router(data.data)
 
 
 @app.get("/")
