@@ -83,7 +83,8 @@ def format_docs(docs: Document):
         A single string containing the concatenated page content of all documents,
         separated by double newlines.
     """
-    return "\n\n".join(doc.page_content for doc in docs)
+    formatted_docs = "\n\n".join(doc.page_content for doc in docs)
+    return formatted_docs
 
 
 def contextualized_retrival(input_dict):
@@ -131,8 +132,10 @@ def pretty_print_documents(docs: Document) -> None:
     Returns:
         None: The function logs the output and does not return a value.
     """
-    for doc in docs:
-        logger.info(clean_llm_output(doc.to_json()["page_content"]))
+    for i, doc in enumerate(docs, 1):
+        logger.info(
+            f"DOC: {i}: {clean_llm_output(doc.to_json()['kwargs']['page_content'])}"
+        )
 
 
 def get_agent(ai_model: AIModels):
