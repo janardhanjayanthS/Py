@@ -9,7 +9,7 @@ from src.schema.ai import BlogLink
 data = APIRouter()
 
 
-@data.post("/data/upload_file")
+@data.post("/data/upload_pdf")
 async def upload_pdf_to_db(file: UploadFile = File(...)):
     """
     Uploads a PDF file and stores its content as embeddings in the vector database.
@@ -53,7 +53,7 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=message)
 
 
-@data.post("/data/upload_blog")
+@data.post("/data/upload_web_content")
 async def upload_blog_to_db(blog_url: BlogLink):
     """
     Fetches content from a specified URL (e.g., a blog) and stores it as

@@ -11,7 +11,7 @@ from src.schema.ai import Query
 chat = APIRouter()
 
 
-@chat.post("/chat/db_query")
+@chat.post("/chat")
 async def search_from_db(query: Query):
     """
     Performs a query using a Conversational RAG chain against the vector database.
