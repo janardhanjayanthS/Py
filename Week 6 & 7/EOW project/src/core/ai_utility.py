@@ -111,7 +111,28 @@ def contextualized_retrival(input_dict):
     logger.info(f"Reformulated question: {question}")
 
     docs = RETRIEVER.invoke(reformulated_question)
+    pretty_print_documents(docs=docs)
     return docs
+
+
+def pretty_print_documents(docs: Document) -> None:
+    """
+    Pretty prints the page content of a list of LangChain Document objects.
+
+    This function iterates through the list of Document objects, converts each
+    document to its JSON representation, extracts the 'page_content', and then
+    logs the cleaned content using the global logger.
+
+    Args:
+        docs: A list of LangChain Document objects to be printed.
+              (Note: The function signature implies a single `Document`, but the
+              implementation loops over it, suggesting it expects an iterable of `Document`.)
+
+    Returns:
+        None: The function logs the output and does not return a value.
+    """
+    for doc in docs:
+        logger.info(clean_llm_output(doc.to_json()["page_content"]))
 
 
 def get_agent(ai_model: AIModels):

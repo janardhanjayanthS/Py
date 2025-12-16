@@ -32,8 +32,13 @@ QA_PROMPT = ChatPromptTemplate.from_messages(
             {context}
             
             Rules:
+                -   If the question is any simple greeting or welcome 
+                    message then just reply with simple greeting,
+                    If you cannot understand the question then ask doubts
                 -   If the question is out-of-context then reply that 
                     you do not have references to get answer.
+                -   Do not generate any additional symbols such as 
+                    slashes, \\n, \\t, or any other mark down symbols
 
             """,
         ),
