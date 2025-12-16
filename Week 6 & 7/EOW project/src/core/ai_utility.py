@@ -7,15 +7,14 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda
 from langchain_openai import ChatOpenAI
 from src.core.constants import (
-    CONTEXTUALIZE_PROMPT,
     HISTORY,
     MODEL_COST_PER_MILLION_TOKENS,
     OPENAI_API_KEY,
-    QA_PROMPT,
     RETRIEVER,
     AIModels,
     logger,
 )
+from src.core.prompts import CONTEXTUALIZE_PROMPT, QA_PROMPT
 from src.schema.ai import Query
 
 

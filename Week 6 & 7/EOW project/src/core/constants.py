@@ -4,10 +4,10 @@ from os import getenv
 
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from src.core.prompts import SYSTEM_PROMPT
 
 load_dotenv()
 
@@ -54,50 +54,7 @@ MODEL_COST_PER_MILLION_TOKENS: dict[str, dict[str, float]] = {
 EMBEDDING = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL, api_key=OPENAI_API_KEY)
 
 
-SYSTEM_PROMPT = """
-You are a helpful assistant agent, answer the question 
-carefully with precise answer. 
-"""
-
 MESSAGES = [SystemMessage(content=SYSTEM_PROMPT)]
-
-
-CONTEXTUALIZE_PROMPT = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """
-                Given a chat history and the latest user question 
-                which might reference context in the chat history, formulate a standalone 
-                question which can be understood without the chat history. 
-                Do NOT answer the question, just reformulate it if needed and otherwise 
-                return it as is.
-            """,
-        ),
-        MessagesPlaceholder("chat_history"),  # This will hold the conversation
-        ("human", "{question}"),
-    ]
-)
-
-QA_PROMPT = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """
-            Answer the question based on the following context:
-
-            {context}
-            
-            Rules:
-                -   If the question is out-of-context then reply that 
-                    you do not have references to get answer.
-
-            """,
-        ),
-        MessagesPlaceholder("chat_history"),
-        ("human", "{question}"),
-    ]
-)
 
 
 # DB

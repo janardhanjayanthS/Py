@@ -51,7 +51,10 @@ async def query_response(query: Query):
 
         return {
             "response": ResponseType.SUCCESS.value,
-            "message": {"ai response": ai_reply, "token cost": token_cost},
+            "message": {
+                "ai response": clean_llm_output(ai_reply),
+                "token cost": token_cost,
+            },
         }
     except Exception as e:
         return {
