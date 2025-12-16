@@ -29,12 +29,11 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
                        generation, a 400 Bad Request is raised.
     """
     if not file.filename.endswith(".pdf"):
-        message = "Only supports pdf files"
+        message = "Only supports .pdf files"
         logger.error(message)
-        return {
-            "response": ResponseType.ERROR.value,
-            "message": message,
-        }
+        raise HTTPException(
+            status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail=message
+        )
 
     try:
         contents = await file.read()
