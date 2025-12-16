@@ -7,6 +7,7 @@ from langchain_core.messages import SystemMessage
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from src.core.prompts import SYSTEM_PROMPT
 
 load_dotenv()
 
@@ -53,37 +54,13 @@ MODEL_COST_PER_MILLION_TOKENS: dict[str, dict[str, float]] = {
 EMBEDDING = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL, api_key=OPENAI_API_KEY)
 
 
-SYSTEM_PROMPT = """
-You are a helpful assistant agent, answer the question 
-carefully with precise answer. 
-"""
 MESSAGES = [SystemMessage(content=SYSTEM_PROMPT)]
 
-DOCUMENT_FORMAT_PROMPT = """Based on the following search results, 
-provide a clear and concise answer to the user's question.
-
-User's Question: {query}
-
-Search Results:
-{context}
-
-Instructions:
-1. Synthesize the information from the search results
-2. Provide a clear, direct answer to the question
-3. Reference which source(s) the information came from 
-    (e.g., "According to algorithms_to_live_by.pdf, page 358...")
-4. If the results don't fully answer the question, acknowledge that
-5. Keep the response concise but informative
-6. Make sure that the response content does not contain any special 
-    characters for formatting (\\n, \\t, etc...). give the result as a 
-    readable sentence.
-
-Answer:"""
 
 # DB
 PG_PWD = getenv("POSTGRESQL_PWD")
 
-FILTER_METADATA_BY_FILENAME_QUERY = """ 
+FILTER_METADATA_BY_SOURCE_QUERY = """ 
 SELECT id, document, cmetadata 
 FROM langchain_pg_embedding 
 WHERE cmetadata->>'source' = %s
@@ -97,3 +74,13 @@ VECTOR_STORE = PGVector(
     connection=CONNECTION,
     use_jsonb=True,
 )
+
+# uses similarity search to get 30 docs -> from that 30 gets top 10 using
+# mmr (Maximum Marginal Relevance) and its lambda_mult value
+# (1 - most relevant/least diverse, 0 - least relevant/most diverse)
+RETRIEVER = VECTOR_STORE.as_retriever(
+    search_type="mmr",
+    search_kwargs={"k": 10, "fetch_k": 30, "lambda_mult": 0.5},
+)
+
+HISTORY = []
