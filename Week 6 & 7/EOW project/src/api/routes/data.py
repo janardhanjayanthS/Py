@@ -47,9 +47,11 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
             },
         }
     except Exception as e:
-        message = f"Error {e}"
-        logger.error(message)
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=message)
+        logger.error(f"Error {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error while uploading file. Please try again.",
+        )
 
 
 @data.post("/data/upload_web_content")
@@ -81,6 +83,8 @@ async def upload_blog_to_db(blog_url: WebLink):
             },
         }
     except Exception as e:
-        message = f"Error {e}"
-        logger.error(message)
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=message)
+        logger.error(f"Error {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error while uploading web content. Please try again.",
+        )

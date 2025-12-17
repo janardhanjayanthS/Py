@@ -1,11 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 from langchain_core.messages import HumanMessage
 from src.core.ai_utility import (
     calculate_token_cost,
     clean_llm_output,
     get_agent,
 )
-from src.core.constants import MESSAGES, AIModels, ResponseType
+from src.core.constants import MESSAGES, AIModels, ResponseType, logger
 from src.schema.ai import Query
 
 ai = APIRouter()
@@ -51,7 +51,8 @@ async def query_response(query: Query):
             },
         }
     except Exception as e:
-        return {
-            "response": ResponseType.ERROR.value,
-            "message": f"{e}",
-        }
+        logger.error(f"Error {e}")
+        raise HTTPException(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error while processing AI query. Please try again.",
+        )

@@ -48,6 +48,8 @@ async def search_from_db(query: Query):
             },
         }
     except Exception as e:
-        message = f"Error {e}"
-        logger.error(message)
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=message)
+        logger.error(f"Error {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error while chatting with AI, please try again.",
+        )
