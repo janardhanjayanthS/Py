@@ -158,5 +158,4 @@ def get_documents_from_file_content(content: Bytes, filename: str) -> list[Docum
                 )
             )
     chunked_document = TEXT_SPLITTER.split_documents(page_documents)
-    logger.info(chunked_document)
     return chunked_document

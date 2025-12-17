@@ -37,8 +37,6 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
 
     try:
         contents = await file.read()
-        logger.info("-" * 300)
-        logger.info(f"Conetent type: {type(contents)}")
         file_add_response = add_file_as_embedding(
             contents=contents, filename=file.filename
         )
