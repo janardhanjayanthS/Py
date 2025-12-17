@@ -60,10 +60,10 @@ MESSAGES = [SystemMessage(content=SYSTEM_PROMPT)]
 # DB
 PG_PWD = getenv("POSTGRESQL_PWD")
 
-FILTER_METADATA_BY_SOURCE_QUERY = """ 
+FILTER_METADATA_BY_HASH_QUERY = """ 
 SELECT id, document, cmetadata 
 FROM langchain_pg_embedding 
-WHERE cmetadata->>'source' = %s
+WHERE cmetadata->>'hash' = %s
 """
 
 CONNECTION = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"

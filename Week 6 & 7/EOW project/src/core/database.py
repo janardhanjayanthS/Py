@@ -7,7 +7,7 @@ from langchain_community.document_loaders import WebBaseLoader
 from langchain_core.documents import Document
 from src.core.constants import (
     CONNECTION,
-    FILTER_METADATA_BY_SOURCE_QUERY,
+    FILTER_METADATA_BY_HASH_QUERY,
     TEXT_SPLITTER,
     VECTOR_STORE,
     logger,
@@ -45,7 +45,7 @@ def add_file_as_embedding(contents: Bytes, filename: str) -> str:
         A string message indicating whether the file was successfully added or
         if it already existed.
     """
-    if check_existing_src(src=filename):
+    if check_existing_hash(hash=hash_bytes(data=contents)):
         return f"File - {filename} - already exists"
     documents = get_documents_from_file_content(content=contents, filename=filename)
     VECTOR_STORE.add_documents(documents)
@@ -66,13 +66,13 @@ def add_web_content_as_embedding(url: str) -> str:
     Returns:
         A status message indicating if the URL was already present or successfully added.
     """
-    if check_existing_src(src=url):
+    if check_existing_hash(hash=hash_str(data=get_base_url(url=url))):
         return f"web - {url} - already exists"
 
     loader = WebBaseLoader([url])
     docs = loader.load()
 
-    base_url = url.split("#")[0]
+    base_url = get_base_url(url=url)
     web_url_hash = hash_str(data=base_url)
 
     web_document_chunks = TEXT_SPLITTER.split_documents(docs)
@@ -83,6 +83,22 @@ def add_web_content_as_embedding(url: str) -> str:
 
     VECTOR_STORE.add_documents(web_document_chunks)
     return f"web - {url} - added successfully"
+
+
+def get_base_url(url: str) -> str:
+    """Extracts the base portion of a URL by removing any fragment identifiers.
+
+    This function splits the URL at the '#' character and returns only the
+    preceding part. This is commonly used to normalize URLs and ensure that
+    different sections of the same page are treated as the same source.
+
+    Args:
+        url: The full URL string, which may include a fragment (e.g., 'example.com/page#section').
+
+    Returns:
+        str: The URL without the fragment identifier.
+    """
+    return url.split("#")[0]
 
 
 def add_base_url_and_hash_to_metadata(
@@ -110,7 +126,7 @@ def add_base_url_and_hash_to_metadata(
         logger.info(f"Blog document chunk metadata: {data[0].metadata}")
 
 
-def check_existing_src(src: str) -> bool:
+def check_existing_hash(hash: str) -> bool:
     """Checks the database directly to see if any document chunks exist with the
     given source in their metadata.
 
@@ -125,7 +141,7 @@ def check_existing_src(src: str) -> bool:
     try:
         with psycopg.connect(pg_connection) as conn:
             with conn.cursor() as cur:
-                cur.execute(FILTER_METADATA_BY_SOURCE_QUERY, (src,))
+                cur.execute(FILTER_METADATA_BY_HASH_QUERY, (hash,))
                 results = cur.fetchall()
                 exists = len(results) > 0
                 return exists
