@@ -41,18 +41,18 @@ TEXT_SPLITTER = RecursiveCharacterTextSplitter(
 # AI
 class AIModels(Enum):
     GPT_4o_MINI = "gpt-4o-mini"
+    TEXT_EMBEDDING_3_LARGE = "text-embedding-3-large"
 
 
 OPENAI_API_KEY = getenv("OPENAI_API_KEY")
-OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
-
 
 MODEL_COST_PER_MILLION_TOKENS: dict[str, dict[str, float]] = {
     AIModels.GPT_4o_MINI.value: {"i": 0.15, "o": 0.60},
 }
 
-EMBEDDING = OpenAIEmbeddings(model=OPENAI_EMBEDDING_MODEL, api_key=OPENAI_API_KEY)
-
+EMBEDDING = OpenAIEmbeddings(
+    model=AIModels.TEXT_EMBEDDING_3_LARGE.value, api_key=OPENAI_API_KEY
+)
 
 MESSAGES = [SystemMessage(content=SYSTEM_PROMPT)]
 
@@ -80,7 +80,7 @@ VECTOR_STORE = PGVector(
 # (1 - most relevant/least diverse, 0 - least relevant/most diverse)
 RETRIEVER = VECTOR_STORE.as_retriever(
     search_type="mmr",
-    search_kwargs={"k": 10, "fetch_k": 30, "lambda_mult": 0.5},
+    search_kwargs={"k": 15, "fetch_k": 50, "lambda_mult": 0.5},
 )
 
 HISTORY = []

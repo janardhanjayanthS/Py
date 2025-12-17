@@ -1,9 +1,9 @@
-import io
+import os
+import tempfile
 from ast import Bytes
 
 import psycopg
-import pypdf
-from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.document_loaders import PyMuPDFLoader, WebBaseLoader
 from langchain_core.documents import Document
 from src.core.constants import (
     CONNECTION,
@@ -144,18 +144,25 @@ def get_documents_from_file_content(content: Bytes, filename: str) -> list[Docum
         A list of chunked Document objects ready for embedding and storage.
     """
     pdf_hash = hash_bytes(data=content)
+
     # imporvements -> using chunks or try to process in chunks
-    pdf_file = io.BytesIO(content)
-    pdf_reader = pypdf.PdfReader(pdf_file)
-    page_documents = []
-    for page_num, page in enumerate(pdf_reader.pages, start=1):
-        text = page.extract_text()
-        if text:
-            page_documents.append(
-                Document(
-                    page_content=text,
-                    metadata={"source": filename, "page": page_num, "hash": pdf_hash},
-                )
-            )
-    chunked_document = TEXT_SPLITTER.split_documents(page_documents)
-    return chunked_document
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_pdf_file:
+        temp_pdf_file.write(content)
+        temp_pdf_filepath = temp_pdf_file.name
+
+    try:
+        loader = PyMuPDFLoader(temp_pdf_filepath)
+        documents = loader.load()
+
+        for doc in documents:
+            doc.metadata["hash"] = pdf_hash
+            doc.metadata["source"] = filename
+
+        chunked_documents = TEXT_SPLITTER.split_documents(documents)
+        return chunked_documents
+    except Exception as e:
+        logger.error(f"Error {e}")
+        return
+    finally:
+        if os.path.exists(temp_pdf_filepath):
+            os.remove(temp_pdf_filepath)
