@@ -15,24 +15,6 @@ from src.core.constants import (
 from src.core.utility import hash_bytes, hash_str
 
 
-def query_relavent_contents(query: str, k: int = 5) -> bool:
-    """Performs a similarity search against the vector store using the provided query.
-
-    Args:
-        query: The user's search query string. This is converted to an embedding for the search.
-        k: The number of top-k most relevant documents to retrieve. Defaults to 5.
-
-    Returns:
-        A list where the first element is a boolean indicating success (True) or failure (False),
-        and the second element is either the list of relevant Document objects or None.
-        Example: [True, [Document(...), Document(...)]] or [False, None]
-    """
-    results = VECTOR_STORE.similarity_search(query=query, k=k)
-    if not results:
-        return [False, None]
-    return [True, results]
-
-
 def add_file_as_embedding(contents: Bytes, filename: str) -> str:
     """Checks if a file already exists in the vector store and, if not, processes
     the file contents, chunks the text, creates embeddings, and adds them to the database.
