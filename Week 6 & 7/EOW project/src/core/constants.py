@@ -79,8 +79,9 @@ VECTOR_STORE = PGVector(
 # mmr (Maximum Marginal Relevance) and its lambda_mult value
 # (1 - most relevant/least diverse, 0 - least relevant/most diverse)
 RETRIEVER = VECTOR_STORE.as_retriever(
-    search_type="mmr",
-    search_kwargs={"k": 15, "fetch_k": 50, "lambda_mult": 0.5},
+    search_type="similarity",
+    search_kwargs={"k": 10},
+    # , "fetch_k": 30, "lambda_mult": 0.6},
 )
 
 HISTORY = []
