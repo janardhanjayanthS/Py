@@ -36,7 +36,7 @@ async def query_response(query: Query):
 
     try:
         agent = get_agent(ai_model=ai_model)
-        agent_response = agent.invoke(MESSAGES)
+        agent_response = await agent.ainvoke(MESSAGES)
 
         ai_reply = agent_response.content
         token_cost = calculate_token_cost(

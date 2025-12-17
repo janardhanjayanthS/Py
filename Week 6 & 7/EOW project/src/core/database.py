@@ -12,6 +12,7 @@ from src.core.constants import (
     VECTOR_STORE,
     logger,
 )
+from src.core.utility import hash_bytes, hash_str
 
 
 def query_relavent_contents(query: str, k: int = 5) -> bool:
@@ -51,27 +52,62 @@ def add_file_as_embedding(contents: Bytes, filename: str) -> str:
     return f"File - {filename} - added successfully"
 
 
-async def add_web_content_as_embedding(url: str) -> str:
-    """Fetches web content from a given URL, processes it, and embeds it into the vector store.
+def add_web_content_as_embedding(url: str) -> str:
+    """Fetches web content, processes it, and embeds it with metadata into the vector store.
 
-    This function first checks if the URL has already been processed and stored. If not,
-    it loads the content, splits it into smaller chunks, generates embeddings for the
-    chunks, and adds them to the VECTOR_STORE.
+    This function performs a check to prevent duplicate entries based on the URL.
+    If unique, it loads the webpage content, generates a hash of the base URL,
+    splits the text into chunks, injects source and hash metadata into each chunk,
+    and saves them to the PGVector store.
 
     Args:
-        url: The URL of the web page whose content is to be embedded.
+        url: The full URL of the web page to be processed.
 
     Returns:
-        A string message indicating whether the content was successfully added or
-        if it already existed in the store.
+        A status message indicating if the URL was already present or successfully added.
     """
     if check_existing_src(src=url):
         return f"web - {url} - already exists"
+
     loader = WebBaseLoader([url])
-    docs = await loader.aload()
-    blog_document_chunks = TEXT_SPLITTER.split_documents(docs)
-    VECTOR_STORE.add_documents(blog_document_chunks)
+    docs = loader.load()
+
+    base_url = url.split("#")[0]
+    web_url_hash = hash_str(data=base_url)
+
+    web_document_chunks = TEXT_SPLITTER.split_documents(docs)
+
+    add_base_url_and_hash_to_metadata(
+        base_url=base_url, hash=web_url_hash, data=web_document_chunks
+    )
+
+    VECTOR_STORE.add_documents(web_document_chunks)
     return f"web - {url} - added successfully"
+
+
+def add_base_url_and_hash_to_metadata(
+    base_url: str, hash: str, data: list[Document]
+) -> None:
+    """Injects source URL and unique hash into the metadata of each document chunk.
+
+    Iterates through a list of LangChain Document objects and modifies their
+    metadata dictionaries in-place to include tracking information. This is
+    essential for filtering or deleting specific sources later in the vector store.
+
+    Args:
+        base_url: The sanitized URL string to be used as the 'source'.
+        hash: The generated unique identifier for the specific web source.
+        data: A list of Document objects (chunks) to be updated.
+
+    Returns:
+        None
+    """
+    for doc in data:
+        doc.metadata["source"] = base_url
+        doc.metadata["hash"] = hash
+
+    if data:
+        logger.info(f"Blog document chunk metadata: {data[0].metadata}")
 
 
 def check_existing_src(src: str) -> bool:
@@ -109,6 +145,8 @@ def get_documents_from_file_content(content: Bytes, filename: str) -> list[Docum
     Returns:
         A list of chunked Document objects ready for embedding and storage.
     """
+    pdf_hash = hash_bytes(data=content)
+    # imporvements -> using chunks or try to process in chunks
     pdf_file = io.BytesIO(content)
     pdf_reader = pypdf.PdfReader(pdf_file)
     page_documents = []
@@ -117,7 +155,8 @@ def get_documents_from_file_content(content: Bytes, filename: str) -> list[Docum
         if text:
             page_documents.append(
                 Document(
-                    page_content=text, metadata={"source": filename, "page": page_num}
+                    page_content=text,
+                    metadata={"source": filename, "page": page_num, "hash": pdf_hash},
                 )
             )
     chunked_document = TEXT_SPLITTER.split_documents(page_documents)
