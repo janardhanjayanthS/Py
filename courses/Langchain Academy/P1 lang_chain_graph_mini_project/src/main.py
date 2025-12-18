@@ -72,4 +72,6 @@ async def mainloop():
 if __name__ == "__main__":
     asyncio.run(mainloop())
     # TOFIX:
-    # - list all books tool is not working!
+    # - tool calls with data access, that means appending into any state's key need to be fixed
+    # - HITL
+    # - need to check and fix MCP
