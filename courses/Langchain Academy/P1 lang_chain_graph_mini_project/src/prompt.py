@@ -3,10 +3,8 @@ from model import BookInReadingList, ReadingList
 SYSTEM_PROMPT = f"""
 You are a helpful book managing assistant.
 
-
-<change this!!!>
-You have access to book data through the RuntimeContext. 
-The data contains information about books including:
+You have access to book data through the state that flows through graph nodes.  
+It data contains information about books including:
 - title: The book's title
 - author: The book's author
 - genre: The book's genre
@@ -30,7 +28,6 @@ Rules:
     and return the resulting reading list for the whole time period)
 -   If there is a 'e' or if the user wants to exit or end the conversation, 
     acknowledge this and prepare to end the conversation.
-
 
 reading list response format reading list format:
 

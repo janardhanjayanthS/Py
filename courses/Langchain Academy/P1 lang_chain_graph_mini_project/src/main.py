@@ -2,7 +2,7 @@ import asyncio
 
 from graph import get_compiled_graph
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
-from lg_utility import AgentState
+from utility import load_json
 
 
 async def mainloop():
@@ -24,34 +24,43 @@ async def mainloop():
             print("please enter a message")
             continue
 
-        initial_state = AgentState(
-            message=[HumanMessage(content=user_input)],
-            pending_tool_calls=[],
-            awaiting_approval=False,
-            iteration_count=0,
-            should_exit=False,
-            last_user_input=user_input,
-        )
+        initial_state = {
+            "message": [HumanMessage(content=user_input)],
+            "pending_tool_calls": [],
+            "awaiting_approval": False,
+            "approval_granted": False,
+            "iteration_count": 0,
+            "should_exit": False,
+            "last_user_input": user_input,
+            "favorite_authors": [],
+            "favorite_genres": [],
+            "reading_list": [],
+            "books": load_json(filepath="../data/books.json"),
+        }
 
         try:
             async for event in agent.astream(
                 initial_state, config, stream_mode="values"
             ):
-                print(f"EVENT: {event}")
                 final_output = event
 
-            if final_output and "messages" in final_output:
-                last_msg = final_output["messages"][-1]
+            if final_output and final_output["message"]:
+                last_msg = final_output["message"][-1]
 
                 if isinstance(last_msg, AIMessage) and last_msg.content:
-                    if not hasattr(last_msg, "tool_calls") or not last_msg.tool_calls:
+                    if not last_msg.tool_calls:
                         print(f"\nAssistant: {last_msg.content}")
                         print("-" * 100)
                 elif isinstance(last_msg, ToolMessage):
                     pass
 
-            if event.get("should_exit"):
+            if (
+                final_output
+                and hasattr(final_output, "should_exit")
+                and final_output["should_exit"]
+            ):
                 print("detected exit request, type 'e' to confirm")
+
         except Exception as e:
             print("MAINLOOP ERROR")
             print(f"Error: {e}")
