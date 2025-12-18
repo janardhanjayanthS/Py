@@ -75,13 +75,9 @@ VECTOR_STORE = PGVector(
     use_jsonb=True,
 )
 
-# uses similarity search to get 30 docs -> from that 30 gets top 10 using
-# mmr (Maximum Marginal Relevance) and its lambda_mult value
-# (1 - most relevant/least diverse, 0 - least relevant/most diverse)
 RETRIEVER = VECTOR_STORE.as_retriever(
     search_type="similarity",
     search_kwargs={"k": 10},
-    # , "fetch_k": 30, "lambda_mult": 0.6},
 )
 
 HISTORY = []

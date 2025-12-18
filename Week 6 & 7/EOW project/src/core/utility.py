@@ -3,7 +3,6 @@ from hashlib import sha256
 from src.core.constants import logger
 
 
-# improvements -> OOPs
 def hash_bytes(data: bytes) -> str:
     """Computes the SHA-256 hash of a bytes object.
 

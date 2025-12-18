@@ -1,3 +1,1 @@
 - observation document: https://docs.google.com/spreadsheets/d/13P9jOq7KZxobsDfJO0Nv6HRS5NqEiGWmU6p9bwTavHU/edit?usp=sharing 
-- issues: 
-    - chat: does not answer a query in middle of conversation
