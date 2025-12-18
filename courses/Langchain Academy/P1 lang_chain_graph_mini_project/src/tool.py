@@ -16,19 +16,20 @@ from utility import search_book_using_title
     parse_docstring=True,
     description=SEARCH_BOOK_PORMPT,
 )
-def search_book(query: str) -> list:
+def search_book(query: str, books: list) -> list:
     """
     Searches for book from qurey
 
     Args:
         query: query used for searching book
+        books: list of all available books from .json file
 
     Returns:
         list[dict]: list containing books as dict
     """
+    print(f"Query: {query}")
+    print(f"books: {books}")
     query = query.lower()
-    books = []
-    # books = get_books_from_runtime()
     result = []
 
     for book in books:
@@ -44,19 +45,17 @@ def search_book(query: str) -> list:
 
 
 @tool("get_all_available_books", parse_docstring=True, description=GET_BOOKS_PROMPT)
-def get_books() -> list:
+def get_books(books: list) -> list:
     """
     get books from available books (context)
+
+    Args:
+        books: list of all available books from .json file
 
     Returns:
         list: of dict containing book detail
     """
-    print("called get books function")
-    books = ...
-    result = [book for book in books if book]
-    print(f"Result: {result}")
-
-    return result
+    return books
 
 
 @tool(

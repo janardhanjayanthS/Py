@@ -29,7 +29,6 @@ client = MultiServerMCPClient(
 
 
 async def agent_reasoning_node(state: AgentState):
-    # Dictionary access
     messages = state["message"]
     system_message = SystemMessage(content=SYSTEM_PROMPT)
     open_book_tool = await client.get_tools()
@@ -51,7 +50,6 @@ async def agent_reasoning_node(state: AgentState):
                 {"id": tc["id"], "name": tc["name"], "args": tc["args"]}
             )
 
-    # Return a dictionary to update the state
     return {
         "message": [response],
         "pending_tool_calls": pending_tools,
@@ -66,7 +64,6 @@ async def check_approval_node(state: AgentState) -> Command:
         "add_to_favorite_authors",
         "add_to_favorite_genre",
     }
-    # Dictionary access
     needs_approval = any(
         tc["name"] in sensitive_tools for tc in state["pending_tool_calls"]
     )
@@ -83,7 +80,6 @@ def request_approval_node(state: AgentState):
         print(f"Tool name: {tc['name']}")
         print(f"Tool args: {dumps(tc['args'], indent=2)}")
 
-    # Correct dictionary-based interrupt
     interrupt(
         value={"type": "approval_request", "actions": state["pending_tool_calls"]}
     )
@@ -97,14 +93,26 @@ def request_approval_node(state: AgentState):
 async def execute_tools_node(state: AgentState) -> Command:
     print("\n⚙️ Executing tools...")
     tool_messages = []
+    books_from_state = state["books"]
 
     for tool_call in state["pending_tool_calls"]:
         tool_name = tool_call["name"]
         tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
 
         try:
-            # Note: You might need to handle MCP tools differently if they aren't in TOOL_LIST
-            result = tool_func.invoke(tool_call["args"])
+            if tool_name == "get_all_available_books":
+                print("calling get all available books tool")
+                tool_call["args"]["books"] = books_from_state
+                result = tool_func.invoke(tool_call["args"])
+            elif tool_name == "search_for_book_info":
+                print("calling search for book info")
+                query = state["message"][-2]["content"]
+                tool_call["args"]["query"] = query
+                tool_call["args"]["books"] = books_from_state
+                result = tool_func.invoke(tool_call["args"])
+            else:
+                print(f"calling {tool_name}!")
+                result = tool_func.invoke(tool_call["args"])
             tool_msg = ToolMessage(
                 content=str(result), tool_call_id=tool_call["id"], name=tool_name
             )
