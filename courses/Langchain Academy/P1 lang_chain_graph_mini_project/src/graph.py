@@ -2,7 +2,7 @@ from typing import Literal
 
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
-from lg_utility import AgentState
+from langgraph_utility import AgentState
 from node import (
     agent_reasoning_node,
     check_approval_node,

@@ -5,7 +5,7 @@ from langchain_core.messages import SystemMessage, ToolMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_openai import ChatOpenAI
 from langgraph.types import Command, interrupt
-from lg_utility import AgentState
+from langgraph_utility import AgentState
 from prompt import SYSTEM_PROMPT
 from tool import (
     add_to_favorite_authors,
