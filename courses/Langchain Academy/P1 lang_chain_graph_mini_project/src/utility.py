@@ -1,7 +1,4 @@
-from langgraph.runtime import get_runtime
 from json import load
-from typing import Optional
-from schema import RuntimeContext
 
 
 def load_json(filepath: str) -> list[dict]:
@@ -26,15 +23,15 @@ def load_json(filepath: str) -> list[dict]:
         return []
 
 
-def get_books_from_runtime() -> list[dict]:
+def get_books_from_agentstate() -> list[dict]:
     """
     returns the books from runtime context
 
     Returns:
         Optional[list[dict]]: list contining book dictionary
     """
-    runtime = get_runtime(RuntimeContext)
-    books = runtime.context.data
+    # read  and send books as list
+    books = ...
     return books if books else []
 
 
@@ -57,7 +54,7 @@ def search_book_using_title(book_title: str, books: list[dict]) -> dict:
 
 def get_book_details(book_data: dict):
     """
-    Generates books as a string from data recieved from 
+    Generates books as a string from data recieved from
     openbooks api
 
     Args:

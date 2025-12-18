@@ -30,16 +30,19 @@ client = MultiServerMCPClient(
 
 
 async def agent_reasoning_node(state: AgentState) -> AgentState:
-    messages = state["messages"]
+    messages = state.message
     system_message = SystemMessage(content=SYSTEM_PROMPT)
     open_book_tool = await client.get_tools()
+
+    print(f"open_book_tool: {open_book_tool}")
 
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=OPENAI_API_KEY)
     agent = llm.bind_tools(TOOL_LIST + open_book_tool)
 
     response = await agent.ainvoke([system_message] + messages)
 
-    last_input = state.get("last_user_input", "").strip().lower()
+    last_input = state.last_user_input if state.last_user_input else ""
+    last_input = last_input.strip().lower()
     should_exit = last_input == "e" or "exit" in last_input or "quit" in last_input
 
     pending_tools = []
@@ -49,12 +52,11 @@ async def agent_reasoning_node(state: AgentState) -> AgentState:
                 {"id": tc["id"], "name": tc["name"], "args": tc["args"]}
             )
 
-    return AgentState(
-        messages=[response],
-        pending_tool_calls=pending_tools,
-        iteration_count=state["iteration_count"] + 1,
-        should_exit=should_exit,
-    )
+    state.message = [response]
+    state.pending_tool_calls = pending_tools
+    state.iteration_count += 1
+    state.should_exit = should_exit
+    return state
 
 
 async def check_approval_node(
@@ -66,7 +68,7 @@ async def check_approval_node(
         "add_to_favorite_genre",
     }
     needs_approval = any(
-        tc["name"] in sensitive_tools for tc in state["pending_tool_calls"]
+        tc["name"] in sensitive_tools for tc in state.pending_tool_calls
     )
 
     if needs_approval:
@@ -79,17 +81,19 @@ async def check_approval_node(
 
 def request_approval_node(state: AgentState) -> AgentState:
     print("🚨 APPROVAL REQUIRED")
-    for tc in state["pending_tool_calls"]:
+    for tc in state.pending_tool_calls:
         print(f"Tool name: {tc['name']}")
         print(f"Tool args: {dumps(tc['args'], indent=2)}")
 
-    approval = interrupt(
+    interrupt(
         value={"type": "approval_request", "actions": state["pending_tool_calls"]}
     )
     print("\nApprove? (y/n): ", end="")
     user_approval = input().lower().strip() == "y"
 
-    return {"approval_granted": user_approval, "awaiting_approval": False}
+    state.approval_granted = user_approval
+    state.awaiting_approval = False
+    return state
 
 
 async def execute_tools_node(
@@ -98,7 +102,7 @@ async def execute_tools_node(
     print("\n⚙️  Executing tools...")
     tool_messages = []
 
-    for tool_call in state["pending_tool_calls"]:
+    for tool_call in state.pending_tool_calls:
         tool_name = tool_call["name"]
         tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
         print(f"Tool name: {tool_name}")
@@ -127,4 +131,5 @@ async def execute_tools_node(
 
 
 def finalize_node(state: AgentState) -> AgentState:
-    return {"iteration_count": 0}
+    state.iteration_count = 0
+    return state

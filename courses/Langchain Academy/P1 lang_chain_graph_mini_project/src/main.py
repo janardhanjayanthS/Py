@@ -2,6 +2,7 @@ import asyncio
 
 from graph import get_compiled_graph
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
+from lg_utility import AgentState
 
 
 async def mainloop():
@@ -23,19 +24,20 @@ async def mainloop():
             print("please enter a message")
             continue
 
-        initial_state = {
-            "messages": [HumanMessage(content=user_input)],
-            "pending_tool_calls": [],
-            "awaiting_approval": False,
-            "iteration_count": 0,
-            "should_exit": False,
-            "last_user_input": user_input,
-        }
+        initial_state = AgentState(
+            message=[HumanMessage(content=user_input)],
+            pending_tool_calls=[],
+            awaiting_approval=False,
+            iteration_count=0,
+            should_exit=False,
+            last_user_input=user_input,
+        )
 
         try:
             async for event in agent.astream(
                 initial_state, config, stream_mode="values"
             ):
+                print(f"EVENT: {event}")
                 final_output = event
 
             if final_output and "messages" in final_output:
@@ -51,6 +53,7 @@ async def mainloop():
             if event.get("should_exit"):
                 print("detected exit request, type 'e' to confirm")
         except Exception as e:
+            print("MAINLOOP ERROR")
             print(f"Error: {e}")
 
     print("Conversation ended")

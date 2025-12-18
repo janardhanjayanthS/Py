@@ -1,14 +1,14 @@
 from langchain.tools import tool
-from schema import RuntimeContext
 from langgraph.runtime import get_runtime
 from prompt import (
-    SEARCH_BOOK_PORMPT,
-    GET_BOOKS_PROMPT,
-    ADD_TO_READING_LIST_PROMPT,
     ADD_TO_FAVORITE_AUTHORS_PROMPT,
     ADD_TO_FAVORITE_GENRES_PROMPT,
+    ADD_TO_READING_LIST_PROMPT,
+    GET_BOOKS_PROMPT,
+    SEARCH_BOOK_PORMPT,
 )
-from utility import get_books_from_runtime, search_book_using_title
+from schema import RuntimeContext
+from utility import search_book_using_title
 
 
 @tool(
@@ -27,7 +27,8 @@ def search_book(query: str) -> list:
         list[dict]: list containing books as dict
     """
     query = query.lower()
-    books = get_books_from_runtime()
+    books = []
+    # books = get_books_from_runtime()
     result = []
 
     for book in books:
@@ -50,8 +51,10 @@ def get_books() -> list:
     Returns:
         list: of dict containing book detail
     """
-    books = get_books_from_runtime()
+    print("called get books function")
+    books = ...
     result = [book for book in books if book]
+    print(f"Result: {result}")
 
     return result
 
@@ -69,7 +72,8 @@ def add_to_reading_list(book_title: str) -> str:
     Returns:
         str: details about this process (success/fail)
     """
-    books: list = get_books_from_runtime()
+    books = []
+    # books: list = get_books_from_runtime()
     reading_list = get_runtime(RuntimeContext).context.reading_list
     book_details = search_book_using_title(book_title=book_title, books=books)
 

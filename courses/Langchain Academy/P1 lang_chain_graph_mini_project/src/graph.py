@@ -21,12 +21,12 @@ def get_compiled_graph():
     compiled_graph = builder.compile(checkpointer=memory)
 
     # Run once to get graph image
-    # display_graph(graph=compiled_graph)
+    # create_graph_image(graph=compiled_graph)
 
     return compiled_graph
 
 
-def display_graph(graph) -> None:
+def create_graph_image(graph) -> None:
     with open("../data/graph_img.png", "wb+") as file:
         file.write(graph.get_graph().draw_mermaid_png())
 
