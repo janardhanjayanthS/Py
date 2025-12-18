@@ -16,11 +16,11 @@ class AgentState:
     should_exit: bool  # Flag to exit conversation
     last_user_input: str
 
-    favorite_authors: Optional[str] = field(init=False)
-    favorite_genres: Optional[str] = field(init=False)
-    reading_list: Optional[list[str]] = field(init=False)
+    favorite_authors: Optional[str] = field(default_factory=list)
+    favorite_genres: Optional[str] = field(default_factory=list)
+    reading_list: Optional[list[str]] = field(default_factory=list)
 
-    books: list[dict[str, Any]] = field(default_factory=[])
+    books: list[dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self):
         self.books = load_json(filepath="../data/books.json")
