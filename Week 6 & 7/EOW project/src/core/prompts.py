@@ -10,10 +10,26 @@ CONTEXTUALIZE_PROMPT = ChatPromptTemplate.from_messages(
         (
             "system",
             """ 
-                Given a chat history and the latest user question 
-                which might reference context in the chat history, 
-                formulate a standalone question which can be understood 
-                without the chat history. 
+                Given a chat history and the latest user question, 
+                reformulate the question to be standalone if it references 
+                the chat history (even several levels before).
+
+                CRITICAL RULES:
+                1.  OUTPUT MUST BE A QUESTION - never provide explanations or answers
+                2.  If the question references "it", "that", "this", etc.,
+                    replace with the actual subject from chat history
+                3.  Keep the question concise - just add necessary context
+                4.  If no context is needed, return the original question unchanged
+
+
+                Examples:
+                - Input: "Explain it in more detail" (after discussing Chapter 8)
+                - Output: "Explain Chapter 8 of Algorithms to Live By in more detail"
+
+                - Input: "What's a story from that chapter?" (after discussing relaxation)
+                - Output: "What's a story from the Relaxation chapter in Algorithms to Live By?"
+               
+                Remember: Only reformulate the QUESTION, never answer it. 
             """,
         ),
         MessagesPlaceholder("chat_history"),

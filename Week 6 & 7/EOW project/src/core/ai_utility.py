@@ -101,15 +101,17 @@ def contextualized_retrival(input_dict):
     """
     logger.info(f"context dict: {input_dict}")
     chat_history = input_dict.get("chat_history", [])
+    logger.info(f"Chat history: {chat_history}")
     question = input_dict["question"]
 
     if chat_history:
         reformulated_question = get_contextualize_rag_chain().invoke(
             {"chat_history": chat_history, "question": question}
         )
+        logger.info(f"Reformulated question: {reformulated_question}")
     else:
         reformulated_question = question
-    logger.info(f"Reformulated question: {reformulated_question}")
+        logger.info(f"non reformulated question: {reformulated_question}")
 
     docs = RETRIEVER.invoke(reformulated_question)
     pretty_print_documents(docs=docs)
