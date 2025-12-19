@@ -69,6 +69,11 @@ async def agent_reasoning_node(state: AgentState):
 
 
 def request_approval_node(state: AgentState):
+    already_denied = "approval_granted" in state and not state.get("awaiting_approval")
+    if already_denied:
+        print(f"Already denied tool execution - {already_denied}")
+        return {}
+
     print("🚨 APPROVAL REQUIRED")
     for tc in state["pending_tool_calls"]:
         print(f"Tool name: {tc['name']}")
@@ -78,7 +83,12 @@ def request_approval_node(state: AgentState):
         value={"type": "approval_request", "actions": state["pending_tool_calls"]}
     )
 
-    return {"approval_granted": user_approval, "awaiting_approval": False}
+    print(f"Approval received: {user_approval}")
+
+    return {
+        "approval_granted": user_approval,
+        "awaiting_approval": False,
+    }
 
 
 async def check_approval_node(state: AgentState) -> Command:
@@ -90,7 +100,7 @@ async def check_approval_node(state: AgentState) -> Command:
     print(f"NEEDS APPROVAL {needs_approval}")
 
     if needs_approval:
-        return Command(goto="request_approval")
+        return Command(goto="request_approval", update={"awaiting_approval": True})
 
     return Command(goto="execute_tools")
 
@@ -99,7 +109,6 @@ async def execute_tools_node(state: AgentState) -> Command:
     print("\n⚙️ Executing tools...")
 
     tool_messages = []
-
     approval_granted = state.get("approval_granted", False)
 
     for tool_call in state["pending_tool_calls"]:
@@ -117,6 +126,17 @@ async def execute_tools_node(state: AgentState) -> Command:
             continue
 
         tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
+
+        if not tool_func:
+            print(f"Tool {tool_name} not found in TOOL_LIST")
+            tool_msg = ToolMessage(
+                content=f"Error: Tool {tool_name} not found",
+                tool_call_id=tool_id,
+                name=tool_name,
+            )
+            tool_messages.append(tool_msg)
+            continue
+
         try:
             if tool_name == "get_all_available_books":
                 print("calling get all available books tool")
@@ -131,13 +151,15 @@ async def execute_tools_node(state: AgentState) -> Command:
                 tool_call["args"]["existing_reading_list"] = state["reading_list"]
                 result = tool_func.invoke(tool_call["args"])
             elif tool_name == "add_to_favorite_authors":
-                print("calling add to reading list")
-                print(f"ARGS: {tool_call['args']}")
+                print("calling add to favorite authors")
                 tool_call["args"]["existing_favorite_authors"] = state[
                     "favorite_authors"
                 ]
                 result = tool_func.invoke(tool_call["args"])
-
+            elif tool_name == "add_to_favorite_genres":
+                print("calling add to favorite genres")
+                tool_call["args"]["existing_favorite_genres"] = state["favorite_genres"]
+                result = tool_func.invoke(tool_call["args"])
             else:
                 print(f"calling {tool_name}!")
                 result = tool_func.invoke(tool_call["args"])
@@ -147,12 +169,19 @@ async def execute_tools_node(state: AgentState) -> Command:
             )
 
         except Exception as e:
+            print(f"Error executing tool {tool_name}: {e}")
             tool_messages.append(
                 ToolMessage(content=f"Error: {e}", tool_call_id=tool_id, name=tool_name)
             )
 
     return Command(
-        goto="agent_node", update={"message": tool_messages, "pending_tool_calls": []}
+        goto="agent_node",
+        update={
+            "message": tool_messages,
+            "pending_tool_calls": [],
+            "approval_granted": False,
+            "awaiting_approval": False,
+        },
     )
 
 

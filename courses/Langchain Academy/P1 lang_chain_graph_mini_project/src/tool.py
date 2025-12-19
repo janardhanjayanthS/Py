@@ -1,6 +1,5 @@
 from constants import JSON_FILEPATH
 from langchain.tools import tool
-from langgraph.runtime import get_runtime
 from prompt import (
     ADD_TO_FAVORITE_AUTHORS_PROMPT,
     ADD_TO_FAVORITE_GENRES_PROMPT,
@@ -8,13 +7,12 @@ from prompt import (
     GET_BOOKS_PROMPT,
     SEARCH_BOOK_PORMPT,
 )
-from schema import RuntimeContext
 from utility import load_json
 
 SENSITIVE_TOOLS = {
     "add_to_reading_list",
     "add_to_favorite_authors",
-    "add_to_favorite_genre",
+    "add_to_favorite_genres",
 }
 
 
@@ -104,17 +102,17 @@ def add_to_favorite_authors(author_name: str, existing_favorite_authors: list) -
     parse_docstring=True,
     description=ADD_TO_FAVORITE_GENRES_PROMPT,
 )
-def add_to_favorite_genre(genre_type: str) -> str:
+def add_to_favorite_genre(genre_type: str, existing_favorite_genres: list) -> str:
     """
     To add a genre to favorite_genres (list)
     in memory
 
     Args:
         genre_type: name of the author
+        existing_favorite_genres: user's current favorite genre list
 
     Returns:
         str: result of this tool call (success/fail)
     """
-    favorite_authors = get_runtime(RuntimeContext).context.favorite_genres
-    favorite_authors.append(genre_type)
+    existing_favorite_genres.append(genre_type)
     return f"Successfully added {genre_type} to your favorites"

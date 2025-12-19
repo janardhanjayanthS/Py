@@ -95,5 +95,6 @@ async def mainloop():
 if __name__ == "__main__":
     asyncio.run(mainloop())
     # TOFIX:
-    # - tool calls with data access, that means appending into any state's key need to be fixed
-    # - need to check and fix MCP
+    # - need to check  MCP
+    # - Refactor: execute_tool_node to send state to tools, then access required details within each tool
+    # - Refactor: the whole code to use smaller fucntion
