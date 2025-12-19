@@ -96,5 +96,4 @@ if __name__ == "__main__":
     asyncio.run(mainloop())
     # TOFIX:
     # - need to check  MCP
-    # - Refactor: execute_tool_node to send state to tools, then access required details within each tool
     # - Refactor: the whole code to use smaller fucntion

@@ -1,32 +1,12 @@
 from json import dumps
 
-from config import BOOK_MCP_PATH, OPENAI_API_KEY
+from constants import OPENAI_API_KEY, TOOL_LIST, client
 from langchain_core.messages import SystemMessage, ToolMessage
-from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_openai import ChatOpenAI
 from langgraph.types import Command, interrupt
 from langgraph_utility import AgentState
 from prompt import SYSTEM_PROMPT
-from tool import (
-    SENSITIVE_TOOLS,
-    add_to_favorite_authors,
-    add_to_favorite_genre,
-    add_to_reading_list,
-    get_books,
-    search_book,
-)
-
-TOOL_LIST: list = [
-    search_book,
-    get_books,
-    add_to_reading_list,
-    add_to_favorite_genre,
-    add_to_favorite_authors,
-]
-
-client = MultiServerMCPClient(
-    {"book": {"transport": "stdio", "command": "python", "args": [BOOK_MCP_PATH]}}
-)
+from tool import SENSITIVE_TOOLS
 
 
 async def agent_reasoning_node(state: AgentState):
