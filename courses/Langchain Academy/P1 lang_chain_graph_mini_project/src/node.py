@@ -138,35 +138,31 @@ async def execute_tools_node(state: AgentState) -> Command:
             continue
 
         try:
-            print(f"calling {tool_name}!")
-            tool_call["args"]["state"] = state
-            print(f"ARGS: {tool_call['args']}")
-            result = tool_func.invoke(tool_call["args"])
-            #
-            # if tool_name == "get_all_available_books":
-            #     print("calling get all available books tool")
-            #     result = tool_func.invoke(tool_call["args"])
-            # elif tool_name == "search_for_book_info":
-            #     print("calling search for book info")
-            #     query = state["message"][-1].content if state["message"] else ""
-            #     tool_call["args"]["query"] = query
-            #     result = tool_func.invoke(tool_call["args"])
-            # elif tool_name == "add_to_reading_list":
-            #     print("calling add to reading list")
-            #     tool_call["args"]["existing_reading_list"] = state["reading_list"]
-            #     result = tool_func.invoke(tool_call["args"])
-            # elif tool_name == "add_to_favorite_authors":
-            #     print("calling add to favorite authors")
-            #     tool_call["args"]["existing_favorite_authors"] = state[
-            #         "favorite_authors"
-            #     ]
-            #     result = tool_func.invoke(tool_call["args"])
-            # elif tool_name == "add_to_favorite_genres":
-            #     print("calling add to favorite genres")
-            #     tool_call["args"]["existing_favorite_genres"] = state["favorite_genres"]
-            #     result = tool_func.invoke(tool_call["args"])
-            # else:
-            #     result = tool_func.invoke(tool_call["args"])
+            if tool_name == "get_all_available_books":
+                print("calling get all available books tool")
+                result = tool_func.invoke(tool_call["args"])
+            elif tool_name == "search_for_book_info":
+                print("calling search for book info")
+                query = state["message"][-1].content if state["message"] else ""
+                tool_call["args"]["query"] = query
+                result = tool_func.invoke(tool_call["args"])
+            elif tool_name == "add_to_reading_list":
+                print("calling add to reading list")
+                tool_call["args"]["existing_reading_list"] = state["reading_list"]
+                result = tool_func.invoke(tool_call["args"])
+            elif tool_name == "add_to_favorite_authors":
+                print("calling add to favorite authors")
+                tool_call["args"]["existing_favorite_authors"] = state[
+                    "favorite_authors"
+                ]
+                result = tool_func.invoke(tool_call["args"])
+            elif tool_name == "add_to_favorite_genres":
+                print("calling add to favorite genres")
+                tool_call["args"]["existing_favorite_genres"] = state["favorite_genres"]
+                result = tool_func.invoke(tool_call["args"])
+            else:
+                print(f"calling {tool_name}!")
+                result = tool_func.invoke(tool_call["args"])
 
             tool_messages.append(
                 ToolMessage(content=str(result), tool_call_id=tool_id, name=tool_name)

@@ -68,6 +68,11 @@ def build_graph(builder: StateGraph) -> None:
         {"request_approval": "request_approval", "execute_tools": "execute_tools"},
     )
 
+    # After approval, always go to execute_tools
     builder.add_edge("request_approval", "execute_tools")
+
+    # After executing tools, go back to agent
     builder.add_edge("execute_tools", "agent_node")
+
+    # Finalize ends the conversation
     builder.add_edge("finalize", END)
