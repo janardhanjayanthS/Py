@@ -95,4 +95,5 @@ async def mainloop():
 if __name__ == "__main__":
     asyncio.run(mainloop())
     # TOFIX:
-    # - need to check  MCP
+    # - minor: code could be refacotred,
+    # - make a understanding video - like leetcode ones - cause probably you will forget everything after a while

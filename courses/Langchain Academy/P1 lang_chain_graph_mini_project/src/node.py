@@ -2,17 +2,14 @@ from json import dumps
 
 from constants import OPENAI_API_KEY, SENSITIVE_TOOLS, TOOL_LIST, client
 from graph_utility import AgentState
-from langchain_core.messages import SystemMessage, ToolMessage
+from langchain_core.messages import SystemMessage
 from langchain_openai import ChatOpenAI
 from langgraph.types import Command, interrupt
 from node_utility import (
-    get_tool_message_for_skipped_tool_call,
-    get_tool_message_for_unknown_tool,
-    invoke_tools,
+    process_single_tool_call,
     update_system_prompt_with_state_variables,
 )
 from prompt import SYSTEM_PROMPT
-from utility import ToolInfo
 
 
 async def agent_reasoning_node(state: AgentState):
@@ -93,67 +90,10 @@ async def execute_tools_node(state: AgentState) -> Command:
     approval_granted = state.get("approval_granted", False)
 
     for tool_call in state["pending_tool_calls"]:
-        tool_id = tool_call["id"]
-        tool_name = tool_call["name"]
-
-        if not approval_granted and tool_name in SENSITIVE_TOOLS:
-            tool_messages.append(
-                get_tool_message_for_skipped_tool_call(
-                    ToolInfo(name=tool_name, id=tool_id)
-                )
-            )
-            continue
-
-        tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
-
-        if not tool_func:
-            print("Tool not found in existing tool list, checking MCP tools")
-            try:
-                mcp_tools = await client.get_tools()
-                mcp_tool = next((t for t in mcp_tools if t.name == tool_name), None)
-
-                if mcp_tool:
-                    print(f"Found mcp tool: {mcp_tool.name}")
-                    print(f"mcp tool args: {tool_call['args']}")
-                    result = await mcp_tool.ainvoke(tool_call["args"])
-                    tool_messages.append(
-                        ToolMessage(
-                            content=str(result), tool_call_id=tool_id, name=tool_name
-                        )
-                    )
-                    continue
-                else:
-                    tool_messages.append(
-                        get_tool_message_for_unknown_tool(
-                            ToolInfo(name=tool_name, id=tool_id)
-                        )
-                    )
-                    continue
-            except Exception as e:
-                message = f"Error with MCP tool exec. {e}"
-                print(message)
-                tool_messages.append(
-                    ToolMessage(content=message, tool_call_id=tool_id, name=tool_name)
-                )
-                continue
-
-        try:
-            result = invoke_tools(
-                tool_function=tool_func,
-                tool_call=tool_call,
-                tool_name=tool_name,
-                state=state,
-            )
-
-            tool_messages.append(
-                ToolMessage(content=str(result), tool_call_id=tool_id, name=tool_name)
-            )
-
-        except Exception as e:
-            print(f"Error executing tool {tool_name}: {e}")
-            tool_messages.append(
-                ToolMessage(content=f"Error: {e}", tool_call_id=tool_id, name=tool_name)
-            )
+        tool_message = await process_single_tool_call(
+            tool_call=tool_call, approval_granted=approval_granted, state=state
+        )
+        tool_messages.append(tool_message)
 
     return Command(
         goto="agent_node",

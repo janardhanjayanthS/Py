@@ -1,15 +1,11 @@
 from dataclasses import dataclass
 from json import load
-from typing import Callable, Optional
 
 
 @dataclass
 class ToolInfo:
     name: str
     id: str
-    tool_call: Optional[dict] = None
-    mcp_tool: Optional[Callable] = None
-    tool_messages: Optional[list] = None
 
 
 def load_json(filepath: str) -> list[dict]:

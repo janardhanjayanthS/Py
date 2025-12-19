@@ -1,8 +1,73 @@
 from typing import Callable
 
+from constants import SENSITIVE_TOOLS, TOOL_LIST, client
 from graph_utility import AgentState
 from langchain_core.messages import ToolMessage
 from utility import ToolInfo
+
+
+async def process_single_tool_call(
+    tool_call: dict, approval_granted: bool, state: AgentState
+) -> ToolMessage:
+    tool_id = tool_call["id"]
+    tool_name = tool_call["name"]
+
+    if not approval_granted and tool_name in SENSITIVE_TOOLS:
+        return get_tool_message_for_skipped_tool_call(
+            ToolInfo(name=tool_name, id=tool_id)
+        )
+
+    tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
+
+    if tool_func:
+        return await execute_local_tool_call(
+            tool_func=tool_func,
+            tool_call=tool_call,
+            tool=ToolInfo(name=tool_name, id=tool_id),
+            state=state,
+        )
+    else:
+        return await execute_mcp_tool_call(
+            tool_call=tool_call, tool=ToolInfo(name=tool_name, id=tool_id)
+        )
+
+
+async def execute_local_tool_call(
+    tool_func: Callable, tool_call: dict, tool: ToolInfo, state: AgentState
+):
+    try:
+        result = invoke_tools(
+            tool_function=tool_func,
+            tool_call=tool_call,
+            tool_name=tool.name,
+            state=state,
+        )
+        return ToolMessage(content=str(result), tool_call_id=tool.id, name=tool.name)
+
+    except Exception as e:
+        print(f"Error executing tool {tool.name}: {e}")
+        return ToolMessage(content=f"Error: {e}", tool_call_id=tool.id, name=tool.name)
+
+
+async def execute_mcp_tool_call(tool_call: dict, tool: ToolInfo):
+    print("Tool not found in existing tool list, checking MCP tools")
+    try:
+        mcp_tools = await client.get_tools()
+        mcp_tool = next((t for t in mcp_tools if t.name == tool.name), None)
+
+        if mcp_tool:
+            print(f"Found mcp tool: {mcp_tool.name}")
+            print(f"mcp tool args: {tool_call['args']}")
+            result = await mcp_tool.ainvoke(tool_call["args"])
+            return ToolMessage(
+                content=str(result), tool_call_id=tool.id, name=tool.name
+            )
+        else:
+            return get_tool_message_for_unknown_tool(tool=tool)
+    except Exception as e:
+        message = f"Error with MCP tool exec. {e}"
+        print(message)
+        return ToolMessage(content=message, tool_call_id=tool.id, name=tool.name)
 
 
 def update_system_prompt_with_state_variables(system_prompt: str, state: AgentState):
