@@ -65,7 +65,9 @@ def get_books(books: list) -> list:
 @tool(
     "add_to_reading_list", parse_docstring=True, description=ADD_TO_READING_LIST_PROMPT
 )
-def add_to_reading_list(book_title: str, books: list) -> str:
+def add_to_reading_list(
+    book_title: str, books: list, existing_reading_list: list
+) -> str:
     """
     To add a particular book to user's reading list, which is in RuntimeContext
 
@@ -75,11 +77,10 @@ def add_to_reading_list(book_title: str, books: list) -> str:
     Returns:
         str: details about this process (success/fail)
     """
-    reading_list = get_runtime(RuntimeContext).context.reading_list
     book_details = search_book_using_title(book_title=book_title, books=books)
 
     if book_details:
-        reading_list.append(book_details)
+        existing_reading_list.append(book_details)
         return f"Successfully appended book: {book_details} to reading list"
     else:
         return f"Cannot find requested book ({book_title}), try again"
@@ -90,7 +91,7 @@ def add_to_reading_list(book_title: str, books: list) -> str:
     parse_docstring=True,
     description=ADD_TO_FAVORITE_AUTHORS_PROMPT,
 )
-def add_to_favorite_authors(author_name: str) -> str:
+def add_to_favorite_authors(author_name: str, existing_favorite_authors: list) -> str:
     """
     To add an author's name to favorite_authors (list)
     in memory
@@ -101,8 +102,7 @@ def add_to_favorite_authors(author_name: str) -> str:
     Returns:
         str: result of this tool call (success/fail)
     """
-    favorite_authors = get_runtime(RuntimeContext).context.favorite_authors
-    favorite_authors.append(author_name)
+    existing_favorite_authors.append(author_name)
     return f"Successfully added {author_name} to your favorites"
 
 

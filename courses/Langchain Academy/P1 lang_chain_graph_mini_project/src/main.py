@@ -47,7 +47,7 @@ async def mainloop():
             try:
                 final_output = None
                 async for event in agent.astream(
-                    initial_state, config, stream_mode="values"
+                    current_input, config, stream_mode="values"
                 ):
                     final_output = event
 

@@ -91,7 +91,6 @@ async def execute_tools_node(state: AgentState) -> Command:
 
     tool_messages = []
     books_from_state = state["books"]
-    print(f"STATE: {state}")
 
     approval_granted = state.get("approval_granted", False)
 
@@ -123,9 +122,17 @@ async def execute_tools_node(state: AgentState) -> Command:
                 result = tool_func.invoke(tool_call["args"])
             elif tool_name == "add_to_reading_list":
                 print("calling add to reading list")
-                tool_call["args"]["book_title"] = ""
                 tool_call["args"]["books"] = books_from_state
+                tool_call["args"]["existing_reading_list"] = state["reading_list"]
                 result = tool_func.invoke(tool_call["args"])
+            elif tool_name == "add_to_favorite_authors":
+                print("calling add to reading list")
+                print(f"ARGS: {tool_call['args']}")
+                tool_call["args"]["existing_favorite_authors"] = state[
+                    "favorite_authors"
+                ]
+                result = tool_func.invoke(tool_call["args"])
+
             else:
                 print(f"calling {tool_name}!")
                 result = tool_func.invoke(tool_call["args"])
@@ -139,8 +146,6 @@ async def execute_tools_node(state: AgentState) -> Command:
                 ToolMessage(content=f"Error: {e}", tool_call_id=tool_id, name=tool_name)
             )
 
-    # We send the list of ToolMessages back to the agent.
-    # The agent will see the "User denied" or the actual results and respond.
     return Command(
         goto="agent_node", update={"message": tool_messages, "pending_tool_calls": []}
     )
