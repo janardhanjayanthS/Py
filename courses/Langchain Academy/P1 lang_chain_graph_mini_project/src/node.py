@@ -8,6 +8,7 @@ from langgraph.types import Command, interrupt
 from langgraph_utility import AgentState
 from prompt import SYSTEM_PROMPT
 from tool import (
+    SENSITIVE_TOOLS,
     add_to_favorite_authors,
     add_to_favorite_genre,
     add_to_reading_list,
@@ -58,47 +59,57 @@ async def agent_reasoning_node(state: AgentState):
     }
 
 
-async def check_approval_node(state: AgentState) -> Command:
-    sensitive_tools = {
-        "add_to_reading_list",
-        "add_to_favorite_authors",
-        "add_to_favorite_genre",
-    }
-    needs_approval = any(
-        tc["name"] in sensitive_tools for tc in state["pending_tool_calls"]
-    )
-
-    if needs_approval:
-        return Command(goto="request_approval", update={"awaiting_approval": True})
-
-    return Command(goto="execute_tools", update={"awaiting_approval": False})
-
-
 def request_approval_node(state: AgentState):
     print("🚨 APPROVAL REQUIRED")
     for tc in state["pending_tool_calls"]:
         print(f"Tool name: {tc['name']}")
         print(f"Tool args: {dumps(tc['args'], indent=2)}")
 
-    interrupt(
+    user_approval = interrupt(
         value={"type": "approval_request", "actions": state["pending_tool_calls"]}
     )
-
-    print("\nApprove? (y/n): ", end="")
-    user_approval = input().lower().strip() == "y"
 
     return {"approval_granted": user_approval, "awaiting_approval": False}
 
 
+async def check_approval_node(state: AgentState) -> Command:
+    print("INSIDE check_approval_node!")
+
+    needs_approval = any(
+        tc["name"] in SENSITIVE_TOOLS for tc in state["pending_tool_calls"]
+    )
+    print(f"NEEDS APPROVAL {needs_approval}")
+
+    if needs_approval:
+        return Command(goto="request_approval")
+
+    return Command(goto="execute_tools")
+
+
 async def execute_tools_node(state: AgentState) -> Command:
     print("\n⚙️ Executing tools...")
+
     tool_messages = []
     books_from_state = state["books"]
+    print(f"STATE: {state}")
+
+    approval_granted = state.get("approval_granted", False)
 
     for tool_call in state["pending_tool_calls"]:
+        tool_id = tool_call["id"]
         tool_name = tool_call["name"]
-        tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
 
+        if not approval_granted and tool_name in SENSITIVE_TOOLS:
+            print(f"TOOL SKIPPED: {tool_name}")
+            tool_msg = ToolMessage(
+                content="User denied permission to execute this tool.",
+                tool_call_id=tool_id,
+                name=tool_name,
+            )
+            tool_messages.append(tool_msg)
+            continue
+
+        tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
         try:
             if tool_name == "get_all_available_books":
                 print("calling get all available books tool")
@@ -106,23 +117,30 @@ async def execute_tools_node(state: AgentState) -> Command:
                 result = tool_func.invoke(tool_call["args"])
             elif tool_name == "search_for_book_info":
                 print("calling search for book info")
-                query = state["message"][-2]["content"]
+                query = state["message"][-1].content if state["message"] else ""
                 tool_call["args"]["query"] = query
+                tool_call["args"]["books"] = books_from_state
+                result = tool_func.invoke(tool_call["args"])
+            elif tool_name == "add_to_reading_list":
+                print("calling add to reading list")
+                tool_call["args"]["book_title"] = ""
                 tool_call["args"]["books"] = books_from_state
                 result = tool_func.invoke(tool_call["args"])
             else:
                 print(f"calling {tool_name}!")
                 result = tool_func.invoke(tool_call["args"])
-            tool_msg = ToolMessage(
-                content=str(result), tool_call_id=tool_call["id"], name=tool_name
-            )
-            tool_messages.append(tool_msg)
-        except Exception as e:
-            tool_msg = ToolMessage(
-                content=f"Error: {e}", tool_call_id=tool_call["id"], name=tool_name
-            )
-            tool_messages.append(tool_msg)
 
+            tool_messages.append(
+                ToolMessage(content=str(result), tool_call_id=tool_id, name=tool_name)
+            )
+
+        except Exception as e:
+            tool_messages.append(
+                ToolMessage(content=f"Error: {e}", tool_call_id=tool_id, name=tool_name)
+            )
+
+    # We send the list of ToolMessages back to the agent.
+    # The agent will see the "User denied" or the actual results and respond.
     return Command(
         goto="agent_node", update={"message": tool_messages, "pending_tool_calls": []}
     )

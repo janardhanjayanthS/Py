@@ -10,6 +10,12 @@ from prompt import (
 from schema import RuntimeContext
 from utility import search_book_using_title
 
+SENSITIVE_TOOLS = {
+    "add_to_reading_list",
+    "add_to_favorite_authors",
+    "add_to_favorite_genre",
+}
+
 
 @tool(
     "search_for_book_info",
@@ -27,8 +33,6 @@ def search_book(query: str, books: list) -> list:
     Returns:
         list[dict]: list containing books as dict
     """
-    print(f"Query: {query}")
-    print(f"books: {books}")
     query = query.lower()
     result = []
 
@@ -61,7 +65,7 @@ def get_books(books: list) -> list:
 @tool(
     "add_to_reading_list", parse_docstring=True, description=ADD_TO_READING_LIST_PROMPT
 )
-def add_to_reading_list(book_title: str) -> str:
+def add_to_reading_list(book_title: str, books: list) -> str:
     """
     To add a particular book to user's reading list, which is in RuntimeContext
 
@@ -71,8 +75,6 @@ def add_to_reading_list(book_title: str) -> str:
     Returns:
         str: details about this process (success/fail)
     """
-    books = []
-    # books: list = get_books_from_runtime()
     reading_list = get_runtime(RuntimeContext).context.reading_list
     book_details = search_book_using_title(book_title=book_title, books=books)
 
