@@ -1,13 +1,14 @@
 import asyncio
 
+from constants import JSON_FILEPATH
 from graph import get_compiled_graph
 from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.types import Command
-from utility import load_json
 
 
 async def mainloop():
     print("Book Manager Agent Welcomes you!")
+    print(f"books.json filepath: {JSON_FILEPATH}")
 
     agent = get_compiled_graph()
     config = {"configurable": {"thread_id": "1"}}
@@ -22,7 +23,6 @@ async def mainloop():
         "favorite_authors": [],
         "favorite_genres": [],
         "reading_list": [],
-        "books": load_json(filepath="../data/books.json"),
     }
 
     turn_count = 1

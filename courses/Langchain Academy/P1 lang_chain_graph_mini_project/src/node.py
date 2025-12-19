@@ -90,7 +90,6 @@ async def execute_tools_node(state: AgentState) -> Command:
     print("\n⚙️ Executing tools...")
 
     tool_messages = []
-    books_from_state = state["books"]
 
     approval_granted = state.get("approval_granted", False)
 
@@ -112,17 +111,14 @@ async def execute_tools_node(state: AgentState) -> Command:
         try:
             if tool_name == "get_all_available_books":
                 print("calling get all available books tool")
-                tool_call["args"]["books"] = books_from_state
                 result = tool_func.invoke(tool_call["args"])
             elif tool_name == "search_for_book_info":
                 print("calling search for book info")
                 query = state["message"][-1].content if state["message"] else ""
                 tool_call["args"]["query"] = query
-                tool_call["args"]["books"] = books_from_state
                 result = tool_func.invoke(tool_call["args"])
             elif tool_name == "add_to_reading_list":
                 print("calling add to reading list")
-                tool_call["args"]["books"] = books_from_state
                 tool_call["args"]["existing_reading_list"] = state["reading_list"]
                 result = tool_func.invoke(tool_call["args"])
             elif tool_name == "add_to_favorite_authors":

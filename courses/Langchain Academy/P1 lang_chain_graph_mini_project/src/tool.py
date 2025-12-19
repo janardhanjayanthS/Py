@@ -1,3 +1,4 @@
+from constants import JSON_FILEPATH
 from langchain.tools import tool
 from langgraph.runtime import get_runtime
 from prompt import (
@@ -8,7 +9,7 @@ from prompt import (
     SEARCH_BOOK_PORMPT,
 )
 from schema import RuntimeContext
-from utility import search_book_using_title
+from utility import load_json, search_book_using_title
 
 SENSITIVE_TOOLS = {
     "add_to_reading_list",
@@ -49,17 +50,14 @@ def search_book(query: str, books: list) -> list:
 
 
 @tool("get_all_available_books", parse_docstring=True, description=GET_BOOKS_PROMPT)
-def get_books(books: list) -> list:
+def get_books() -> list:
     """
     get books from available books (context)
-
-    Args:
-        books: list of all available books from .json file
 
     Returns:
         list: of dict containing book detail
     """
-    return books
+    return load_json(filename=JSON_FILEPATH)
 
 
 @tool(

@@ -17,22 +17,12 @@ def load_json(filepath: str) -> list[dict]:
     """
     try:
         with open(filepath, "r") as json_file:
-            return load(json_file)
+            data = load(json_file)
+            print(f"Loaded json data: {data}")
+            return data
     except FileNotFoundError as e:
         print(f"Unable to find {filepath}, error: {e}")
         return []
-
-
-def get_books_from_agentstate() -> list[dict]:
-    """
-    returns the books from runtime context
-
-    Returns:
-        Optional[list[dict]]: list contining book dictionary
-    """
-    # read  and send books as list
-    books = ...
-    return books if books else []
 
 
 def search_book_using_title(book_title: str, books: list[dict]) -> dict:

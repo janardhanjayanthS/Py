@@ -3,7 +3,7 @@ from model import BookInReadingList, ReadingList
 SYSTEM_PROMPT = f"""
 You are a helpful book managing assistant.
 
-You have access to book data through the state that flows through graph nodes.  
+You can access all books through get_books() tool
 It data contains information about books including:
 - title: The book's title
 - author: The book's author
