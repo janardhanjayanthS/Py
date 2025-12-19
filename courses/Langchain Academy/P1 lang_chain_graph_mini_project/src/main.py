@@ -1,6 +1,5 @@
 import asyncio
 
-from constants import JSON_FILEPATH
 from graph import get_compiled_graph
 from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.types import Command
@@ -8,7 +7,6 @@ from langgraph.types import Command
 
 async def mainloop():
     print("Book Manager Agent Welcomes you!")
-    print(f"books.json filepath: {JSON_FILEPATH}")
 
     agent = get_compiled_graph()
     config = {"configurable": {"thread_id": "1"}}
@@ -98,5 +96,4 @@ if __name__ == "__main__":
     asyncio.run(mainloop())
     # TOFIX:
     # - tool calls with data access, that means appending into any state's key need to be fixed
-    # - HITL
     # - need to check and fix MCP

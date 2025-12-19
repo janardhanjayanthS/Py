@@ -50,14 +50,15 @@ def search_book(query: str, books: list) -> list:
 
 
 @tool("get_all_available_books", parse_docstring=True, description=GET_BOOKS_PROMPT)
-def get_books() -> list:
+def get_books() -> str:
     """
     get books from available books (context)
 
     Returns:
         list: of dict containing book detail
     """
-    return load_json(filename=JSON_FILEPATH)
+    data = load_json(filepath=JSON_FILEPATH)
+    return str(data) if data else "Unable to load books data"
 
 
 @tool(
