@@ -1,10 +1,10 @@
 from json import dumps
 
 from constants import OPENAI_API_KEY, SENSITIVE_TOOLS, TOOL_LIST, client
+from graph_utility import AgentState
 from langchain_core.messages import SystemMessage, ToolMessage
 from langchain_openai import ChatOpenAI
 from langgraph.types import Command, interrupt
-from langgraph_utility import AgentState
 from node_utility import (
     get_tool_message_for_skipped_tool_call,
     get_tool_message_for_unknown_tool,

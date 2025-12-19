@@ -1,9 +1,9 @@
 from typing import Literal
 
 from constants import SENSITIVE_TOOLS
+from graph_utility import AgentState
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
-from langgraph_utility import AgentState
 from node import (
     agent_reasoning_node,
     check_approval_node,

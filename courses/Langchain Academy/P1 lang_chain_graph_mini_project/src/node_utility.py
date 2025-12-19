@@ -1,7 +1,7 @@
 from typing import Callable
 
+from graph_utility import AgentState
 from langchain_core.messages import ToolMessage
-from langgraph_utility import AgentState
 
 
 def update_system_prompt_with_state_variables(system_prompt: str, state: AgentState):
