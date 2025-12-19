@@ -2,6 +2,7 @@ from typing import Callable
 
 from graph_utility import AgentState
 from langchain_core.messages import ToolMessage
+from utility import ToolInfo
 
 
 def update_system_prompt_with_state_variables(system_prompt: str, state: AgentState):
@@ -16,22 +17,22 @@ def update_system_prompt_with_state_variables(system_prompt: str, state: AgentSt
     return system_prompt_with_state_variables
 
 
-def get_tool_message_for_skipped_tool_call(tool_name: str, tool_id: str) -> ToolMessage:
-    print(f"TOOL SKIPPED: {tool_name}")
+def get_tool_message_for_skipped_tool_call(tool: ToolInfo) -> ToolMessage:
+    print(f"TOOL SKIPPED: {tool.name}")
     tool_msg = ToolMessage(
         content="User denied permission to execute this tool.",
-        tool_call_id=tool_id,
-        name=tool_name,
+        tool_call_id=tool.id,
+        name=tool.name,
     )
     return tool_msg
 
 
-def get_tool_message_for_unknown_tool(tool_name: str, tool_id: str) -> ToolMessage:
-    print(f"Tool {tool_name} not found in TOOL_LIST")
+def get_tool_message_for_unknown_tool(tool: ToolInfo) -> ToolMessage:
+    print(f"Tool {tool.name} not found in TOOL_LIST")
     tool_msg = ToolMessage(
-        content=f"Error: Tool {tool_name} not found",
-        tool_call_id=tool_id,
-        name=tool_name,
+        content=f"Error: Tool {tool.name} not found",
+        tool_call_id=tool.id,
+        name=tool.name,
     )
     return tool_msg
 
