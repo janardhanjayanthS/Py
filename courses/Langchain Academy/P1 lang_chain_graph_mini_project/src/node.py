@@ -31,11 +31,20 @@ client = MultiServerMCPClient(
 
 async def agent_reasoning_node(state: AgentState):
     messages = state["message"]
-    system_message = SystemMessage(content=SYSTEM_PROMPT)
     open_book_tool = await client.get_tools()
 
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=OPENAI_API_KEY)
     agent = llm.bind_tools(TOOL_LIST + open_book_tool)
+
+    system_prompt_with_state_variables = f"""
+    {SYSTEM_PROMPT}
+
+    CURRENT USER DATA:
+    - favorite authors: {state.get("favorite_authors", [])}
+    - favorite genres: {state.get("favorite_genres", [])}
+    - reading list: {state.get("reading_list", [])}
+    """
+    system_message = SystemMessage(content=system_prompt_with_state_variables)
 
     response = await agent.ainvoke([system_message] + messages)
 

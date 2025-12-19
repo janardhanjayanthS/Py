@@ -18,7 +18,6 @@ def load_json(filepath: str) -> list[dict]:
     try:
         with open(filepath, "r") as json_file:
             data = load(json_file)
-            print(f"Loaded json data: {data}")
             return data
     except FileNotFoundError as e:
         print(f"Unable to find {filepath}, error: {e}")

@@ -9,7 +9,7 @@ from prompt import (
     SEARCH_BOOK_PORMPT,
 )
 from schema import RuntimeContext
-from utility import load_json, search_book_using_title
+from utility import load_json
 
 SENSITIVE_TOOLS = {
     "add_to_reading_list",
@@ -64,25 +64,19 @@ def get_books() -> str:
 @tool(
     "add_to_reading_list", parse_docstring=True, description=ADD_TO_READING_LIST_PROMPT
 )
-def add_to_reading_list(
-    book_title: str, books: list, existing_reading_list: list
-) -> str:
+def add_to_reading_list(book_title: str, existing_reading_list: list) -> str:
     """
     To add a particular book to user's reading list, which is in RuntimeContext
 
     Args:
         book_title: title of the book to add
+        existing_reading_list: user's current reading list
 
     Returns:
         str: details about this process (success/fail)
     """
-    book_details = search_book_using_title(book_title=book_title, books=books)
-
-    if book_details:
-        existing_reading_list.append(book_details)
-        return f"Successfully appended book: {book_details} to reading list"
-    else:
-        return f"Cannot find requested book ({book_title}), try again"
+    existing_reading_list.append(book_title)
+    return f"Successfully appended book: {book_title} to reading list"
 
 
 @tool(
