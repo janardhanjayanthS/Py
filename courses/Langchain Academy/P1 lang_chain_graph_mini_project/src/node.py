@@ -18,6 +18,8 @@ async def agent_reasoning_node(state: AgentState):
     messages = state["message"]
     open_book_tool = await client.get_tools()
 
+    print(f"OPEN BOOK TOOL: {open_book_tool}")
+
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=OPENAI_API_KEY)
     agent = llm.bind_tools(TOOL_LIST + open_book_tool)
 

@@ -96,4 +96,3 @@ if __name__ == "__main__":
     asyncio.run(mainloop())
     # TOFIX:
     # - need to check  MCP
-    # - Refactor: the whole code to use smaller fucntion
