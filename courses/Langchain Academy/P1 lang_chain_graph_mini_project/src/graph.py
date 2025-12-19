@@ -1,5 +1,6 @@
 from typing import Literal
 
+from constants import SENSITIVE_TOOLS
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 from langgraph_utility import AgentState
@@ -28,17 +29,14 @@ def create_graph_image(graph) -> None:
 
 
 def build_graph(builder: StateGraph) -> None:
-    # Add all nodes
     builder.add_node("agent_node", agent_reasoning_node)
     builder.add_node("check_approval", check_approval_node)
     builder.add_node("request_approval", request_approval_node)
     builder.add_node("execute_tools", execute_tools_node)
     builder.add_node("finalize", finalize_node)
 
-    # Start edge
     builder.add_edge(START, "agent_node")
 
-    # Route after agent: either check approval or finalize
     def route_after_agent(state: AgentState) -> Literal["check_approval", "finalize"]:
         if state["pending_tool_calls"]:
             return "check_approval"
@@ -50,13 +48,9 @@ def build_graph(builder: StateGraph) -> None:
         {"check_approval": "check_approval", "finalize": "finalize"},
     )
 
-    # Route after check_approval: either request approval or execute directly
     def route_after_check(
         state: AgentState,
     ) -> Literal["request_approval", "execute_tools"]:
-        # Check if any pending tools need approval
-        from tool import SENSITIVE_TOOLS
-
         needs_approval = any(
             tc["name"] in SENSITIVE_TOOLS for tc in state["pending_tool_calls"]
         )
@@ -68,11 +62,6 @@ def build_graph(builder: StateGraph) -> None:
         {"request_approval": "request_approval", "execute_tools": "execute_tools"},
     )
 
-    # After approval, always go to execute_tools
     builder.add_edge("request_approval", "execute_tools")
-
-    # After executing tools, go back to agent
     builder.add_edge("execute_tools", "agent_node")
-
-    # Finalize ends the conversation
     builder.add_edge("finalize", END)

@@ -24,6 +24,12 @@ TOOL_LIST: list = [
     add_to_favorite_authors,
 ]
 
+SENSITIVE_TOOLS = {
+    "add_to_reading_list",
+    "add_to_favorite_authors",
+    "add_to_favorite_genres",
+}
+
 # MCP client
 BOOK_MCP_PATH = str(Path(__file__).parent / "book_mcp.py")
 client = MultiServerMCPClient(

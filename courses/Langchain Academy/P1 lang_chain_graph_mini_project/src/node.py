@@ -1,12 +1,17 @@
 from json import dumps
 
-from constants import OPENAI_API_KEY, TOOL_LIST, client
+from constants import OPENAI_API_KEY, SENSITIVE_TOOLS, TOOL_LIST, client
 from langchain_core.messages import SystemMessage, ToolMessage
 from langchain_openai import ChatOpenAI
 from langgraph.types import Command, interrupt
 from langgraph_utility import AgentState
+from node_utility import (
+    get_tool_message_for_skipped_tool_call,
+    get_tool_message_for_unknown_tool,
+    invoke_tools,
+    update_system_prompt_with_state_variables,
+)
 from prompt import SYSTEM_PROMPT
-from tool import SENSITIVE_TOOLS
 
 
 async def agent_reasoning_node(state: AgentState):
@@ -16,15 +21,10 @@ async def agent_reasoning_node(state: AgentState):
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=OPENAI_API_KEY)
     agent = llm.bind_tools(TOOL_LIST + open_book_tool)
 
-    system_prompt_with_state_variables = f"""
-    {SYSTEM_PROMPT}
-
-    CURRENT USER DATA:
-    - favorite authors: {state.get("favorite_authors", [])}
-    - favorite genres: {state.get("favorite_genres", [])}
-    - reading list: {state.get("reading_list", [])}
-    """
-    system_message = SystemMessage(content=system_prompt_with_state_variables)
+    updated_sys_prompt = update_system_prompt_with_state_variables(
+        system_prompt=SYSTEM_PROMPT, state=state
+    )
+    system_message = SystemMessage(content=updated_sys_prompt)
 
     response = await agent.ainvoke([system_message] + messages)
 
@@ -96,53 +96,28 @@ async def execute_tools_node(state: AgentState) -> Command:
         tool_name = tool_call["name"]
 
         if not approval_granted and tool_name in SENSITIVE_TOOLS:
-            print(f"TOOL SKIPPED: {tool_name}")
-            tool_msg = ToolMessage(
-                content="User denied permission to execute this tool.",
-                tool_call_id=tool_id,
-                name=tool_name,
+            tool_messages.append(
+                get_tool_message_for_skipped_tool_call(
+                    tool_name=tool_name, tool_id=tool_id
+                )
             )
-            tool_messages.append(tool_msg)
             continue
 
         tool_func = next((t for t in TOOL_LIST if t.name == tool_name), None)
 
         if not tool_func:
-            print(f"Tool {tool_name} not found in TOOL_LIST")
-            tool_msg = ToolMessage(
-                content=f"Error: Tool {tool_name} not found",
-                tool_call_id=tool_id,
-                name=tool_name,
+            tool_messages.append(
+                get_tool_message_for_unknown_tool(tool_name=tool_name, tool_id=tool_id)
             )
-            tool_messages.append(tool_msg)
             continue
 
         try:
-            if tool_name == "get_all_available_books":
-                print("calling get all available books tool")
-                result = tool_func.invoke(tool_call["args"])
-            elif tool_name == "search_for_book_info":
-                print("calling search for book info")
-                query = state["message"][-1].content if state["message"] else ""
-                tool_call["args"]["query"] = query
-                result = tool_func.invoke(tool_call["args"])
-            elif tool_name == "add_to_reading_list":
-                print("calling add to reading list")
-                tool_call["args"]["existing_reading_list"] = state["reading_list"]
-                result = tool_func.invoke(tool_call["args"])
-            elif tool_name == "add_to_favorite_authors":
-                print("calling add to favorite authors")
-                tool_call["args"]["existing_favorite_authors"] = state[
-                    "favorite_authors"
-                ]
-                result = tool_func.invoke(tool_call["args"])
-            elif tool_name == "add_to_favorite_genres":
-                print("calling add to favorite genres")
-                tool_call["args"]["existing_favorite_genres"] = state["favorite_genres"]
-                result = tool_func.invoke(tool_call["args"])
-            else:
-                print(f"calling {tool_name}!")
-                result = tool_func.invoke(tool_call["args"])
+            result = invoke_tools(
+                tool_function=tool_func,
+                tool_call=tool_call,
+                tool_name=tool_name,
+                state=state,
+            )
 
             tool_messages.append(
                 ToolMessage(content=str(result), tool_call_id=tool_id, name=tool_name)

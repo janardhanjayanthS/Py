@@ -1,4 +1,5 @@
-from constants import JSON_FILEPATH
+from pathlib import Path
+
 from langchain.tools import tool
 from prompt import (
     ADD_TO_FAVORITE_AUTHORS_PROMPT,
@@ -9,11 +10,8 @@ from prompt import (
 )
 from utility import load_json
 
-SENSITIVE_TOOLS = {
-    "add_to_reading_list",
-    "add_to_favorite_authors",
-    "add_to_favorite_genres",
-}
+# Circular imports
+JSON_FILEPATH = str(Path(__file__).parent.parent) + "/data/books.json"
 
 
 @tool(
