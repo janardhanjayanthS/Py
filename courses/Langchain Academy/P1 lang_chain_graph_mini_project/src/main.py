@@ -2,7 +2,12 @@ import asyncio
 
 from graph import get_compiled_graph
 from langchain_core.messages import AIMessage, HumanMessage
-from langgraph.types import Command
+from utility import (
+    interrupt_handler,
+    is_valid_output,
+    no_user_input,
+    user_wants_to_exit,
+)
 
 
 async def mainloop():
@@ -28,12 +33,10 @@ async def mainloop():
         turn_count += 1
         user_input = input("Prompt to llm [or] 'e' to exit: ")
 
-        if user_input.lower() == "e":
-            print("Tata")
+        if user_wants_to_exit(user_input=user_input):
             break
 
-        if not user_input:
-            print("please enter a message")
+        if no_user_input(user_input=user_input):
             continue
 
         initial_state["message"].append(HumanMessage(content=user_input))
@@ -52,18 +55,10 @@ async def mainloop():
                 # checking for interrupts
                 snapshot = await agent.aget_state(config)
                 if snapshot.tasks:
-                    print("IN-IN-shapshot tasks")
-                    print("---APPROVAL REQUIRED---")
-                    choice = input("Approve these actions (y/n): ").lower().strip()
-                    approval_granted = choice == "y"
-                    current_input = Command(resume=approval_granted)
+                    current_input, approval_granted = interrupt_handler()
                     continue
 
-                if (
-                    final_output
-                    and "message" in final_output
-                    and final_output["message"]
-                ):
+                if is_valid_output(final_output=final_output):
                     last_msg = final_output["message"][-1]
 
                     if isinstance(last_msg, AIMessage) and last_msg.content:
