@@ -1,7 +1,92 @@
-from langgraph.runtime import get_runtime
+from dataclasses import dataclass
 from json import load
-from typing import Optional
-from schema import RuntimeContext
+
+from langgraph.types import Command
+
+
+@dataclass
+class ToolInfo:
+    name: str
+    id: str
+
+
+def is_valid_output(final_output: dict) -> bool:
+    """Validates the structure and content of the graph's final output.
+
+    This helper function ensures that the output dictionary is not empty,
+    contains the 'message' key, and that the value associated with that
+    key is not an empty list or None.
+
+    Args:
+        final_output: The dictionary returned by the compiled graph
+            after execution.
+
+    Returns:
+        bool: True if the output is valid and contains message data;
+            False otherwise.
+    """
+    return final_output and "message" in final_output and final_output["message"]
+
+
+def interrupt_handler():
+    """Handles user interaction during a graph interrupt for approval.
+
+    This function is designed to be called when the graph execution is suspended.
+    It prompts the user via the terminal to approve or deny pending actions,
+    captures the input, and packages it into a LangGraph `Command` to resume
+    the workflow.
+
+    Returns:
+        tuple: A tuple containing:
+            - current_input (Command): A LangGraph Command object with the
+                `resume` value set to the user's decision (True/False).
+            - approval_granted (bool): A boolean flag representing the
+                user's choice for immediate local logic handling.
+    """
+    print("IN-IN-shapshot tasks")
+    print("---APPROVAL REQUIRED---")
+    choice = input("Approve these actions (y/n): ").lower().strip()
+    approval_granted = choice == "y"
+    current_input = Command(resume=approval_granted)
+    return current_input, approval_granted
+
+
+def user_wants_to_exit(user_input: str) -> bool:
+    """Checks if the user has provided the specific exit command.
+
+    This function evaluates the user's input to determine if the conversation
+    should be terminated. It specifically looks for the character 'e'.
+
+    Args:
+        user_input: The raw string input provided by the user.
+
+    Returns:
+        bool: True if the input matches the exit criteria and prints a
+            farewell message; False otherwise.
+    """
+    if user_input.lower == "e":
+        print("Tata")
+        return True
+    return False
+
+
+def no_user_input(user_input: str) -> bool:
+    """Validates whether the user input is empty or null.
+
+    This helper function ensures that the system does not attempt to process
+    blank entries, prompting the user for a valid string if none is found.
+
+    Args:
+        user_input: The raw string input to validate.
+
+    Returns:
+        bool: True if the input is empty or evaluates to False; False if
+            the input contains content.
+    """
+    if not user_input:
+        print("please provide a prompt")
+        return True
+    return False
 
 
 def load_json(filepath: str) -> list[dict]:
@@ -20,22 +105,11 @@ def load_json(filepath: str) -> list[dict]:
     """
     try:
         with open(filepath, "r") as json_file:
-            return load(json_file)
+            data = load(json_file)
+            return data
     except FileNotFoundError as e:
         print(f"Unable to find {filepath}, error: {e}")
         return []
-
-
-def get_books_from_runtime() -> list[dict]:
-    """
-    returns the books from runtime context
-
-    Returns:
-        Optional[list[dict]]: list contining book dictionary
-    """
-    runtime = get_runtime(RuntimeContext)
-    books = runtime.context.data
-    return books if books else []
 
 
 def search_book_using_title(book_title: str, books: list[dict]) -> dict:
@@ -57,7 +131,7 @@ def search_book_using_title(book_title: str, books: list[dict]) -> dict:
 
 def get_book_details(book_data: dict):
     """
-    Generates books as a string from data recieved from 
+    Generates books as a string from data recieved from
     openbooks api
 
     Args:
