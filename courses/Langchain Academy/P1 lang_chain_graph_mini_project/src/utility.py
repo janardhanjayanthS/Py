@@ -64,7 +64,7 @@ def user_wants_to_exit(user_input: str) -> bool:
         bool: True if the input matches the exit criteria and prints a
             farewell message; False otherwise.
     """
-    if user_input.lower == "e":
+    if user_input.lower() == "e":
         print("Tata")
         return True
     return False
