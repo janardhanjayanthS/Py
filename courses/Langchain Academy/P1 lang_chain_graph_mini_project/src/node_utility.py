@@ -9,6 +9,20 @@ from utility import ToolInfo
 async def process_single_tool_call(
     tool_call: dict, approval_granted: bool, state: AgentState
 ) -> ToolMessage:
+    """Orchestrates the lifecycle of a single tool execution.
+
+    This function determines if a tool is local or remote (MCP), checks for
+    necessary user permissions for sensitive operations, and routes the call
+    to the appropriate execution handler.
+
+    Args:
+        tool_call: A dictionary containing 'id', 'name', and 'args' for the call.
+        approval_granted: Boolean indicating if the user authorized this action.
+        state: The current global AgentState.
+
+    Returns:
+        ToolMessage: The resulting message containing the tool output or error.
+    """
     tool_id = tool_call["id"]
     tool_name = tool_call["name"]
 
@@ -35,6 +49,17 @@ async def process_single_tool_call(
 async def execute_local_tool_call(
     tool_func: Callable, tool_call: dict, tool: ToolInfo, state: AgentState
 ):
+    """Executes a tool defined within the local environment.
+
+    Args:
+        tool_func: The callable Python function associated with the tool.
+        tool_call: The raw tool call data from the LLM.
+        tool: Metadata object containing tool name and ID.
+        state: The current AgentState.
+
+    Returns:
+        ToolMessage: The outcome of the local function execution.
+    """
     try:
         result = invoke_tools(
             tool_function=tool_func,
@@ -50,6 +75,17 @@ async def execute_local_tool_call(
 
 
 async def execute_mcp_tool_call(tool_call: dict, tool: ToolInfo):
+    """Fetches and executes a tool via the Model Context Protocol (MCP) client.
+
+    This is used for dynamic tools not hardcoded in the primary TOOL_LIST.
+
+    Args:
+        tool_call: The raw tool call data from the LLM.
+        tool: Metadata object containing tool name and ID.
+
+    Returns:
+        ToolMessage: The result returned from the MCP server or an error message.
+    """
     print("Tool not found in existing tool list, checking MCP tools")
     try:
         mcp_tools = await client.get_tools()
@@ -71,6 +107,16 @@ async def execute_mcp_tool_call(tool_call: dict, tool: ToolInfo):
 
 
 def update_system_prompt_with_state_variables(system_prompt: str, state: AgentState):
+    """Injects current user preferences and state into the base system prompt.
+
+    Args:
+        system_prompt: The static base instructions for the agent.
+        state: The current AgentState containing user data.
+
+    Returns:
+        str: An augmented system prompt with the user's favorite authors,
+            genres, and reading list context.
+    """
     system_prompt_with_state_variables = f"""
     {system_prompt}
 
@@ -83,6 +129,14 @@ def update_system_prompt_with_state_variables(system_prompt: str, state: AgentSt
 
 
 def get_tool_message_for_skipped_tool_call(tool: ToolInfo) -> ToolMessage:
+    """Generates a ToolMessage for instances where the user denied execution.
+
+    Args:
+        tool: Metadata object for the skipped tool.
+
+    Returns:
+        ToolMessage: A message indicating permission was denied.
+    """
     print(f"TOOL SKIPPED: {tool.name}")
     tool_msg = ToolMessage(
         content="User denied permission to execute this tool.",
@@ -93,6 +147,14 @@ def get_tool_message_for_skipped_tool_call(tool: ToolInfo) -> ToolMessage:
 
 
 def get_tool_message_for_unknown_tool(tool: ToolInfo) -> ToolMessage:
+    """Generates an error ToolMessage for a tool that cannot be found.
+
+    Args:
+        tool: Metadata object for the missing tool.
+
+    Returns:
+        ToolMessage: A message reporting that the tool is unrecognized.
+    """
     print(f"Tool {tool.name} not found in TOOL_LIST")
     tool_msg = ToolMessage(
         content=f"Error: Tool {tool.name} not found",
@@ -105,6 +167,21 @@ def get_tool_message_for_unknown_tool(tool: ToolInfo) -> ToolMessage:
 def invoke_tools(
     tool_function: Callable, tool_call: dict, tool_name: str, state: AgentState
 ) -> str:
+    """Invokes local tool functions with context-aware argument injection.
+
+    This function acts as a dispatcher that adds relevant state information
+    (like the current reading list or last message content) to tool
+    arguments before execution.
+
+    Args:
+        tool_function: The tool logic to be invoked.
+        tool_call: The dictionary containing arguments from the LLM.
+        tool_name: The identifier of the tool being called.
+        state: The current AgentState used to hydrate tool arguments.
+
+    Returns:
+        str: The result of the tool invocation.
+    """
     if tool_name == "get_all_available_books":
         print("calling get all available books tool")
         result = tool_function.invoke(tool_call["args"])
