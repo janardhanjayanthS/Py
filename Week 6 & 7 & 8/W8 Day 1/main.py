@@ -21,9 +21,6 @@ if not OPENAI_API_KEY:
     raise ValueError(message)
 
 
-# In memory caching -> uses RAM
-# set_llm_cache(InMemoryCache())
-# SQLite caching -> auto-creates and uses a sqlite db
 set_llm_cache(SQLiteCache(database_path="langchain.db"))
 
 
