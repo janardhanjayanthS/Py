@@ -42,18 +42,6 @@ def get_llm_response(query: str) -> str:
     return response
 
 
-def check_cache(query: str) -> bool:
-    if query in cache:
-        return True
-    return False
-
-
-def cache_if_new_query(query: str, response: str) -> None:
-    global cache
-    if query not in cache:
-        cache[query] = response
-
-
 def call_agent(cache_toggle: bool = False):
     input_prompt = input("Enter prompt: ")
     start = time.time()
