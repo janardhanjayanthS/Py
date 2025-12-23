@@ -1,4 +1,5 @@
 import time
+from decimal import Decimal
 from os import getenv
 
 from dotenv import load_dotenv
@@ -12,7 +13,7 @@ OPENAI_API_KEY = getenv("OPENAI_API_KEY")
 
 
 # Manual caching -> not efficient
-cache = {}
+# cache = {}
 # In memory caching -> uses RAM
 # set_llm_cache(InMemoryCache())
 # SQLite caching -> auto-creates and uses a sqlite db
@@ -57,7 +58,7 @@ def call_agent(cache_toggle: bool = False):
     result = get_llm_response(query=input_prompt, cache_toggle=cache_toggle)
     end = time.time()
     print(result)
-    print("above llm call took: ", end - start)
+    print("above llm call took: ", Decimal(end - start))
 
 
 if __name__ == "__main__":
