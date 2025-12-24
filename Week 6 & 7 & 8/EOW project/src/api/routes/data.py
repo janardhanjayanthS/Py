@@ -1,6 +1,7 @@
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
+
 from src.core.constants import ResponseType, logger
-from src.core.database import (
+from src.core.database_utility import (
     add_file_as_embedding,
     add_web_content_as_embedding,
 )
