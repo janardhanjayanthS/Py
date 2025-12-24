@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from src.core.ai_utility import (
     calculate_token_cost,
@@ -7,6 +7,8 @@ from src.core.ai_utility import (
     update_history,
 )
 from src.core.constants import HISTORY, AIModels, ResponseType, logger
+from src.core.jwt_utility import authenticate_user_from_token
+from src.models.user import User
 from src.schema.ai import Query
 from src.schema.response import APIResponse
 
@@ -14,7 +16,9 @@ chat = APIRouter()
 
 
 @chat.post("/chat", response_model=APIResponse)
-async def search_from_db(query: Query):
+async def search_from_db(
+    query: Query, current_user: User = Depends(authenticate_user_from_token)
+):
     """
     Performs a query using a Conversational RAG chain against the vector database.
 
@@ -33,9 +37,14 @@ async def search_from_db(query: Query):
         HTTPException: If an error occurs during the RAG chain invocation,
                        a 400 Bad Request is raised.
     """
+    logger.info(f"CURRENT USER EMAIL: {current_user.email}")
     try:
         result = get_conversational_rag_chain().invoke(
-            {"question": query.query, "chat_history": HISTORY}
+            {
+                "question": query.query,
+                "chat_history": HISTORY,
+                "user_id": current_user.id,
+            }
         )
         update_history(result=result, query=query)
         token_cost = calculate_token_cost(
