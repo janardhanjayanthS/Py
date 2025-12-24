@@ -5,6 +5,8 @@ from ast import Bytes
 import psycopg
 from langchain_community.document_loaders import PyMuPDFLoader, WebBaseLoader
 from langchain_core.documents import Document
+from sqlalchemy.orm import Session
+
 from src.core.constants import (
     CONNECTION,
     FILTER_METADATA_BY_HASH_QUERY,
@@ -13,6 +15,39 @@ from src.core.constants import (
     logger,
 )
 from src.core.utility import hash_bytes, hash_str
+from src.models.user import User
+from src.schema.user import UserCreate
+
+
+def add_commit_refresh_db(object: User, db: Session):
+    """Adds an object to the database, commits the transaction, and refreshes the instance.
+
+    This helper function handles the standard SQLAlchemy lifecycle for a new or
+    updated object to ensure the local instance matches the database state
+    (including generated IDs or default values).
+
+    Args:
+        object (User): The SQLAlchemy model instance to be persisted.
+        db (Session): The active database session.
+    """
+    db.add(object)
+    db.commit()
+    db.refresh(object)
+
+
+def check_existing_user_using_email(db: Session, user: UserCreate) -> bool:
+    """Checks if a user already exists in the database based on their email address.
+
+    Args:
+        db (Session): The active database session.
+        user (UserCreate): A Pydantic schema or object containing the user's
+            registration data, specifically the email.
+
+    Returns:
+        bool: True if a user with the provided email exists, False otherwise.
+    """
+    user = db.query(User).filter_by(email=user.email).first()
+    return True if user else False
 
 
 def add_file_as_embedding(contents: Bytes, filename: str) -> str:
