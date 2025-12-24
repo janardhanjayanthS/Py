@@ -8,12 +8,12 @@ from src.core.ai_utility import (
 )
 from src.core.constants import HISTORY, AIModels, ResponseType, logger
 from src.schema.ai import Query
-from src.schema.response import CustomResponse
+from src.schema.response import APIResponse
 
 chat = APIRouter()
 
 
-@chat.post("/chat", response_model=CustomResponse)
+@chat.post("/chat", response_model=APIResponse)
 async def search_from_db(query: Query):
     """
     Performs a query using a Conversational RAG chain against the vector database.
@@ -42,8 +42,8 @@ async def search_from_db(query: Query):
             result.usage_metadata, ai_model=AIModels.GPT_4o_MINI
         )
 
-        return CustomResponse().get_response(
-            response_type=ResponseType.SUCCESS,
+        return APIResponse(
+            response=ResponseType.SUCCESS,
             message={
                 "token cost": token_cost,
                 "query response": clean_llm_output(result.content),

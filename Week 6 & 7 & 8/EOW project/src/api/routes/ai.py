@@ -8,12 +8,12 @@ from src.core.ai_utility import (
 )
 from src.core.constants import MESSAGES, AIModels, ResponseType, logger
 from src.schema.ai import Query
-from src.schema.response import CustomResponse
+from src.schema.response import APIResponse
 
 ai = APIRouter()
 
 
-@ai.post("/ai/query", response_model=CustomResponse)
+@ai.post("/ai/query", response_model=APIResponse)
 async def query_response(query: Query):
     """
     Handles a direct query to an LLM agent without RAG (Retrieval-Augmented Generation).
@@ -45,7 +45,7 @@ async def query_response(query: Query):
             agent_response.usage_metadata, ai_model=ai_model
         )
 
-        return CustomResponse().get_response(
+        return APIResponse(
             response_type=ResponseType.SUCCESS,
             message={
                 "ai response": clean_llm_output(ai_reply),

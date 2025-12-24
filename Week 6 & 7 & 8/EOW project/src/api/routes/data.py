@@ -6,12 +6,12 @@ from src.core.database_utility import (
     add_web_content_as_embedding,
 )
 from src.schema.ai import WebLink
-from src.schema.response import CustomResponse
+from src.schema.response import APIResponse
 
 data = APIRouter()
 
 
-@data.post("/data/upload_pdf", response_model=CustomResponse)
+@data.post("/data/upload_pdf", response_model=APIResponse)
 async def upload_pdf_to_db(file: UploadFile = File(...)):
     """
     Uploads a PDF file and stores its content as embeddings in the vector database.
@@ -42,7 +42,7 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
         file_add_response = add_file_as_embedding(
             contents=contents, filename=file.filename
         )
-        return CustomResponse().get_response(
+        return APIResponse(
             response_type=ResponseType.SUCCESS,
             message={
                 "db response": file_add_response,
@@ -56,7 +56,7 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
         )
 
 
-@data.post("/data/upload_web_content", response_model=CustomResponse)
+@data.post("/data/upload_web_content", response_model=APIResponse)
 async def upload_blog_to_db(blog_url: WebLink):
     """
     Fetches content from a specified URL (e.g., a blog) and stores it as
@@ -78,7 +78,7 @@ async def upload_blog_to_db(blog_url: WebLink):
     """
     try:
         web_upload_result = add_web_content_as_embedding(url=str(blog_url.url))
-        return CustomResponse().get_response(
+        return APIResponse(
             response_type=ResponseType.SUCCESS,
             message={
                 "db response": web_upload_result,
