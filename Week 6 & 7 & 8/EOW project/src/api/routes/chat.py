@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
+
 from src.core.ai_utility import (
     calculate_token_cost,
     clean_llm_output,
@@ -7,11 +8,12 @@ from src.core.ai_utility import (
 )
 from src.core.constants import HISTORY, AIModels, ResponseType, logger
 from src.schema.ai import Query
+from src.schema.response import CustomResponse
 
 chat = APIRouter()
 
 
-@chat.post("/chat")
+@chat.post("/chat", response_model=CustomResponse)
 async def search_from_db(query: Query):
     """
     Performs a query using a Conversational RAG chain against the vector database.
@@ -40,13 +42,13 @@ async def search_from_db(query: Query):
             result.usage_metadata, ai_model=AIModels.GPT_4o_MINI
         )
 
-        return {
-            "response": ResponseType.SUCCESS.value,
-            "message": {
+        return CustomResponse().get_response(
+            response_type=ResponseType.SUCCESS,
+            message={
                 "token cost": token_cost,
                 "query response": clean_llm_output(result.content),
             },
-        }
+        )
     except Exception as e:
         logger.error(f"Error {e}")
         raise HTTPException(
