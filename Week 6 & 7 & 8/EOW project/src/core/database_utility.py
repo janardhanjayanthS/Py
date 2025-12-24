@@ -1,8 +1,10 @@
 import os
 import tempfile
 from ast import Bytes
+from typing import Optional
 
 import psycopg
+from fastapi import HTTPException, status
 from langchain_community.document_loaders import PyMuPDFLoader, WebBaseLoader
 from langchain_core.documents import Document
 from sqlalchemy.orm import Session
@@ -14,9 +16,29 @@ from src.core.constants import (
     VECTOR_STORE,
     logger,
 )
-from src.core.utility import hash_bytes, hash_str
+from src.core.utility import hash_bytes, hash_str, verify_password
 from src.models.user import User
-from src.schema.user import UserCreate
+from src.schema.user import UserCreate, UserLogin
+
+
+def authenticate_user(user: UserLogin, db: Session) -> Optional[User]:
+    db_user = fetch_user_by_email(db=db, email_id=user.email)
+    if not db_user:
+        log_then_raise_unauthorized_error(
+            message=f"Uable to find user with {user.email} id"
+        )
+
+    if not verify_password(
+        plain_password=user.password, hashed_password=db_user.password_hash
+    ):
+        log_then_raise_unauthorized_error(message="Invalid email or password")
+
+    return db_user
+
+
+def log_then_raise_unauthorized_error(message: str) -> None:
+    logger.error(message)
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=message)
 
 
 def add_commit_refresh_db(object: User, db: Session):
@@ -46,8 +68,12 @@ def check_existing_user_using_email(db: Session, user: UserCreate) -> bool:
     Returns:
         bool: True if a user with the provided email exists, False otherwise.
     """
-    user = db.query(User).filter_by(email=user.email).first()
+    user = fetch_user_by_email(db=db, email_id=user.email)
     return True if user else False
+
+
+def fetch_user_by_email(db: Session, email_id: str) -> Optional[User]:
+    return db.query(User).filter_by(email=email_id).first()
 
 
 def add_file_as_embedding(contents: Bytes, filename: str) -> str:

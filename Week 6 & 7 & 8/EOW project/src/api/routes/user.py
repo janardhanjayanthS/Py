@@ -5,12 +5,14 @@ from src.core.constants import ResponseType, logger
 from src.core.database import get_db
 from src.core.database_utility import (
     add_commit_refresh_db,
+    authenticate_user,
     check_existing_user_using_email,
 )
+from src.core.jwt import create_access_token
 from src.core.utility import hash_password
 from src.models.user import User
 from src.schema.response import APIResponse
-from src.schema.user import UserCreate, UserResponse
+from src.schema.user import UserCreate, UserLogin, UserResponse
 
 user = APIRouter()
 
@@ -50,5 +52,26 @@ def register_user(user_create: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             details="Internal server error occured try again later",
+        )
+
+
+@user.post("/user/login", response_model=APIResponse)
+def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
+    try:
+        logger.info(f"user login: {user_login}")
+        user = authenticate_user(user=user_login, db=db)
+        token = create_access_token(
+            data={"email": user.email, "id": user.id}, expires_delta=None
+        )
+        logger.info(f"JWT TOKEN: {token}")
+        return APIResponse(response=ResponseType.SUCCESS, message={"token": token})
+    except HTTPException:
+        raise
+    except Exception as e:
+        message = f"Error occured: {e}"
+        logger.error(message)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error occured try again later",
         )
 

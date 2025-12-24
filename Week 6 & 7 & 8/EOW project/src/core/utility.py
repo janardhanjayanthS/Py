@@ -2,34 +2,34 @@ from hashlib import sha256
 
 from passlib.context import CryptContext
 
-from src.core.constants import logger
-
 pwt_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:
     """
-    Hash a plain text password using bcrypt
+    Hash a plain text password using Argon2.
+    Each call generates a unique hash due to random salt.
 
     Args:
         password: plain text password
 
     Returns:
-        str: hash of the password
+        str: hashed password with embedded salt
     """
     return pwt_context.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
-    Verifies if plain text matches a hash
+    Verifies if plain text password matches the stored hash.
+    The hash contains the salt, so verification extracts it automatically.
 
     Args:
-        plain_password: plain text password
-        hashed_password: hashed password
+        plain_password: plain text password from user
+        hashed_password: hashed password from database
 
     Returns:
-        bool: True if match, False otherwise
+        bool: True if passwords match, False otherwise
     """
     return pwt_context.verify(plain_password, hashed_password)
 
