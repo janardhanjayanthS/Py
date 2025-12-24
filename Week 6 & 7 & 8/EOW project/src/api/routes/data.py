@@ -1,10 +1,12 @@
-from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 
 from src.core.constants import ResponseType, logger
 from src.core.database_utility import (
     add_file_as_embedding,
     add_web_content_as_embedding,
 )
+from src.core.jwt_utility import authenticate_user_from_token
+from src.models.user import User
 from src.schema.ai import WebLink
 from src.schema.response import APIResponse
 
@@ -12,7 +14,10 @@ data = APIRouter()
 
 
 @data.post("/data/upload_pdf", response_model=APIResponse)
-async def upload_pdf_to_db(file: UploadFile = File(...)):
+async def upload_pdf_to_db(
+    file: UploadFile = File(...),
+    current_user: User = Depends(authenticate_user_from_token),
+):
     """
     Uploads a PDF file and stores its content as embeddings in the vector database.
 
@@ -30,6 +35,7 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
         HTTPException: If an error occurs during file reading or embedding
                        generation, a 400 Bad Request is raised.
     """
+
     if not file.filename.endswith(".pdf"):
         message = "Only supports .pdf files"
         logger.error(message)
@@ -40,10 +46,10 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
     try:
         contents = await file.read()
         file_add_response = add_file_as_embedding(
-            contents=contents, filename=file.filename
+            contents=contents, filename=file.filename, current_user_id=current_user.id
         )
         return APIResponse(
-            response_type=ResponseType.SUCCESS,
+            response=ResponseType.SUCCESS,
             message={
                 "db response": file_add_response,
             },
@@ -57,7 +63,9 @@ async def upload_pdf_to_db(file: UploadFile = File(...)):
 
 
 @data.post("/data/upload_web_content", response_model=APIResponse)
-async def upload_blog_to_db(blog_url: WebLink):
+async def upload_blog_to_db(
+    blog_url: WebLink, current_user: User = Depends(authenticate_user_from_token)
+):
     """
     Fetches content from a specified URL (e.g., a blog) and stores it as
     embeddings in the vector database.
@@ -77,9 +85,11 @@ async def upload_blog_to_db(blog_url: WebLink):
                        embedding generation, a 400 Bad Request is raised.
     """
     try:
-        web_upload_result = add_web_content_as_embedding(url=str(blog_url.url))
+        web_upload_result = add_web_content_as_embedding(
+            url=str(blog_url.url), current_user_id=current_user.id
+        )
         return APIResponse(
-            response_type=ResponseType.SUCCESS,
+            response=ResponseType.SUCCESS,
             message={
                 "db response": web_upload_result,
             },

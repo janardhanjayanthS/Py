@@ -71,7 +71,7 @@ def decode_access_token(token: str) -> TokenData:
     """
     try:
         payload: dict = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub", "")
+        email: str = payload.get("email", "")
         id: str = payload.get("id", "")
 
         if email is None:

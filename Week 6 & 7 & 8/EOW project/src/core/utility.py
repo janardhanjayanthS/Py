@@ -2,6 +2,8 @@ from hashlib import sha256
 
 from passlib.context import CryptContext
 
+from src.core.constants import logger
+
 pwt_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 

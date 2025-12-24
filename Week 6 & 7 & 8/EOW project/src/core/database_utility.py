@@ -22,10 +22,28 @@ from src.schema.user import UserCreate, UserLogin
 
 
 def authenticate_user(user: UserLogin, db: Session) -> Optional[User]:
+    """Authenticates a user by checking their credentials against the database.
+
+    This function first attempts to locate the user by their email address.
+    If the user exists, it verifies the provided plain-text password against
+    the stored password hash.
+
+    Args:
+        user (UserLogin): A Pydantic schema or object containing the user's
+            login credentials (email and password).
+        db (Session): The active SQLAlchemy database session.
+
+    Returns:
+        Optional[User]: The User model instance if authentication succeeds.
+
+    Raises:
+        HTTPException: 401 Unauthorized if the user is not found or
+            if the password verification fails.
+    """
     db_user = fetch_user_by_email(db=db, email_id=user.email)
     if not db_user:
         log_then_raise_unauthorized_error(
-            message=f"Uable to find user with {user.email} id"
+            message=f"Unable to find user with {user.email} id"
         )
 
     if not verify_password(
@@ -37,6 +55,15 @@ def authenticate_user(user: UserLogin, db: Session) -> Optional[User]:
 
 
 def log_then_raise_unauthorized_error(message: str) -> None:
+    """Logs an error message and raises an HTTP 401 Unauthorized exception.
+
+    Args:
+        message (str): The error message to be logged and sent back
+            in the HTTP response detail.
+
+    Raises:
+        HTTPException: Always raises a 401 Unauthorized status code.
+    """
     logger.error(message)
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=message)
 
@@ -73,16 +100,29 @@ def check_existing_user_using_email(db: Session, user: UserCreate) -> bool:
 
 
 def fetch_user_by_email(db: Session, email_id: str) -> Optional[User]:
+    """Fetches a user from the database using their email address.
+
+    This function queries the 'User' table for a record matching the provided
+    email ID and returns the first result found.
+
+    Args:
+        db (Session): The active SQLAlchemy database session.
+        email_id (str): The unique email address of the user to retrieve.
+
+    Returns:
+        Optional[User]: The User model instance if a match is found, otherwise None.
+    """
     return db.query(User).filter_by(email=email_id).first()
 
 
-def add_file_as_embedding(contents: Bytes, filename: str) -> str:
+def add_file_as_embedding(contents: Bytes, filename: str, current_user_id: int) -> str:
     """Checks if a file already exists in the vector store and, if not, processes
     the file contents, chunks the text, creates embeddings, and adds them to the database.
 
     Args:
         contents: The raw binary data (Bytes) of the PDF file.
         filename: The name of the file, used as the unique identifier and source metadata.
+        current_user_id: id for currently logged in user from db
 
     Returns:
         A string message indicating whether the file was successfully added or
@@ -90,12 +130,14 @@ def add_file_as_embedding(contents: Bytes, filename: str) -> str:
     """
     if check_existing_hash(hash=hash_bytes(data=contents)):
         return f"File - {filename} - already exists"
-    documents = get_documents_from_file_content(content=contents, filename=filename)
+    documents = get_documents_from_file_content(
+        content=contents, filename=filename, user_id=current_user_id
+    )
     VECTOR_STORE.add_documents(documents)
     return f"File - {filename} - added successfully"
 
 
-def add_web_content_as_embedding(url: str) -> str:
+def add_web_content_as_embedding(url: str, current_user_id: int) -> str:
     """Fetches web content, processes it, and embeds it with metadata into the vector store.
 
     This function performs a check to prevent duplicate entries based on the URL.
@@ -105,6 +147,7 @@ def add_web_content_as_embedding(url: str) -> str:
 
     Args:
         url: The full URL of the web page to be processed.
+        current_user_id: id for currently logged in user from db
 
     Returns:
         A status message indicating if the URL was already present or successfully added.
@@ -120,8 +163,11 @@ def add_web_content_as_embedding(url: str) -> str:
 
     web_document_chunks = TEXT_SPLITTER.split_documents(docs)
 
-    add_base_url_and_hash_to_metadata(
-        base_url=base_url, hash=web_url_hash, data=web_document_chunks
+    add_base_url_hash_user_id_to_metadata(
+        base_url=base_url,
+        hash=web_url_hash,
+        user_id=current_user_id,
+        data=web_document_chunks,
     )
 
     VECTOR_STORE.add_documents(web_document_chunks)
@@ -144,8 +190,8 @@ def get_base_url(url: str) -> str:
     return url.split("#")[0]
 
 
-def add_base_url_and_hash_to_metadata(
-    base_url: str, hash: str, data: list[Document]
+def add_base_url_hash_user_id_to_metadata(
+    base_url: str, hash: str, user_id: int, data: list[Document]
 ) -> None:
     """Injects source URL and unique hash into the metadata of each document chunk.
 
@@ -156,6 +202,7 @@ def add_base_url_and_hash_to_metadata(
     Args:
         base_url: The sanitized URL string to be used as the 'source'.
         hash: The generated unique identifier for the specific web source.
+        user_id: currently logged in user's id
         data: A list of Document objects (chunks) to be updated.
 
     Returns:
@@ -164,6 +211,7 @@ def add_base_url_and_hash_to_metadata(
     for doc in data:
         doc.metadata["source"] = base_url
         doc.metadata["hash"] = hash
+        doc.metadata["user_id"] = user_id
 
     if data:
         logger.info(f"Blog document chunk metadata: {data[0].metadata}")
@@ -193,13 +241,16 @@ def check_existing_hash(hash: str) -> bool:
         return False
 
 
-def get_documents_from_file_content(content: Bytes, filename: str) -> list[Document]:
+def get_documents_from_file_content(
+    content: Bytes, filename: str, user_id: int
+) -> list[Document]:
     """Parses text from a PDF file's binary content, creates document objects,
     and splits them into smaller, embeddable chunks.
 
     Args:
         content: The raw binary data (Bytes) of the PDF file.
         filename: The name of the file to be used as the 'source' in the document metadata.
+        user_id: currently logged in user's id
 
     Returns:
         A list of chunked Document objects ready for embedding and storage.
@@ -218,6 +269,7 @@ def get_documents_from_file_content(content: Bytes, filename: str) -> list[Docum
         for doc in documents:
             doc.metadata["hash"] = pdf_hash
             doc.metadata["source"] = filename
+            doc.metadata["user_id"] = user_id
 
         chunked_documents = TEXT_SPLITTER.split_documents(documents)
         return chunked_documents

@@ -46,7 +46,7 @@ async def query_response(query: Query):
         )
 
         return APIResponse(
-            response_type=ResponseType.SUCCESS,
+            response=ResponseType.SUCCESS,
             message={
                 "ai response": clean_llm_output(ai_reply),
                 "token cost": token_cost,
