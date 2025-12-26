@@ -1,6 +1,71 @@
+import time
+from dataclasses import dataclass
 from hashlib import sha256
 
+from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+
 from src.core.constants import logger
+
+
+@dataclass
+class CacheDetails:
+    """
+    Basic cache details used in src.core.cache's functions
+    """
+
+    db: Session
+    user_id: int
+    question: str
+
+
+def get_elapsed_time_till_now_in_ms(start_time: float) -> float:
+    """
+    Calculates the duration between a given start time and the current moment in milliseconds.
+
+    This utility is commonly used for performance profiling, such as measuring
+    the latency of an LLM API call or a database query.
+
+    Args:
+        start_time (float): The starting timestamp as a float, typically
+            obtained from a previous call to `time.perf_counter()`.
+
+    Returns:
+        float: The elapsed time in milliseconds (ms).
+    """
+    return (time.perf_counter() - start_time) * 1000
+
+
+pwt_context = CryptContext(schemes=["argon2"], deprecated="auto")
+
+
+def hash_password(password: str) -> str:
+    """
+    Hash a plain text password using Argon2.
+    Each call generates a unique hash due to random salt.
+
+    Args:
+        password: plain text password
+
+    Returns:
+        str: hashed password with embedded salt
+    """
+    return pwt_context.hash(password)
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Verifies if plain text password matches the stored hash.
+    The hash contains the salt, so verification extracts it automatically.
+
+    Args:
+        plain_password: plain text password from user
+        hashed_password: hashed password from database
+
+    Returns:
+        bool: True if passwords match, False otherwise
+    """
+    return pwt_context.verify(plain_password, hashed_password)
 
 
 def hash_bytes(data: bytes) -> str:

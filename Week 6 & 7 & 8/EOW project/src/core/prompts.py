@@ -19,15 +19,23 @@ CONTEXTUALIZE_PROMPT = ChatPromptTemplate.from_messages(
                 2.  If the question references "it", "that", "this", etc.,
                     replace with the actual subject from chat history
                 3.  Keep the question concise - just add necessary context
-                4.  If no context is needed, return the original question unchanged
+                4.  If no context is needed or if the question is direct and
+                    straight forward, then return the original question unchanged
 
 
                 Examples:
+                --- Specific questions ---
                 - Input: "Explain it in more detail" (after discussing Chapter 8)
                 - Output: "Explain Chapter 8 of Algorithms to Live By in more detail"
 
                 - Input: "What's a story from that chapter?" (after discussing relaxation)
                 - Output: "What's a story from the Relaxation chapter in Algorithms to Live By?"
+
+                --- general questions ---
+                - Input:  "what is the title of the book?" 
+                    (or any common query relevant to docs)
+                - Process: understand it is not about the contents 
+                    from inside the book instead of the documents itself
                
                 Remember: Only reformulate the QUESTION, never answer it. 
             """,
@@ -57,7 +65,6 @@ QA_PROMPT = ChatPromptTemplate.from_messages(
                 -   Only answer questions for which you have references to.
                 -   Do not generate any additional symbols such as 
                     slashes, \\n, \\t, or any other mark down symbols
-
             """,
         ),
         MessagesPlaceholder("chat_history"),

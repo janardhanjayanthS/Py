@@ -6,11 +6,12 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda
 from langchain_openai import ChatOpenAI
+
 from src.core.constants import (
     HISTORY,
     MODEL_COST_PER_MILLION_TOKENS,
     OPENAI_API_KEY,
-    RETRIEVER,
+    VECTOR_STORE,
     AIModels,
     logger,
 )
@@ -40,7 +41,7 @@ def get_contextualize_rag_chain():
 
     Returns:
         A LangChain Runnable (LCEL chain) that takes chat history and the current question
-        as input and outputs the reformulated question string.
+        as input and outputs the reformulated questionstring.
     """
     logger.info("invoked contextualize rag")
     chain = CONTEXTUALIZE_PROMPT | get_agent(AIModels.GPT_4o_MINI) | StrOutputParser()
@@ -63,6 +64,7 @@ def get_conversational_rag_chain():
             "context": RunnableLambda(contextualized_retrival) | format_docs,
             "question": lambda x: x["question"],
             "chat_history": lambda x: x.get("chat_history", []),
+            "user_id": lambda x: x["user_id"],
         }
         | QA_PROMPT
         | get_agent(AIModels.GPT_4o_MINI)
@@ -71,20 +73,35 @@ def get_conversational_rag_chain():
 
 
 def format_docs(docs: Document):
-    """Formats a list of LangChain Document objects into a single, combined string.
+    """
+    Parses retrieved documents into a structured string for LLM consumption.
 
-    This function is used to 'stuff' the document contents into the context variable
-    of the final prompt template.
+    This function iterates through a list of LangChain Document objects,
+    extracting both the page content and the source title from the metadata.
+    By explicitly labeling the 'METADATA_TITLE', it helps the LLM distinguish
+    between the actual book title and other titles mentioned within the text body.
 
     Args:
-        docs: A list of Document objects retrieved from the vector store.
+        docs (list[langchain_core.documents.Document]): A list of Document objects
+            returned by a vector store similarity search.
 
     Returns:
-        A single string containing the concatenated page content of all documents,
-        separated by double newlines.
+        str: A single formatted string containing numbered documents with
+            explicit metadata and content sections, separated by double newlines.
     """
-    formatted_docs = "\n\n".join(doc.page_content for doc in docs)
-    return formatted_docs
+    formatted_chunks = []
+    for i, doc in enumerate(docs, start=1):
+        doc_title = doc.metadata.get("title", "Unknown Title")
+        doc_content = doc.page_content
+
+        formatted_chunk = (
+            f"--- DOCUMENT {i} ---\n"
+            f"--- Metadata Title: {doc_title} ---\n"
+            f"--- Document Content: {doc_content} ---\n"
+        )
+        formatted_chunks.append(formatted_chunk)
+
+    return "\n\n".join(formatted_chunks)
 
 
 def contextualized_retrival(input_dict):
@@ -103,6 +120,8 @@ def contextualized_retrival(input_dict):
     chat_history = input_dict.get("chat_history", [])
     logger.info(f"Chat history: {chat_history}")
     question = input_dict["question"]
+    user_id = input_dict.get("user_id")
+    logger.info(f"Looking for {user_id}'s documents")
 
     if chat_history:
         reformulated_question = get_contextualize_rag_chain().invoke(
@@ -113,7 +132,10 @@ def contextualized_retrival(input_dict):
         reformulated_question = question
         logger.info(f"non reformulated question: {reformulated_question}")
 
-    docs = RETRIEVER.invoke(reformulated_question)
+    docs = VECTOR_STORE.similarity_search(
+        query=reformulated_question, k=10, filter={"user_id": user_id}
+    )
+
     pretty_print_documents(docs=docs)
     return docs
 
@@ -153,8 +175,12 @@ def get_agent(ai_model: AIModels):
         A configured instance of the ChatOpenAI client.
     """
     agent = ChatOpenAI(
-        model=ai_model.value, temperature=0, api_key=OPENAI_API_KEY, stream_usage=True
+        model=ai_model.value,
+        temperature=0,
+        api_key=OPENAI_API_KEY,
+        stream_usage=True,
     )
+
     return agent
 
 

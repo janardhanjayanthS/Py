@@ -1,5 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
+from langchain_community.cache import InMemoryCache
+from langchain_core.globals import set_llm_cache
 from langchain_core.messages import HumanMessage
+
 from src.core.ai_utility import (
     calculate_token_cost,
     clean_llm_output,
@@ -7,11 +10,14 @@ from src.core.ai_utility import (
 )
 from src.core.constants import MESSAGES, AIModels, ResponseType, logger
 from src.schema.ai import Query
+from src.schema.response import APIResponse
+
+set_llm_cache(InMemoryCache(maxsize=100))
 
 ai = APIRouter()
 
 
-@ai.post("/ai/query")
+@ai.post("/ai/query", response_model=APIResponse)
 async def query_response(query: Query):
     """
     Handles a direct query to an LLM agent without RAG (Retrieval-Augmented Generation).
@@ -35,7 +41,7 @@ async def query_response(query: Query):
     ai_model: AIModels = AIModels.GPT_4o_MINI
 
     try:
-        agent = get_agent(ai_model=ai_model)
+        agent = get_agent(ai_model=ai_model, need_cache=True)
         agent_response = await agent.ainvoke(MESSAGES)
 
         ai_reply = agent_response.content
@@ -43,13 +49,13 @@ async def query_response(query: Query):
             agent_response.usage_metadata, ai_model=ai_model
         )
 
-        return {
-            "response": ResponseType.SUCCESS.value,
-            "message": {
+        return APIResponse(
+            response=ResponseType.SUCCESS,
+            message={
                 "ai response": clean_llm_output(ai_reply),
                 "token cost": token_cost,
             },
-        }
+        )
     except Exception as e:
         logger.error(f"Error {e}")
         raise HTTPException(
