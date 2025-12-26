@@ -1,5 +1,3 @@
-import time
-
 from fastapi import APIRouter, HTTPException, status
 from langchain_community.cache import InMemoryCache
 from langchain_core.globals import set_llm_cache
@@ -11,7 +9,6 @@ from src.core.ai_utility import (
     get_agent,
 )
 from src.core.constants import MESSAGES, AIModels, ResponseType, logger
-from src.core.utility import get_elapsed_time_till_now_in_ms
 from src.schema.ai import Query
 from src.schema.response import APIResponse
 
@@ -39,7 +36,6 @@ async def query_response(query: Query):
     Raises:
         Exception: Catches and reports any general error during the agent invocation.
     """
-    start_time = time.perf_counter()
     MESSAGES.append(HumanMessage(content=query.query))
 
     ai_model: AIModels = AIModels.GPT_4o_MINI
@@ -56,7 +52,6 @@ async def query_response(query: Query):
         return APIResponse(
             response=ResponseType.SUCCESS,
             message={
-                "response time": f"{get_elapsed_time_till_now_in_ms(start_time=start_time):.0f }ms",
                 "ai response": clean_llm_output(ai_reply),
                 "token cost": token_cost,
             },

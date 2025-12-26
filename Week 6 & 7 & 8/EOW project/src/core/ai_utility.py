@@ -163,7 +163,7 @@ def pretty_print_documents(docs: Document) -> None:
         )
 
 
-def get_agent(ai_model: AIModels, need_cache: Optional[bool]) -> ChatOpenAI:
+def get_agent(ai_model: AIModels, need_cache: Optional[bool]):
     """Initializes and returns an instance of the ChatOpenAI client.
 
     The client is configured to use the specified model, a temperature of 0
