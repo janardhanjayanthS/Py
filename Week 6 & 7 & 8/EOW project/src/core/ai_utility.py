@@ -118,7 +118,7 @@ def contextualized_retrival(input_dict):
         logger.info(f"non reformulated question: {reformulated_question}")
 
     docs = VECTOR_STORE.similarity_search(
-        query=reformulated_question, k=10, filter={"user_id": user_id}
+        query=reformulated_question, k=15, filter={"user_id": user_id}
     )
 
     pretty_print_documents(docs=docs)
