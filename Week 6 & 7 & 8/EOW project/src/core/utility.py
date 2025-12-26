@@ -1,3 +1,4 @@
+import time
 from dataclasses import dataclass
 from hashlib import sha256
 
@@ -16,6 +17,23 @@ class CacheDetails:
     db: Session
     user_id: int
     question: str
+
+
+def get_elapsed_time_till_now_in_ms(start_time: float) -> float:
+    """
+    Calculates the duration between a given start time and the current moment in milliseconds.
+
+    This utility is commonly used for performance profiling, such as measuring
+    the latency of an LLM API call or a database query.
+
+    Args:
+        start_time (float): The starting timestamp as a float, typically
+            obtained from a previous call to `time.perf_counter()`.
+
+    Returns:
+        float: The elapsed time in milliseconds (ms).
+    """
+    return (time.perf_counter() - start_time) * 1000
 
 
 pwt_context = CryptContext(schemes=["argon2"], deprecated="auto")
