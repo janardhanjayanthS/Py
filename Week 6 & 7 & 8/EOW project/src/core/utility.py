@@ -1,8 +1,22 @@
+from dataclasses import dataclass
 from hashlib import sha256
 
 from passlib.context import CryptContext
+from sqlalchemy.orm import Session
 
 from src.core.constants import logger
+
+
+@dataclass
+class CacheDetails:
+    """
+    Basic cache details used in src.core.cache's functions
+    """
+
+    db: Session
+    user_id: int
+    question: str
+
 
 pwt_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
