@@ -4,6 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from src.core.constants import CONNECTION
 from src.models.base import Base
+from src.models.cache import UserLLMCache  # noqa: F401
 from src.models.user import User  # noqa: F401
 
 # this is the Alembic Config object, which provides
