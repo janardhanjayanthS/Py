@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
 
 from src.core.ai_utility import (
     calculate_token_cost,
@@ -6,7 +7,9 @@ from src.core.ai_utility import (
     get_conversational_rag_chain,
     update_history,
 )
+from src.core.cache import get_cached_response, save_to_cache
 from src.core.constants import HISTORY, AIModels, ResponseType, logger
+from src.core.database import get_db
 from src.core.jwt_utility import authenticate_user_from_token
 from src.models.user import User
 from src.schema.ai import Query
@@ -17,7 +20,9 @@ chat = APIRouter()
 
 @chat.post("/chat", response_model=APIResponse)
 async def search_from_db(
-    query: Query, current_user: User = Depends(authenticate_user_from_token)
+    query: Query,
+    current_user: User = Depends(authenticate_user_from_token),
+    db: Session = Depends(get_db),
 ):
     """
     Performs a query using a Conversational RAG chain against the vector database.
@@ -39,6 +44,21 @@ async def search_from_db(
     """
     logger.info(f"CURRENT USER EMAIL: {current_user.email}")
     try:
+        cached_response = get_cached_response(
+            db=db,
+            user_id=current_user.id,
+            question=query.query,
+        )
+
+        if cached_response:
+            return APIResponse(
+                response=ResponseType.SUCCESS,
+                message={
+                    "query response": clean_llm_output(cached_response),
+                },
+            )
+
+        logger.info("Invoking RAG chain")
         result = get_conversational_rag_chain().invoke(
             {
                 "question": query.query,
@@ -49,6 +69,13 @@ async def search_from_db(
         update_history(result=result, query=query)
         token_cost = calculate_token_cost(
             result.usage_metadata, ai_model=AIModels.GPT_4o_MINI
+        )
+
+        save_to_cache(
+            db=db,
+            user_id=current_user.id,
+            question=query.query,
+            response=clean_llm_output(result.content),
         )
 
         return APIResponse(
