@@ -1,5 +1,6 @@
 import re
 from decimal import Decimal
+from typing import Optional
 
 from langchain_core.documents import Document
 from langchain_core.messages import AIMessage, HumanMessage
@@ -41,7 +42,7 @@ def get_contextualize_rag_chain():
 
     Returns:
         A LangChain Runnable (LCEL chain) that takes chat history and the current question
-        as input and outputs the reformulated question string.
+        as input and outputs the reformulated questionstring.
     """
     logger.info("invoked contextualize rag")
     chain = CONTEXTUALIZE_PROMPT | get_agent(AIModels.GPT_4o_MINI) | StrOutputParser()
@@ -162,7 +163,7 @@ def pretty_print_documents(docs: Document) -> None:
         )
 
 
-def get_agent(ai_model: AIModels):
+def get_agent(ai_model: AIModels, need_cache: Optional[bool]):
     """Initializes and returns an instance of the ChatOpenAI client.
 
     The client is configured to use the specified model, a temperature of 0
@@ -170,13 +171,28 @@ def get_agent(ai_model: AIModels):
 
     Args:
         ai_model: An enum member (AIModels) specifying the desired OpenAI model (e.g., GPT-4, GPT-3.5-turbo).
+        need_cache: True if llm uses InMemoryCache, False otherwise
 
     Returns:
         A configured instance of the ChatOpenAI client.
     """
-    agent = ChatOpenAI(
-        model=ai_model.value, temperature=0, api_key=OPENAI_API_KEY, stream_usage=True
-    )
+    if need_cache:
+        agent = ChatOpenAI(
+            model=ai_model.value,
+            temperature=0,
+            api_key=OPENAI_API_KEY,
+            stream_usage=True,
+            cache=True,
+        )
+    else:
+        agent = ChatOpenAI(
+            model=ai_model.value,
+            temperature=0,
+            api_key=OPENAI_API_KEY,
+            stream_usage=True,
+            cache=False,
+        )
+
     return agent
 
 

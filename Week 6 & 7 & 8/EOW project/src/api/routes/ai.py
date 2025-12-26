@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
+from langchain_community.cache import InMemoryCache
+from langchain_core.globals import set_llm_cache
 from langchain_core.messages import HumanMessage
 
 from src.core.ai_utility import (
@@ -9,6 +11,8 @@ from src.core.ai_utility import (
 from src.core.constants import MESSAGES, AIModels, ResponseType, logger
 from src.schema.ai import Query
 from src.schema.response import APIResponse
+
+set_llm_cache(InMemoryCache(maxsize=100))
 
 ai = APIRouter()
 
@@ -37,7 +41,7 @@ async def query_response(query: Query):
     ai_model: AIModels = AIModels.GPT_4o_MINI
 
     try:
-        agent = get_agent(ai_model=ai_model)
+        agent = get_agent(ai_model=ai_model, need_cache=True)
         agent_response = await agent.ainvoke(MESSAGES)
 
         ai_reply = agent_response.content
