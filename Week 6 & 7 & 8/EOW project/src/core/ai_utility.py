@@ -73,20 +73,35 @@ def get_conversational_rag_chain():
 
 
 def format_docs(docs: Document):
-    """Formats a list of LangChain Document objects into a single, combined string.
+    """
+    Parses retrieved documents into a structured string for LLM consumption.
 
-    This function is used to 'stuff' the document contents into the context variable
-    of the final prompt template.
+    This function iterates through a list of LangChain Document objects,
+    extracting both the page content and the source title from the metadata.
+    By explicitly labeling the 'METADATA_TITLE', it helps the LLM distinguish
+    between the actual book title and other titles mentioned within the text body.
 
     Args:
-        docs: A list of Document objects retrieved from the vector store.
+        docs (list[langchain_core.documents.Document]): A list of Document objects
+            returned by a vector store similarity search.
 
     Returns:
-        A single string containing the concatenated page content of all documents,
-        separated by double newlines.
+        str: A single formatted string containing numbered documents with
+            explicit metadata and content sections, separated by double newlines.
     """
-    formatted_docs = "\n\n".join(doc.page_content for doc in docs)
-    return formatted_docs
+    formatted_chunks = []
+    for i, doc in enumerate(docs, start=1):
+        doc_title = doc.metadata.get("title", "Unknown Title")
+        doc_content = doc.page_content
+
+        formatted_chunk = (
+            f"--- DOCUMENT {i} ---\n"
+            f"--- metadata title: {doc_title} ---\n"
+            f"--- document content: {doc_content} ---\n"
+        )
+        formatted_chunks.append(formatted_chunk)
+
+    return "\n\n".join(formatted_chunks)
 
 
 def contextualized_retrival(input_dict):
@@ -118,7 +133,7 @@ def contextualized_retrival(input_dict):
         logger.info(f"non reformulated question: {reformulated_question}")
 
     docs = VECTOR_STORE.similarity_search(
-        query=reformulated_question, k=15, filter={"user_id": user_id}
+        query=reformulated_question, k=10, filter={"user_id": user_id}
     )
 
     pretty_print_documents(docs=docs)

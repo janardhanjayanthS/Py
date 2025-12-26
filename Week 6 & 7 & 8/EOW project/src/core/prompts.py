@@ -24,11 +24,18 @@ CONTEXTUALIZE_PROMPT = ChatPromptTemplate.from_messages(
 
 
                 Examples:
+                --- Specific questions ---
                 - Input: "Explain it in more detail" (after discussing Chapter 8)
                 - Output: "Explain Chapter 8 of Algorithms to Live By in more detail"
 
                 - Input: "What's a story from that chapter?" (after discussing relaxation)
                 - Output: "What's a story from the Relaxation chapter in Algorithms to Live By?"
+
+                --- general questions ---
+                - Input:  "what is the title of the book?" 
+                    (or any common query relevant to docs)
+                - Process: understand it is not about the contents 
+                    from inside the book instead of the documents itself
                
                 Remember: Only reformulate the QUESTION, never answer it. 
             """,
