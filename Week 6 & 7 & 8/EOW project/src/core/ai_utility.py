@@ -96,8 +96,8 @@ def format_docs(docs: Document):
 
         formatted_chunk = (
             f"--- DOCUMENT {i} ---\n"
-            f"--- metadata title: {doc_title} ---\n"
-            f"--- document content: {doc_content} ---\n"
+            f"--- Metadata Title: {doc_title} ---\n"
+            f"--- Document Content: {doc_content} ---\n"
         )
         formatted_chunks.append(formatted_chunk)
 
