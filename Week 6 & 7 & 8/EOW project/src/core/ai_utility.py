@@ -1,6 +1,5 @@
 import re
 from decimal import Decimal
-from typing import Optional
 
 from langchain_core.documents import Document
 from langchain_core.messages import AIMessage, HumanMessage
@@ -163,7 +162,7 @@ def pretty_print_documents(docs: Document) -> None:
         )
 
 
-def get_agent(ai_model: AIModels, need_cache: Optional[bool]):
+def get_agent(ai_model: AIModels):
     """Initializes and returns an instance of the ChatOpenAI client.
 
     The client is configured to use the specified model, a temperature of 0
@@ -171,27 +170,16 @@ def get_agent(ai_model: AIModels, need_cache: Optional[bool]):
 
     Args:
         ai_model: An enum member (AIModels) specifying the desired OpenAI model (e.g., GPT-4, GPT-3.5-turbo).
-        need_cache: True if llm uses InMemoryCache, False otherwise
 
     Returns:
         A configured instance of the ChatOpenAI client.
     """
-    if need_cache:
-        agent = ChatOpenAI(
-            model=ai_model.value,
-            temperature=0,
-            api_key=OPENAI_API_KEY,
-            stream_usage=True,
-            cache=True,
-        )
-    else:
-        agent = ChatOpenAI(
-            model=ai_model.value,
-            temperature=0,
-            api_key=OPENAI_API_KEY,
-            stream_usage=True,
-            cache=False,
-        )
+    agent = ChatOpenAI(
+        model=ai_model.value,
+        temperature=0,
+        api_key=OPENAI_API_KEY,
+        stream_usage=True,
+    )
 
     return agent
 
