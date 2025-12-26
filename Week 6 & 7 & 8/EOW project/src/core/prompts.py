@@ -19,7 +19,8 @@ CONTEXTUALIZE_PROMPT = ChatPromptTemplate.from_messages(
                 2.  If the question references "it", "that", "this", etc.,
                     replace with the actual subject from chat history
                 3.  Keep the question concise - just add necessary context
-                4.  If no context is needed, return the original question unchanged
+                4.  If no context is needed or if the question is direct and
+                    straight forward, then return the original question unchanged
 
 
                 Examples:
@@ -57,7 +58,6 @@ QA_PROMPT = ChatPromptTemplate.from_messages(
                 -   Only answer questions for which you have references to.
                 -   Do not generate any additional symbols such as 
                     slashes, \\n, \\t, or any other mark down symbols
-
             """,
         ),
         MessagesPlaceholder("chat_history"),

@@ -16,7 +16,7 @@ def authenticate_user_from_token(
 ):
     token = credentials.credentials
     token_data = decode_access_token(token=token)
-    logger.info(token_data)
+    logger.info(f"User info from token: {token_data}")
     user = db.query(User).filter_by(id=token_data.id).first()
 
     if not user:
