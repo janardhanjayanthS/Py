@@ -1,6 +1,4 @@
 from fastapi import APIRouter, HTTPException, status
-from langchain_community.cache import InMemoryCache
-from langchain_core.globals import set_llm_cache
 from langchain_core.messages import HumanMessage
 
 from src.core.ai_utility import (
@@ -11,8 +9,6 @@ from src.core.ai_utility import (
 from src.core.constants import MESSAGES, AIModels, ResponseType, logger
 from src.schema.ai import Query
 from src.schema.response import APIResponse
-
-set_llm_cache(InMemoryCache(maxsize=100))
 
 ai = APIRouter()
 
