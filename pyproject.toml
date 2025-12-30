@@ -24,6 +24,7 @@ dependencies = [
     "langchain-postgres>=0.0.16",
     "langchain-text-splitters>=1.1.0",
     "logfire==4.14.2",
+    "mangum>=0.20.0",
     "openai==2.9.0",
     "passlib>=1.7.4",
     "pre-commit==4.5.0",
