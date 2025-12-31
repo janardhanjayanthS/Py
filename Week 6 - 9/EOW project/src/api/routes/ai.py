@@ -37,7 +37,7 @@ async def query_response(query: Query):
     ai_model: AIModels = AIModels.GPT_4o_MINI
 
     try:
-        agent = get_agent(ai_model=ai_model, need_cache=True)
+        agent = get_agent(ai_model=ai_model)
         agent_response = await agent.ainvoke(MESSAGES)
 
         ai_reply = agent_response.content
@@ -55,6 +55,6 @@ async def query_response(query: Query):
     except Exception as e:
         logger.error(f"Error {e}")
         raise HTTPException(
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error while processing AI query. Please try again.",
         )

@@ -7,6 +7,7 @@ TO READ:
 - Hugging Face (HF) pipelines:https://huggingface.co/docs/transformers/v5.0.0rc1/en/main_classes/pipelines#transformers.TextGenerationPipeline 
 - HF chat template: https://huggingface.co/docs/transformers/chat_templating?template=Zephyr 
 - HF downloading models: https://huggingface.co/docs/hub/models-downloading 
+- AWS SAM sample fastapi blog: https://towardsserverless.com/articles/fastapi-aws-lambda 
 
 Documentation:
 - LLM cache comparisons - https://docs.google.com/document/d/1ymAnymZ-5ZABi5CYmxzHwoOahF17bymxnP2iofWHyZ8/edit?usp=sharing 
