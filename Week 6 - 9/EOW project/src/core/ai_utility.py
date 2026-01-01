@@ -15,7 +15,7 @@ from src.core.constants import (
 )
 from src.core.log import logger
 from src.core.prompts import CONTEXTUALIZE_PROMPT, QA_PROMPT
-from src.core.secrets import get_vector_store
+from src.core.secrets.vector_db import get_vector_store
 from src.schema.ai import Query
 
 

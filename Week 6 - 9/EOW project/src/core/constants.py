@@ -1,14 +1,13 @@
 from enum import Enum
-from os import getenv
 
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage
 from langchain_openai import OpenAIEmbeddings
-from langchain_postgres import PGVector
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from src.core.prompts import SYSTEM_PROMPT
-from src.core.secrets import get_openai_key
+from src.core.secrets.database import get_postgresql_password
+from src.core.secrets.openai import get_openai_key
 
 load_dotenv()
 
@@ -42,16 +41,15 @@ MODEL_COST_PER_MILLION_TOKENS: dict[str, dict[str, float]] = {
     AIModels.GPT_4o_MINI.value: {"i": 0.15, "o": 0.60},
 }
 
-EMBEDDING = OpenAIEmbeddings(
-    model=AIModels.TEXT_EMBEDDING_3_LARGE.value, api_key=OPENAI_API_KEY
-)
-
 MESSAGES = [SystemMessage(content=SYSTEM_PROMPT)]
 
 
 # DB
-PG_PWD = getenv("POSTGRESQL_PWD")
+PG_PWD = get_postgresql_password()
 
+EMBEDDING = OpenAIEmbeddings(
+    model=AIModels.TEXT_EMBEDDING_3_LARGE.value, api_key=get_openai_key()
+)
 FILTER_METADATA_BY_HASH_QUERY = """ 
 SELECT id, document, cmetadata 
 FROM langchain_pg_embedding 
@@ -66,16 +64,16 @@ CONNECTION = (
     f"postgresql+psycopg://postgres:{PG_PWD}@host.docker.internal:5432/vector_db"
 )
 
-VECTOR_STORE = PGVector(
-    embeddings=EMBEDDING,
-    collection_name="uploaded_documents",
-    connection=CONNECTION,
-    use_jsonb=True,
-)
-
-RETRIEVER = VECTOR_STORE.as_retriever(
-    search_type="similarity",
-    search_kwargs={"k": 10},
-)
+# VECTOR_STORE = PGVector(
+#     embeddings=EMBEDDING,
+#     collection_name="uploaded_documents",
+#     connection=CONNECTION,
+#     use_jsonb=True,
+# )
+#
+# RETRIEVER = VECTOR_STORE.as_retriever(
+#     search_type="similarity",
+#     search_kwargs={"k": 10},
+# )
 
 HISTORY = []
