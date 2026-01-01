@@ -58,7 +58,13 @@ FROM langchain_pg_embedding
 WHERE cmetadata->>'hash' = %s
 """
 
-CONNECTION = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
+# FOR LOCAL
+# CONNECTION = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
+
+# FOR AWS
+CONNECTION = (
+    f"postgresql+psycopg://postgres:{PG_PWD}@host.docker.internal:5432/vector_db"
+)
 
 VECTOR_STORE = PGVector(
     embeddings=EMBEDDING,

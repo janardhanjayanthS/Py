@@ -11,11 +11,11 @@ from src.core.constants import (
     HISTORY,
     MODEL_COST_PER_MILLION_TOKENS,
     OPENAI_API_KEY,
-    VECTOR_STORE,
     AIModels,
 )
 from src.core.log import logger
 from src.core.prompts import CONTEXTUALIZE_PROMPT, QA_PROMPT
+from src.core.secrets import get_vector_store
 from src.schema.ai import Query
 
 
@@ -132,7 +132,7 @@ def contextualized_retrival(input_dict):
         reformulated_question = question
         logger.info(f"non reformulated question: {reformulated_question}")
 
-    docs = VECTOR_STORE.similarity_search(
+    docs = get_vector_store().similarity_search(
         query=reformulated_question, k=10, filter={"user_id": user_id}
     )
 

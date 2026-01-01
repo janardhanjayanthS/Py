@@ -54,7 +54,7 @@ Resources:
           Properties:
             RestApiId: !Ref MainApi
             Path: /{proxy+}
-            Method: ANY# AWS Lambda function definition
+            Method: ANY
 
 Outputs:
   ApiUrl:
