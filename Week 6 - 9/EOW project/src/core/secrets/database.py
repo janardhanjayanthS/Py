@@ -1,5 +1,4 @@
 from fastapi import HTTPException
-
 from src.core.secrets.utility import (
     environment_variable_from_secrets_manager,
     get_local_env_var_else_raise_error,

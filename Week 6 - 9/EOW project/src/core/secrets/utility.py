@@ -24,7 +24,7 @@ def running_on_aws() -> bool:
     return os.getenv("AWS_LAMBDA_FUNCTION_NAME") and not os.getenv("AWS_SAM_LOCAL")
 
 
-def environment_vairable_from_secrets_manager(env_var_name: str) -> Optional[str]:
+def environment_variable_from_secrets_manager(env_var_name: str) -> Optional[str]:
     """Retrieves a specific environment variable value from AWS Secrets Manager.
 
     Initializes a Boto3 session to connect to AWS Secrets Manager, fetches
