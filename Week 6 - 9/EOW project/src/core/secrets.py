@@ -3,7 +3,6 @@ import os
 from typing import Dict, Optional
 
 import boto3
-
 from src.core.log import logger
 
 # Cache for secrets to avoid repeated API calls
@@ -13,12 +12,6 @@ _secrets_cache: Dict[str, dict] = {}
 def get_secret(secret_arn: str) -> Optional[dict]:
     """
     Retrieve secret from AWS Secrets Manager or return None for local dev.
-
-    Args:
-        secret_arn: ARN of the secret (from environment variable)
-
-    Returns:
-        Dictionary containing the secret values
     """
     # Check if already cached
     if secret_arn in _secrets_cache:
@@ -59,62 +52,19 @@ def get_openai_api_key() -> str:
     # Local development - use .env file
     if secret_arn == "local":
         api_key = os.getenv("OPENAI_API_KEY")
-        logger.info(f"OPENAI API KEY FROM .env file {api_key}")
         if not api_key:
             raise ValueError("OPENAI_API_KEY not found in .env file")
+
+        # FIXED: Check if api_key is not None before slicing
+        logger.info(
+            f"OPENAI API KEY FROM .env file: {api_key[:5] if api_key else 'None'}..."
+        )
         return api_key
 
     # AWS - use Secrets Manager
     secret = get_secret(secret_arn)
-    if not secret:
+    if not secret or "api_key" not in secret:
         raise ValueError(f"Failed to retrieve OpenAI API key from {secret_arn}")
 
-    return secret["api_key"]
-
-
-# def get_database_config() -> dict:
-#     """
-#     Get database configuration from Secrets Manager (AWS) or .env (local).
-#     """
-#     secret_arn = os.getenv("DB_SECRET_ARN", "local")
-#
-#     # Local development - use .env file
-#     if secret_arn == "local":
-#         return {
-#             "host": os.getenv("DB_HOST", "localhost"),
-#             "port": int(os.getenv("DB_PORT", "5432")),
-#             "dbname": os.getenv("DB_NAME", "mydatabase"),
-#             "username": os.getenv("DB_USER", "myuser"),
-#             "password": os.getenv("DB_PASSWORD", "mypassword"),
-#         }
-
-# # AWS - use Secrets Manager
-# secret = get_secret(secret_arn)
-# if not secret:
-#     raise ValueError(f"Failed to retrieve database config from {secret_arn}")
-#
-# return {
-#     "host": secret["host"],
-#     "port": int(secret["port"]),
-#     "dbname": secret["dbname"],
-#     "username": secret["username"],
-#     "password": secret["password"],
-# }
-
-
-def get_api_key() -> str:
-    """
-    Get API key from Secrets Manager (AWS) or .env (local).
-    """
-    secret_arn = os.getenv("API_KEY_SECRET_ARN", "local")
-
-    # Local development
-    if secret_arn == "local":
-        return os.getenv("API_KEY", "local-dev-key")
-
-    # AWS
-    secret = get_secret(secret_arn)
-    if not secret:
-        raise ValueError(f"Failed to retrieve API key from {secret_arn}")
-
+    logger.info(f"OPENAI API KEY FROM Secrets Manager: {secret['api_key'][:5]}...")
     return secret["api_key"]

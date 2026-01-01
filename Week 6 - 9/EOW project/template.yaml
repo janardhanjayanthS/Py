@@ -4,9 +4,10 @@ Description: >
   Multi-tenant RAG with FastAPI
 Globals:
   Function:
-    Timeout: 15
-    MemorySize: 256
+    Timeout: 30
+    MemorySize: 512
 
+# Inputs from samconfig.py
 Parameters:
   OpenAIApiKey:
     Type: String
@@ -34,9 +35,19 @@ Resources:
       Runtime: python3.12
       Architectures:
         - x86_64
+
       Environment:
         Variables:
-          OPEN_AI_API_KEY:
+          OPENAI_SECRET_ARN: !Ref OpenAISecret
+
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource:
+                - !Ref OpenAISecret
+
       Events:
         TestRoute:
           Type: Api # <- this creates API Gateway implicitly inside AWS

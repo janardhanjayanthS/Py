@@ -6,7 +6,6 @@ from langchain_core.messages import SystemMessage
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
 from src.core.prompts import SYSTEM_PROMPT
 from src.core.secrets import get_openai_api_key
 
