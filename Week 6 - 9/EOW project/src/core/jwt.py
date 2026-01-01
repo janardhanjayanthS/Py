@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 
-from src.core.constants import logger
+from src.core.log import logger
 from src.schema.token import TokenData
 
 load_dotenv()

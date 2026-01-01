@@ -4,6 +4,8 @@ from typing import Dict, Optional
 
 import boto3
 
+from src.core.log import logger
+
 # Cache for secrets to avoid repeated API calls
 _secrets_cache: Dict[str, dict] = {}
 
@@ -57,6 +59,7 @@ def get_openai_api_key() -> str:
     # Local development - use .env file
     if secret_arn == "local":
         api_key = os.getenv("OPENAI_API_KEY")
+        logger.info(f"OPENAI API KEY FROM .env file {api_key}")
         if not api_key:
             raise ValueError("OPENAI_API_KEY not found in .env file")
         return api_key

@@ -6,7 +6,8 @@ from src.core.ai_utility import (
     clean_llm_output,
     get_agent,
 )
-from src.core.constants import MESSAGES, AIModels, ResponseType, logger
+from src.core.constants import MESSAGES, AIModels, ResponseType
+from src.core.log import logger
 from src.schema.ai import Query
 from src.schema.response import APIResponse
 

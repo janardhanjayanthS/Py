@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.core.constants import ResponseType, logger
+from src.core.constants import ResponseType
 from src.core.database import get_db
 from src.core.database_utility import (
     add_commit_refresh_db,
@@ -9,6 +9,7 @@ from src.core.database_utility import (
     check_existing_user_using_email,
 )
 from src.core.jwt import create_access_token
+from src.core.log import logger
 from src.core.utility import hash_password
 from src.models.user import User
 from src.schema.response import APIResponse
@@ -74,4 +75,3 @@ def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error occured try again later",
         )
-

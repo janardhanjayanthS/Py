@@ -1,6 +1,7 @@
 from typing import Optional
 
-from src.core.constants import AIModels, logger
+from src.core.constants import AIModels
+from src.core.log import logger
 from src.core.utility import CacheDetails
 from src.models.cache import UserLLMCache
 

@@ -3,8 +3,8 @@ from typing import Any, AsyncGenerator
 
 from fastapi import FastAPI
 
-from src.core.constants import logger
 from src.core.database import engine
+from src.core.log import logger
 from src.models.base import Base
 
 

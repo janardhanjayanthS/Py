@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 
-from src.core.constants import ResponseType, logger
+from src.core.constants import ResponseType
 from src.core.database_utility import (
     add_file_as_embedding,
     add_web_content_as_embedding,
 )
 from src.core.jwt_utility import authenticate_user_from_token
+from src.core.log import logger
 from src.models.user import User
 from src.schema.ai import WebLink
 from src.schema.response import APIResponse

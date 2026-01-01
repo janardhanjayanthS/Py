@@ -5,7 +5,7 @@ from hashlib import sha256
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from src.core.constants import logger
+from src.core.log import logger
 
 
 @dataclass

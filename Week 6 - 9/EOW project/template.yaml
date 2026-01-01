@@ -39,7 +39,7 @@ Resources:
           OPEN_AI_API_KEY:
       Events:
         TestRoute:
-          Type: Api
+          Type: Api # <- this creates API Gateway implicitly inside AWS
           Properties:
             Path: /
             Method: get
@@ -75,9 +75,6 @@ Resources:
             Method: post
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   APIGatewayHost:
     Description: "API Gateway endpoint HOST for Prod stage for Item function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

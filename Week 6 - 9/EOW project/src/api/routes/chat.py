@@ -10,9 +10,10 @@ from src.core.ai_utility import (
     update_history,
 )
 from src.core.cache import get_cached_response, save_to_cache
-from src.core.constants import HISTORY, AIModels, ResponseType, logger
+from src.core.constants import HISTORY, AIModels, ResponseType
 from src.core.database import get_db
 from src.core.jwt_utility import authenticate_user_from_token
+from src.core.log import logger
 from src.core.utility import CacheDetails, get_elapsed_time_till_now_in_ms
 from src.models.user import User
 from src.schema.ai import Query

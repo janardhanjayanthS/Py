@@ -13,8 +13,8 @@ from src.core.constants import (
     OPENAI_API_KEY,
     VECTOR_STORE,
     AIModels,
-    logger,
 )
+from src.core.log import logger
 from src.core.prompts import CONTEXTUALIZE_PROMPT, QA_PROMPT
 from src.schema.ai import Query
 

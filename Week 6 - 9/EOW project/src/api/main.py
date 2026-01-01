@@ -1,3 +1,4 @@
+import uvicorn  # noqa: F401
 from fastapi import FastAPI
 from mangum import Mangum
 
@@ -20,5 +21,5 @@ lambda_handler = Mangum(app, lifespan="off")
 
 
 # TO RUN LOCALLY
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="0.0.0.0", port=5002)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=5002)
