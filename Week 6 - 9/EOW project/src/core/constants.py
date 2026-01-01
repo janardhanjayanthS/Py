@@ -6,12 +6,11 @@ from langchain_core.messages import SystemMessage
 from langchain_openai import OpenAIEmbeddings
 from langchain_postgres import PGVector
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
 from src.core.prompts import SYSTEM_PROMPT
-from src.core.secrets import get_openai_api_key
+from src.core.secrets import get_openai_key
 
 load_dotenv()
-
-# Logging
 
 
 # General
@@ -37,7 +36,7 @@ class AIModels(Enum):
     TEXT_EMBEDDING_3_LARGE = "text-embedding-3-large"
 
 
-OPENAI_API_KEY = get_openai_api_key()
+OPENAI_API_KEY = get_openai_key()
 
 MODEL_COST_PER_MILLION_TOKENS: dict[str, dict[str, float]] = {
     AIModels.GPT_4o_MINI.value: {"i": 0.15, "o": 0.60},

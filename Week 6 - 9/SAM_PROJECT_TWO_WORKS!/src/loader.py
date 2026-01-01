@@ -10,7 +10,6 @@ def get_openai_key() -> str:
     if os.getenv("AWS_LAMBDA_FUNCTION_NAME") and not os.getenv("AWS_SAM_LOCAL"):
         try:
             session = boto3.session.Session()
-            # FIX: changed 'service' to 'service_name'
             client = session.client(
                 service_name="secretsmanager", region_name="us-east-1"
             )

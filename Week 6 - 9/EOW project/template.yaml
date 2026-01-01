@@ -6,6 +6,9 @@ Globals:
   Function:
     Timeout: 30
     MemorySize: 512
+    Runtime: python3.12
+    Architectures:
+      - x86_64
 
 # Inputs from samconfig.py
 Parameters:
@@ -16,79 +19,47 @@ Parameters:
     Default: ""
 
 Resources:
-  OpenAISecret:
-    Type: AWS::SecretsManager::Secret
+  MainApi:
+    Type: AWS::Serverless::Api
     Properties:
-      Name: openai-api-key
-      Description: OpenAI API key
-      SecretString: !Sub |
-        {
-          "api_key": "${OpenAIApiKey}"
-        }
+      StageName: dev
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
 
-  # AWS Lambda function definition
   MainFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: .
       Handler: src/api/main.lambda_handler
-      Runtime: python3.12
-      Architectures:
-        - x86_64
-
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:openai/api_key-*"
       Environment:
         Variables:
-          OPENAI_SECRET_ARN: !Ref OpenAISecret
-
-      Policies:
-        - Statement:
-            - Effect: Allow
-              Action:
-                - secretsmanager:GetSecretValue
-              Resource:
-                - !Ref OpenAISecret
-
+          # Use this to pass the parameter key for local dev or ARN for cloud
+          OPENAI_API_KEY: !Ref OpenAIApiKey
       Events:
-        TestRoute:
-          Type: Api # <- this creates API Gateway implicitly inside AWS
+        # 1. Matches the root path (/)
+        RootRoute:
+          Type: Api
           Properties:
+            RestApiId: !Ref MainApi
             Path: /
-            Method: get
-        AIQueryRoute:
+            Method: ANY
+        # 2. Matches everything else (/ai/query, /chat, /user/login, etc.)
+        ProxyRoute:
           Type: Api
           Properties:
-            Path: /ai/query
-            Method: post
-        AIChatRoute:
-          Type: Api
-          Properties:
-            Path: /chat
-            Method: post
-        PdfUploadRoute:
-          Type: Api
-          Properties:
-            Path: /data/upload_pdf
-            Method: post
-        WebContentUploadRoute:
-          Type: Api
-          Properties:
-            Path: /data/upload_web_content
-            Method: post
-        UserLoginRoute:
-          Type: Api
-          Properties:
-            Path: /user/login
-            Method: post
-        UserRegisterRoute:
-          Type: Api
-          Properties:
-            Path: /user/register
-            Method: post
+            RestApiId: !Ref MainApi
+            Path: /{proxy+}
+            Method: ANY# AWS Lambda function definition
 
 Outputs:
-  APIGatewayHost:
-    Description: "API Gateway endpoint HOST for Prod stage for Item function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
-  ItemFunction:
-    Description: "Item Lambda Function ARN"
+  ApiUrl:
+    Description: "URL of your API Gateway"
+    Value: !Sub "https://${GenAIApi}.execute-api.${AWS::Region}.amazonaws.com/dev/ai/"
+  FunctionArn:
+    Description: "Lambda Function ARN"
     Value: !GetAtt MainFunction.Arn
