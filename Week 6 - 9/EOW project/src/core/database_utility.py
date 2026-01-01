@@ -13,7 +13,6 @@ from src.core.constants import (
     CONNECTION,
     FILTER_METADATA_BY_HASH_QUERY,
     TEXT_SPLITTER,
-    VECTOR_STORE,
 )
 from src.core.log import logger
 from src.core.utility import hash_bytes, hash_str, verify_password

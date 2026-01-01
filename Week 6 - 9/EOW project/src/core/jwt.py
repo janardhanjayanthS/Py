@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from os import getenv
 from typing import Optional
 
 from dotenv import load_dotenv
@@ -7,16 +6,13 @@ from fastapi import HTTPException, status
 from jose import JWTError, jwt
 
 from src.core.log import logger
+from src.core.secrets.jwt import get_jwt_secret_key
 from src.schema.token import TokenData
 
 load_dotenv()
 
-JWT_SECRET_KEY = getenv("JWT_SECRET_KEY")
+JWT_SECRET_KEY = get_jwt_secret_key()
 
-if not JWT_SECRET_KEY:
-    message = "Cannot find JSON_SECRET_KEY from .env"
-    logger.error(message)
-    raise ValueError(message)
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30

@@ -40,7 +40,8 @@ Resources:
         Variables:
           # Use this to pass the parameter key for local dev or ARN for cloud
           OPENAI_API_KEY: !Ref OpenAIApiKey
-          POSTGRESQL_PWS: ""
+          POSTGRESQL_PWD: ""
+          JWT_SECRET_KEY: ""
       Events:
         # 1. Matches the root path (/)
         RootRoute:

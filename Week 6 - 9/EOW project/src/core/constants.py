@@ -64,16 +64,4 @@ CONNECTION = (
     f"postgresql+psycopg://postgres:{PG_PWD}@host.docker.internal:5432/vector_db"
 )
 
-# VECTOR_STORE = PGVector(
-#     embeddings=EMBEDDING,
-#     collection_name="uploaded_documents",
-#     connection=CONNECTION,
-#     use_jsonb=True,
-# )
-#
-# RETRIEVER = VECTOR_STORE.as_retriever(
-#     search_type="similarity",
-#     search_kwargs={"k": 10},
-# )
-
 HISTORY = []

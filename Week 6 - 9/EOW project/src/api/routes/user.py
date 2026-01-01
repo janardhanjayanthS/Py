@@ -51,8 +51,8 @@ def register_user(user_create: UserCreate, db: Session = Depends(get_db)):
         message = f"Error occured: {e}"
         logger.error(message)
         raise HTTPException(
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            details="Internal server error occured try again later",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error occured try again later",
         )
 
 
