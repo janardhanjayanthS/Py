@@ -14,11 +14,10 @@ app.include_router(user.user)
 
 @app.get("/")
 async def hw():
-    return {"jello": "world111  x`x`"}
+    return {"jello": "world"}
 
 
 lambda_handler = Mangum(app, lifespan="off")
-
 
 # TO RUN LOCALLY
 if __name__ == "__main__":
