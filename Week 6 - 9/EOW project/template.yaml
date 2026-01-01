@@ -7,7 +7,24 @@ Globals:
     Timeout: 15
     MemorySize: 256
 
+Parameters:
+  OpenAIApiKey:
+    Type: String
+    NoEcho: true
+    Description: OpenAI API key
+    Default: ""
+
 Resources:
+  OpenAISecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: openai-api-key
+      Description: OpenAI API key
+      SecretString: !Sub |
+        {
+          "api_key": "${OpenAIApiKey}"
+        }
+
   # AWS Lambda function definition
   MainFunction:
     Type: AWS::Serverless::Function
