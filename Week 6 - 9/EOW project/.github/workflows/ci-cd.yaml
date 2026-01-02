@@ -1,0 +1,31 @@
+name: EOW9 project CI
+
+on:
+  push:
+    branches: ["feat/week_9_day_3_to_5"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-verion: "3.12"
+
+      - name: Install requirements
+        run: |
+          pip install flake8 pytest
+          pip install -r requirements.txt
+
+      - name: Lint with flake8
+        run: |
+          flake8 "Week 6 - 9" --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Run Tests
+        run: |
+          pytest -p no:cacheprovider tests
