@@ -19,8 +19,8 @@ jobs:
 
       - name: Install requirements
         run: |
-          pip install flake8 pytest
-          pip install -r week9_eow_proj_requirements.txt
+          pip install flake8
+          pip install --no-cache-dir -r week9_eow_proj_requirements.txt
 
       - name: Lint with flake8
         run: |
