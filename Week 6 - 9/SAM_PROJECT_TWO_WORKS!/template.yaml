@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  GenAI FastAPI Service - Minimal Production Template
+
+# 1. Globals: Set default values for all functions
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Runtime: python3.12
+    Architectures:
+      - x86_64
+
+# 2. Parameters: Values you can change at deployment
+Parameters:
+  OpenAIApiKey:
+    Type: String
+    NoEcho: true # Hides the value in logs/console
+    Description: OpenAI API Key for the LLM
+    Default: ""
+
+# 3. Resources: The actual AWS services
+Resources:
+  GenAIApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
+
+  GenAIFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: src.main.lambda_handler
+      # IAM Policy allowing Lambda to talk to Secrets Manager (Important for Cloud)
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:openai/api_key-*"
+      Environment:
+        Variables:
+          OPENAI_API_KEY: !Ref OpenAIApiKey
+      Events:
+        FastAPIProxy:
+          Type: Api
+          Properties:
+            RestApiId: !Ref GenAIApi
+            Path: /ai/{proxy+}
+            Method: ANY
+
+# 4. Outputs: Useful info printed after 'sam deploy'
+Outputs:
+  ApiUrl:
+    Description: "URL of your API Gateway"
+    Value: !Sub "https://${GenAIApi}.execute-api.${AWS::Region}.amazonaws.com/dev/ai/"
+  FunctionArn:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt GenAIFunction.Arn

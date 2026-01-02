@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Multi-tenant RAG with FastAPI
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: python3.12
+    Architectures:
+      - x86_64
+
+# Inputs from samconfig.py
+Parameters:
+  OpenAIApiKey:
+    Type: String
+    NoEcho: true
+    Description: OpenAI API key
+    Default: ""
+
+Resources:
+  MainApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
+
+  MainFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: src/api/main.lambda_handler
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:openai/api_key-*"
+      Environment:
+        Variables:
+          # Use this to pass the parameter key for local dev or ARN for cloud
+          OPENAI_API_KEY: !Ref OpenAIApiKey
+          POSTGRESQL_PWD: ""
+          JWT_SECRET_KEY: ""
+          DB_HOST: "localhost"
+      Events:
+        # 1. Matches the root path (/)
+        RootRoute:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MainApi
+            Path: /
+            Method: ANY
+        # 2. Matches everything else (/ai/query, /chat, /user/login, etc.)
+        ProxyRoute:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MainApi
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  ApiUrl:
+    Description: "URL of your API Gateway"
+    Value: !Sub "https://${GenAIApi}.execute-api.${AWS::Region}.amazonaws.com/dev/ai/"
+  FunctionArn:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt MainFunction.Arn

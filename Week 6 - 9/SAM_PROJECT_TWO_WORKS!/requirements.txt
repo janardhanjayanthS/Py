@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+mangum
+python-dotenv
+langchain-openai
+boto3
