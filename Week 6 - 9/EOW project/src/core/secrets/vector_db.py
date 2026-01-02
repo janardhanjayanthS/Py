@@ -1,6 +1,6 @@
-import os
-
-from src.core.constants import EMBEDDING, PG_PWD
+from src.core.constants import EMBEDDING
+from src.core.secrets.database import get_postgresql_password
+from src.core.secrets.utility import running_on_aws
 
 
 def get_vector_store():
@@ -12,8 +12,8 @@ def get_vector_store():
         from langchain_postgres import PGVector
 
         # Determine connection string based on environment
-        db_host = "host.docker.internal" if os.getenv("AWS_SAM_LOCAL") else "localhost"
-        db_url = f"postgresql+psycopg://postgres:{PG_PWD}@{db_host}:5432/vector_db"
+        db_host = "host.docker.internal" if running_on_aws() else "localhost"
+        db_url = f"postgresql+psycopg://postgres:{get_postgresql_password()}@{db_host}:5432/vector_db"
 
         globals()["_VECTOR_STORE_INSTANCE"] = PGVector(
             embeddings=EMBEDDING,

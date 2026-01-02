@@ -15,6 +15,7 @@ from src.core.constants import (
     TEXT_SPLITTER,
 )
 from src.core.log import logger
+from src.core.secrets.vector_db import get_vector_store
 from src.core.utility import hash_bytes, hash_str, verify_password
 from src.models.user import User
 from src.schema.user import UserCreate, UserLogin
@@ -132,7 +133,7 @@ def add_file_as_embedding(contents: Bytes, filename: str, current_user_id: int) 
     documents = get_documents_from_file_content(
         content=contents, filename=filename, user_id=current_user_id
     )
-    VECTOR_STORE.add_documents(documents)
+    get_vector_store().add_documents(documents)
     return f"File - {filename} - added successfully"
 
 
@@ -169,7 +170,7 @@ def add_web_content_as_embedding(url: str, current_user_id: int) -> str:
         data=web_document_chunks,
     )
 
-    VECTOR_STORE.add_documents(web_document_chunks)
+    get_vector_store().add_documents(web_document_chunks)
     return f"web - {url} - added successfully"
 
 
