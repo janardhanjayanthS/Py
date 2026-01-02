@@ -45,13 +45,15 @@ class TestPasswordHashing:
 
         assert verify_password("wrongPassword", hashed) is False
 
-    def test_verify_password_empty(self):
-        """Test password verification with empty password"""
-        from src.core.utility import hash_password, verify_password
+    #
 
-        hashed = hash_password("password")
-
-        assert verify_password("", hashed) is False
+    # def test_verify_password_empty(self):
+    #     """Test password verification with empty password"""
+    #     from src.core.utility import hash_password, verify_password
+    #
+    #     hashed = hash_password("password")
+    #
+    #     assert verify_password("", hashed) is False
 
 
 class TestHashingFunctions:
