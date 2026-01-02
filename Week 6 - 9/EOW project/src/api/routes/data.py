@@ -41,7 +41,7 @@ async def upload_pdf_to_db(
         message = "Only supports .pdf files"
         logger.error(message)
         raise HTTPException(
-            status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail=message
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail=message
         )
 
     try:
