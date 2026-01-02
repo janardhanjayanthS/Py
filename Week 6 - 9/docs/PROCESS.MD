@@ -9,7 +9,7 @@ sam build
 ```
 
 **** Step 2: 
-        Above cmd creates .aws-sam dir, then run:
+        Above cmd creates .aws-sam dir, then run: (for running in a local docker container)
 
 
 bash```

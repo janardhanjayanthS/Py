@@ -41,13 +41,13 @@ def get_database_connection_string() -> str:
         str: Fully formatted SQLAlchemy connection string.
     """
     password = get_postgresql_password()
-    # 1. Real AWS Cloud (Not Local SAM)
-    if running_on_aws():
-        # In AWS, you usually get the DB Host from an Environment Variable
-        db_host = os.getenv("DB_HOST", "your-production-rds-endpoint")
-        return f"postgresql+psycopg://postgres:{password}@{db_host}:5432/vector_db"
-    # 2. Local SAM (Running inside Docker)
-    elif os.getenv("AWS_SAM_LOCAL"):
-        return f"postgresql+psycopg://postgres:{password}@host.docker.internal:5432/vector_db"
+    # Check if we are in the SAM Local Docker Container
+    if os.getenv("AWS_SAM_LOCAL"):
+        # Use the bridge to reach the Ubuntu host
+        host = "host.docker.internal"
+    elif running_on_aws():
+        host = os.getenv("DB_HOST", "your-rds-endpoint")
     else:
-        return f"postgresql+psycopg://postgres:{password}@localhost:5432/vector_db"
+        host = "localhost"
+
+    return f"postgresql+psycopg://postgres:{password}@{host}:5432/vector_db"
