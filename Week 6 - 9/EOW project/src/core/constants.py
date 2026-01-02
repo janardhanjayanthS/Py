@@ -6,7 +6,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from src.core.prompts import SYSTEM_PROMPT
-from src.core.secrets.database import get_postgresql_password
+from src.core.secrets.database import get_database_connection_string
 from src.core.secrets.openai import get_openai_key
 
 load_dotenv()
@@ -44,9 +44,6 @@ MODEL_COST_PER_MILLION_TOKENS: dict[str, dict[str, float]] = {
 MESSAGES = [SystemMessage(content=SYSTEM_PROMPT)]
 
 
-# DB
-PG_PWD = get_postgresql_password()
-
 EMBEDDING = OpenAIEmbeddings(
     model=AIModels.TEXT_EMBEDDING_3_LARGE.value, api_key=get_openai_key()
 )
@@ -56,12 +53,6 @@ FROM langchain_pg_embedding
 WHERE cmetadata->>'hash' = %s
 """
 
-# FOR LOCAL
-# CONNECTION = f"postgresql+psycopg://postgres:{PG_PWD}@localhost:5432/vector_db"
-
-# FOR AWS
-CONNECTION = (
-    f"postgresql+psycopg://postgres:{PG_PWD}@host.docker.internal:5432/vector_db"
-)
+CONNECTION = get_database_connection_string()
 
 HISTORY = []

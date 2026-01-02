@@ -1,4 +1,7 @@
+import os
+
 from fastapi import HTTPException
+
 from src.core.secrets.utility import (
     environment_variable_from_secrets_manager,
     get_local_env_var_else_raise_error,
@@ -29,3 +32,22 @@ def get_postgresql_password() -> str:
 
     else:
         return get_local_env_var_else_raise_error(env_var_name=env_var)
+
+
+def get_database_connection_string() -> str:
+    """Dynamically constructs the PostgreSQL connection string.
+
+    Returns:
+        str: Fully formatted SQLAlchemy connection string.
+    """
+    password = get_postgresql_password()
+    # 1. Real AWS Cloud (Not Local SAM)
+    if running_on_aws():
+        # In AWS, you usually get the DB Host from an Environment Variable
+        db_host = os.getenv("DB_HOST", "your-production-rds-endpoint")
+        return f"postgresql+psycopg://postgres:{password}@{db_host}:5432/vector_db"
+    # 2. Local SAM (Running inside Docker)
+    elif os.getenv("AWS_SAM_LOCAL"):
+        return f"postgresql+psycopg://postgres:{password}@host.docker.internal:5432/vector_db"
+    else:
+        return f"postgresql+psycopg://postgres:{password}@localhost:5432/vector_db"

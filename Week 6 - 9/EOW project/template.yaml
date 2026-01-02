@@ -42,6 +42,7 @@ Resources:
           OPENAI_API_KEY: !Ref OpenAIApiKey
           POSTGRESQL_PWD: ""
           JWT_SECRET_KEY: ""
+          DB_HOST: "localhost"
       Events:
         # 1. Matches the root path (/)
         RootRoute:
