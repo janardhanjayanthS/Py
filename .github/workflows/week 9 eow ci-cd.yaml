@@ -28,4 +28,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          pytest -p no:cacheprovider tests
+          pytest -p no:cacheprovider "Week 6 - 9/EOW project/tests"
