@@ -1,0 +1,44 @@
+# Development Requirements
+
+# Testing
+pytest==9.0.1
+iniconfig==2.3.0
+pluggy==1.6.0
+
+# Code Quality & Formatting
+pre_commit==4.5.0
+Pygments==2.19.2
+
+# Development Tools
+rich==14.2.0
+rich-toolkit==0.16.0
+typer==0.20.0
+
+# Virtual Environment
+virtualenv==20.35.4
+distlib==0.4.0
+filelock==3.20.0
+platformdirs==4.5.0
+
+# Pre-commit Configuration
+cfgv==3.5.0
+identify==2.6.15
+nodeenv==1.9.1
+rignore==0.7.6
+
+# Documentation & Utilities
+packaging==25.0
+PyYAML==6.0.3
+markdown-it-py==4.0.0
+mdurl==0.1.2
+
+# CLI Tools (optional)
+fastapi-cli==0.0.16
+fastapi-cloud-cli==0.5.1
+
+# Local Development Packages (remove in production)
+# inventory_manager @ file:///home/bitcot/python/Week%202/Day%206/package
+
+# Unused packages that can be removed:
+# annotated-doc==0.0.4
+# fastar==0.6.0
