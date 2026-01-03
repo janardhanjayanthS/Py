@@ -36,9 +36,4 @@ mdurl==0.1.2
 fastapi-cli==0.0.16
 fastapi-cloud-cli==0.5.1
 
-# Local Development Packages (remove in production)
-# inventory_manager @ file:///home/bitcot/python/Week%202/Day%206/package
-
-# Unused packages that can be removed:
-# annotated-doc==0.0.4
-# fastar==0.6.0
+pre-commit==4.0.1
