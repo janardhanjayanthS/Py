@@ -20,7 +20,7 @@ jobs:
       - name: Install requirements
         run: |
           pip install flake8
-          pip install --no-cache-dir -r week9_eow_proj_requirements.txt
+          pip install --no-cache-dir -r "Week 6 - 9/EOW project/requirements.txt"
 
       - name: Lint with flake8
         run: |
