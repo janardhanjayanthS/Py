@@ -16,10 +16,10 @@ def add_context_processor(_, __, event_dict):
 def setup_logging():
     is_production = settings.DEV_ENV in ["production", "prod"]
 
+    # Displayed in log console
     processors = [
         structlog.contextvars.merge_contextvars,
         add_context_processor,
-        # Displayed in log console
         structlog.processors.add_log_level,
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.StackInfoRenderer(),
@@ -53,4 +53,4 @@ def log_error(message: str) -> None:
     Args:
         message: error message to log
     """
-    logger.error(msg=message)
+    logger.error(message)

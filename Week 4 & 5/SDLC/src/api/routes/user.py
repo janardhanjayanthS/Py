@@ -33,10 +33,11 @@ user = APIRouter()
 @user.post("/user/register", response_model=WrapperUserResponse)
 async def register_user(create_user: UserRegister, db: Session = Depends(get_db)):
     if check_existing_user_using_email(user=create_user, db=db):
-        logger.info("HELLO WORLD")
+        message = f"User with email {create_user.email} already exists"
+        logger.error(message)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"User with email {create_user.email} already exists",
+            detail=message,
         )
 
     db_user = User(
@@ -47,6 +48,7 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
     )
 
     add_commit_refresh_db(object=db_user, db=db)
+    logger.info(f"Created new user with - {db_user.email} - email")
 
     return {"status": "success", "message": {"registered user": db_user}}
 
