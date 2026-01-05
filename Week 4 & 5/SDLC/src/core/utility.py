@@ -138,14 +138,6 @@ def password_does_not_exist(password: Optional[str]) -> bool:
 
     Returns:
         True if password is None or empty/falsy, False otherwise.
-
-    Examples:
-        >>> password_does_not_exist(None)
-        True
-        >>> password_does_not_exist("")
-        True
-        >>> password_does_not_exist("password123")
-        False
     """
     return not password or password is None
 
@@ -164,19 +156,6 @@ def strong_password(password: Optional[str]) -> bool:
     Returns:
         True if the password is weak (fails to meet requirements), False if
         the password is strong (meets all requirements).
-
-    Examples:
-        >>> not_strong_password("weak")
-        True
-        >>> not_strong_password("Strong1!")
-        False
-        >>> not_strong_password(None)
-        True
-        >>> not_strong_password("NoDigits!")
-        True
-
-    Note:
-        Special characters include: !@#$%^&*(),.?":{}|<>
     """
     return bool(
         len(password) >= 8

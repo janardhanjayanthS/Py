@@ -1,7 +1,48 @@
 import logging
+from contextvars import ContextVar
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(filename="errors.log", encoding="utf-8", level=logging.ERROR)
+import structlog
+
+from src.core.constants import settings
+
+correlation_id: ContextVar[str] = ContextVar("correlation_id", default="N/A")
+
+
+def add_context_processor(_, __, event_dict):
+    event_dict["correlation_id"] = correlation_id
+    return event_dict
+
+
+def setup_logging():
+    is_production = settings.DEVELOPMENT_ENVIRONMENT in ["production", "prod"]
+
+    processors = [
+        structlog.contextvars.merge_contextvars,
+        add_context_processor,
+        structlog.processors.add_log_level,
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.processors.StackInfoRenderer(),
+        structlog.dev.set_exc_info,
+    ]
+
+    if is_production:
+        processors.append(structlog.processors.JSONRenderer())
+    else:
+        processors.append(structlog.dev.ConsoleRenderer(colors=True))
+
+    structlog.configure(
+        processors=processors,
+        wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
+        logger_factory=structlog.WriteLoggerFactory(),
+        cache_logger_on_first_use=True,
+    )
+
+
+def get_logger(name: str):
+    return structlog.get_logger(__name__)
+
+
+logger = get_logger(__name__)
 
 
 def log_error(message: str) -> None:

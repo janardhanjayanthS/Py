@@ -16,14 +16,18 @@ class Settings(BaseSettings):
     # POSTGRESQL
     postgresql_pwd: str = Field(validation_alias="POSTGRESQL_PWD")
 
+    @property
+    def DATABASE_URL(self) -> str:
+        return f"postgresql://postgres:{self.postgresql_pwd}@localhost:5432/inventory_manager"
+
     # JWT
     JWT_SECRET_KEY: str = Field(validation_alias="JWT_SECRET_KEY")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
-    @property
-    def DATABASE_URL(self) -> str:
-        return f"postgresql://postgres:{self.postgresql_pwd}@localhost:5432/inventory_manager"
+    # LOGGING
+    ENVIRONMENT: str = Field(validation_alias="DEVELOPMENT_ENVIORNMENT")
+    LOG_LEVLEL: str = Field(validation_alias="LOG_LEVLEL")
 
     # .env settings
     model_config = SettingsConfigDict(

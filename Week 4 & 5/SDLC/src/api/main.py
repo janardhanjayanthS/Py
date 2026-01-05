@@ -1,17 +1,36 @@
+import uuid
+
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from src.core.config import lifespan
 from src.core.excptions import WeakPasswordException
+from src.core.log import correlation_id, get_logger
 
 from .routes import category, product, user
+
+logger = get_logger(__name__)
 
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(product.product)
 app.include_router(user.user)
 app.include_router(category.category)
+
+
+@app.middleware("http")
+async def logger_middleware(request: Request, call_next):
+    request_id = str(uuid.uuid4())
+    token = correlation_id.set(request_id)
+
+    logger.info("Request started", path=request.url.path, method=request.method)
+
+    try:
+        response = await call_next(request)
+        return response
+    finally:
+        correlation_id.reset(token)
 
 
 @app.exception_handler(WeakPasswordException)

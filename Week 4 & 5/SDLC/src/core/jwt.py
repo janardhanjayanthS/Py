@@ -1,14 +1,14 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from dotenv import load_dotenv
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 
 from src.core.constants import settings
+from src.core.log import get_logger
 from src.schema.token import TokenData
 
-load_dotenv()
+logger = get_logger(__name__)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -23,7 +23,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
     to_encode["exp"] = get_expiration_time(expires_delta=expires_delta)
 
-    print(f"To encode: {to_encode}")
+    logger.info(f"To encode: {to_encode}")
     encode_jwt = jwt.encode(to_encode, settings.JWT_SECRET_KEY, settings.ALGORITHM)
     return encode_jwt
 

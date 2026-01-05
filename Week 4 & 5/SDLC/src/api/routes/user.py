@@ -15,6 +15,7 @@ from src.core.constants import ResponseStatus, settings
 from src.core.database import add_commit_refresh_db, get_db, hash_password
 from src.core.decorators import required_roles
 from src.core.jwt import create_access_token
+from src.core.log import get_logger
 from src.models.models import User
 from src.schema.user import (
     UserEdit,
@@ -23,6 +24,8 @@ from src.schema.user import (
     UserRole,
     WrapperUserResponse,
 )
+
+logger = get_logger(__name__)
 
 user = APIRouter()
 
@@ -66,7 +69,7 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
     )
 
     # cannot copy from postman
-    print(access_token)
+    logger.info(access_token)
     return {"access_tokem": access_token, "token_type": "Bearer"}
 
 
