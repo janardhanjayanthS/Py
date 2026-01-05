@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 settings = Settings()
 
 
-class ResponseStatus(Enum):
+class ResponseStatus(str, Enum):
     """
     Response status enum
 
@@ -40,5 +40,5 @@ class ResponseStatus(Enum):
         E: error string
     """
 
-    S: str = "success"
-    E: str = "error"
+    S = "success"
+    E = "error"

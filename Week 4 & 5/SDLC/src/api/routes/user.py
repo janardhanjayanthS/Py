@@ -11,10 +11,10 @@ from src.core.api_utility import (
     update_user_name,
     update_user_password,
 )
-from src.core.constants import ResponseStatus
+from src.core.constants import ResponseStatus, settings
 from src.core.database import add_commit_refresh_db, get_db, hash_password
 from src.core.decorators import required_roles
-from src.core.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
+from src.core.jwt import create_access_token
 from src.models.models import User
 from src.schema.user import (
     UserEdit,
@@ -59,7 +59,7 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"sub": user.email, "role": user.role},
         expires_delta=access_token_expires,

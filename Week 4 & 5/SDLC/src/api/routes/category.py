@@ -11,13 +11,13 @@ from src.core.constants import ResponseStatus
 from src.core.database import add_commit_refresh_db, get_db
 from src.core.decorators import required_roles
 from src.models.models import Category
-from src.schema.category import CategoryCreate, CategoryUpdate
+from src.schema.category import CategoryCreate, CategoryResponse, CategoryUpdate
 from src.schema.user import UserRole
 
 category = APIRouter()
 
 
-@category.get("/category/all")
+@category.get("/category/all", response_model=CategoryResponse)
 @required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
 async def get_all_category(request: Request, db: Session = Depends(get_db)):
     current_user_email = request.state.email
@@ -31,7 +31,7 @@ async def get_all_category(request: Request, db: Session = Depends(get_db)):
     }
 
 
-@category.get("/category")
+@category.get("/category", response_model=CategoryResponse)
 @required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
 async def get_specifc_category(
     request: Request, category_id: int, db: Session = Depends(get_db)
@@ -53,7 +53,7 @@ async def get_specifc_category(
     }
 
 
-@category.post("/category")
+@category.post("/category", response_model=CategoryResponse)
 @required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def add_category(
     request: Request, category_create: CategoryCreate, db: Session = Depends(get_db)
@@ -70,7 +70,7 @@ async def add_category(
     }
 
 
-@category.put("/category/update")
+@category.put("/category/update", response_model=CategoryResponse)
 @required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def update_category(
     request: Request, category_update: CategoryUpdate, db: Session = Depends(get_db)
@@ -106,7 +106,7 @@ async def update_category(
     }
 
 
-@category.delete("/category/delete")
+@category.delete("/category/delete", response_model=CategoryResponse)
 @required_roles(UserRole.ADMIN)
 async def delete_category(
     request: Request,
