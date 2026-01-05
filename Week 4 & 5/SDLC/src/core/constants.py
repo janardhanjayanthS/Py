@@ -4,6 +4,9 @@ from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+CURRENT_DIR = Path(__file__).parent
+ENV_FILE = CURRENT_DIR / ".env"
+
 
 class Settings(BaseSettings):
     INVENTORY_CSV_FILEPATH: str = str(
@@ -13,20 +16,24 @@ class Settings(BaseSettings):
     # POSTGRESQL
     postgresql_pwd: str = Field(validation_alias="POSTGRESQL_PWD")
 
-    DATABASE_URL = (
-        f"postgresql://postgres:{postgresql_pwd}@localhost:5432/inventory_manager"
-    )
-
     # JWT
-    JWT_SECRET_KEY = Field(validation_alias="JWT_SECRET_KEY")
-    ALGORITHM = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES = 30
+    JWT_SECRET_KEY: str = Field(validation_alias="JWT_SECRET_KEY")
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    @property
+    def DATABASE_URL(self) -> str:
+        return f"postgresql://postgres:{self.postgresql_pwd}@localhost:5432/inventory_manager"
 
     # .env settings
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", env_prefix=""
+        env_file=ENV_FILE, env_file_encoding="utf-8", env_prefix="", extra="ignore"
     )
 
+
+# Debugging print (temporary)
+if not ENV_FILE.exists():
+    print(f"CRITICAL: .env file not found at {ENV_FILE.absolute()}")
 
 settings = Settings()
 
