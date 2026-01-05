@@ -7,7 +7,7 @@ from src.core.secrets.database import get_postgresql_password
 def get_vector_store():
     """Returns a singleton instance of the Vector Store"""
     # We use a global variable to cache the connection so we don't reconnect every time
-    global _VECTOR_STORE_INSTANCE
+    global _VECTOR_STORE_INSTANCE  # noqa: F824
 
     if "_VECTOR_STORE_INSTANCE" not in globals():
         from langchain_postgres import PGVector
