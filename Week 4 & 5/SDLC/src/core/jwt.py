@@ -1,18 +1,14 @@
 from datetime import datetime, timedelta
-from os import getenv
 from typing import Optional
 
 from dotenv import load_dotenv
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 
+from src.core.constants import settings
 from src.schema.token import TokenData
 
 load_dotenv()
-
-JWT_SECRET_KEY = getenv("JWT_SECRET_KEY", "")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -28,7 +24,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     to_encode["exp"] = get_expiration_time(expires_delta=expires_delta)
 
     print(f"To encode: {to_encode}")
-    encode_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
+    encode_jwt = jwt.encode(to_encode, settings.JWT_SECRET_KEY, settings.ALGORITHM)
     return encode_jwt
 
 
@@ -63,7 +59,9 @@ def decode_access_token(token: str) -> TokenData:
         HTTPException: if invalid/expired token
     """
     try:
-        payload: dict = jwt.decode(token, JWT_SECRET_KEY, algorithms=[ALGORITHM])
+        payload: dict = jwt.decode(
+            token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         email: str = payload.get("sub", "")
         role: str = payload.get("role", "")
 

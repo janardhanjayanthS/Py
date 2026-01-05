@@ -1,25 +1,13 @@
-from os import getenv
-
-from dotenv import load_dotenv
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy import create_engine, insert, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
-from src.core.constants import INVENTORY_CSV_FILEPATH
+from src.core.constants import settings
 from src.core.log import log_error
 from src.core.utility import get_initial_data_from_csv
 
-load_dotenv()
-
-postgresql_pwd = getenv("POSTGRESQL_PWD")
-
-DATABASE_URL = (
-    f"postgresql://postgres:{postgresql_pwd}@localhost:5432/inventory_manager"
-)
-
-
-engine = create_engine(url=DATABASE_URL)
+engine = create_engine(url=settings.DATABASE_URL)
 session_local = sessionmaker(autoflush=False, autocommit=False, bind=engine)
 
 Base = declarative_base()
@@ -37,7 +25,7 @@ def get_db():
 
 
 def seed_db():
-    initial_data = get_initial_data_from_csv(INVENTORY_CSV_FILEPATH)
+    initial_data = get_initial_data_from_csv(settings.INVENTORY_CSV_FILEPATH)
     with engine.connect() as connection:
         for tablename in ["product_category", "product"]:
             if tablename in initial_data and len(initial_data[tablename]) > 0:
