@@ -1,9 +1,29 @@
 import re
+from typing import Optional
 
 from inventory_manager import Inventory
 
 
 def get_initial_data_from_csv(csv_filepath: str) -> dict[str, list]:
+    """Load inventory data from CSV and extract initial product and category data.
+
+    Reads inventory information from a CSV file, processes the products to extract
+    unique categories, and organizes both product and product category data into
+    a structured dictionary format.
+
+    Args:
+        csv_filepath: Path to the CSV file containing inventory data.
+
+    Returns:
+        A dictionary containing two lists:
+            - 'product': List of product data dictionaries
+            - 'product_category': List of product category data dictionaries
+
+    Example:
+        >>> data = get_initial_data_from_csv('inventory.csv')
+        >>> data['product_category']
+        [{'id': 1, 'name': 'Electronics'}, {'id': 2, 'name': 'Clothing'}]
+    """
     initial_data: dict[str, list] = {"product": [], "product_category": []}
     inv = Inventory()
     inv.load_from_csv(csv_filepath)
@@ -13,10 +33,28 @@ def get_initial_data_from_csv(csv_filepath: str) -> dict[str, list]:
 
 
 def get_initial_product_category_data(products: list, initial_data: dict):
+    """Extract unique product categories and populate initial data dictionary.
+
+    Iterates through the provided products to identify all unique product categories,
+    then adds each category to the initial_data dictionary with a sequential ID.
+
+    Args:
+        products: List of product objects, each containing a 'type' attribute with
+            an enum value representing the product category.
+        initial_data: Dictionary to be populated with product category data. Must
+            contain a 'product_category' key with an empty list value.
+
+    Returns:
+        None. Modifies the initial_data dictionary in place by appending category
+        dictionaries to the 'product_category' list.
+
+    Note:
+        Each category dictionary contains 'id' (sequential integer starting from 1)
+        and 'name' (string value of the category).
+    """
     unique_categories = set()
     for product in products:
         unique_categories.add(product.type.value)
-
     for i, category in enumerate(unique_categories, start=1):
         initial_data["product_category"].append({"id": i, "name": category})
 
@@ -77,7 +115,7 @@ def get_category_id_from_type(type: str, initial_data: dict) -> int | None:
     return None
 
 
-def check_password_strength(password) -> bool:
+def check_password_strength(password: Optional[str]) -> bool:
     """
     Checks if user's password is strong
 
@@ -87,15 +125,63 @@ def check_password_strength(password) -> bool:
     Returns:
         bool: returns True if password is strong, False otherwise
     """
-
-    if (
-        not password
-        or password is None
-        or len(password) < 8
-        or not re.search(r"[a-z]", password)
-        or not re.search(r"[A-Z]", password)
-        or not re.search(r"\d", password)
-        or not re.search(r'[!@#$%^&*(),.?":{}|<>]', password)
-    ):
+    if password_does_not_exist(password=password):
         return False
-    return True
+    return strong_password(password=password)
+
+
+def password_does_not_exist(password: Optional[str]) -> bool:
+    """Check if password is None or empty.
+
+    Args:
+        password: Password string to check.
+
+    Returns:
+        True if password is None or empty/falsy, False otherwise.
+
+    Examples:
+        >>> password_does_not_exist(None)
+        True
+        >>> password_does_not_exist("")
+        True
+        >>> password_does_not_exist("password123")
+        False
+    """
+    return not password or password is None
+
+
+def strong_password(password: Optional[str]) -> bool:
+    """Check if a password does not meet strong password requirements.
+
+    Validates that a password fails to meet one or more security criteria.
+    A strong password must be at least 8 characters long and contain at least
+    one lowercase letter, one uppercase letter, one digit, and one special
+    character.
+
+    Args:
+        password: The password string to validate, or None.
+
+    Returns:
+        True if the password is weak (fails to meet requirements), False if
+        the password is strong (meets all requirements).
+
+    Examples:
+        >>> not_strong_password("weak")
+        True
+        >>> not_strong_password("Strong1!")
+        False
+        >>> not_strong_password(None)
+        True
+        >>> not_strong_password("NoDigits!")
+        True
+
+    Note:
+        Special characters include: !@#$%^&*(),.?":{}|<>
+    """
+    return bool(
+        len(password) >= 8
+        and re.search(r"[a-z]", password)
+        and re.search(r"[A-Z]", password)
+        and re.search(r"\d", password)
+        and re.search(r'[!@#$%^&*(),.?":{}|<>]', password)
+    )
