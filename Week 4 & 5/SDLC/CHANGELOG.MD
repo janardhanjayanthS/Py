@@ -1,5 +1,65 @@
 # Changelog
 
+## Version 1.1.0 - API Documentation Release
+
+### Added 
+- **Step 3 API Documentation**: Comprehensive endpoint documentation
+  - 15 detailed API documentation files in docs/step_3/
+  - Complete request/response examples for all endpoints
+  - cURL and Python testing examples for each API
+  - Detailed error handling documentation
+  - Role-based access control documentation
+  - Implementation details and security considerations
+
+- **User Management API Documentation** (5 endpoints):
+  - POST /user/register - User registration with validation
+  - POST /user/login - JWT authentication and token generation
+  - GET /user/all - Retrieve all users (authenticated)
+  - PATCH /user/update - Update user profile (manager/admin only)
+  - DELETE /user/delete - Delete user account (admin only)
+
+- **Category Management API Documentation** (5 endpoints):
+  - GET /category/all - Retrieve all categories
+  - GET /category - Get specific category by ID
+  - POST /category - Create new category (manager/admin only)
+  - PUT /category/update - Update category (manager/admin only)
+  - DELETE /category/delete - Delete category (admin only)
+
+- **Product Management API Documentation** (5 endpoints):
+  - GET /products - Get products with filtering options
+  - POST /products - Create new product (manager/admin only)
+  - PUT /product - Update existing product (manager/admin only)
+  - DELETE /product - Delete product (admin only)
+  - PATCH /product/update_category - Update product category (manager/admin only)
+
+### Documentation Features
+- **Comprehensive Examples**: Each endpoint includes multiple usage scenarios
+- **Testing Instructions**: Complete cURL and Python testing examples
+- **Error Handling**: Detailed error responses with status codes
+- **Security Documentation**: Authentication and authorization details
+- **Implementation Insights**: Technical details about each endpoint
+- **Related Endpoints**: Cross-references between related APIs
+
+### Documentation Structure
+```
+docs/step_3/
+├── 1_user_register_api.md
+├── 2_user_login_api.md
+├── 3_get_all_users_api.md
+├── 4_update_user_api.md
+├── 5_delete_user_api.md
+├── 6_get_all_categories_api.md
+├── 7_get_category_api.md
+├── 8_create_category_api.md
+├── 9_update_category_api.md
+├── 10_delete_category_api.md
+├── 11_get_products_api.md
+├── 12_create_product_api.md
+├── 13_update_product_api.md
+├── 14_delete_product_api.md
+└── 15_update_product_category_api.md
+```
+
 ## Version 1.0.0 - Initial Release
 
 ### Added 
@@ -56,6 +116,8 @@ SDLC/
 ├── requirements/          # Split production and dev dependencies
 ├── alembic/              # Database migration files
 ├── docs/                 # Complete documentation
+│   ├── step_2/           # Project structure documentation
+│   └── step_3/           # API endpoint documentation
 └── Configuration files   # .env.example, .pre-commit.yaml, etc.
 ```
 
@@ -64,7 +126,7 @@ SDLC/
 - **Product Category Table**: Product organization with unique names
 - **Products Table**: Inventory items with foreign key to categories
 
-### API Endpoints (16 total)
+### API Endpoints (15 total + health check)
 - **Authentication**: POST /user/register, POST /user/login
 - **User Management**: GET /user/all, PATCH /user/update, DELETE /user/delete
 - **Category Management**: GET /category/all, GET /category, POST /category, PUT /category/update, DELETE /category/delete
@@ -88,6 +150,9 @@ SDLC/
 - Error handling with custom exceptions
 
 ### Documentation
+- **Step 1**: Planning, design, user stories, database schema
+- **Step 2**: Project structure and architecture documentation
+- **Step 3**: Complete API endpoint documentation with examples
 - API endpoints with request/response examples
 - Database schema with relationships and constraints
 - User stories with acceptance criteria

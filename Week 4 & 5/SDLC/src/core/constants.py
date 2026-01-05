@@ -31,10 +31,6 @@ class Settings(BaseSettings):
     )
 
 
-# Debugging print (temporary)
-if not ENV_FILE.exists():
-    print(f"CRITICAL: .env file not found at {ENV_FILE.absolute()}")
-
 settings = Settings()
 
 
