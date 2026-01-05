@@ -26,8 +26,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # LOGGING
-    ENVIRONMENT: str = Field(validation_alias="DEVELOPMENT_ENVIORNMENT")
-    LOG_LEVLEL: str = Field(validation_alias="LOG_LEVLEL")
+    DEV_ENV: str = Field(validation_alias="DEV_ENV")
+    LOG_LEVEL: str = Field(validation_alias="LOG_LEVEL")
 
     # .env settings
     model_config = SettingsConfigDict(

@@ -4,13 +4,15 @@ from sqlalchemy import create_engine, insert, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 from src.core.constants import settings
-from src.core.log import log_error
+from src.core.log import get_logger, log_error
 from src.core.utility import get_initial_data_from_csv
 
 engine = create_engine(url=settings.DATABASE_URL)
 session_local = sessionmaker(autoflush=False, autocommit=False, bind=engine)
 
 Base = declarative_base()
+
+logger = get_logger(__name__)
 
 
 def get_db():
@@ -34,12 +36,14 @@ def seed_db():
                 try:
                     connection.execute(stmt)
                     connection.commit()
-                    print(
+                    logger.info(
                         f"Successfully seeded {len(initial_data[tablename])} values to {tablename}"
                     )
                 except Exception as e:
                     connection.rollback()
-                    print(f"Error: Unexpected exception when interacting with db. {e}")
+                    logger.info(
+                        f"Error: Unexpected exception when interacting with db. {e}"
+                    )
 
         # Reset sequences with COALESCE to handle empty tables
         try:
@@ -56,10 +60,10 @@ def seed_db():
                 )
             )
             connection.commit()
-            print("Successfully reset sequences")
+            logger.info("Successfully reset sequences")
         except Exception as e:
             connection.rollback()
-            print(f"Error resetting sequences: {e}")
+            logger.error(f"Error resetting sequences: {e}")
 
 
 def add_commit_refresh_db(object: BaseModel, db: Session):

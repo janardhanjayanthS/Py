@@ -9,16 +9,17 @@ correlation_id: ContextVar[str] = ContextVar("correlation_id", default="N/A")
 
 
 def add_context_processor(_, __, event_dict):
-    event_dict["correlation_id"] = correlation_id
+    event_dict["correlation_id"] = correlation_id.get()
     return event_dict
 
 
 def setup_logging():
-    is_production = settings.DEVELOPMENT_ENVIRONMENT in ["production", "prod"]
+    is_production = settings.DEV_ENV in ["production", "prod"]
 
     processors = [
         structlog.contextvars.merge_contextvars,
         add_context_processor,
+        # Displayed in log console
         structlog.processors.add_log_level,
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.StackInfoRenderer(),
@@ -39,7 +40,7 @@ def setup_logging():
 
 
 def get_logger(name: str):
-    return structlog.get_logger(__name__)
+    return structlog.get_logger(name)
 
 
 logger = get_logger(__name__)

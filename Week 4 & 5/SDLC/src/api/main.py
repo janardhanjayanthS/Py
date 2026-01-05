@@ -42,6 +42,7 @@ async def handle_weak_password(request: Request, error: WeakPasswordException):
 
 @app.get("/")
 def home():
+    logger.info("HELLO WORLD")
     return {"jello": "world"}
 
 

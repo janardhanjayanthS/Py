@@ -11,11 +11,13 @@ from src.core.database import (
     verify_password,
 )
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
-from src.core.log import log_error
+from src.core.log import get_logger, log_error
 from src.models.models import Category, Product, User
 from src.schema.category import BaseCategory
 from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister
+
+logger = get_logger(__name__)
 
 
 def check_id_type(id: Any):
@@ -29,6 +31,7 @@ def check_id_type(id: Any):
             Unprocessable Content error with details about the type mismatch.
     """
     if id and not isinstance(id, int):
+        logger.error("ID should be numbers(integers)")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail=f"id should be type int but got type: {id.__class__.__name__}",
@@ -340,6 +343,7 @@ def apply_discount_or_tax(product: Product) -> Product:
         price = DiscountDecorator(price=price, discount_percentage=0.2)
         product.price_type = "discounted"
     product.price = price.get_amount()
+    logger.info(f"Applied {product.price_type} to {price.get_amount()}")
     return product
 
 
