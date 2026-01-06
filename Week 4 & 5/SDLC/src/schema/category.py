@@ -1,7 +1,6 @@
 from typing import Any, Optional
 
-from pydantic import BaseModel
-
+from pydantic import BaseModel, ConfigDict
 from src.core.constants import ResponseStatus
 
 
@@ -37,3 +36,14 @@ class CategoryResponse(BaseModel):
 
     status: ResponseStatus
     message: dict[str, Any]
+
+
+class CategoryRead(BaseModel):
+    """
+    Model for reading category data (serializable)
+    """
+
+    id: int
+    name: str
+
+    model_config = ConfigDict(from_attributes=True)

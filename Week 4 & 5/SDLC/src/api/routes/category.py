@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-
 from src.core.api_utility import (
     check_existing_category_using_id,
     check_existing_category_using_name,
@@ -11,7 +10,12 @@ from src.core.constants import ResponseStatus
 from src.core.database import add_commit_refresh_db, get_db
 from src.core.decorators import required_roles
 from src.models.models import Category
-from src.schema.category import CategoryCreate, CategoryResponse, CategoryUpdate
+from src.schema.category import (
+    CategoryCreate,
+    CategoryRead,
+    CategoryResponse,
+    CategoryUpdate,
+)
 from src.schema.user import UserRole
 
 category = APIRouter()
@@ -22,11 +26,12 @@ category = APIRouter()
 async def get_all_category(request: Request, db: Session = Depends(get_db)):
     current_user_email = request.state.email
     all_categories = db.query(Category).all()
+    categories_data = [CategoryRead.model_validate(cat) for cat in all_categories]
     return {
         "status": ResponseStatus.S.value,
         "message": {
             "current user's email": current_user_email,
-            "all categories": all_categories,
+            "all categories": [cat.model_dump() for cat in categories_data],
         },
     }
 
@@ -45,10 +50,11 @@ async def get_specifc_category(
             },
         }
 
+    category_data = CategoryRead.model_validate(category)
     return {
         "status": ResponseStatus.S.value,
         "message": {
-            "requested category": category,
+            "requested category": category_data.model_dump(),
         },
     }
 
@@ -62,10 +68,11 @@ async def add_category(
     check_existing_category_using_id(category=category_create, db=db)
     db_category = Category(**category_create.model_dump())
     add_commit_refresh_db(object=db_category, db=db)
+    category_data = CategoryRead.model_validate(db_category)
     return {
         "status": ResponseStatus.S.value,
         "message": {
-            "new category": db_category,
+            "new category": category_data.model_dump(),
         },
     }
 
@@ -85,12 +92,13 @@ async def update_category(
         }
 
     category_by_name = get_category_by_name(category_name=category_update.name, db=db)
-    if category_by_name is not None:
+    if category_by_name is not None and category_by_name.id != category_update.id:
+        category_data = CategoryRead.model_validate(category_by_name)
         return {
             "status": ResponseStatus.E.value,
             "message": {
                 "response": "found existing category with same name",
-                "category": category_by_name,
+                "category": category_data.model_dump(),
             },
         }
 
@@ -98,10 +106,11 @@ async def update_category(
     db.commit()
     db.refresh(existing_category)
 
+    updated_category_data = CategoryRead.model_validate(existing_category)
     return {
         "status": ResponseStatus.S.value,
         "message": {
-            "updated category details": category_update,
+            "updated category details": updated_category_data.model_dump(),
         },
     }
 
@@ -122,10 +131,12 @@ async def delete_category(
             },
         }
 
+    category_data = CategoryRead.model_validate(category)
+
     db.delete(category)
     db.commit()
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"deleted category": category},
+        "message": {"deleted category": category_data.model_dump()},
     }
