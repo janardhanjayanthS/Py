@@ -3874,6 +3874,7 @@ dependencies = [
     { name = "streamlit" },
     { name = "torch" },
     { name = "transformers" },
+    { name = "websockets" },
 ]
 
 [package.metadata]
@@ -3913,6 +3914,7 @@ requires-dist = [
     { name = "streamlit", specifier = "==1.51.0" },
     { name = "torch", specifier = ">=2.9.1" },
     { name = "transformers", specifier = ">=4.57.3" },
+    { name = "websockets", specifier = ">=15.0.1" },
 ]
 
 [[package]]
