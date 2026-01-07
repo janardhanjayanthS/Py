@@ -7,4 +7,4 @@ load_dotenv()
 
 OPENAI_API_KEY = getenv("OPENAI_API_KEY")
 
-llm = ChatOpenAI()
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
