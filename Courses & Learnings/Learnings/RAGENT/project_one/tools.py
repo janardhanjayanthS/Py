@@ -2,15 +2,12 @@ from api import access_medical_api
 from api_utility import disease_to_code
 from constants import llm
 from langchain.agents import create_agent
-from langchain.messages import SystemMessage
+from langchain.messages import HumanMessage, SystemMessage
 from langchain.tools import tool
 from prompts import DATA_CLEANER_SYSTEM_PROMPT, MEDICAL_AGENT_SYSTEM_PROMT
 
 
-@tool(
-    parse_docstring=True,
-    description="Performs basic arithmetic operations (sum, subtract, multiply, divide) on two numbers.",
-)
+@tool(parse_docstring=True)
 def number_calculation(
     number1: int | float, number2: int | float, operation: str
 ) -> int:
@@ -25,14 +22,10 @@ def number_calculation(
             For subtraction (number2 - number1) and division (number2 // number1),
             this acts as the starting value or dividend.
         operation (str): The arithmetic operation to perform.
-            Supported values: 'sum', 'add', 'multiply', 'subtract', 'divide'.
+            Acceptable values are 'sum', 'add', 'multiply', 'subtract', or 'divide'.
 
     Returns:
         int: The result of the arithmetic operation.
-
-    Raises:
-        Exception: If the provided operation string is not supported.
-        ZeroDivisionError: If operation is 'divide' and number1 is 0.
     """
     if operation in ["sum", "add"]:
         return number1 + number2
@@ -61,6 +54,8 @@ async def get_medical_information(disease: str) -> str:
     """
     code = disease_to_code.get(disease, "Unknown disease")
     print(f"D code: {code}")
+    if code == 'Unknown disease':
+        return f'Cannont give assistance for this {disease} disease'
     medical_response = await access_medical_api(disease_code=code)
     api_data_cleaner = create_agent(
         llm, system_prompt=SystemMessage(content=DATA_CLEANER_SYSTEM_PROMPT)
@@ -86,5 +81,7 @@ def process_medical_query(query: str) -> str:
     """
     medical_agent = create_agent(llm, system_prompt=MEDICAL_AGENT_SYSTEM_PROMT)
 
-    result = medical_agent.invoke(query, tools=[get_medical_information])
-    return result.content
+    result = medical_agent.invoke(
+        {"messages": [HumanMessage(content=query)]}, tools=[get_medical_information]
+    )
+    return result["messages"][-1].content

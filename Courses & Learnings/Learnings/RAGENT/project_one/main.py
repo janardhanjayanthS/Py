@@ -16,11 +16,11 @@ if __name__ == "__main__":
 
     print("AI that answers basic arithmentic questions and medical qeueries")
     while True:
-        user_input = input("user query: (or) 'e' to exit")
+        user_input = input("user query: (or) 'e' to exit: ")
         if user_input.lower() in ["e", "exit"]:
             break
         messages = [HumanMessage(content=user_input)]
         response = agent.invoke({"messages": messages}, config=config)
-        print(f"AI: {response.content}")
+        print(f"AI: {response['messages'][-1].content}")
 
     print("EXIT")
