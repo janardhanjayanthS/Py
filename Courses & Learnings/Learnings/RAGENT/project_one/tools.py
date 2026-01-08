@@ -1,7 +1,10 @@
+from api import access_medical_api
+from api_utility import disease_to_code
 from constants import llm
 from langchain.agents import create_agent
+from langchain.messages import SystemMessage
 from langchain.tools import tool
-from prompts import MEDICAL_AGENT_SYSTEM_PROMT
+from prompts import DATA_CLEANER_SYSTEM_PROMPT, MEDICAL_AGENT_SYSTEM_PROMT
 
 
 @tool(
@@ -43,8 +46,45 @@ def number_calculation(
         raise Exception(f"Unknown operation: {operation}")
 
 
-@tool()
-def process_medical_query(query: str) -> str:
-    medical_agent = create_agent(llm, system_prompt=MEDICAL_AGENT_SYSTEM_PROMT)
-    medical_agent.invoke()
+@tool(parse_docstring=True)
+async def get_medical_information(disease: str) -> str:
+    """Fetches and cleans medical data for a specific disease from an external API.
 
+    This tool acts as a bridge between raw medical API data and the agent,
+    using a secondary 'cleaner' agent to summarize and format the information.
+
+    Args:
+        disease (str): The common name of the disease (e.g., 'Diabetes', 'Asthma').
+
+    Returns:
+        str: A cleaned, human-readable summary of medical information about the disease.
+    """
+    code = disease_to_code.get(disease, "Unknown disease")
+    print(f"D code: {code}")
+    medical_response = await access_medical_api(disease_code=code)
+    api_data_cleaner = create_agent(
+        llm, system_prompt=SystemMessage(content=DATA_CLEANER_SYSTEM_PROMPT)
+    )
+    cleaned_api_response = api_data_cleaner.invoke(medical_response)
+    cleaned_content = cleaned_api_response.content
+    print(f"CLEANED API RESPONSE: {cleaned_content}")
+    return cleaned_content
+
+
+@tool(parse_docstring=True)
+def process_medical_query(query: str) -> str:
+    """Delegates a complex medical user query to a specialized medical agent.
+
+    Use this tool when a user's question requires multi-step reasoning,
+    accessing medical databases, or clinical interpretation.
+
+    Args:
+        query (str): The full natural language medical question from the user.
+
+    Returns:
+        str: The final interpreted answer from the medical expert agent.
+    """
+    medical_agent = create_agent(llm, system_prompt=MEDICAL_AGENT_SYSTEM_PROMT)
+
+    result = medical_agent.invoke(query, tools=[get_medical_information])
+    return result.content
