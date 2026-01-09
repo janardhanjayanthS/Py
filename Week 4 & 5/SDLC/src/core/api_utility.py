@@ -7,7 +7,9 @@ from src.core.config import ResponseStatus
 from src.core.database import add_commit_refresh_db, hash_password, verify_password
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
 from src.core.log import get_logger, log_error
-from src.models.models import Category, Product, User
+from src.models.category import Category
+from src.models.product import Product
+from src.models.user import User
 from src.schema.category import BaseCategory
 from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister

@@ -1,8 +1,7 @@
 # test_product_routes.py - Tests for product CRUD operations
 from fastapi.testclient import TestClient  # noqa: F401
 from sqlalchemy.orm import Session  # noqa: F401
-
-from src.models.models import Category  # noqa: F401
+from src.models.category import Category  # noqa: F401
 
 
 class TestGetProducts:
@@ -186,7 +185,7 @@ class TestUpdateProduct:
         print(f"Data in test_manager_can_create_product: {data}")
         assert data["message"]["updated product"]["name"] == "Updated Product"
         assert data["message"]["updated product"]["quantity"] == 10
-        assert data["message"]["updated product"]["price"] == 1200.0
+        assert data["message"]["updated product"]["price"] == pytest.approx(1200.0)
 
     def test_admin_can_update_product(
         self, client: TestClient, admin_headers: dict, sample_product

@@ -16,7 +16,7 @@ from src.core.api_utility import (
 from src.core.config import ResponseStatus
 from src.core.database import get_db
 from src.core.decorators import required_roles
-from src.models.models import Product
+from src.models.product import Product
 from src.schema.product import ProductCreate, ProductUpdate
 from src.schema.user import UserRole
 

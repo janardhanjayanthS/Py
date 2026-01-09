@@ -1,8 +1,8 @@
 # test_category_routes.py - Complete tests for category management
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session  # noqa: F401
-
-from src.models.models import Category, Product  # noqa: F401
+from src.models.category import Category
+from src.models.product import Product  # noqa: F401
 
 
 class TestGetAllCategories:

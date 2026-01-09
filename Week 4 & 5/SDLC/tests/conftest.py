@@ -7,11 +7,12 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
-
 from src.api.main import app
 from src.core.database import Base, get_db, hash_password
 from src.core.jwt import create_access_token
-from src.models.models import Category, Product, User
+from src.models.category import Category
+from src.models.product import Product
+from src.models.user import User
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(

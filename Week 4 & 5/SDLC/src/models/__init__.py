@@ -1,3 +1,5 @@
-from .models import Category, Product, User
+from .category import Category
+from .product import Product
+from .user import User
 
 __all__ = ["User", "Product", "Category"]

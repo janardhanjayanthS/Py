@@ -9,7 +9,7 @@ from src.core.api_utility import (
 from src.core.config import ResponseStatus
 from src.core.database import add_commit_refresh_db, get_db
 from src.core.decorators import required_roles
-from src.models.models import Category
+from src.models.category import Category
 from src.schema.category import (
     CategoryCreate,
     CategoryRead,
