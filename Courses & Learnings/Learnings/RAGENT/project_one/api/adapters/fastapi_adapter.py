@@ -5,6 +5,7 @@ This adapter bridges FastAPI + python-socketio with ragent's framework-agnostic
 voice gateway. It implements the required interfaces so ragent can work with FastAPI.
 """
 
+import asyncio
 from typing import Any, Callable, Optional
 
 import socketio
@@ -49,6 +50,29 @@ class FastAPIWebApp(WebApp):
                 name=endpoint,
             )
 
+    def route(self, rule: str, **options):
+        """
+        Decorator to add a route (Flask-style).
+
+        ragent uses this decorator pattern: @app.route("/health")
+
+        Args:
+            rule: The URL path (e.g., "/health")
+            **options: Additional options like methods=["GET", "POST"]
+        """
+        methods = options.get("methods", ["GET"])
+
+        def decorator(view_func: Callable):
+            for method in methods:
+                self._app.add_api_route(
+                    rule,
+                    view_func,
+                    methods=[method],
+                )
+            return view_func
+
+        return decorator
+
     def run(self, host: str = "0.0.0.0", port: int = 5000, **options) -> None:
         """Run the FastAPI app (typically you'd use uvicorn externally)."""
         import uvicorn
@@ -64,14 +88,19 @@ class FastAPISocketHandler(WebSocketHandler):
     """
     Wraps python-socketio's AsyncServer for ragent's WebSocketHandler interface.
 
-    This uses ragent's UniversalSocketIOHandler internally, which auto-detects
-    sync vs async Socket.IO and handles both correctly.
+    Handles the tricky case where ragent calls emit() from background threads
+    (OpenAI WebSocket handlers) but Socket.IO AsyncServer needs an event loop.
     """
 
     def __init__(self, sio: socketio.AsyncServer):
         self._sio = sio
         self._handler = UniversalSocketIOHandler(sio)
         self._current_sid: Optional[str] = None
+        self._main_loop: Optional[asyncio.AbstractEventLoop] = None
+
+    def set_main_loop(self, loop: asyncio.AbstractEventLoop) -> None:
+        """Store reference to main event loop for cross-thread emit."""
+        self._main_loop = loop
 
     def on(self, event: str, handler: Callable) -> None:
         """Register an event handler for Socket.IO events."""
@@ -82,8 +111,39 @@ class FastAPISocketHandler(WebSocketHandler):
         self._handler.on_error(handler)
 
     def emit(self, event: str, data: Any = None, **kwargs) -> None:
-        """Emit an event to connected clients."""
-        self._handler.emit(event, data, **kwargs)
+        """
+        Emit an event to connected clients.
+
+        Handles cross-thread emit by using run_coroutine_threadsafe when
+        called from a thread different from the main event loop.
+        """
+        # Convert 'to' to 'room' for python-socketio compatibility
+        if "to" in kwargs:
+            kwargs["room"] = kwargs.pop("to")
+
+        try:
+            # Try to get the running loop in current thread
+            loop = asyncio.get_running_loop()
+            # We're in an async context, create task
+            loop.create_task(self._sio.emit(event, data, **kwargs))
+        except RuntimeError:
+            # No running loop in this thread - we're in a background thread
+            # Use the main loop if available
+            if self._main_loop and self._main_loop.is_running():
+                future = asyncio.run_coroutine_threadsafe(
+                    self._sio.emit(event, data, **kwargs), self._main_loop
+                )
+                # Wait for completion with timeout to ensure it finishes
+                try:
+                    future.result(timeout=5.0)
+                except Exception:
+                    pass  # Best effort emit
+            else:
+                # Fallback: try to run in new loop (not ideal but prevents crash)
+                try:
+                    asyncio.run(self._sio.emit(event, data, **kwargs))
+                except Exception:
+                    pass
 
     def get_current_client_id(self) -> str:
         """Get the current client's session ID."""

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Chat</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            min-height: 100vh;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 420px;
+            padding: 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .status {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #333;
+        }
+
+        .status-dot.connected { background: #22c55e; }
+        .status-dot.recording { background: #ef4444; animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat {
+            background: #1a1a1a;
+            border-radius: 16px;
+            height: 360px;
+            overflow-y: auto;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .msg {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 85%;
+        }
+
+        .msg.user {
+            background: #2563eb;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg.ai {
+            background: #262626;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg.system {
+            background: transparent;
+            color: #666;
+            text-align: center;
+            max-width: 100%;
+            font-size: 12px;
+            padding: 8px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+
+        .btn-record {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .btn-record:hover:not(:disabled) {
+            background: #b91c1c;
+        }
+
+        .btn-record.recording {
+            animation: pulse 1s infinite;
+        }
+
+        .btn-secondary {
+            background: #262626;
+            color: #fff;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #333;
+        }
+
+        .mic-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="header">
+            <h1>Voice Chat</h1>
+            <div class="status">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Disconnected</span>
+            </div>
+        </div>
+
+        <div class="chat" id="chat"></div>
+
+        <button class="mic-btn btn-record" id="micBtn" onclick="toggleRecording()" disabled>🎤</button>
+
+        <div class="controls">
+            <button class="btn-secondary" id="btnConnect" onclick="connect()">Connect</button>
+            <button class="btn-primary" id="btnSession" onclick="toggleSession()" disabled>Start</button>
+            <button class="btn-secondary" onclick="speak('Hello, this is a test of text to speech.')">Test TTS</button>
+        </div>
+    </div>
+
+    <script>
+        let socket = null;
+        let isRecording = false;
+        let isSessionActive = false;
+        let mediaRecorder = null;
+        let synth = window.speechSynthesis;
+        let voices = [];
+
+        // Load voices (required for some browsers)
+        function loadVoices() {
+            voices = synth.getVoices();
+            console.log('Loaded voices:', voices.length);
+        }
+        loadVoices();
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+
+        function setStatus(state, text) {
+            const dot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            dot.className = 'status-dot ' + state;
+            statusText.textContent = text;
+        }
+
+        function addMsg(text, type) {
+            const chat = document.getElementById('chat');
+            const msg = document.createElement('div');
+            msg.className = 'msg ' + type;
+            msg.textContent = text;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        let audioElement = null;
+
+        function speak(text) {
+            console.log('Speaking:', text);
+            
+            // Stop any ongoing audio
+            if (audioElement) {
+                audioElement.pause();
+                audioElement = null;
+            }
+
+            // Try browser TTS first
+            if (voices.length > 0) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                const englishVoice = voices.find(v => v.lang.startsWith('en'));
+                if (englishVoice) utterance.voice = englishVoice;
+                utterance.onstart = () => console.log('TTS started');
+                utterance.onend = () => console.log('TTS ended');
+                utterance.onerror = (e) => {
+                    console.error('Browser TTS failed, using Google TTS');
+                    speakWithGoogle(text);
+                };
+                synth.speak(utterance);
+            } else {
+                // No browser voices, use Google TTS
+                speakWithGoogle(text);
+            }
+        }
+
+        function speakWithGoogle(text) {
+            // No browser voices available - just beep and show text prominently
+            console.log('No TTS voices - using beep notification');
+            playBeep();
+        }
+
+        function playBeep() {
+            // Simple beep notification as last resort
+            const ctx = new AudioContext();
+            const oscillator = ctx.createOscillator();
+            const gain = ctx.createGain();
+            oscillator.connect(gain);
+            gain.connect(ctx.destination);
+            oscillator.frequency.value = 440;
+            gain.gain.value = 0.3;
+            oscillator.start();
+            setTimeout(() => { oscillator.stop(); ctx.close(); }, 200);
+        }
+
+        function connect() {
+            socket = io('http://localhost:5000', { transports: ['websocket'] });
+
+            socket.on('connect', () => {
+                setStatus('connected', 'Connected');
+                document.getElementById('btnConnect').disabled = true;
+                document.getElementById('btnSession').disabled = false;
+            });
+
+            socket.on('disconnect', () => {
+                setStatus('', 'Disconnected');
+                document.getElementById('btnConnect').disabled = false;
+                document.getElementById('btnSession').disabled = true;
+                document.getElementById('micBtn').disabled = true;
+                isSessionActive = false;
+            });
+
+            socket.on('session_started', (data) => {
+                isSessionActive = true;
+                setStatus('connected', 'Session active');
+                document.getElementById('btnSession').textContent = 'End';
+                document.getElementById('micBtn').disabled = false;
+                addMsg('Session started. Hold mic to speak.', 'system');
+            });
+
+            socket.on('session_ended', () => {
+                isSessionActive = false;
+                setStatus('connected', 'Connected');
+                document.getElementById('btnSession').textContent = 'Start';
+                document.getElementById('micBtn').disabled = true;
+                addMsg('Session ended.', 'system');
+            });
+
+            socket.on('ai_response', (data) => {
+                if (data.transcript) {
+                    addMsg(data.transcript, 'user');
+                }
+                if (data.response) {
+                    addMsg(data.response, 'ai');
+                    speak(data.response);
+                }
+            });
+
+            socket.on('error', (data) => {
+                addMsg('Error: ' + (data.message || 'Unknown error'), 'system');
+            });
+        }
+
+        function toggleSession() {
+            if (isSessionActive) {
+                socket.emit('end_session');
+            } else {
+                socket.emit('start_session', { config: {} });
+            }
+        }
+
+        function toggleRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: { sampleRate: 24000, channelCount: 1, echoCancellation: true, noiseSuppression: true } 
+                });
+
+                const ctx = new AudioContext({ sampleRate: 24000 });
+                const source = ctx.createMediaStreamSource(stream);
+                const processor = ctx.createScriptProcessor(4096, 1, 1);
+
+                source.connect(processor);
+                processor.connect(ctx.destination);
+
+                processor.onaudioprocess = (e) => {
+                    const input = e.inputBuffer.getChannelData(0);
+                    const pcm16 = new Int16Array(input.length);
+                    for (let i = 0; i < input.length; i++) {
+                        pcm16[i] = Math.max(-32768, Math.min(32767, input[i] * 32768));
+                    }
+                    socket.emit('audio_data', { audio: btoa(String.fromCharCode(...new Uint8Array(pcm16.buffer))) });
+                };
+
+                mediaRecorder = { stream, processor, source, ctx };
+                isRecording = true;
+                
+                setStatus('recording', 'Recording...');
+                document.getElementById('micBtn').classList.add('recording');
+
+            } catch (err) {
+                addMsg('Mic error: ' + err.message, 'system');
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder) {
+                mediaRecorder.processor.disconnect();
+                mediaRecorder.source.disconnect();
+                mediaRecorder.stream.getTracks().forEach(t => t.stop());
+                mediaRecorder.ctx.close();
+                mediaRecorder = null;
+                
+                socket.emit('commit_audio');
+                isRecording = false;
+                
+                setStatus('connected', 'Processing...');
+                document.getElementById('micBtn').classList.remove('recording');
+                
+                setTimeout(() => {
+                    if (!isRecording) setStatus('connected', 'Session active');
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
