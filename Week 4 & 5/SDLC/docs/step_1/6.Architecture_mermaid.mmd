@@ -1,0 +1,190 @@
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#fff','primaryTextColor':'#000','primaryBorderColor':'#000','lineColor':'#000','secondaryColor':'#f4f4f4','tertiaryColor':'#fff','noteTextColor':'#000','noteBkgColor':'#ffeb99','noteBorderColor':'#000','actorTextColor':'#000','actorLineColor':'#000','signalColor':'#000','signalTextColor':'#000','labelBoxBkgColor':'#e0e0e0','labelBoxBorderColor':'#000','labelTextColor':'#000','loopTextColor':'#000','activationBorderColor':'#666','activationBkgColor':'#f4f4f4','sequenceNumberColor':'#000'}}}%%
+sequenceDiagram
+    participant Client as Client Application
+    participant FastAPI as FastAPI Backend API
+    participant PostgreSQL as PostgreSQL DB
+    participant JWT as JWT Auth Service
+    
+    rect rgb(220, 220, 220)
+    Note over Client,JWT: User Authentication
+    Client->>FastAPI: POST /auth/register (email, password)
+    FastAPI->>PostgreSQL: Check if user exists
+    PostgreSQL-->>FastAPI: User validation by email
+    alt User does not exist
+        FastAPI->>PostgreSQL: INSERT new user record
+        PostgreSQL-->>FastAPI: User created successfully
+        FastAPI->>JWT: Generate JWT token
+        JWT-->>FastAPI: JWT access/refresh tokens
+        FastAPI-->>Client: 201 Created (JWT token, user info)
+    else User exists
+        FastAPI-->>Client: 409 Conflict
+    end
+    
+    Client->>FastAPI: POST /auth/login (email, password)
+    FastAPI->>PostgreSQL: Verify user credentials
+    PostgreSQL-->>FastAPI: User validated
+    FastAPI->>JWT: Generate JWT token
+    JWT-->>FastAPI: JWT access tokens
+    FastAPI-->>Client: 200 OK (JWT token)
+    end
+    
+    rect rgb(255, 235, 200)
+    Note over Client,JWT: Product Catalog (Unauthenticated)
+    Client->>FastAPI: GET /products (with JWT token)
+    FastAPI->>PostgreSQL: Fetch products
+    PostgreSQL-->>FastAPI: Return products data
+    FastAPI-->>Client: 200 OK Products list
+    
+    Client->>FastAPI: GET /products/{category_id}
+    FastAPI->>PostgreSQL: SELECT * FROM products WHERE category_id
+    PostgreSQL-->>FastAPI: Product list returned
+    FastAPI-->>Client: 200 OK Products list
+    end
+    
+    rect rgb(255, 235, 200)
+    Note over Client,JWT: Product Management (Authenticated)
+    Client->>FastAPI: GET /products (with JWT token)
+    FastAPI->>JWT: Validate JWT
+    JWT-->>FastAPI: Token valid
+    FastAPI->>PostgreSQL: Fetch all products (with categories)
+    PostgreSQL-->>FastAPI: Product list with categories
+    FastAPI-->>Client: 200 OK Products list
+    
+    Client->>FastAPI: POST /products (name, price, category_id, etc)
+    FastAPI->>JWT: Validate JWT + Role check
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: Validate category exists
+    PostgreSQL-->>FastAPI: Category valid
+    FastAPI->>PostgreSQL: INSERT INTO products
+    PostgreSQL-->>FastAPI: Product created
+    FastAPI-->>Client: 201 Created (product record)
+    end
+    
+    rect rgb(255, 235, 200)
+    Note over Client,JWT: Product Details
+    Client->>FastAPI: GET /products/{id}
+    FastAPI->>PostgreSQL: Fetch product by ID
+    PostgreSQL-->>FastAPI: Return product
+    FastAPI-->>Client: 200 OK Product details
+    
+    Client->>FastAPI: POST /products (name, price, category_id, JWT token)
+    FastAPI->>JWT: Validate JWT + Role check
+    JWT-->>FastAPI: Authorized (admin/staff only)
+    FastAPI->>PostgreSQL: Lookup category exists
+    PostgreSQL-->>FastAPI: Category validated
+    FastAPI->>PostgreSQL: INSERT new product
+    PostgreSQL-->>FastAPI: Product record
+    FastAPI-->>Client: 201 Created (product info)
+    end
+    
+    rect rgb(255, 235, 200)
+    Note over Client,JWT: Update Product
+    Client->>FastAPI: GET /products/{id}
+    FastAPI->>PostgreSQL: Fetch product
+    PostgreSQL-->>FastAPI: Product returned
+    FastAPI-->>Client: 200 OK Product details
+    
+    Client->>FastAPI: PUT /products/{id} (update data, JWT token)
+    FastAPI->>JWT: Validate JWT + Role check
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: Check product exists
+    PostgreSQL-->>FastAPI: Product found
+    FastAPI->>PostgreSQL: UPDATE product
+    PostgreSQL-->>FastAPI: Product updated
+    FastAPI-->>Client: 200 OK Product updated
+    end
+    
+    rect rgb(255, 235, 200)
+    Note over Client,JWT: Delete Product
+    Client->>FastAPI: GET /products/{id}
+    FastAPI->>PostgreSQL: Fetch product
+    PostgreSQL-->>FastAPI: Return product
+    FastAPI-->>Client: 200 OK Product details
+    
+    Client->>FastAPI: DELETE /products/{id} (JWT token)
+    FastAPI->>JWT: Validate JWT + Role check
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: Check product exists
+    PostgreSQL-->>FastAPI: Product found
+    FastAPI->>PostgreSQL: DELETE product
+    PostgreSQL-->>FastAPI: Product deleted
+    FastAPI-->>Client: 204 No Content
+    end
+    
+    rect rgb(200, 255, 200)
+    Note over Client,JWT: Product Category Management (Authenticated)
+    Client->>FastAPI: GET /categories (with JWT token)
+    FastAPI->>JWT: Validate JWT token
+    JWT-->>FastAPI: Token validated (admin role)
+    FastAPI->>PostgreSQL: Fetch all categories
+    PostgreSQL-->>FastAPI: Return category list
+    FastAPI-->>Client: 200 OK Categories list
+    
+    Client->>FastAPI: POST /categories (name, desc)
+    FastAPI->>JWT: Validate JWT + role check
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: INSERT INTO categories
+    PostgreSQL-->>FastAPI: Category created
+    FastAPI-->>Client: 201 Created (category details)
+    
+    Client->>FastAPI: PUT /categories/{category_id} (update data)
+    FastAPI->>JWT: Validate JWT + role check
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: UPDATE categories WHERE id
+    PostgreSQL-->>FastAPI: Category updated
+    FastAPI-->>Client: 200 OK Category record
+    
+    Client->>FastAPI: DELETE /categories/{category_id}
+    FastAPI->>JWT: Validate JWT + role check
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: DELETE FROM categories
+    PostgreSQL-->>FastAPI: Category deleted
+    FastAPI-->>Client: 204 No Content
+    end
+    
+    rect rgb(200, 255, 200)
+    Note over Client,JWT: Get all categories
+    Client->>FastAPI: GET /category/all (all category details by admin)
+    FastAPI->>JWT: Validate JWT
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: Fetch all category
+    PostgreSQL-->>FastAPI: Return all category
+    FastAPI-->>Client: 200 all category records
+    
+    Client->>FastAPI: PUT /categories/{category_id} (update data, JWT token)
+    FastAPI->>JWT: Validate JWT + Role check
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: UPDATE category
+    PostgreSQL-->>FastAPI: Category updated
+    FastAPI-->>Client: 200 OK Category record
+    end
+    
+    rect rgb(200, 255, 200)
+    Note over Client,JWT: Categories Get/Delete
+    Client->>FastAPI: GET /categories/{id}
+    FastAPI->>PostgreSQL: Fetch category
+    PostgreSQL-->>FastAPI: Return category
+    FastAPI-->>Client: 200 OK Category details
+    
+    Client->>FastAPI: DELETE /categories/{id} (JWT token)
+    FastAPI->>JWT: Validate JWT + Role check
+    JWT-->>FastAPI: Authorized
+    FastAPI->>PostgreSQL: Check for dependent products
+    PostgreSQL-->>FastAPI: Dependency status
+    alt No dependencies
+        FastAPI->>PostgreSQL: DELETE category
+        PostgreSQL-->>FastAPI: Category deleted
+        FastAPI-->>Client: 204 No Content
+    else Has dependencies
+        FastAPI-->>Client: 409 Conflict (Dependency error)
+    end
+    end
+    
+    rect rgb(220, 220, 230)
+    Note over Client,JWT: Error Handling
+    Client->>FastAPI: Any Invalid Request (Unauthenticated)
+    FastAPI-->>Client: 401 Unauthorized
+    
+    Client->>FastAPI: Invalid Request
+    FastAPI-->>Client: 500 Internal Server Error
+    end
