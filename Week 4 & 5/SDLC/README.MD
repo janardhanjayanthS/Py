@@ -2,6 +2,14 @@
 
 A RESTful API backend built with FastAPI for managing product inventory with role-based access control and JWT authentication.
 
+## Purpose
+The purpose of this planning document is to provide the development team with an organized roadmap for the implementation of the backend system, including:
+- Defining the core technologies that will be used
+- Laying out the structure and approach to data validation and user authentication
+- Identifying additional libraries and tools required for development
+- Providing a visual sequence diagram to better understand the system's flow and architecture
+
+
 ## Features
 
 - **User Authentication**: Registration, login with JWT tokens
@@ -11,16 +19,6 @@ A RESTful API backend built with FastAPI for managing product inventory with rol
 - **Database Integration**: PostgreSQL with SQLAlchemy ORM
 - **API Documentation**: Auto-generated OpenAPI/Swagger docs
 
-## Technology Stack
-
-- **Framework**: FastAPI
-- **Database**: PostgreSQL
-- **ORM**: SQLAlchemy with Alembic migrations
-- **Authentication**: JWT with bcrypt password hashing
-- **Validation**: Pydantic schemas
-- **Testing**: pytest with SQLite in-memory database
-
-## Quick Start
 
 ### Prerequisites
 
