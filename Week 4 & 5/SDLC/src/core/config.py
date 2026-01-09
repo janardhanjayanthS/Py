@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("✅ Database initialized successfully")
 
     # For seeding: run after alembic migration or first app start up
-    # from src.core.database import seed_db
+    # from src.repository.database import seed_db
     #
     # seed_db()
 

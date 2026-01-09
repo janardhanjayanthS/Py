@@ -4,9 +4,9 @@ from typing import Callable, Optional
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
-from src.core.database import get_db
 from src.core.jwt import decode_access_token
 from src.models.user import User
+from src.repository.database import get_db
 from src.schema.user import UserRole
 
 

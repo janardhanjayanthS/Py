@@ -14,9 +14,9 @@ from src.core.api_utility import (
     put_product,
 )
 from src.core.config import ResponseStatus
-from src.core.database import get_db
 from src.core.decorators import required_roles
 from src.models.product import Product
+from src.repository.database import get_db
 from src.schema.product import ProductCreate, ProductUpdate
 from src.schema.user import UserRole
 
