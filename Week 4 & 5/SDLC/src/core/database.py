@@ -2,8 +2,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy import create_engine, insert, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
-
-from src.core.constants import settings
+from src.core.config import settings
 from src.core.log import get_logger, log_error
 from src.core.utility import get_initial_data_from_csv
 

@@ -3,8 +3,7 @@ from typing import Optional
 
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
-
-from src.core.constants import settings
+from src.core.config import settings
 from src.core.log import get_logger
 from src.schema.token import TokenData
 

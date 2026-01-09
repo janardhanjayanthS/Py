@@ -2,7 +2,6 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-
 from src.core.api_utility import (
     check_id_type,
     delete_product,
@@ -14,7 +13,7 @@ from src.core.api_utility import (
     post_product,
     put_product,
 )
-from src.core.constants import ResponseStatus
+from src.core.config import ResponseStatus
 from src.core.database import get_db
 from src.core.decorators import required_roles
 from src.models.models import Product
@@ -99,9 +98,7 @@ async def remove_product(
     """
     check_id_type(id=product_id)
     current_user_email = request.state.email
-    return delete_product(
-        current_user_email == current_user_email, product_id=product_id, db=db
-    )
+    return delete_product(current_user_email, product_id=product_id, db=db)
 
 
 @product.patch("/product/update_category")

@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
-
 from src.core.api_utility import (
     authenticate_user,
     check_existing_user_using_email,
@@ -11,7 +10,7 @@ from src.core.api_utility import (
     update_user_name,
     update_user_password,
 )
-from src.core.constants import ResponseStatus, settings
+from src.core.config import ResponseStatus, settings
 from src.core.database import add_commit_refresh_db, get_db, hash_password
 from src.core.decorators import required_roles
 from src.core.jwt import create_access_token

@@ -2,8 +2,7 @@ import logging
 from contextvars import ContextVar
 
 import structlog
-
-from src.core.constants import settings
+from src.core.config import settings
 
 correlation_id: ContextVar[str] = ContextVar("correlation_id", default="N/A")
 
