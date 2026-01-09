@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 from enum import Enum
 from pathlib import Path
@@ -6,6 +7,7 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from src.core.log import get_logger, setup_logging
 from src.repository.database import Base, engine
 
@@ -36,13 +38,13 @@ CURRENT_DIR = Path(__file__).parent
 ENV_FILE = CURRENT_DIR / ".env"
 
 
-class LogLevel(str, Enum):
-    NOTSET = "NOTSET"
-    DEBUG = "DEBUG"
-    INFO = "INFO"
-    WARNING = "WARNING"
-    ERROR = "ERROR"
-    CRITICAL = "CRITICAL"
+class LogLevel(Enum):
+    NOTSET = logging.NOTSET
+    DEBUG = logging.DEBUG
+    INFO = logging.INFO
+    WARNING = logging.WARNING
+    ERROR = logging.ERROR
+    CRITICAL = logging.CRITICAL
 
 
 class Settings(BaseSettings):

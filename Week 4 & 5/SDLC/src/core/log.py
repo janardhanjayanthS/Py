@@ -13,7 +13,7 @@ def add_context_processor(_, __, event_dict):
 
 
 def setup_logging():
-    log_level = settings.LOG_LEVEL 
+    log_level = settings.LOG_LEVEL
 
     # Displayed in log console
     processors = [
