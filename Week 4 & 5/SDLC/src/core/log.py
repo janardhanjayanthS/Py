@@ -13,7 +13,7 @@ def add_context_processor(_, __, event_dict):
 
 
 def setup_logging():
-    is_production = settings.DEV_ENV in ["production", "prod"]
+    log_level = settings.LOG_LEVEL 
 
     # Displayed in log console
     processors = [
@@ -25,14 +25,11 @@ def setup_logging():
         structlog.dev.set_exc_info,
     ]
 
-    if is_production:
-        processors.append(structlog.processors.JSONRenderer())
-    else:
-        processors.append(structlog.dev.ConsoleRenderer(colors=True))
+    processors.append(structlog.processors.JSONRenderer())
 
     structlog.configure(
         processors=processors,
-        wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
+        wrapper_class=structlog.make_filtering_bound_logger(log_level),
         logger_factory=structlog.WriteLoggerFactory(),
         cache_logger_on_first_use=True,
     )

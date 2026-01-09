@@ -6,8 +6,8 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from src.core.database import Base, engine
 from src.core.log import get_logger, setup_logging
+from src.repository.database import Base, engine
 
 logger = get_logger(__name__)
 
@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("✅ Database initialized successfully")
 
     # For seeding: run after alembic migration or first app start up
-    # from src.repository.database import seed_db
+    # from src.core.database import seed_db
     #
     # seed_db()
 
@@ -34,6 +34,15 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 CURRENT_DIR = Path(__file__).parent
 ENV_FILE = CURRENT_DIR / ".env"
+
+
+class LogLevel(str, Enum):
+    NOTSET = "NOTSET"
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    CRITICAL = "CRITICAL"
 
 
 class Settings(BaseSettings):
@@ -54,8 +63,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     # LOGGING
-    DEV_ENV: str = Field(validation_alias="DEV_ENV")
-    LOG_LEVEL: str = Field(validation_alias="LOG_LEVEL")
+    LOG_LEVEL: LogLevel = Field(validation_alias="LOG_LEVEL")
 
     # .env settings
     model_config = SettingsConfigDict(
@@ -76,4 +84,5 @@ class ResponseStatus(str, Enum):
     """
 
     S = "success"
+    E = "error"
     E = "error"
