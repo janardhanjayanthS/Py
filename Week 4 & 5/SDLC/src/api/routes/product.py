@@ -2,7 +2,9 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
+
 from src.core.api_utility import (
+    ResponseStatus,
     check_id_type,
     delete_product,
     get_all_products,
@@ -13,7 +15,6 @@ from src.core.api_utility import (
     post_product,
     put_product,
 )
-from src.core.config import ResponseStatus
 from src.core.decorators import required_roles
 from src.models.product import Product
 from src.repository.database import get_db

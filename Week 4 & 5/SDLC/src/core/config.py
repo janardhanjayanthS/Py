@@ -1,4 +1,3 @@
-from enum import Enum
 from pathlib import Path
 
 from pydantic import Field
@@ -37,16 +36,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-
-
-class ResponseStatus(str, Enum):
-    """
-    Response status enum
-
-    Attributes:
-        S: success string
-        E: error string
-    """
-
-    S = "success"
-    E = "error"

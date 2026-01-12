@@ -1,9 +1,10 @@
+from enum import Enum
 from typing import Any, Optional
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from src.core.config import ResponseStatus
+
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
 from src.core.log import get_logger, log_error
 from src.models.category import Category
@@ -19,6 +20,19 @@ from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister
 
 logger = get_logger(__name__)
+
+
+class ResponseStatus(str, Enum):
+    """
+    Response status enum
+
+    Attributes:
+        S: success string
+        E: error string
+    """
+
+    S = "success"
+    E = "error"
 
 
 def check_id_type(id: Any):

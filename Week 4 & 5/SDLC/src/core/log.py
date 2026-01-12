@@ -31,7 +31,7 @@ class LogSettings(BaseSettings):
 
 log_settings = LogSettings()
 
-
+# correlation_id is unique for each req, tracks it
 correlation_id: ContextVar[str] = ContextVar("correlation_id", default="N/A")
 
 
