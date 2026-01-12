@@ -1,10 +1,10 @@
-from api import access_medical_api
-from api_utility import disease_to_code
-from constants import llm
+from src.core.api import access_medical_api
+from src.core.api_utility import disease_to_code
+from src.core.constants import llm
 from langchain.agents import create_agent
 from langchain.messages import HumanMessage, SystemMessage
 from langchain.tools import tool
-from prompts import DATA_CLEANER_SYSTEM_PROMPT, MEDICAL_AGENT_SYSTEM_PROMT
+from src.core.prompts import DATA_CLEANER_SYSTEM_PROMPT, MEDICAL_AGENT_SYSTEM_PROMT
 
 
 @tool(parse_docstring=True)

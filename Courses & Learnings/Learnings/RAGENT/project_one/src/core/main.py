@@ -1,8 +1,8 @@
-from constants import llm
+from src.core.constants import llm
 from langchain.agents import create_agent
 from langchain.messages import HumanMessage
-from prompts import MAIN_AGENT_SYSTEM_PROMPT
-from tools import number_calculation, process_medical_query
+from src.core.prompts import MAIN_AGENT_SYSTEM_PROMPT
+from src.core.tools import number_calculation, process_medical_query
 
 agent = create_agent(
     llm,
