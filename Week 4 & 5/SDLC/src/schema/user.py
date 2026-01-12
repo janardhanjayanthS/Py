@@ -6,7 +6,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from src.core.excptions import WeakPasswordException
-from src.core.utility import check_password_strength
+from src.repository.utility import check_password_strength
 
 
 def validate_password(password: str) -> str:

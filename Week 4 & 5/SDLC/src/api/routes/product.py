@@ -9,7 +9,6 @@ from src.repository.database import get_db
 from src.schema.product import ProductCreate, ProductUpdate
 from src.schema.user import UserRole
 from src.services.api_utility import (
-    ResponseStatus,
     check_id_type,
     delete_product,
     get_all_products,
@@ -20,6 +19,7 @@ from src.services.api_utility import (
     post_product,
     put_product,
 )
+from src.services.models import ResponseStatus
 
 product = APIRouter()
 

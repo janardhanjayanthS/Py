@@ -12,12 +12,12 @@ from src.schema.category import (
 )
 from src.schema.user import UserRole
 from src.services.api_utility import (
-    ResponseStatus,
     check_existing_category_using_id,
     check_existing_category_using_name,
     get_category_by_id,
     get_category_by_name,
 )
+from src.services.models import ResponseStatus
 
 category = APIRouter()
 

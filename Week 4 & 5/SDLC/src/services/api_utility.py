@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import Any, Optional
 
 from fastapi import HTTPException, status
@@ -17,21 +16,9 @@ from src.repository.database import (
 from src.schema.category import BaseCategory
 from src.schema.product import ProductCreate
 from src.schema.user import UserEdit, UserRegister
+from src.services.models import ResponseStatus
 
 logger = get_logger(__name__)
-
-
-class ResponseStatus(str, Enum):
-    """
-    Response status enum
-
-    Attributes:
-        S: success string
-        E: error string
-    """
-
-    S = "success"
-    E = "error"
 
 
 def check_id_type(id: Any):

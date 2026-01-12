@@ -1,7 +1,7 @@
 from typing import Any, Optional
 
 from pydantic import BaseModel, ConfigDict
-from src.core.config import ResponseStatus
+from src.services.models import ResponseStatus
 
 
 class BaseCategory(BaseModel):

@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 
 from src.core.excptions import WeakPasswordException
 from src.core.log import correlation_id, get_logger
-from src.services.config import lifespan
+from src.core.app_utility import lifespan
 
 from .routes import category, product, user
 
