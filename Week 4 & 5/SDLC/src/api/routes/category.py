@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
+
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.category import Category
@@ -11,7 +12,7 @@ from src.schema.category import (
     CategoryUpdate,
 )
 from src.schema.user import UserRole
-from src.services.api_utility import (
+from src.services.category_service import (
     check_existing_category_using_id,
     check_existing_category_using_name,
     get_category_by_id,

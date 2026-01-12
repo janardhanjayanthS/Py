@@ -2,24 +2,25 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
+
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.product import Product
 from src.repository.database import get_db
 from src.schema.product import ProductCreate, ProductUpdate
 from src.schema.user import UserRole
-from src.services.api_utility import (
-    check_id_type,
+from src.services.category_service import get_category_by_id
+from src.services.models import ResponseStatus
+from src.services.product_service import (
     delete_product,
     get_all_products,
-    get_category_by_id,
     get_category_specific_products,
     get_specific_product,
     handle_missing_product,
     post_product,
     put_product,
 )
-from src.services.models import ResponseStatus
+from src.services.utility import check_id_type
 
 product = APIRouter()
 

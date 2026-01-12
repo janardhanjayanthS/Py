@@ -15,7 +15,8 @@ from src.schema.user import (
     UserRole,
     WrapperUserResponse,
 )
-from src.services.api_utility import (
+from src.services.models import ResponseStatus
+from src.services.user_service import (
     authenticate_user,
     check_existing_user_using_email,
     fetch_user_by_email,
@@ -23,7 +24,6 @@ from src.services.api_utility import (
     update_user_name,
     update_user_password,
 )
-from src.services.models import ResponseStatus
 
 logger = get_logger(__name__)
 
