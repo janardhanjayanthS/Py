@@ -18,11 +18,6 @@ def get_initial_data_from_csv(csv_filepath: str) -> dict[str, list]:
         A dictionary containing two lists:
             - 'product': List of product data dictionaries
             - 'product_category': List of product category data dictionaries
-
-    Example:
-        >>> data = get_initial_data_from_csv('inventory.csv')
-        >>> data['product_category']
-        [{'id': 1, 'name': 'Electronics'}, {'id': 2, 'name': 'Clothing'}]
     """
     initial_data: dict[str, list] = {"product": [], "product_category": []}
     inv = Inventory()

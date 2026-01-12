@@ -36,6 +36,8 @@ correlation_id: ContextVar[str] = ContextVar("correlation_id", default="N/A")
 
 
 def add_context_processor(_, __, event_dict):
+    # I can modify this to add more variable at the end of the logs
+    # event_dict["random"] = "HI"
     event_dict["correlation_id"] = correlation_id.get()
     return event_dict
 
@@ -48,12 +50,21 @@ def setup_logging():
         structlog.contextvars.merge_contextvars,
         add_context_processor,
         structlog.processors.add_log_level,
+        structlog.processors.CallsiteParameterAdder(
+            {
+                structlog.processors.CallsiteParameter.LINENO,
+                structlog.processors.CallsiteParameter.PATHNAME,
+            }
+        ),
         structlog.processors.TimeStamper(fmt="iso"),
         structlog.processors.StackInfoRenderer(),
         structlog.dev.set_exc_info,
     ]
 
-    processors.append(structlog.processors.JSONRenderer())
+    # TO LOG AS JSON
+    # processors.append(structlog.processors.JSONRenderer())
+    # TO LOG IN CONSOLE
+    processors.append(structlog.dev.ConsoleRenderer())
 
     structlog.configure(
         processors=processors,
