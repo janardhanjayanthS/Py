@@ -3,15 +3,6 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
-from src.core.api_utility import (
-    ResponseStatus,
-    authenticate_user,
-    check_existing_user_using_email,
-    fetch_user_by_email,
-    handle_missing_user,
-    update_user_name,
-    update_user_password,
-)
 from src.core.config import settings
 from src.core.decorators import required_roles
 from src.core.jwt import create_access_token
@@ -24,6 +15,15 @@ from src.schema.user import (
     UserRegister,
     UserRole,
     WrapperUserResponse,
+)
+from src.services.api_utility import (
+    ResponseStatus,
+    authenticate_user,
+    check_existing_user_using_email,
+    fetch_user_by_email,
+    handle_missing_user,
+    update_user_name,
+    update_user_password,
 )
 
 logger = get_logger(__name__)
