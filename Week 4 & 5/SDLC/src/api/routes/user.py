@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
-
 from src.core.config import settings
 from src.core.jwt import create_access_token, required_roles
 from src.core.log import get_logger
@@ -32,6 +31,7 @@ user = APIRouter()
 
 @user.post("/user/register", response_model=WrapperUserResponse)
 async def register_user(create_user: UserRegister, db: Session = Depends(get_db)):
+    logger.debug(f"Registration attempt for email: {create_user.email}")
     if check_existing_user_using_email(user=create_user, db=db):
         message = f"User with email {create_user.email} already exists"
         logger.error(message)
@@ -55,10 +55,12 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
 
 @user.post("/user/login")
 async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
+    logger.debug(f"Login attempt for email: {user_login.email}")
     user = authenticate_user(
         db=db, email=user_login.email, password=user_login.password
     )
     if not user:
+        logger.warning(f"Failed login attempt for email: {user_login.email}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
@@ -71,8 +73,7 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
         expires_delta=access_token_expires,
     )
 
-    # cannot copy from postman
-    logger.info(access_token)
+    logger.info(f"User {user.email} logged in successfully")
     return {"access_tokem": access_token, "token_type": "Bearer"}
 
 
@@ -80,7 +81,9 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
 @required_roles(UserRole.MANAGER, UserRole.ADMIN, UserRole.STAFF)
 async def get_all_users(request: Request, db: Session = Depends(get_db)):
     current_user_email = request.state.email
+    logger.debug(f"Fetching all users, requested by: {current_user_email}")
     all_users = db.query(User).all()
+    logger.info(f"Retrieved {len(all_users)} users")
     return {
         "status": ResponseStatus.S.value,
         "message": {"user email": current_user_email, "users": all_users},
@@ -94,6 +97,7 @@ async def update_user_detail(
     update_details: UserEdit,
     db: Session = Depends(get_db),
 ):
+    logger.debug(f"User update request from: {request.state.email}")
     current_user = fetch_user_by_email(email_id=request.state.email, db=db)
 
     message = update_user_name(
@@ -101,6 +105,7 @@ async def update_user_detail(
     ) + update_user_password(current_user=current_user, update_details=update_details)
     db.commit()
     db.refresh(current_user)
+    logger.info(f"User {current_user.email} details updated successfully")
 
     return {
         "status": ResponseStatus.S.value,
@@ -116,12 +121,15 @@ async def remove_user(
     db: Session = Depends(get_db),
 ):
     current_user_email = request.state.email
+    logger.debug(f"Delete user request for user_id: {user_id} by: {current_user_email}")
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
+        logger.warning(f"Attempted to delete non-existent user with id: {user_id}")
         return handle_missing_user(user_id=user_id)
 
     db.delete(user)
     db.commit()
+    logger.info(f"User {user.email} (id: {user_id}) deleted by {current_user_email}")
 
     return {
         "status": ResponseStatus.S.value,

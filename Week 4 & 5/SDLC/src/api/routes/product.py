@@ -2,8 +2,8 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-
 from src.core.jwt import required_roles
+from src.core.log import get_logger
 from src.models.product import Product
 from src.repository.database import get_db
 from src.schema.product import ProductCreate, ProductUpdate
@@ -23,6 +23,8 @@ from src.services.api_utility import (
 
 product = APIRouter()
 
+logger = get_logger(__name__)
+
 
 @product.get("/products")
 @required_roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.STAFF)
@@ -33,6 +35,9 @@ async def get_products(
     db: Session = Depends(get_db),
 ):
     current_user_email: str = request.state.email
+    logger.debug(
+        f"Get products request by: {current_user_email}, product_id: {product_id}, category_id: {category_id}"
+    )
     if product_id and product_id is not None:
         check_id_type(id=product_id)
         return get_specific_product(
@@ -40,9 +45,11 @@ async def get_products(
         )
     elif category_id and category_id is not None:
         check_id_type(id=category_id)
+        logger.info(f"Fetching products for category_id: {category_id}")
         return get_category_specific_products(
             user_email=current_user_email, category_id=category_id, db=db
         )
+    logger.info("Fetching all products")
     return get_all_products(user_email=current_user_email, db=db)
 
 
@@ -54,6 +61,8 @@ async def post_products(
     db: Session = Depends(get_db),
 ):
     current_user_email: str = request.state.email
+    logger.debug(f"Create product request by: {current_user_email}")
+    logger.info(f"Creating new product: {product.name if product else 'None'}")
     return post_product(user_email=current_user_email, product=product, db=db)
 
 
@@ -74,6 +83,10 @@ async def update_product(
         db: sqlalchemy db object. Defaults to Depends(get_db).
     """
     current_user_email = request.state.email
+    logger.debug(
+        f"Update product request for product_id: {product_id} by: {current_user_email}"
+    )
+    logger.info(f"Updating product with id: {product_id}")
     return put_product(
         current_user_email=current_user_email,
         product_id=product_id,
@@ -99,6 +112,10 @@ async def remove_product(
     """
     check_id_type(id=product_id)
     current_user_email = request.state.email
+    logger.debug(
+        f"Delete product request for product_id: {product_id} by: {current_user_email}"
+    )
+    logger.info(f"Deleting product with id: {product_id}")
     return delete_product(current_user_email, product_id=product_id, db=db)
 
 
@@ -111,9 +128,13 @@ async def update_product_category(
     db: Session = Depends(get_db),
 ):
     current_user_email = request.state.email
+    logger.debug(
+        f"Update product category request: product_id={product_id}, category_id={category_id} by: {current_user_email}"
+    )
     check_id_type(id=category_id)
     category = get_category_by_id(category_id=category_id, db=db)
     if not category:
+        logger.warning(f"Category not found with id: {category_id}")
         return {
             "status": ResponseStatus.E.value,
             "message": {
@@ -125,11 +146,13 @@ async def update_product_category(
     check_id_type(id=product_id)
     product = db.query(Product).filter_by(id=product_id).first()
     if not product:
+        logger.warning(f"Product not found with id: {product_id}")
         return handle_missing_product(product_id=product_id)
 
     product.category_id = category.id
     db.commit()
     db.refresh(product)
+    logger.info(f"Product {product_id} category updated to {category.name}")
 
     return {
         "status": ResponseStatus.S.value,

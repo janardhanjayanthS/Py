@@ -4,7 +4,6 @@ from typing import Any, Optional
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
 from src.core.log import get_logger, log_error
 from src.models.category import Category
@@ -64,6 +63,7 @@ def get_category_by_id(category_id: int, db: Session) -> Category | None:
     Returns:
         returns category object if exists else None
     """
+    logger.debug(f"Fetching category by id: {category_id}")
     return db.query(Category).filter_by(id=category_id).first()
 
 
@@ -118,6 +118,7 @@ def get_category_by_name(category_name: str, db: Session) -> Category | None:
     Returns:
         category from db if exists else None
     """
+    logger.debug(f"Fetching category by name: {category_name}")
     existing_category = (
         db.query(Category).filter(Category.name == category_name).first()
     )
@@ -205,6 +206,7 @@ def fetch_user_by_email(email_id: str, db: Session) -> User | None:
     Returns:
         User | None: user object if user exists else None
     """
+    logger.debug(f"Fetching user by email: {email_id}")
     return db.query(User).filter_by(email=email_id).first()
 
 
@@ -221,13 +223,17 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
     Returns:
         User: valid user object with user data
     """
+    logger.debug(f"Authenticating user: {email}")
     user = db.query(User).filter(User.email == email).first()
     if not user:
+        logger.warning(f"Authentication failed: user not found for email: {email}")
         return None
 
     if not verify_password(plain_password=password, hashed_password=str(user.password)):
+        logger.warning(f"Authentication failed: invalid password for email: {email}")
         return None
 
+    logger.info(f"User authenticated successfully: {email}")
     return user
 
 
@@ -246,8 +252,12 @@ def update_user_name(current_user: User, update_details: UserEdit) -> str:
         update_details.new_name is not None
         and current_user.name != update_details.new_name
     ):
+        logger.info(
+            f"Updating user name from '{current_user.name}' to '{update_details.new_name}'"
+        )
         current_user.name = update_details.new_name
         return f"updated user's name to {update_details.new_name}. "
+    logger.debug("No name update required - names are identical")
     return "existing name and new name are same. "
 
 
@@ -267,7 +277,9 @@ def update_user_password(current_user: User, update_details: UserEdit) -> str:
         and current_user.password != hash_password(update_details.new_password)
     ):
         current_user.password = hash_password(update_details.new_password)
+        logger.info(f"Password updated for user: {current_user.email}")
         return "password updated"
+    logger.debug("No password update required")
     return "same password"
 
 
@@ -321,6 +333,7 @@ def post_product(
     Returns:
         dict: fastapi response
     """
+    logger.debug(f"Creating product: {product.name if product else 'None'}")
     check_existing_product_using_name(product=product, db=db)
     check_existing_product_using_id(product=product, db=db)
 
@@ -333,6 +346,7 @@ def post_product(
         db_product = apply_discount_or_tax(product=db_product)
 
     add_commit_refresh_db(object=db_product, db=db)
+    logger.info(f"Product '{db_product.name}' created successfully")
 
     return {
         "status": ResponseStatus.S.value,
@@ -374,6 +388,7 @@ def get_all_products(user_email: str, db: Session) -> dict:
         dict: fastapi response
     """
     products = db.query(Product).all()
+    logger.info(f"Retrieved {len(products)} products")
     return {
         "status": ResponseStatus.S.value,
         "message": {"user email": user_email, "products": products},
@@ -392,11 +407,14 @@ def get_specific_product(user_email: str, product_id: int, db: Session) -> dict:
     Returns:
         dict: fastapi response
     """
+    logger.debug(f"Fetching product with id: {product_id}")
     check_id_type(id=product_id)
     product = db.query(Product).filter_by(id=product_id).first()
     if product is None:
+        logger.warning(f"Product not found with id: {product_id}")
         return handle_missing_product(product_id=str(product_id))
 
+    logger.info(f"Retrieved product: {product.name}")
     return {
         "status": ResponseStatus.S.value,
         "message": {"user_email": user_email, "product": product},
@@ -415,7 +433,9 @@ def get_category_specific_products(user_email: str, category_id: int, db: Sessio
     Returns:
         dict: fastapi response
     """
+    logger.debug(f"Fetching products for category_id: {category_id}")
     products = db.query(Product).filter_by(category_id=category_id).all()
+    logger.info(f"Retrieved {len(products)} products for category_id: {category_id}")
     return {
         "status": ResponseStatus.S.value,
         "message": {
@@ -440,9 +460,11 @@ def put_product(
     Returns:
         dict: fastapi response
     """
+    logger.debug(f"Updating product with id: {product_id}")
     check_id_type(id=product_id)
     db_product = db.query(Product).filter_by(id=product_id).first()
     if db_product is None:
+        logger.warning(f"Product not found for update: {product_id}")
         return handle_missing_product(product_id=product_id)
 
     update_data = product_update.model_dump(exclude_unset=True)  # type: ignore
@@ -451,6 +473,7 @@ def put_product(
 
     db.commit()
     db.refresh(db_product)
+    logger.info(f"Product '{db_product.name}' updated successfully")
     return {
         "status": ResponseStatus.S.value,
         "message": {"user email": current_user_email, "updated product": db_product},
@@ -469,13 +492,16 @@ def delete_product(current_user_email: str, product_id: int, db: Session) -> dic
     Returns:
         dict: fastapi response
     """
+    logger.debug(f"Deleting product with id: {product_id}")
     check_id_type(id=product_id)
     db_product = db.query(Product).filter_by(id=product_id).first()
     if db_product is None:
+        logger.warning(f"Product not found for deletion: {product_id}")
         return handle_missing_product(product_id=product_id)
 
     db.delete(db_product)
     db.commit()
+    logger.info(f"Product '{db_product.name}' (id: {product_id}) deleted successfully")
     return {
         "status": ResponseStatus.S.value,
         "message": {"user email": current_user_email, "deleted product": db_product},
