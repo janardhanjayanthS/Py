@@ -1,13 +1,11 @@
 from contextvars import ContextVar
 from enum import Enum
-from pathlib import Path
 
 import structlog
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-CURRENT_DIR = Path(__file__).parent
-ENV_FILE = CURRENT_DIR / ".env"
+from src.core.filepath import ENV_FILE
 
 
 class LogLevel(str, Enum):

@@ -3,13 +3,10 @@ from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from src.core.filepath import ENV_FILE
 from src.core.log import get_logger
 
 logger = get_logger(__name__)
-
-
-CURRENT_DIR = Path(__file__).parent
-ENV_FILE = CURRENT_DIR / ".env"
 
 
 class Settings(BaseSettings):
