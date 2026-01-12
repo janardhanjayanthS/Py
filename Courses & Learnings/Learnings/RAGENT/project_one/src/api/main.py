@@ -78,11 +78,14 @@ async def on_transcript(session_id, transcript, chat_payload, event_emitter, TTS
         # Example: Echo back what the user said
         response = f"You said: {transcript}"
         print("-" * 50)
-        print(f"RESPONSE: {response}")
+        print(f"USER MESSAGE: {transcript}")
         print("-" * 50)
 
         # Use TTS to speak the response
         ai_response = mainloop(human_message=transcript)
+        print('-' * 50)
+        print(f'AI RESPONSE: {ai_response}')
+        print('-' * 50)
         TTS(ai_response)
 
         return {
