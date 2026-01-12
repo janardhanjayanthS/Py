@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
-from src.core.decorators import required_roles
+from src.core.jwt import required_roles
 from src.models.product import Product
 from src.repository.database import get_db
 from src.schema.product import ProductCreate, ProductUpdate

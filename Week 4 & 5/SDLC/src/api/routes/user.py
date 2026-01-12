@@ -4,8 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from src.core.config import settings
-from src.core.decorators import required_roles
-from src.core.jwt import create_access_token
+from src.core.jwt import create_access_token, required_roles
 from src.core.log import get_logger
 from src.models.user import User
 from src.repository.database import add_commit_refresh_db, get_db, hash_password

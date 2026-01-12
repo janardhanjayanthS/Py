@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
-from src.core.decorators import required_roles
+from src.core.jwt import required_roles
 from src.models.category import Category
 from src.repository.database import add_commit_refresh_db, get_db
 from src.schema.category import (
