@@ -8,6 +8,7 @@ for real-time voice processing using OpenAI's Realtime API.
 import asyncio
 import inspect
 import os
+from src.core.main import mainloop
 
 # =============================================================================
 # CRITICAL: Patch ragent's async handling BEFORE importing ragent
@@ -81,7 +82,8 @@ async def on_transcript(session_id, transcript, chat_payload, event_emitter, TTS
         print("-" * 50)
 
         # Use TTS to speak the response
-        TTS(response)
+        ai_response = mainloop(human_message=transcript)
+        TTS(ai_response)
 
         return {
             "contextId": session_id,
