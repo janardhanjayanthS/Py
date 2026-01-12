@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
+
 from src.core.config import settings
 from src.core.jwt import create_access_token, required_roles
 from src.core.log import get_logger
@@ -48,7 +49,8 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
     )
 
     add_commit_refresh_db(object=db_user, db=db)
-    logger.info(f"Created new user with - {db_user.email} - email")
+    logger.debug(f"Created new user with- {db_user.email} - email")
+    logger.warning(f"Created new user with - {db_user.email} - email")
 
     return {"status": "success", "message": {"registered user": db_user}}
 
