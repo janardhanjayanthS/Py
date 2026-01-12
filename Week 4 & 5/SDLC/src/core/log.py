@@ -1,8 +1,36 @@
-import logging
 from contextvars import ContextVar
+from enum import Enum
+from pathlib import Path
 
 import structlog
-from src.core.config import settings
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+CURRENT_DIR = Path(__file__).parent
+ENV_FILE = CURRENT_DIR / ".env"
+
+
+class LogLevel(str, Enum):
+    NOTSET = "NOTSET"
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    CRITICAL = "CRITICAL"
+
+
+class LogSettings(BaseSettings):
+    # LOGGING
+    LOG_LEVEL: LogLevel = Field(validation_alias="LOG_LEVEL")
+
+    # .env settings
+    model_config = SettingsConfigDict(
+        env_file=ENV_FILE, env_file_encoding="utf-8", env_prefix="", extra="ignore"
+    )
+
+
+log_settings = LogSettings()
+
 
 correlation_id: ContextVar[str] = ContextVar("correlation_id", default="N/A")
 
@@ -13,7 +41,7 @@ def add_context_processor(_, __, event_dict):
 
 
 def setup_logging():
-    log_level = settings.LOG_LEVEL
+    log_level = log_settings.LOG_LEVEL
 
     # Displayed in log console
     processors = [

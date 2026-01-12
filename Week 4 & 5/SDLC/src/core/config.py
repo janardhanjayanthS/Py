@@ -1,50 +1,16 @@
-import logging
-from contextlib import asynccontextmanager
 from enum import Enum
 from pathlib import Path
-from typing import AsyncGenerator
 
-from fastapi import FastAPI
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from src.core.log import get_logger, setup_logging
-from src.repository.database import Base, engine
+from src.core.log import get_logger
 
 logger = get_logger(__name__)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-    # Stratup:
-    setup_logging()
-    logger.info("🚀 Starting application...")
-    # Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
-    logger.info("✅ Database initialized successfully")
-
-    # For seeding: run after alembic migration or first app start up
-    # from src.core.database import seed_db
-    #
-    # seed_db()
-
-    yield  # Application runs here
-
-    # Shutdown:
-    logger.info("👋 Shutprintting down application...")
-
-
 CURRENT_DIR = Path(__file__).parent
 ENV_FILE = CURRENT_DIR / ".env"
-
-
-class LogLevel(Enum):
-    NOTSET = logging.NOTSET
-    DEBUG = logging.DEBUG
-    INFO = logging.INFO
-    WARNING = logging.WARNING
-    ERROR = logging.ERROR
-    CRITICAL = logging.CRITICAL
 
 
 class Settings(BaseSettings):
@@ -63,9 +29,6 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str = Field(validation_alias="JWT_SECRET_KEY")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-
-    # LOGGING
-    LOG_LEVEL: LogLevel = Field(validation_alias="LOG_LEVEL")
 
     # .env settings
     model_config = SettingsConfigDict(
@@ -86,5 +49,4 @@ class ResponseStatus(str, Enum):
     """
 
     S = "success"
-    E = "error"
     E = "error"
