@@ -21,7 +21,7 @@ class LogLevel(str, Enum):
 
 class LogSettings(BaseSettings):
     # LOGGING
-    LOG_LEVEL: LogLevel = Field(validation_alias="LOG_LEVEL")
+    LOG_LEVEL: LogLevel = Field(default=LogLevel.INFO, validation_alias="LOG_LEVEL")
 
     # .env settings
     model_config = SettingsConfigDict(
