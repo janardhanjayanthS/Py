@@ -1,5 +1,7 @@
+from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -40,3 +42,11 @@ class Errors(str, Enum):
     WEAK_PWD_ERROR = "WEAK_PASSWORD_ERROR"
     DB_ERROR = "DATABASE_ERROR"
     AUTH_ERROR = "AUTH_ERROR"
+
+
+@dataclass
+class ErrorDetails:
+    message: str
+    error_code: str
+    status_code: int
+    details: dict[str, Any]

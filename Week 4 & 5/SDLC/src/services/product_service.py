@@ -1,10 +1,10 @@
 from typing import Optional
 
-from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
+from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
 from src.models.category import Category
 from src.models.product import Product
@@ -32,7 +32,15 @@ def check_existing_product_using_name(product: Optional[ProductCreate], db: Sess
     if existing_product is not None:
         message = f"product with name {product.name} already exists"
         logger.error(message=message)
-        raise HTTPException(status_code=400, detail={"message": message})
+        raise DatabaseException(
+            message=message,
+            field_errors={
+                {
+                    "field": "product name",
+                    "message": f"{product.name} already exists in DB",
+                }
+            },
+        )
 
 
 def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
@@ -50,7 +58,9 @@ def check_existing_product_using_id(product: Optional[ProductCreate], db: Sessio
     if existing_product is not None:
         message = f"product with id {product.id} already exists"
         logger.error(message=message)
-        raise HTTPException(status_code=400, detail={"message": message})
+        raise DatabaseException(
+            message=message,
+        )
 
 
 def handle_missing_product(product_id: str):

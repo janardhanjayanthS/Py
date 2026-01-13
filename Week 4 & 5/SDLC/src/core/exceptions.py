@@ -28,11 +28,10 @@ class WeakPasswordException(BaseAppException):
     """
 
     def __init__(self, message: str, field_errors: list[dict[str, str]] = None) -> None:
-        details = {"field_errors": field_errors} if field_errors else {}
         super().__init__(
             message=message,
             error_code=Errors.WEAK_PWD_ERROR,
-            details=details,
+            details=field_errors,
             status_code=400,
         )
 
@@ -50,7 +49,7 @@ class DatabaseException(BaseAppException):
             message=message,
             error_code=Errors.DB_ERROR,
             details=details,
-            status_code=500,
+            status_code=400,
         )
 
 

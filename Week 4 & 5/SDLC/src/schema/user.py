@@ -13,7 +13,7 @@ def validate_password(password: str) -> str:
     pwd_strength = check_password_strength(password=password)
     if not pwd_strength:
         raise WeakPasswordException(
-            f"Your password must include a digit, a lowercase letter, an uppercase letter, and a special character. You entered: {password}"
+            message=f"Your password must include a digit, a lowercase letter, an uppercase letter, and a special character. You entered: {password}",
         )
     return password
 
@@ -31,15 +31,6 @@ class UserRole(Enum):
     ADMIN: str = "admin"
     MANAGER: str = "manager"
     STAFF: str = "staff"
-
-    @staticmethod
-    def get_all_values() -> list[str]:
-        """
-        Returns list of values of all available enums
-        Returns:
-            list[str]: list containing enum values
-        """
-        return [role.value for role in UserRole]
 
     @staticmethod
     def get_values(roles: tuple[UserRole]) -> tuple[str]:

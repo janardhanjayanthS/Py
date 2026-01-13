@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from src.core.config import settings
+from src.core.exceptions import AuthenticationException
 from src.core.jwt import create_access_token, required_roles
 from src.core.log import get_logger
 from src.models.user import User
@@ -36,9 +37,14 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
     if check_existing_user_using_email(user=create_user, db=db):
         message = f"User with email {create_user.email} already exists"
         logger.error(message)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=message,
+        raise AuthenticationException(
+            message=message,
+            field_errors={
+                {
+                    "field": "email id",
+                    "message": f"{create_user.email} already exists in DB",
+                }
+            },
         )
 
     db_user = User(

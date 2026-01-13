@@ -1,6 +1,6 @@
-from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
+from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
 from src.models.category import Category
 from src.schema.category import BaseCategory
@@ -39,8 +39,14 @@ def check_existing_category_using_name(category: BaseCategory, db: Session):
     if existing_category is not None:
         message = f"Category with name - {category.name} - already exists in db"
         logger.error(message=message)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
+        raise DatabaseException(
+            message=message,
+            field_errors={
+                {
+                    "field": "category name",
+                    "message": f"{category.name} already exists in DB",
+                }
+            },
         )
 
 
@@ -59,8 +65,14 @@ def check_existing_category_using_id(category: BaseCategory, db: Session):
     if existing_category is not None:
         message = f"Category with id - {category.id} - already exists in db"
         logger.error(message=message)
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
+        raise DatabaseException(
+            message=message,
+            field_errors={
+                {
+                    "field": "category name",
+                    "message": f"{category.id} already exists in DB",
+                }
+            },
         )
 
 
