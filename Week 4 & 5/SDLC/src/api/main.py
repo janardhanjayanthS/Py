@@ -2,11 +2,10 @@ import uuid
 
 import uvicorn
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 
-from src.core.excptions import WeakPasswordException
-from src.core.log import correlation_id, get_logger
 from src.core.app_utility import lifespan
+from src.core.exception_handler import add_exception_handlers_to_app
+from src.core.log import correlation_id, get_logger
 
 from .routes import category, product, user
 
@@ -33,11 +32,7 @@ async def logger_middleware(request: Request, call_next):
         correlation_id.reset(token)
 
 
-@app.exception_handler(WeakPasswordException)
-async def handle_weak_password(request: Request, error: WeakPasswordException):
-    return JSONResponse(
-        status_code=400, content={"status": "Error", "message": error.message}
-    )
+add_exception_handlers_to_app(app=app)
 
 
 @app.get("/")

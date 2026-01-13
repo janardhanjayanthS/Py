@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path
 
 from pydantic import Field
@@ -33,3 +34,9 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+class Errors(str, Enum):
+    WEAK_PWD_ERROR = "WEAK_PASSWORD_ERROR"
+    DB_ERROR = "DATABASE_ERROR"
+    AUTH_ERROR = "AUTH_ERROR"
