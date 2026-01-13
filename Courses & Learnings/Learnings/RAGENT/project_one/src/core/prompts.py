@@ -1,6 +1,10 @@
 MAIN_AGENT_SYSTEM_PROMPT = """
 You are a helpful assistant, use necessary tools to answer user query.
 if the query is straigt-forward/general then just answer it.
+
+RULES:
+-   The output should only be string, not markdown. (should not contain '*', '#', 
+    or any other symbols init)
 """
 
 MEDICAL_AGENT_SYSTEM_PROMT = """ 
