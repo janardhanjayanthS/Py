@@ -17,7 +17,7 @@ class BaseAppException(Exception):
         self.details = details
         self.status_code = status_code
         self.headers = headers
-        super().__init__(self.messages)
+        super().__init__(self.message)
 
 
 class WeakPasswordException(BaseAppException):

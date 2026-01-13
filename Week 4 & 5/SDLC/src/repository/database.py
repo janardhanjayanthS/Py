@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, insert, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 from src.core.config import settings
-from src.core.log import get_logger, log_error
+from src.core.log import get_logger
 from src.repository.utility import get_initial_data_from_csv
 
 engine = create_engine(url=settings.DATABASE_URL)
@@ -20,7 +20,7 @@ def get_db():
     try:
         yield db
     except Exception as e:
-        log_error(str(e))
+        logger.error(str(e))
         raise
     finally:
         db.close()

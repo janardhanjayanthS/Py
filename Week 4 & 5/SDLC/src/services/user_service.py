@@ -2,7 +2,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from src.core.log import get_logger, log_error
+from src.core.log import get_logger
 from src.models.user import User
 from src.repository.database import (
     hash_password,
@@ -127,7 +127,7 @@ def handle_missing_user(user_id: int) -> dict:
         dict: response describing missing user
     """
     message = f"Unable to find user with id: {user_id}"
-    log_error(message)
+    logger.error(message)
     return {
         "status": ResponseStatus.E.value,
         "message": {"response": message},

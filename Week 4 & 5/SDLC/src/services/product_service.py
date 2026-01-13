@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
-from src.core.log import get_logger, log_error
+from src.core.log import get_logger
 from src.models.category import Category
 from src.models.product import Product
 from src.repository.database import add_commit_refresh_db
@@ -31,7 +31,7 @@ def check_existing_product_using_name(product: Optional[ProductCreate], db: Sess
     existing_product = db.query(Product).filter_by(name=product.name).first()
     if existing_product is not None:
         message = f"product with name {product.name} already exists"
-        log_error(message=message)
+        logger.error(message=message)
         raise HTTPException(status_code=400, detail={"message": message})
 
 
@@ -49,7 +49,7 @@ def check_existing_product_using_id(product: Optional[ProductCreate], db: Sessio
     existing_product = db.query(Product).filter_by(id=product.id).first()
     if existing_product is not None:
         message = f"product with id {product.id} already exists"
-        log_error(message=message)
+        logger.error(message=message)
         raise HTTPException(status_code=400, detail={"message": message})
 
 
@@ -64,7 +64,7 @@ def handle_missing_product(product_id: str):
         dict: fastapi response
     """
     message = f"product with id {product_id} not found"
-    log_error(message=message)
+    logger.error(message=message)
     return {
         "status": ResponseStatus.E.value,
         "message": {

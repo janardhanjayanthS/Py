@@ -12,7 +12,7 @@ def handle_weak_password_error(
 ) -> JSONResponse:
     logger.error(exception.message)
     return JSONResponse(
-        status_code=status.HTTP_400_BAD_REQUEST, content=exception.message
+        status_code=status.HTTP_400_BAD_REQUEST, content={"body": exception.message}
     )
 
 

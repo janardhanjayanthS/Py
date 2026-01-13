@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.core.log import get_logger, log_error
+from src.core.log import get_logger
 from src.models.category import Category
 from src.schema.category import BaseCategory
 from src.services.models import ResponseStatus
@@ -38,7 +38,7 @@ def check_existing_category_using_name(category: BaseCategory, db: Session):
     existing_category = get_category_by_name(category_name=category.name, db=db)
     if existing_category is not None:
         message = f"Category with name - {category.name} - already exists in db"
-        log_error(message=message)
+        logger.error(message=message)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
         )
@@ -58,7 +58,7 @@ def check_existing_category_using_id(category: BaseCategory, db: Session):
     existing_category = get_category_by_id(category_id=category.id, db=db)
     if existing_category is not None:
         message = f"Category with id - {category.id} - already exists in db"
-        log_error(message=message)
+        logger.error(message=message)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail={"message": message}
         )
@@ -93,7 +93,7 @@ def handle_missing_category(category_id: int):
         dict: response describing missing category
     """
     message = f"Cannot find category with id: {category_id}"
-    log_error(message)
+    logger.error(message)
     return {
         "status": ResponseStatus.E.value,
         "message": {"response": message},
