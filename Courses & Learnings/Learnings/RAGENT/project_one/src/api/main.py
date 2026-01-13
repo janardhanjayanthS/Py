@@ -8,6 +8,7 @@ for real-time voice processing using OpenAI's Realtime API.
 import asyncio
 import inspect
 import os
+
 from src.core.main import mainloop
 
 # =============================================================================
@@ -83,9 +84,9 @@ async def on_transcript(session_id, transcript, chat_payload, event_emitter, TTS
 
         # Use TTS to speak the response
         ai_response = mainloop(human_message=transcript)
-        print('-' * 50)
-        print(f'AI RESPONSE: {ai_response}')
-        print('-' * 50)
+        print("-" * 50)
+        print(f"AI RESPONSE: {ai_response}")
+        print("-" * 50)
         TTS(ai_response)
 
         return {
@@ -150,4 +151,5 @@ if __name__ == "__main__":
         server = uvicorn.Server(config)
         await server.serve()
 
+    asyncio.run(run_server())
     asyncio.run(run_server())

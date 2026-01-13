@@ -1,11 +1,11 @@
 """
 FastAPI Adapter for ragent Voice Gateway
-
 This adapter bridges FastAPI + python-socketio with ragent's framework-agnostic
 voice gateway. It implements the required interfaces so ragent can work with FastAPI.
 """
 
 import asyncio
+import inspect
 from typing import Any, Callable, Optional
 
 import socketio
@@ -21,7 +21,6 @@ from ragent.voice_gateway.interfaces import (
 class FastAPIWebApp(WebApp):
     """
     Wraps a FastAPI application to match ragent's WebApp interface.
-
     ragent needs a standard way to add routes to ANY web framework.
     This class translates ragent's route requests into FastAPI's format.
     """
@@ -34,7 +33,6 @@ class FastAPIWebApp(WebApp):
     ) -> None:
         """
         Add a URL route to FastAPI.
-
         Args:
             rule: The URL path (e.g., "/health")
             endpoint: Name for the route
@@ -53,9 +51,7 @@ class FastAPIWebApp(WebApp):
     def route(self, rule: str, **options):
         """
         Decorator to add a route (Flask-style).
-
         ragent uses this decorator pattern: @app.route("/health")
-
         Args:
             rule: The URL path (e.g., "/health")
             **options: Additional options like methods=["GET", "POST"]
@@ -85,65 +81,91 @@ class FastAPIWebApp(WebApp):
 
 
 class FastAPISocketHandler(WebSocketHandler):
-    """
-    Wraps python-socketio's AsyncServer for ragent's WebSocketHandler interface.
-
-    Handles the tricky case where ragent calls emit() from background threads
-    (OpenAI WebSocket handlers) but Socket.IO AsyncServer needs an event loop.
-    """
+    """FastAPI Socket.IO handler that keeps async emits from leaking tasks."""
 
     def __init__(self, sio: socketio.AsyncServer):
-        self._sio = sio
         self._handler = UniversalSocketIOHandler(sio)
-        self._current_sid: Optional[str] = None
+        self._loop: Optional[asyncio.AbstractEventLoop] = None
         self._main_loop: Optional[asyncio.AbstractEventLoop] = None
 
     def set_main_loop(self, loop: asyncio.AbstractEventLoop) -> None:
-        """Store reference to main event loop for cross-thread emit."""
+        """Backwards-compatible way to provide the main loop reference."""
         self._main_loop = loop
+        self._loop = loop
 
-    def on(self, event: str, handler: Callable) -> None:
-        """Register an event handler for Socket.IO events."""
-        self._handler.on(event, handler)
+    def _set_loop(self) -> None:
+        if self._loop is None:
+            try:
+                self._loop = asyncio.get_running_loop()
+            except RuntimeError:
+                self._loop = self._main_loop
 
-    def on_error(self, handler: Callable) -> None:
-        """Register an error handler."""
-        self._handler.on_error(handler)
+    def _call_handler(self, handler: Callable, sid: str, *args, **kwargs):
+        try:
+            return handler(*args, **kwargs)
+        except TypeError:
+            return handler(sid, *args, **kwargs)
+
+    def on(self, event: str, handler: Callable = None):
+        """Register event handlers compatible with sync/async functions."""
+
+        if handler is None:
+            return lambda h: self.on(event, h)
+
+        async def wrapper(sid, *args, **kwargs):
+            self._set_loop()
+            self._handler._current_sid = sid
+
+            def run_handler():
+                return self._call_handler(handler, sid, *args, **kwargs)
+
+            result = await asyncio.to_thread(run_handler)
+            if inspect.iscoroutine(result):
+                return await result
+            return result
+
+        self._handler.socketio.on(event)(wrapper)
+        return handler
+
+    def on_error(self, handler: Callable = None):
+        """Register an error handler respecting sync/async semantics."""
+
+        if handler is None:
+            return lambda h: self.on_error(h)
+
+        async def wrapper(sid, *args, **kwargs):
+            self._set_loop()
+            self._handler._current_sid = sid
+
+            def run_handler():
+                return self._call_handler(handler, sid, *args, **kwargs)
+
+            result = await asyncio.to_thread(run_handler)
+            if inspect.iscoroutine(result):
+                return await result
+            return result
+
+        self._handler.socketio.on("error")(wrapper)
+        return handler
 
     def emit(self, event: str, data: Any = None, **kwargs) -> None:
-        """
-        Emit an event to connected clients.
-
-        Handles cross-thread emit by using run_coroutine_threadsafe when
-        called from a thread different from the main event loop.
-        """
-        # Convert 'to' to 'room' for python-socketio compatibility
+        """Emit synchronously so shutdown never leaves pending tasks."""
         if "to" in kwargs:
             kwargs["room"] = kwargs.pop("to")
 
-        try:
-            # Try to get the running loop in current thread
-            loop = asyncio.get_running_loop()
-            # We're in an async context, create task
-            loop.create_task(self._sio.emit(event, data, **kwargs))
-        except RuntimeError:
-            # No running loop in this thread - we're in a background thread
-            # Use the main loop if available
-            if self._main_loop and self._main_loop.is_running():
-                future = asyncio.run_coroutine_threadsafe(
-                    self._sio.emit(event, data, **kwargs), self._main_loop
-                )
-                # Wait for completion with timeout to ensure it finishes
-                try:
-                    future.result(timeout=5.0)
-                except Exception:
-                    pass  # Best effort emit
-            else:
-                # Fallback: try to run in new loop (not ideal but prevents crash)
-                try:
-                    asyncio.run(self._sio.emit(event, data, **kwargs))
-                except Exception:
-                    pass
+        coro = self._handler.socketio.emit(event, data, **kwargs)
+        if not inspect.iscoroutine(coro):
+            return
+
+        loop = self._loop or self._main_loop
+        if loop and loop.is_running():
+            future = asyncio.run_coroutine_threadsafe(coro, loop)
+            try:
+                future.result(timeout=5.0)
+            except Exception:
+                pass
+        else:
+            asyncio.run(coro)
 
     def get_current_client_id(self) -> str:
         """Get the current client's session ID."""
@@ -153,9 +175,7 @@ class FastAPISocketHandler(WebSocketHandler):
 class FastAPIAdapter(WebFrameworkAdapter):
     """
     Main adapter that creates and configures FastAPI + Socket.IO for ragent.
-
     This is what you pass to CreateVoiceGateway.create().
-
     Usage:
         adapter = FastAPIAdapter(
             cors_allowed_origins="*",
@@ -172,7 +192,6 @@ class FastAPIAdapter(WebFrameworkAdapter):
     ):
         """
         Initialize the FastAPI adapter.
-
         Args:
             cors_allowed_origins: CORS setting for Socket.IO ("*" allows all)
             async_mode: Socket.IO async mode ("asgi" for FastAPI)
