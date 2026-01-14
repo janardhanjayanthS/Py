@@ -2,6 +2,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy import create_engine, insert, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
+
 from src.core.config import settings
 from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
@@ -117,6 +118,16 @@ def add_commit_refresh_db(object: BaseModel, db: Session):
     db.add(object)
     db.commit()
     db.refresh(object)
+
+
+def commit_refresh_db(object: BaseModel, db: Session) -> None:
+    db.commit()
+    db.refresh(object)
+
+
+def delete_commit_db(object: BaseModel, db: Session) -> None:
+    db.delete(object)
+    db.commit()
 
 
 pwt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

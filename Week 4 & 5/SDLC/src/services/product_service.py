@@ -2,12 +2,17 @@ from typing import Optional
 
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
 from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
 from src.models.category import Category
 from src.models.product import Product
-from src.repository.database import add_commit_refresh_db
+from src.repository.database import (
+    add_commit_refresh_db,
+    commit_refresh_db,
+    delete_commit_db,
+)
 from src.schema.product import ProductCreate
 from src.services.category_service import handle_missing_category
 from src.services.models import ResponseStatus
@@ -232,8 +237,7 @@ def put_product(
     for field, value in update_data.items():
         setattr(db_product, field, value)
 
-    db.commit()
-    db.refresh(db_product)
+    commit_refresh_db(object=db_product, db=db)
     logger.info(f"Product '{db_product.name}' updated successfully")
     return {
         "status": ResponseStatus.S.value,
@@ -260,8 +264,7 @@ def delete_product(current_user_email: str, product_id: int, db: Session) -> dic
         logger.warning(f"Product not found for deletion: {product_id}")
         return handle_missing_product(product_id=product_id)
 
-    db.delete(db_product)
-    db.commit()
+    delete_commit_db(object=db_product, db=db)
     logger.info(f"Product '{db_product.name}' (id: {product_id}) deleted successfully")
     return {
         "status": ResponseStatus.S.value,

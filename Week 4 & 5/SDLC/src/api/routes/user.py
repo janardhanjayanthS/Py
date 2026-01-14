@@ -2,12 +2,19 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
+
 from src.core.config import settings
 from src.core.exceptions import AuthenticationException
 from src.core.jwt import create_access_token, required_roles
 from src.core.log import get_logger
 from src.models.user import User
-from src.repository.database import add_commit_refresh_db, get_db, hash_password
+from src.repository.database import (
+    add_commit_refresh_db,
+    commit_refresh_db,
+    delete_commit_db,
+    get_db,
+    hash_password,
+)
 from src.schema.user import (
     UserEdit,
     UserLogin,
@@ -154,8 +161,7 @@ async def update_user_detail(
     message = update_user_name(
         current_user=current_user, update_details=update_details
     ) + update_user_password(current_user=current_user, update_details=update_details)
-    db.commit()
-    db.refresh(current_user)
+    commit_refresh_db(object=current_user, db=db)
     logger.info(f"User {current_user.email} details updated successfully")
 
     return {
@@ -188,8 +194,7 @@ async def remove_user(
         logger.warning(f"Attempted to delete non-existent user with id: {user_id}")
         return handle_missing_user(user_id=user_id)
 
-    db.delete(user)
-    db.commit()
+    delete_commit_db(object=user, db=db)
     logger.info(f"User {user.email} (id: {user_id}) deleted by {current_user_email}")
 
     return {

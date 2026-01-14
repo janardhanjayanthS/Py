@@ -1,9 +1,15 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
+
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.category import Category
-from src.repository.database import add_commit_refresh_db, get_db
+from src.repository.database import (
+    add_commit_refresh_db,
+    commit_refresh_db,
+    delete_commit_db,
+    get_db,
+)
 from src.schema.category import (
     CategoryCreate,
     CategoryRead,
@@ -157,8 +163,7 @@ async def update_category(
         }
 
     existing_category.name = category_update.name.lower()
-    db.commit()
-    db.refresh(existing_category)
+    commit_refresh_db(object=existing_category, db=db)
     logger.info(
         f"Category {category_update.id} updated to name: {existing_category.name}"
     )
@@ -201,9 +206,8 @@ async def delete_category(
         }
 
     category_data = CategoryRead.model_validate(category)
+    delete_commit_db(object=category, db=db)
 
-    db.delete(category)
-    db.commit()
     logger.info(f"Category {category.name} (id: {category_id}) deleted")
 
     return {
