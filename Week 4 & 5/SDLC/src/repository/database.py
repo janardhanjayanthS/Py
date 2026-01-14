@@ -16,6 +16,17 @@ logger = get_logger(__name__)
 
 
 def get_db():
+    """Get database session dependency for FastAPI.
+
+    Provides a database session with proper error handling and cleanup.
+    Uses FastAPI's dependency injection pattern for database access.
+
+    Yields:
+        Session: SQLAlchemy database session instance.
+
+    Raises:
+        DatabaseException: If database connection fails.
+    """
     db = session_local()
     try:
         yield db
@@ -32,6 +43,15 @@ def get_db():
 
 
 def seed_db():
+    """Seed database with initial data from CSV file.
+
+    Reads inventory data from CSV file and populates database tables.
+    Handles table seeding, sequence reset, and error recovery.
+    Uses transaction management to ensure data consistency.
+
+    Raises:
+        DatabaseException: If seeding fails for any table or sequence reset.
+    """
     initial_data = get_initial_data_from_csv(settings.INVENTORY_CSV_FILEPATH)
     with engine.connect() as connection:
         for tablename in ["product_category", "product"]:
@@ -85,12 +105,14 @@ def seed_db():
 
 
 def add_commit_refresh_db(object: BaseModel, db: Session):
-    """
-    add, commit and refresh db after adding a row
+    """Add, commit, and refresh database object.
+
+    Performs the complete database transaction cycle for a new object:
+    add to session, commit transaction, and refresh object with database values.
 
     Args:
-        object: to insert to db (pydantic model instance)
-        db: database instance in session
+        object: Pydantic model instance to insert into database.
+        db: SQLAlchemy database session instance.
     """
     db.add(object)
     db.commit()
@@ -101,27 +123,31 @@ pwt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:
-    """
-    Hash a plain text password using bcrypt
+    """Hash a plain text password using bcrypt.
+
+    Uses passlib's CryptContext with bcrypt scheme for secure password hashing.
+    Includes automatic salt generation and deprecated scheme handling.
 
     Args:
-        password: plain text password
+        password: Plain text password to hash.
 
     Returns:
-        str: hash of the password
+        str: Bcrypt hash of the password.
     """
     return pwt_context.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """
-    Verifies if plain text matches a hash
+    """Verify if plain text password matches bcrypt hash.
+
+    Uses passlib's CryptContext to securely compare plain text password
+    against stored bcrypt hash with automatic salt extraction.
 
     Args:
-        plain_password: plain text password
-        hashed_password: hashed password
+        plain_password: Plain text password to verify.
+        hashed_password: Bcrypt hash to compare against.
 
     Returns:
-        bool: True if match, False otherwise
+        bool: True if password matches hash, False otherwise.
     """
     return pwt_context.verify(plain_password, hashed_password)
