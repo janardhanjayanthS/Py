@@ -4,7 +4,9 @@ from enum import Enum
 import structlog
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from src.core.filepath import ENV_FILE
+from src.core.singleton_pattern import Singleton
 
 
 class LogLevel(str, Enum):
@@ -18,7 +20,7 @@ class LogLevel(str, Enum):
     CRITICAL = "CRITICAL"
 
 
-class LogSettings(BaseSettings):
+class LogSettings(BaseSettings, metaclass=Singleton):
     """Configuration settings for logging."""
 
     # LOGGING

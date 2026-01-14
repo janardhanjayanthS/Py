@@ -5,13 +5,15 @@ from typing import Any
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from src.core.filepath import ENV_FILE
 from src.core.log import get_logger
+from src.core.singleton_pattern import Singleton
 
 logger = get_logger(__name__)
 
 
-class Settings(BaseSettings):
+class Settings(BaseSettings, metaclass=Singleton):
     """Application configuration settings.
 
     Handles environment variables and application-wide settings.
