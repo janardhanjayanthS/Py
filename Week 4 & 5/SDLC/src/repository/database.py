@@ -121,11 +121,29 @@ def add_commit_refresh_db(object: BaseModel, db: Session):
 
 
 def commit_refresh_db(object: BaseModel, db: Session) -> None:
+    """Commit and refresh database object.
+
+    Commits transaction changes and refreshes object with updated database values.
+    Used for updating existing objects without adding them to session.
+
+    Args:
+        object: Pydantic model instance to commit and refresh.
+        db: SQLAlchemy database session instance.
+    """
     db.commit()
     db.refresh(object)
 
 
 def delete_commit_db(object: BaseModel, db: Session) -> None:
+    """Delete and commit database object.
+
+    Deletes object from database session and commits the transaction.
+    Used for permanent removal of records from database.
+
+    Args:
+        object: Pydantic model instance to delete from database.
+        db: SQLAlchemy database session instance.
+    """
     db.delete(object)
     db.commit()
 
