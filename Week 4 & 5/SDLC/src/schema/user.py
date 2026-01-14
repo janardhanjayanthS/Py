@@ -10,6 +10,18 @@ from src.repository.utility import check_password_strength
 
 
 def validate_password(password: str) -> str:
+    """Validates if a password is strong or not,
+       if so returns pwd, otherwise raises error
+
+    Args:
+        password: password string
+
+    Raises:
+        WeakPasswordException: raised when password is weak
+
+    Returns:
+        str: returned strong password
+    """
     pwd_strength = check_password_strength(password=password)
     if not pwd_strength:
         raise WeakPasswordException(

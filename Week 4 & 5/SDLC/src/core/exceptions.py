@@ -4,6 +4,8 @@ from src.core.config import Errors
 
 
 class BaseAppException(Exception):
+    """Base exception class for all application exceptions."""
+
     def __init__(
         self,
         message: str,
@@ -12,6 +14,15 @@ class BaseAppException(Exception):
         status_code: int = 500,
         headers: Optional[dict[str, Any]] = None,
     ) -> None:
+        """Initialize base application exception.
+
+        Args:
+            message: Error message.
+            error_code: Error code from Errors enum.
+            details: Additional error details.
+            status_code: HTTP status code.
+            headers: Additional headers.
+        """
         self.message = message
         self.error_code = error_code
         self.details = details
@@ -28,6 +39,12 @@ class WeakPasswordException(BaseAppException):
     """
 
     def __init__(self, message: str, field_errors: list[dict[str, str]] = None) -> None:
+        """Initialize weak password exception.
+
+        Args:
+            message: Description of why the password is weak.
+            field_errors: List of field-specific error details.
+        """
         super().__init__(
             message=message,
             error_code=Errors.WEAK_PWD_ERROR,
@@ -37,13 +54,19 @@ class WeakPasswordException(BaseAppException):
 
 
 class DatabaseException(BaseAppException):
-    """Exception raised when a password does not meet strength requirements.
+    """Exception raised for database-related errors.
 
     Args:
-        message: Description of why the password is weak.
+        message: Description of the database error.
     """
 
     def __init__(self, message: str, field_errors: list[dict[str, str]] = None) -> None:
+        """Initialize database exception.
+
+        Args:
+            message: Description of the database error.
+            field_errors: List of field-specific error details.
+        """
         details = {"field_errors": field_errors} if field_errors else {}
         super().__init__(
             message=message,
@@ -54,13 +77,19 @@ class DatabaseException(BaseAppException):
 
 
 class AuthenticationException(BaseAppException):
-    """Exception raised when a password does not meet strength requirements.
+    """Exception raised for authentication-related errors.
 
     Args:
-        message: Description of why the password is weak.
+        message: Description of the authentication error.
     """
 
     def __init__(self, message: str, field_errors: list[dict[str, str]] = None) -> None:
+        """Initialize authentication exception.
+
+        Args:
+            message: Description of the authentication error.
+            field_errors: List of field-specific error details.
+        """
         details = {"field_errors": field_errors} if field_errors else {}
         super().__init__(
             message=message,

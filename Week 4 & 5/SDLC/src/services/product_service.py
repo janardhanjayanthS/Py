@@ -2,7 +2,6 @@ from typing import Optional
 
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
 from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
@@ -18,15 +17,14 @@ logger = get_logger(__name__)
 
 
 def check_existing_product_using_name(product: Optional[ProductCreate], db: Session):
-    """
-    Checks if product already exists in db,
-    if so raises HTTP error
+    """Check if product already exists in database.
 
     Args:
-        product: pydnatic product model with its details
-        db: database instance in session
+        product: Pydantic product model with details.
+        db: Database session instance.
+
     Raises:
-        HTTPException: if product does not exist
+        DatabaseException: If product already exists.
     """
     existing_product = db.query(Product).filter_by(name=product.name).first()
     if existing_product is not None:
@@ -34,25 +32,24 @@ def check_existing_product_using_name(product: Optional[ProductCreate], db: Sess
         logger.error(message=message)
         raise DatabaseException(
             message=message,
-            field_errors={
+            field_errors=[
                 {
                     "field": "product name",
                     "message": f"{product.name} already exists in DB",
                 }
-            },
+            ],
         )
 
 
 def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
-    """
-    Checks if product already exists in db,
-    if so raises HTTP error
+    """Check if product already exists in database by ID.
 
     Args:
-        product: pydnatic product model with its details
-        db: database instance in session
+        product: Pydantic product model with details.
+        db: Database session instance.
+
     Raises:
-        HTTPException: if product does not exist
+        DatabaseException: If product already exists.
     """
     existing_product = db.query(Product).filter_by(id=product.id).first()
     if existing_product is not None:

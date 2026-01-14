@@ -5,7 +5,6 @@ from typing import Any
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 from src.core.filepath import ENV_FILE
 from src.core.log import get_logger
 
@@ -13,6 +12,11 @@ logger = get_logger(__name__)
 
 
 class Settings(BaseSettings):
+    """Application configuration settings.
+
+    Handles environment variables and application-wide settings.
+    """
+
     INVENTORY_CSV_FILEPATH: str = str(
         (Path(__file__).parent.parent.parent / "data" / "new_inventory.csv")
     )
@@ -22,6 +26,11 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self) -> str:
+        """Generate PostgreSQL database URL.
+
+        Returns:
+            Database connection string.
+        """
         return f"postgresql://postgres:{self.postgresql_pwd}@localhost:5432/inventory_manager"
 
     # JWT

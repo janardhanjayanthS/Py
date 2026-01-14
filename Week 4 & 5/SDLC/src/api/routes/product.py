@@ -2,7 +2,6 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.product import Product
@@ -35,6 +34,17 @@ async def get_products(
     category_id: Optional[int] = None,
     db: Session = Depends(get_db),
 ):
+    """Retrieve products based on optional filters.
+
+    Args:
+        request: HTTP request object.
+        product_id: Optional product ID to filter by.
+        category_id: Optional category ID to filter by.
+        db: Database session dependency.
+
+    Returns:
+        Product response based on provided filters.
+    """
     current_user_email: str = request.state.email
     logger.debug(
         f"Get products request by: {current_user_email}, product_id: {product_id}, category_id: {category_id}"
@@ -61,6 +71,16 @@ async def post_products(
     product: Optional[ProductCreate] = None,
     db: Session = Depends(get_db),
 ):
+    """Create a new product.
+
+    Args:
+        request: HTTP request object.
+        product: Product data to create.
+        db: Database session dependency.
+
+    Returns:
+        Created product response.
+    """
     current_user_email: str = request.state.email
     logger.debug(f"Create product request by: {current_user_email}")
     logger.info(f"Creating new product: {product.name if product else 'None'}")
@@ -75,13 +95,16 @@ async def update_product(
     product_update: ProductUpdate,
     db: Session = Depends(get_db),
 ):
-    """
-    To update product information
+    """Update product information.
 
     Args:
-        product_id: id of the product to update
-        product_update: update product schema
-        db: sqlalchemy db object. Defaults to Depends(get_db).
+        request: HTTP request object.
+        product_id: ID of the product to update.
+        product_update: Product update data.
+        db: Database session dependency.
+
+    Returns:
+        Updated product response.
     """
     current_user_email = request.state.email
     logger.debug(
@@ -103,13 +126,15 @@ async def remove_product(
     product_id: int,
     db: Session = Depends(get_db),
 ):
-    """
-    To delete a product from db
+    """Delete a product from the database.
 
     Args:
-        product_id: id of the product to delete
-        db: sqlalchemy db object. Defaults to Depends(get_db).
-        current_user: user object returned from JWT
+        request: HTTP request object.
+        product_id: ID of the product to delete.
+        db: Database session dependency.
+
+    Returns:
+        Deletion response.
     """
     check_id_type(id=product_id)
     current_user_email = request.state.email
@@ -128,6 +153,17 @@ async def update_product_category(
     category_id: int,
     db: Session = Depends(get_db),
 ):
+    """Update product category assignment.
+
+    Args:
+        request: HTTP request object.
+        product_id: ID of the product to update.
+        category_id: New category ID for the product.
+        db: Database session dependency.
+
+    Returns:
+        Updated product category response.
+    """
     current_user_email = request.state.email
     logger.debug(
         f"Update product category request: product_id={product_id}, category_id={category_id} by: {current_user_email}"

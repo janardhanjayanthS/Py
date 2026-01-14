@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.category import Category
@@ -28,6 +27,15 @@ logger = get_logger(__name__)
 @category.get("/category/all", response_model=CategoryResponse)
 @required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
 async def get_all_category(request: Request, db: Session = Depends(get_db)):
+    """Retrieve all categories from the database.
+
+    Args:
+        request: HTTP request object.
+        db: Database session dependency.
+
+    Returns:
+        CategoryResponse containing all categories.
+    """
     current_user_email = request.state.email
     logger.debug(f"Fetching all categories, requested by: {current_user_email}")
     all_categories = db.query(Category).all()
@@ -47,6 +55,16 @@ async def get_all_category(request: Request, db: Session = Depends(get_db)):
 async def get_specifc_category(
     request: Request, category_id: int, db: Session = Depends(get_db)
 ):
+    """Retrieve a specific category by ID.
+
+    Args:
+        request: HTTP request object.
+        category_id: ID of the category to retrieve.
+        db: Database session dependency.
+
+    Returns:
+        CategoryResponse containing the category or error message.
+    """
     logger.debug(f"Fetching category with id: {category_id}")
     category = db.query(Category).filter_by(id=category_id).first()
     if not category:
@@ -73,6 +91,16 @@ async def get_specifc_category(
 async def add_category(
     request: Request, category_create: CategoryCreate, db: Session = Depends(get_db)
 ):
+    """Create a new category.
+
+    Args:
+        request: HTTP request object.
+        category_create: Category data to create.
+        db: Database session dependency.
+
+    Returns:
+        CategoryResponse containing the created category.
+    """
     logger.debug(f"Create category request: {category_create.name}")
     check_existing_category_using_name(category=category_create, db=db)
     check_existing_category_using_id(category=category_create, db=db)
@@ -93,6 +121,16 @@ async def add_category(
 async def update_category(
     request: Request, category_update: CategoryUpdate, db: Session = Depends(get_db)
 ):
+    """Update an existing category.
+
+    Args:
+        request: HTTP request object.
+        category_update: Category data to update.
+        db: Database session dependency.
+
+    Returns:
+        CategoryResponse containing the updated category or error message.
+    """
     logger.debug(f"Update category request for id: {category_update.id}")
     existing_category = get_category_by_id(category_id=category_update.id, db=db)
     if not existing_category or existing_category is None:
@@ -141,6 +179,16 @@ async def delete_category(
     category_id: int,
     db: Session = Depends(get_db),
 ):
+    """Delete a category by ID.
+
+    Args:
+        request: HTTP request object.
+        category_id: ID of the category to delete.
+        db: Database session dependency.
+
+    Returns:
+        CategoryResponse containing the deleted category or error message.
+    """
     logger.debug(f"Delete category request for id: {category_id}")
     category = get_category_by_id(category_id=category_id, db=db)
     if not category or category is None:

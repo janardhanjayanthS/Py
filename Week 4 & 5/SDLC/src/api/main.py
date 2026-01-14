@@ -2,7 +2,6 @@ import uuid
 
 import uvicorn
 from fastapi import FastAPI, Request
-
 from src.core.app_utility import lifespan
 from src.core.exception_handler import add_exception_handlers_to_app
 from src.core.log import correlation_id, get_logger
@@ -20,6 +19,15 @@ app.include_router(category.category)
 
 @app.middleware("http")
 async def logger_middleware(request: Request, call_next):
+    """Middleware for logging requests with correlation IDs.
+
+    Args:
+        request: Incoming HTTP request.
+        call_next: Next middleware in the chain.
+
+    Returns:
+        HTTP response with correlation ID tracking.
+    """
     request_id = str(uuid.uuid4())
     token = correlation_id.set(request_id)
 
@@ -37,6 +45,11 @@ add_exception_handlers_to_app(app=app)
 
 @app.get("/")
 def home():
+    """Home endpoint returning a simple greeting.
+
+    Returns:
+        Dictionary with a greeting message.
+    """
     logger.info("HELLO WORLD")
     return {"jello": "world"}
 

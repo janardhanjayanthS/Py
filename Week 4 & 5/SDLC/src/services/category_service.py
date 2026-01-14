@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-
 from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
 from src.models.category import Category
@@ -25,15 +24,14 @@ def get_category_by_id(category_id: int, db: Session) -> Category | None:
 
 
 def check_existing_category_using_name(category: BaseCategory, db: Session):
-    """
-    checks db if category exists by name
+    """Check if category exists by name in database.
 
     Args:
-        category: category pydantic model
-        db: database instance in session
+        category: Category pydantic model.
+        db: Database session instance.
 
     Raises:
-        HTTPException: if no category in db
+        DatabaseException: If category already exists.
     """
     existing_category = get_category_by_name(category_name=category.name, db=db)
     if existing_category is not None:
@@ -41,25 +39,24 @@ def check_existing_category_using_name(category: BaseCategory, db: Session):
         logger.error(message=message)
         raise DatabaseException(
             message=message,
-            field_errors={
+            field_errors=[
                 {
                     "field": "category name",
                     "message": f"{category.name} already exists in DB",
                 }
-            },
+            ],
         )
 
 
 def check_existing_category_using_id(category: BaseCategory, db: Session):
-    """
-    checks db if category exists by name
+    """Check if category exists by ID in database.
 
     Args:
-        category: category pydantic model
-        db: database instance in session
+        category: Category pydantic model.
+        db: Database session instance.
 
     Raises:
-        HTTPException: if no category in db
+        DatabaseException: If category already exists.
     """
     existing_category = get_category_by_id(category_id=category.id, db=db)
     if existing_category is not None:
@@ -67,26 +64,26 @@ def check_existing_category_using_id(category: BaseCategory, db: Session):
         logger.error(message=message)
         raise DatabaseException(
             message=message,
-            field_errors={
+            field_errors=[
                 {
-                    "field": "category name",
+                    "field": "category id",
                     "message": f"{category.id} already exists in DB",
                 }
-            },
+            ],
         )
 
 
 def get_category_by_name(category_name: str, db: Session) -> Category | None:
-    """
-    Gets category (db object) using name
+    """Get category by name from database.
 
     Args:
-        category_name: name of category to look for
-        db: database instance in session
+        category_name: Name of category to search.
+        db: Database session instance.
 
     Returns:
-        category from db if exists else None
+        Category object if found, None otherwise.
     """
+
     logger.debug(f"Fetching category by name: {category_name}")
     existing_category = (
         db.query(Category).filter(Category.name == category_name).first()
@@ -95,14 +92,13 @@ def get_category_by_name(category_name: str, db: Session) -> Category | None:
 
 
 def handle_missing_category(category_id: int):
-    """
-    Log and return response for missing category
+    """Log and return response for missing category.
 
     Args:
-        category_id: missing category's id
+        category_id: Missing category ID.
 
     Returns:
-        dict: response describing missing category
+        Dictionary with error response for missing category.
     """
     message = f"Cannot find category with id: {category_id}"
     logger.error(message)
