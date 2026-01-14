@@ -2,10 +2,10 @@ from datetime import datetime, timedelta
 from functools import wraps
 from typing import Callable, Optional
 
-from fastapi import HTTPException, Request, status
+from fastapi import Request
 from jose import JWTError, jwt
-
 from src.core.config import settings
+from src.core.exceptions import AuthenticationException
 from src.core.log import get_logger
 from src.schema.token import TokenData
 from src.schema.user import UserRole
@@ -68,23 +68,27 @@ def decode_access_token(token: str) -> TokenData:
         role: str = payload.get("role", "")
 
         if email is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Could not validate credentials",
+            raise AuthenticationException(
+                message="Could not validate credentials",
+                field_errors=[
+                    {"field": "token", "message": "Invalid token: missing email"}
+                ],
             )
 
         if role is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Could not validate credentials",
+            raise AuthenticationException(
+                message="Could not validate credentials",
+                field_errors=[
+                    {"field": "token", "message": "Invalid token: missing role"}
+                ],
             )
 
         return TokenData(email=email, role=role)
 
     except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials",
+        raise AuthenticationException(
+            message="Could not validate credentials",
+            field_errors=[{"field": "token", "message": "Invalid or expired token"}],
         )
 
 
@@ -129,9 +133,14 @@ def required_roles(*allowed_roles):
 
             # Check if user role is authorized
             if user_role not in UserRole.get_values(roles=allowed_roles):
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail=f"Unauthorized to perform action, you are a {user_role}",
+                raise AuthenticationException(
+                    message=f"Unauthorized to perform action, you are a {user_role}",
+                    field_errors=[
+                        {
+                            "field": "role",
+                            "message": f"Role {user_role} is not authorized for this action",
+                        }
+                    ],
                 )
 
             # Set user info on request state
@@ -153,12 +162,12 @@ def handle_missing_request_object(request: Request) -> None:
         request: request object from client's request
 
     Raises:
-        HTTPException: if request object is None
+        AuthenticationException: if request object is None
     """
     if not request:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Request object missing",
+        raise AuthenticationException(
+            message="Request object missing",
+            field_errors=[{"field": "request", "message": "Request object is missing"}],
         )
 
 
@@ -170,11 +179,14 @@ def handle_missing_email_in_request(user_email: str) -> None:
         user_email: email id of user
 
     Raises:
-        HTTPException: if user_email(param) is empty
+        AuthenticationException: if user_email(param) is empty
     """
     if not user_email:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+        raise AuthenticationException(
+            message="User not found",
+            field_errors=[
+                {"field": "email", "message": "User email is missing or invalid"}
+            ],
         )
 
 
@@ -189,13 +201,18 @@ def get_authorization_from_request(request: Request) -> str:
         str: authorization string if exists
 
     Raises:
-        HTTPException: [TODO:throw]
+        AuthenticationException: if authorization header is missing
     """
     authorization = request.headers.get("Authorization")
     if not authorization:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header missing",
+        raise AuthenticationException(
+            message="Authorization header missing",
+            field_errors=[
+                {
+                    "field": "authorization",
+                    "message": "Authorization header is required",
+                }
+            ],
         )
     return authorization
 
@@ -211,13 +228,15 @@ def get_request_from_jwt(kwargs: dict) -> Request:
         Request: object if exists
 
     Raises:
-        HTTPException: If there is'nt a request object
+        AuthenticationException: If there is'nt a request object
     """
     request: Optional[Request] = kwargs.get("request")
     if not request:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Request object missing",
+        raise AuthenticationException(
+            message="Request object missing",
+            field_errors=[
+                {"field": "request", "message": "Request object is missing from kwargs"}
+            ],
         )
     return request
 
@@ -233,18 +252,28 @@ def verify_scheme_and_return_token(authorization: str) -> str:
         str: JWT token
 
     Raises:
-        HTTPException: if there is any problem with scheme
+        AuthenticationException: if there is any problem with scheme
     """
     try:
         scheme, token = authorization.split()
         if scheme.lower() != "bearer":
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authorization scheme",
+            raise AuthenticationException(
+                message="Invalid authorization scheme",
+                field_errors=[
+                    {
+                        "field": "authorization",
+                        "message": "Only Bearer scheme is supported",
+                    }
+                ],
             )
     except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authorization header format",
+        raise AuthenticationException(
+            message="Invalid authorization header format",
+            field_errors=[
+                {
+                    "field": "authorization",
+                    "message": "Authorization header must be in format 'Bearer <token>'",
+                }
+            ],
         )
     return token

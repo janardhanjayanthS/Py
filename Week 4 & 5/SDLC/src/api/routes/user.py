@@ -1,8 +1,7 @@
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-
 from src.core.config import settings
 from src.core.exceptions import AuthenticationException
 from src.core.jwt import create_access_token, required_roles
@@ -39,12 +38,12 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
         logger.error(message)
         raise AuthenticationException(
             message=message,
-            field_errors={
+            field_errors=[
                 {
                     "field": "email id",
                     "message": f"{create_user.email} already exists in DB",
                 }
-            },
+            ],
         )
 
     db_user = User(
@@ -69,10 +68,11 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
     )
     if not user:
         logger.warning(f"Failed login attempt for email: {user_login.email}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise AuthenticationException(
+            message="Incorrect email or password",
+            field_errors=[
+                {"field": "email", "message": "Email or password is incorrect"}
+            ],
         )
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)

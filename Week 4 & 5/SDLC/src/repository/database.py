@@ -2,8 +2,8 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy import create_engine, insert, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
-
 from src.core.config import settings
+from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
 from src.repository.utility import get_initial_data_from_csv
 
@@ -21,7 +21,12 @@ def get_db():
         yield db
     except Exception as e:
         logger.error(str(e))
-        raise
+        raise DatabaseException(
+            message="Database connection failed",
+            field_errors=[
+                {"field": "database", "message": f"Database error: {str(e)}"}
+            ],
+        )
     finally:
         db.close()
 
@@ -41,8 +46,12 @@ def seed_db():
                     )
                 except Exception as e:
                     connection.rollback()
-                    logger.info(
-                        f"Error: Unexpected exception when interacting with db. {e}"
+                    logger.error(f"Error seeding {tablename}: {str(e)}")
+                    raise DatabaseException(
+                        message=f"Failed to seed {tablename} table",
+                        field_errors=[
+                            {"field": tablename, "message": f"Seeding failed: {str(e)}"}
+                        ],
                     )
 
         # Reset sequences with COALESCE to handle empty tables
@@ -64,6 +73,15 @@ def seed_db():
         except Exception as e:
             connection.rollback()
             logger.error(f"Error resetting sequences: {e}")
+            raise DatabaseException(
+                message="Failed to reset database sequences",
+                field_errors=[
+                    {
+                        "field": "sequences",
+                        "message": f"Sequence reset failed: {str(e)}",
+                    }
+                ],
+            )
 
 
 def add_commit_refresh_db(object: BaseModel, db: Session):
