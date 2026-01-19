@@ -1,7 +1,9 @@
 from typing import Any
 
+from pydantic._internal._model_construction import ModelMetaclass
 
-class Singleton(type):
+
+class Singleton(ModelMetaclass):
     """Metaclass that ensures only one instance of each class exists.
 
     Implements the singleton pattern by maintaining a registry of instances
@@ -22,5 +24,7 @@ class Singleton(type):
         """
         if cls not in cls._instances:
             print(f"creating instance of {cls.__name__}")
-            cls._instances[cls] = super().__init__(*args, **kwargs)
+            instance = cls.__new__(cls, *args, **kwargs)
+            instance.__init__(*args, **kwargs)
+            cls._instances[cls] = instance
         return cls._instances[cls]
