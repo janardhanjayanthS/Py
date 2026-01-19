@@ -76,7 +76,7 @@ def handle_missing_product(product_id: str):
         dict: fastapi response
     """
     message = f"product with id {product_id} not found"
-    logger.error(message=message)
+    logger.error(message)
     return {
         "status": ResponseStatus.E.value,
         "message": {
