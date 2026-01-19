@@ -20,7 +20,7 @@ def print_results_using_sentence_transformer(query: str, top_k: int = 5) -> None
 
 
 if __name__ == "__main__":
-    query = "what is the title of the book?"
+    query = "what is machine learning"
     print_results_using_sentence_transformer(query=query)
     print("-" * 50)
     print_results_using_open_ai(query=query)

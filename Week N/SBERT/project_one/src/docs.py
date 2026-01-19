@@ -1,6 +1,6 @@
 import pymupdf
 
-doc = pymupdf.open("data/algorithms_to_live_by.pdf")
+doc = pymupdf.open("data/ml.pdf")
 corpus = []
 for page in doc:
     if page:

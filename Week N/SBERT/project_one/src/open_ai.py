@@ -93,8 +93,8 @@ def print_results_using_open_ai(query: str, top_k: int = 5) -> None:
     print(f"{'=' * 80}\n")
 
     for rank, i in enumerate(top_indices, 1):
-        preview = corpus[i][:300].replace("\n", " ").strip()
-        if len(corpus[i]) > 300:
+        preview = corpus[i][:2000].replace("\n", " ").strip()
+        if len(corpus[i]) > 2000:
             preview += "..."
 
         print(f"Rank {rank} | Page {i + 1} | Similarity: {similarities[i]:.4f}")
