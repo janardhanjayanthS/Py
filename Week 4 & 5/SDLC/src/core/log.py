@@ -99,14 +99,3 @@ def get_logger(name: str):
     """
     return structlog.get_logger(name)
 
-
-logger = get_logger(__name__)
-
-
-def log_error(message: str) -> None:
-    """Log error message into errors.log file.
-
-    Args:
-        message: Error message to log.
-    """
-    logger.error(message)
