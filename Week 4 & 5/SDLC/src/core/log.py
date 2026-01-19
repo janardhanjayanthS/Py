@@ -82,7 +82,7 @@ def setup_logging():
 
     structlog.configure(
         processors=processors,
-        wrapper_class=structlog.make_filtering_bound_logger(log_level),
+        wrapper_class=structlog.BoundLogger,
         logger_factory=structlog.WriteLoggerFactory(),
         cache_logger_on_first_use=True,
     )
@@ -98,4 +98,3 @@ def get_logger(name: str):
         Configured structlog logger instance.
     """
     return structlog.get_logger(name)
-

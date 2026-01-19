@@ -2,6 +2,7 @@ import uuid
 
 import uvicorn
 from fastapi import FastAPI, Request
+
 from src.core.app_utility import lifespan
 from src.core.exception_handler import add_exception_handlers_to_app
 from src.core.log import correlation_id, get_logger

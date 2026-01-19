@@ -4,6 +4,7 @@ from typing import Callable, Optional
 
 from fastapi import Request
 from jose import JWTError, jwt
+
 from src.core.config import settings
 from src.core.exceptions import AuthenticationException
 from src.core.log import get_logger
@@ -116,36 +117,40 @@ def required_roles(*allowed_roles):
 
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            # Try to get from kwargs first (production)
+            # Try to get from kwargs first
             request = kwargs.get("request", None)
 
-            handle_missing_request_object(request=request)
+            if settings.environment.lower() in {"production", "prod"}:
+                handle_missing_request_object(request=request)
 
-            authorization = get_authorization_from_request(request=request)
+                authorization = get_authorization_from_request(request=request)
 
-            token = verify_scheme_and_return_token(authorization=authorization)
+                token = verify_scheme_and_return_token(authorization=authorization)
 
-            token_data = decode_access_token(token=token)
-            user_email = token_data.email
-            user_role = token_data.role
+                token_data = decode_access_token(token=token)
+                user_email = token_data.email
+                user_role = token_data.role
 
-            handle_missing_email_in_request(user_email=user_email)
+                handle_missing_email_in_request(user_email=user_email)
 
-            # Check if user role is authorized
-            if user_role not in UserRole.get_values(roles=allowed_roles):
-                raise AuthenticationException(
-                    message=f"Unauthorized to perform action, you are a {user_role}",
-                    field_errors=[
-                        {
-                            "field": "role",
-                            "message": f"Role {user_role} is not authorized for this action",
-                        }
-                    ],
-                )
+                # Check if user role is authorized
+                if user_role not in UserRole.get_values(roles=allowed_roles):
+                    raise AuthenticationException(
+                        message=f"Unauthorized to perform action, you are a {user_role}",
+                        field_errors=[
+                            {
+                                "field": "role",
+                                "message": f"Role {user_role} is not authorized for this action",
+                            }
+                        ],
+                    )
 
-            # Set user info on request state
-            request.state.email = user_email
-            request.state.role = user_role
+                request.state.email = user_email
+                request.state.role = user_role
+            else:
+                if request:
+                    request.state.email = "dev@sample.com"
+                    request.state.role = "admin"
 
             return await func(*args, **kwargs)
 

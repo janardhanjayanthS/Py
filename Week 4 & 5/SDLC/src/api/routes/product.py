@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
+
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.product import Product
@@ -45,6 +46,7 @@ async def get_products(
     Returns:
         Product response based on provided filters.
     """
+    logger.debug(f"REQUEST: {request}")
     current_user_email: str = request.state.email
     logger.debug(
         f"Get products request by: {current_user_email}, product_id: {product_id}, category_id: {category_id}"

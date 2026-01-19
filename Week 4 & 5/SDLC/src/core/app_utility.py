@@ -2,7 +2,9 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
-from src.core.log import get_logger, setup_logging
+
+from src.core.config import settings
+from src.core.log import get_logger, log_settings, setup_logging
 from src.repository.database import Base, engine
 
 logger = get_logger(__name__)
@@ -25,6 +27,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     Base.metadata.create_all(bind=engine)
     logger.info("✅ Database initialized successfully")
 
+    # LOGGING .env vars
+    logger.info(f"Executing in {settings.environment} environ")
+    logger.info(f"Log level at {log_settings.LOG_LEVEL}")
     # For seeding: run after alembic migration or first app start up
     # from src.core.database import seed_db
     #

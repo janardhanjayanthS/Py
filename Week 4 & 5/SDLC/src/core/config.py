@@ -26,6 +26,9 @@ class Settings(BaseSettings, metaclass=Singleton):
     # POSTGRESQL
     postgresql_pwd: str = Field(validation_alias="POSTGRESQL_PWD")
 
+    # ENVIRONMENT
+    environment: str = Field(validation_alias="ENVIRONMENT")
+
     @property
     def DATABASE_URL(self) -> str:
         """Generate PostgreSQL database URL.
