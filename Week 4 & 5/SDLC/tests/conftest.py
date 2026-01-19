@@ -69,6 +69,15 @@ def test_db():
 
 
 @pytest.fixture(scope="function")
+def db_session(test_db):
+    """
+    Alias for test_db fixture to match naming convention in service tests.
+    Provides a database session for testing service layer functions.
+    """
+    return test_db
+
+
+@pytest.fixture(scope="function")
 def client(test_db):
     """
     Create a test client with dependency override.
@@ -304,3 +313,114 @@ def create_test_token(email: str, role: str) -> str:
     return create_access_token(
         data={"sub": email, "role": role}, expires_delta=timedelta(minutes=30)
     )
+
+
+# ============================================================================
+# ADDITIONAL FIXTURES FOR COMPREHENSIVE TESTING
+# ============================================================================
+
+
+@pytest.fixture
+def multiple_categories(test_db: Session) -> list:
+    """
+    Create multiple categories for testing category-specific operations.
+    Returns list of Category objects.
+    """
+    categories = [
+        Category(id=1, name="electronics"),
+        Category(id=2, name="clothing"),
+        Category(id=3, name="books"),
+        Category(id=4, name="home"),
+    ]
+    for category in categories:
+        test_db.add(category)
+    test_db.commit()
+    for category in categories:
+        test_db.refresh(category)
+    return categories
+
+
+@pytest.fixture
+def products_with_different_categories(
+    test_db: Session, multiple_categories: list
+) -> list:
+    """
+    Create products across different categories for testing category filtering.
+    Returns list of Product objects.
+    """
+    products = [
+        Product(
+            id=1, name="Laptop", price=1500, quantity=5, category_id=1
+        ),  # electronics
+        Product(id=2, name="T-Shirt", price=25, quantity=50, category_id=2),  # clothing
+        Product(
+            id=3, name="Python Book", price=45, quantity=20, category_id=3
+        ),  # books
+        Product(id=4, name="Coffee Maker", price=89, quantity=8, category_id=4),  # home
+        Product(
+            id=5, name="Mouse", price=30, quantity=25, category_id=1
+        ),  # electronics
+    ]
+    for product in products:
+        test_db.add(product)
+    test_db.commit()
+    for product in products:
+        test_db.refresh(product)
+    return products
+
+
+@pytest.fixture
+def expired_token():
+    """
+    Create an expired JWT token for testing authentication expiration.
+    """
+    return create_access_token(
+        data={"sub": "expired@test.com", "role": "staff"},
+        expires_delta=timedelta(seconds=-1),  # Already expired
+    )
+
+
+@pytest.fixture
+def invalid_token():
+    """
+    Create an invalid JWT token for testing authentication failures.
+    """
+    return "invalid.jwt.token"
+
+
+@pytest.fixture
+def sample_product_data():
+    """
+    Sample product data for testing product creation.
+    Returns dict with product fields.
+    """
+    return {
+        "name": "Test Product",
+        "description": "A test product for testing purposes",
+        "price": 99.99,
+        "stock": 10,
+        "category_id": 1,
+    }
+
+
+@pytest.fixture
+def sample_user_data():
+    """
+    Sample user data for testing user creation.
+    Returns dict with user fields.
+    """
+    return {
+        "name": "Test User",
+        "email": "testuser@example.com",
+        "password": "TestPass123!",
+        "role": "staff",
+    }
+
+
+@pytest.fixture
+def sample_category_data():
+    """
+    Sample category data for testing category creation.
+    Returns dict with category fields.
+    """
+    return {"name": "test_category"}
