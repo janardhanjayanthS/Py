@@ -4,10 +4,7 @@ from sqlalchemy.orm import Session
 
 from src.core.log import get_logger
 from src.models.user import User
-from src.repository.database import (
-    hash_password,
-    verify_password,
-)
+from src.repository.database import hash_password, verify_password
 from src.schema.user import UserEdit, UserRegister
 from src.services.models import ResponseStatus
 

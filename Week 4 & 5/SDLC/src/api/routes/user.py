@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-
 from src.core.config import settings
 from src.core.exceptions import AuthenticationException
 from src.core.jwt import create_access_token, required_roles

@@ -2,7 +2,6 @@ from typing import Optional
 
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
 from src.core.exceptions import DatabaseException
 from src.core.log import get_logger

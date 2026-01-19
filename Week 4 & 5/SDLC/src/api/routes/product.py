@@ -2,7 +2,6 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
-
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.product import Product

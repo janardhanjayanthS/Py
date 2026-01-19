@@ -2,7 +2,6 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
-
 from src.core.config import settings
 from src.core.log import get_logger, log_settings, setup_logging
 from src.repository.database import Base, engine
