@@ -1,12 +1,7 @@
-import pymupdf
 import torch
+from docs import corpus
+from open_ai import print_results_using_open_ai
 from sentence_transformers import SentenceTransformer
-
-doc = pymupdf.open("data/algorithms_to_live_by.pdf")
-corpus = []
-for page in doc:
-    if page:
-        corpus.append(page.get_text())
 
 
 def print_results_using_sentence_transformer(query: str, top_k: int = 5) -> None:
@@ -24,4 +19,8 @@ def print_results_using_sentence_transformer(query: str, top_k: int = 5) -> None
         print(f"(Score: {score:.4f})", corpus[idx])
 
 
-def print_results_using_open_ai(query: str, top_k: int = 5) -> None: ...
+if __name__ == "__main__":
+    query = "what is the title of the book?"
+    print_results_using_sentence_transformer(query=query)
+    print("-" * 50)
+    print_results_using_open_ai(query=query)
