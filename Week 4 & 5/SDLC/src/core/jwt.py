@@ -61,6 +61,7 @@ def decode_access_token(token: str) -> TokenData:
     Raises:
         HTTPException: if invalid/expired token
     """
+    auth_error_message: str = "Could not validate credentials"
     try:
         payload: dict = jwt.decode(
             token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
@@ -70,7 +71,7 @@ def decode_access_token(token: str) -> TokenData:
 
         if email is None:
             raise AuthenticationException(
-                message="Could not validate credentials",
+                message=auth_error_message,
                 field_errors=[
                     {"field": "token", "message": "Invalid token: missing email"}
                 ],
@@ -78,7 +79,7 @@ def decode_access_token(token: str) -> TokenData:
 
         if role is None:
             raise AuthenticationException(
-                message="Could not validate credentials",
+                message=auth_error_message,
                 field_errors=[
                     {"field": "token", "message": "Invalid token: missing role"}
                 ],
@@ -88,7 +89,7 @@ def decode_access_token(token: str) -> TokenData:
 
     except JWTError:
         raise AuthenticationException(
-            message="Could not validate credentials",
+            message=auth_error_message,
             field_errors=[{"field": "token", "message": "Invalid or expired token"}],
         )
 
