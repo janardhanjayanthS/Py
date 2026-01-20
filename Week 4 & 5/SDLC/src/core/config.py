@@ -5,7 +5,6 @@ from typing import Any
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 from src.core.filepath import ENV_FILE
 from src.core.log import get_logger
 from src.core.singleton_pattern import Singleton

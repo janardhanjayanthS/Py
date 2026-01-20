@@ -4,7 +4,6 @@ from enum import Enum
 import structlog
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 from src.core.filepath import ENV_FILE
 from src.core.singleton_pattern import Singleton
 

@@ -1,6 +1,5 @@
 import pytest
-
-from src.core.utility import check_password_strength
+from src.repository.utility import check_password_strength
 
 
 class TestCheckPasswordStrength:
