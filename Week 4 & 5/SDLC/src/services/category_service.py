@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+
 from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
 from src.models.category import Category
@@ -36,7 +37,7 @@ def check_existing_category_using_name(category: BaseCategory, db: Session):
     existing_category = get_category_by_name(category_name=category.name, db=db)
     if existing_category is not None:
         message = f"Category with name - {category.name} - already exists in db"
-        logger.error(message=message)
+        logger.error(message)
         raise DatabaseException(
             message=message,
             field_errors=[
@@ -61,7 +62,7 @@ def check_existing_category_using_id(category: BaseCategory, db: Session):
     existing_category = get_category_by_id(category_id=category.id, db=db)
     if existing_category is not None:
         message = f"Category with id - {category.id} - already exists in db"
-        logger.error(message=message)
+        logger.error(message)
         raise DatabaseException(
             message=message,
             field_errors=[
