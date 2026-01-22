@@ -11,7 +11,7 @@ COPY . .
 EXPOSE 6000
 
 ENV sample=hi_da
-ENV host=127.0.0.5
-ENV port=6000
+ENV host=0.0.0.0
+ENV port=5000
 
-CMD ["python", '-m', 'src.main']
+CMD ["python", "-m", "src.main"]
