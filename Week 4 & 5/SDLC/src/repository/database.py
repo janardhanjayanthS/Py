@@ -1,22 +1,27 @@
+from typing import Any, AsyncGenerator
+
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from sqlalchemy import create_engine, insert, text
-from sqlalchemy.orm import Session, declarative_base, sessionmaker
+from sqlalchemy import insert, text
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import Session, declarative_base
 
 from src.core.config import settings
 from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
 from src.repository.utility import get_initial_data_from_csv
 
-engine = create_engine(url=settings.DATABASE_URL)
-session_local = sessionmaker(autoflush=False, autocommit=False, bind=engine)
+engine = create_async_engine(url=settings.DATABASE_URL)
+async_session_local = async_sessionmaker(
+    bind=engine, class_=AsyncSession, expire_on_commit=False, autoflush=False
+)
 
 Base = declarative_base()
 
 logger = get_logger(__name__)
 
 
-def get_db():
+async def get_db() -> AsyncGenerator[AsyncSession, Any]:
     """Get database session dependency for FastAPI.
 
     Provides a database session with proper error handling and cleanup.
@@ -28,22 +33,22 @@ def get_db():
     Raises:
         DatabaseException: If database connection fails.
     """
-    db = session_local()
-    try:
-        yield db
-    except Exception as e:
-        logger.error(str(e))
-        raise DatabaseException(
-            message="Database connection failed",
-            field_errors=[
-                {"field": "database", "message": f"Database error: {str(e)}"}
-            ],
-        )
-    finally:
-        db.close()
+    async with async_session_local() as db:
+        try:
+            yield db
+        except Exception as e:
+            logger.error(str(e))
+            raise DatabaseException(
+                message="Database connection failed",
+                field_errors=[
+                    {"field": "database", "message": f"Database error: {str(e)}"}
+                ],
+            )
+        finally:
+            await db.close()
 
 
-def seed_db():
+async def seed_db():
     """Seed database with initial data from CSV file.
 
     Reads inventory data from CSV file and populates database tables.
@@ -54,19 +59,17 @@ def seed_db():
         DatabaseException: If seeding fails for any table or sequence reset.
     """
     initial_data = get_initial_data_from_csv(settings.INVENTORY_CSV_FILEPATH)
-    with engine.connect() as connection:
+    async with engine.connect() as connection:
         for tablename in ["product_category", "product"]:
             if tablename in initial_data and len(initial_data[tablename]) > 0:
                 target = Base.metadata.tables[tablename]
                 stmt = insert(target).values(initial_data[tablename])
                 try:
-                    connection.execute(stmt)
-                    connection.commit()
+                    await connection.execute(stmt)
                     logger.info(
                         f"Successfully seeded {len(initial_data[tablename])} values to {tablename}"
                     )
                 except Exception as e:
-                    connection.rollback()
                     logger.error(f"Error seeding {tablename}: {str(e)}")
                     raise DatabaseException(
                         message=f"Failed to seed {tablename} table",
@@ -77,13 +80,13 @@ def seed_db():
 
         # Reset sequences with COALESCE to handle empty tables
         try:
-            connection.execute(
+            await connection.execute(
                 text(
                     "SELECT setval(pg_get_serial_sequence('product', 'id'), "
                     "COALESCE((SELECT MAX(id) FROM product), 1), true);"
                 )
             )
-            connection.execute(
+            await connection.execute(
                 text(
                     "SELECT setval(pg_get_serial_sequence('product_category', 'id'), "
                     "COALESCE((SELECT MAX(id) FROM product_category), 1), true);"
@@ -92,7 +95,6 @@ def seed_db():
             connection.commit()
             logger.info("Successfully reset sequences")
         except Exception as e:
-            connection.rollback()
             logger.error(f"Error resetting sequences: {e}")
             raise DatabaseException(
                 message="Failed to reset database sequences",
@@ -105,7 +107,7 @@ def seed_db():
             )
 
 
-def add_commit_refresh_db(object: BaseModel, db: Session):
+async def add_commit_refresh_db(object: BaseModel, db: Session):
     """Add, commit, and refresh database object.
 
     Performs the complete database transaction cycle for a new object:
@@ -116,11 +118,11 @@ def add_commit_refresh_db(object: BaseModel, db: Session):
         db: SQLAlchemy database session instance.
     """
     db.add(object)
-    db.commit()
-    db.refresh(object)
+    await db.commit()
+    await db.refresh(object)
 
 
-def commit_refresh_db(object: BaseModel, db: Session) -> None:
+async def commit_refresh_db(object: BaseModel, db: Session) -> None:
     """Commit and refresh database object.
 
     Commits transaction changes and refreshes object with updated database values.
@@ -130,8 +132,8 @@ def commit_refresh_db(object: BaseModel, db: Session) -> None:
         object: Pydantic model instance to commit and refresh.
         db: SQLAlchemy database session instance.
     """
-    db.commit()
-    db.refresh(object)
+    await db.commit()
+    await db.refresh(object)
 
 
 def delete_commit_db(object: BaseModel, db: Session) -> None:
@@ -144,8 +146,8 @@ def delete_commit_db(object: BaseModel, db: Session) -> None:
         object: Pydantic model instance to delete from database.
         db: SQLAlchemy database session instance.
     """
-    db.delete(object)
-    db.commit()
+    await db.delete(object)
+    await db.commit()
 
 
 pwt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
