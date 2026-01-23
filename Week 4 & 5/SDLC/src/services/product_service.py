@@ -23,7 +23,9 @@ from src.services.utility import check_id_type
 logger = get_logger(__name__)
 
 
-def check_existing_product_using_name(product: Optional[ProductCreate], db: Session):
+async def check_existing_product_using_name(
+    product: Optional[ProductCreate], db: Session
+):
     """Check if product already exists in database.
 
     Args:
@@ -33,7 +35,11 @@ def check_existing_product_using_name(product: Optional[ProductCreate], db: Sess
     Raises:
         DatabaseException: If product already exists.
     """
-    existing_product = db.query(Product).filter_by(name=product.name).first()
+
+    stmt = select(Product).filter_by(name=product.name)
+    result = await db.execute(stmt)
+    existing_product = result.scalars().first()
+
     if existing_product is not None:
         message = f"product with name {product.name} already exists"
         logger.error(message=message)
@@ -48,7 +54,9 @@ def check_existing_product_using_name(product: Optional[ProductCreate], db: Sess
         )
 
 
-def check_existing_product_using_id(product: Optional[ProductCreate], db: Session):
+async def check_existing_product_using_id(
+    product: Optional[ProductCreate], db: Session
+):
     """Check if product already exists in database by ID.
 
     Args:
@@ -58,7 +66,10 @@ def check_existing_product_using_id(product: Optional[ProductCreate], db: Sessio
     Raises:
         DatabaseException: If product already exists.
     """
-    existing_product = db.query(Product).filter_by(id=product.id).first()
+    # repo
+    stmt = select(Product).filter_by(id=product.id)
+    result = await db.execute(stmt)
+    existing_product = result.scalars().first()
     if existing_product is not None:
         message = f"product with id {product.id} already exists"
         logger.error(message=message)
@@ -87,7 +98,7 @@ def handle_missing_product(product_id: str):
     }
 
 
-def post_product(
+async def post_product(
     user_email: str, product: Optional[ProductCreate], db: Session
 ) -> dict:
     """
@@ -102,10 +113,14 @@ def post_product(
         dict: fastapi response
     """
     logger.debug(f"Creating product: {product.name if product else 'None'}")
-    check_existing_product_using_name(product=product, db=db)
-    check_existing_product_using_id(product=product, db=db)
+    await check_existing_product_using_name(product=product, db=db)
+    await check_existing_product_using_id(product=product, db=db)
 
-    category = db.query(Category).filter(Category.id == product.category_id).first()
+    # REPO
+    stmt = select(Category).where(Category.id == product.category_id)
+    result = await db.execute(stmt)
+    category = result.scalars().first()
+
     if not category:
         return handle_missing_category(category_id=product.category_id)
 
@@ -113,7 +128,7 @@ def post_product(
     if product.id is not None:
         db_product = apply_discount_or_tax(product=db_product)
 
-    add_commit_refresh_db(object=db_product, db=db)
+    await add_commit_refresh_db(object=db_product, db=db)
     logger.info(f"Product '{db_product.name}' created successfully")
 
     return {
@@ -144,7 +159,7 @@ def apply_discount_or_tax(product: Product) -> Product:
     return product
 
 
-def get_all_products(user_email: str, db: Session) -> dict:
+async def get_all_products(user_email: str, db: AsyncSession) -> dict:
     """
     To fetch all products from database
 
@@ -155,7 +170,10 @@ def get_all_products(user_email: str, db: Session) -> dict:
     Returns:
         dict: fastapi response
     """
-    products = db.query(Product).all()
+    stmt = select(Product)
+    result = await db.execute(stmt)
+    products = result.scalars().all()
+
     logger.info(f"Retrieved {len(products)} products")
     return {
         "status": ResponseStatus.S.value,
@@ -270,7 +288,7 @@ def put_product(
     }
 
 
-def delete_product(current_user_email: str, product_id: int, db: Session) -> dict:
+async def delete_product(current_user_email: str, product_id: int, db: Session) -> dict:
     """
     delete a product from db
 
@@ -284,12 +302,17 @@ def delete_product(current_user_email: str, product_id: int, db: Session) -> dic
     """
     logger.debug(f"Deleting product with id: {product_id}")
     check_id_type(id=product_id)
-    db_product = db.query(Product).filter_by(id=product_id).first()
+
+    # REPO
+    stmt = select(Product).filter_by(id=product_id)
+    result = await db.execute(stmt)
+    db_product = result.scalars().first()
+
     if db_product is None:
         logger.warning(f"Product not found for deletion: {product_id}")
         return handle_missing_product(product_id=product_id)
 
-    delete_commit_db(object=db_product, db=db)
+    await delete_commit_db(object=db_product, db=db)
     logger.info(f"Product '{db_product.name}' (id: {product_id}) deleted successfully")
     return {
         "status": ResponseStatus.S.value,

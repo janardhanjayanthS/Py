@@ -59,11 +59,11 @@ async def get_products(
     elif category_id and category_id is not None:
         check_id_type(id=category_id)
         logger.info(f"Fetching products for category_id: {category_id}")
-        return get_category_specific_products(
+        return await get_category_specific_products(
             user_email=current_user_email, category_id=category_id, db=db
         )
     logger.info("Fetching all products")
-    return get_all_products(user_email=current_user_email, db=db)
+    return await get_all_products(user_email=current_user_email, db=db)
 
 
 @product.post("/products")
@@ -86,7 +86,7 @@ async def post_products(
     current_user_email: str = request.state.email
     logger.debug(f"Create product request by: {current_user_email}")
     logger.info(f"Creating new product: {product.name if product else 'None'}")
-    return post_product(user_email=current_user_email, product=product, db=db)
+    return await post_product(user_email=current_user_email, product=product, db=db)
 
 
 @product.put("/product")
@@ -144,7 +144,7 @@ async def remove_product(
         f"Delete product request for product_id: {product_id} by: {current_user_email}"
     )
     logger.info(f"Deleting product with id: {product_id}")
-    return delete_product(current_user_email, product_id=product_id, db=db)
+    return await delete_product(current_user_email, product_id=product_id, db=db)
 
 
 @product.patch("/product/update_category")
