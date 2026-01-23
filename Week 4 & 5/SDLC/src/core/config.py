@@ -36,7 +36,7 @@ class Settings(BaseSettings, metaclass=Singleton):
         Returns:
             Database connection string.
         """
-        return f"postgresql://postgres:{self.postgresql_pwd}@localhost:5432/inventory_manager"
+        return f"postgresql+asyncpg://postgres:{self.postgresql_pwd}@localhost:5432/inventory_manager"
 
     # JWT
     JWT_SECRET_KEY: str = Field(validation_alias="JWT_SECRET_KEY")

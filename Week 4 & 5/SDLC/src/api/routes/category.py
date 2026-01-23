@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, Request
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from src.core.jwt import required_roles
@@ -32,7 +34,7 @@ logger = get_logger(__name__)
 
 @category.get("/category/all", response_model=CategoryResponse)
 @required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
-async def get_all_category(request: Request, db: Session = Depends(get_db)):
+async def get_all_category(request: Request, db: AsyncSession = Depends(get_db)):
     """Retrieve all categories from the database.
 
     Args:
@@ -44,7 +46,10 @@ async def get_all_category(request: Request, db: Session = Depends(get_db)):
     """
     current_user_email = request.state.email
     logger.debug(f"Fetching all categories, requested by: {current_user_email}")
-    all_categories = db.query(Category).all()
+
+    results = await db.execute(select(Category))
+    all_categories = results.scalars().all()
+
     logger.info(f"Retrieved {len(all_categories)} categories")
     categories_data = [CategoryRead.model_validate(cat) for cat in all_categories]
     return {

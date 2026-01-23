@@ -136,7 +136,7 @@ async def commit_refresh_db(object: BaseModel, db: Session) -> None:
     await db.refresh(object)
 
 
-def delete_commit_db(object: BaseModel, db: Session) -> None:
+async def delete_commit_db(object: BaseModel, db: Session) -> None:
     """Delete and commit database object.
 
     Deletes object from database session and commits the transaction.

@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
+
 from src.core.config import settings
 from src.core.log import get_logger, log_settings, setup_logging
 from src.repository.database import Base, engine
@@ -22,8 +23,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Stratup:
     setup_logging()
     logger.info("🚀 Starting application...")
-    # Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
+
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
     logger.info("✅ Database initialized successfully")
 
     # LOGGING .env vars
