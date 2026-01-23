@@ -260,6 +260,151 @@ price_with_shipping = ShippingDecorator(price_with_tax, 15.0)  # 125.0
 - ✅ New pricing strategies added through composition
 - ✅ System is stable and extensible
 
+### 🏗️ Real-World Example: Settings Configuration Class
+
+The `Settings` class demonstrates OCP by being extensible without modifying core functionality:
+
+```python
+# src/core/config.py (Current Implementation)
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from src.core.singleton_pattern import Singleton
+
+class Settings(BaseSettings, metaclass=Singleton):
+    """Application configuration settings.
+
+    Handles environment variables and application-wide settings.
+    """
+
+    INVENTORY_CSV_FILEPATH: str = str(
+        (Path(__file__).parent.parent.parent / "data" / "new_inventory.csv")
+    )
+
+    # POSTGRESQL
+    postgresql_pwd: str = Field(validation_alias="POSTGRESQL_PWD")
+
+    # ENVIRONMENT
+    environment: str = Field(validation_alias="ENVIRONMENT")
+
+    @property
+    def DATABASE_URL(self) -> str:
+        """Generate PostgreSQL database URL.
+
+        Returns:
+            Database connection string.
+        """
+        return f"postgresql://postgres:{self.postgresql_pwd}@localhost:5432/inventory_manager"
+
+    # JWT
+    JWT_SECRET_KEY: str = Field(validation_alias="JWT_SECRET_KEY")
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    # .env settings
+    model_config = SettingsConfigDict(
+        env_file=ENV_FILE, env_file_encoding="utf-8", env_prefix="", extra="ignore"
+    )
+
+# Global instance - singleton pattern ensures one configuration source
+settings = Settings()
+```
+
+### 🚀 Extending Settings Without Modification
+
+**Adding new configuration sections without changing existing code:**
+
+```python
+# NEW: Extend Settings for Redis configuration
+class RedisSettings(Settings):
+    """Extended settings with Redis configuration"""
+    
+    REDIS_HOST: str = Field(default="localhost", validation_alias="REDIS_HOST")
+    REDIS_PORT: int = Field(default=6379, validation_alias="REDIS_PORT")
+    REDIS_DB: int = Field(default=0, validation_alias="REDIS_DB")
+    
+    @property
+    def REDIS_URL(self) -> str:
+        """Generate Redis connection URL."""
+        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+
+# NEW: Extend Settings for Email configuration
+class EmailSettings(Settings):
+    """Extended settings with Email configuration"""
+    
+    SMTP_HOST: str = Field(validation_alias="SMTP_HOST")
+    SMTP_PORT: int = Field(default=587, validation_alias="SMTP_PORT")
+    SMTP_USERNAME: str = Field(validation_alias="SMTP_USERNAME")
+    SMTP_PASSWORD: str = Field(validation_alias="SMTP_PASSWORD")
+    EMAIL_FROM_ADDRESS: str = Field(validation_alias="EMAIL_FROM_ADDRESS")
+
+# NEW: Extend Settings for Monitoring configuration
+class MonitoringSettings(Settings):
+    """Extended settings with Monitoring configuration"""
+    
+    SENTRY_DSN: str = Field(default="", validation_alias="SENTRY_DSN")
+    PROMETHEUS_PORT: int = Field(default=9090, validation_alias="PROMETHEUS_PORT")
+    LOG_LEVEL: str = Field(default="INFO", validation_alias="LOG_LEVEL")
+
+# Usage: Each extension maintains original functionality while adding new features
+redis_config = RedisSettings()
+email_config = EmailSettings()
+monitoring_config = MonitoringSettings()
+
+# Original settings still work exactly as before
+original_db_url = settings.DATABASE_URL  # Still works unchanged
+new_redis_url = redis_config.REDIS_URL  # New functionality without touching original
+```
+
+### 🎯 OCP Benefits in Settings Implementation
+
+**How Settings class follows OCP:**
+
+- ✅ **Closed for Modification**: Core `Settings` class remains stable and unchanged
+- ✅ **Open for Extension**: New configuration sections added through inheritance
+- ✅ **Backward Compatible**: Existing code using `settings` continues to work
+- ✅ **Environment Isolation**: Different environments can extend settings differently
+- ✅ **Testable**: Each settings extension can be tested independently
+
+**Real-world extension scenarios:**
+
+```python
+# Development environment - add debug settings
+class DevelopmentSettings(Settings):
+    DEBUG: bool = True
+    LOG_LEVEL: str = "DEBUG"
+    ENABLE_PROFILING: bool = True
+
+# Production environment - add security settings
+class ProductionSettings(Settings):
+    DEBUG: bool = False
+    LOG_LEVEL: str = "WARNING"
+    ENABLE_SECURITY_HEADERS: bool = True
+    RATE_LIMIT_REQUESTS: int = 100
+
+# Testing environment - add test-specific settings
+class TestSettings(Settings):
+    DATABASE_URL: str = "sqlite:///:memory:"
+    TESTING: bool = True
+    DISABLE_AUTH: bool = True
+
+# Environment-specific usage without modifying core code
+def get_settings():
+    env = os.getenv("ENVIRONMENT", "development")
+    
+    settings_classes = {
+        "development": DevelopmentSettings,
+        "production": ProductionSettings,
+        "testing": TestSettings,
+    }
+    
+    return settings_classes.get(env, Settings)()
+```
+
+**Key OCP Principles Demonstrated:**
+- **Extensibility**: New configuration capabilities through inheritance
+- **Stability**: Original `Settings` class never needs modification
+- **Polymorphism**: Different settings implementations used interchangeably
+- **Encapsulation**: Each settings class manages its own configuration domain
+
 
 ## Liskov Substitution Principle (LSP)
 
