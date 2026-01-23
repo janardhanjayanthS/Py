@@ -1,7 +1,9 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
+
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.product import Product
@@ -32,7 +34,7 @@ async def get_products(
     request: Request,
     product_id: Optional[int] = None,
     category_id: Optional[int] = None,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Retrieve products based on optional filters.
 
@@ -45,14 +47,13 @@ async def get_products(
     Returns:
         Product response based on provided filters.
     """
-    logger.debug(f"REQUEST: {request}")
     current_user_email: str = request.state.email
     logger.debug(
         f"Get products request by: {current_user_email}, product_id: {product_id}, category_id: {category_id}"
     )
     if product_id and product_id is not None:
         check_id_type(id=product_id)
-        return get_specific_product(
+        return await get_specific_product(
             user_email=current_user_email, product_id=product_id, db=db
         )
     elif category_id and category_id is not None:

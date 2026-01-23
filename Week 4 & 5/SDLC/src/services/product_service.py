@@ -1,7 +1,10 @@
 from typing import Optional
 
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session, selectinload
+
 from src.core.decorator_pattern import ConcretePrice, DiscountDecorator, TaxDecorator
 from src.core.exceptions import DatabaseException
 from src.core.log import get_logger
@@ -160,7 +163,9 @@ def get_all_products(user_email: str, db: Session) -> dict:
     }
 
 
-def get_specific_product(user_email: str, product_id: int, db: Session) -> dict:
+async def get_specific_product(
+    user_email: str, product_id: int, db: AsyncSession
+) -> dict:
     """
     Fetches a specific product from db
 
@@ -173,8 +178,18 @@ def get_specific_product(user_email: str, product_id: int, db: Session) -> dict:
         dict: fastapi response
     """
     logger.debug(f"Fetching product with id: {product_id}")
+    # move this to validators
     check_id_type(id=product_id)
-    product = db.query(Product).filter_by(id=product_id).first()
+
+    # Move this to repository
+    stmt = (
+        select(Product)
+        .where(Product.id == product_id)
+        .options(selectinload(Product.category))
+    )
+    result = await db.execute(stmt)
+    product = result.scalars().first()
+
     if product is None:
         logger.warning(f"Product not found with id: {product_id}")
         return handle_missing_product(product_id=str(product_id))
@@ -186,7 +201,9 @@ def get_specific_product(user_email: str, product_id: int, db: Session) -> dict:
     }
 
 
-def get_category_specific_products(user_email: str, category_id: int, db: Session):
+async def get_category_specific_products(
+    user_email: str, category_id: int, db: AsyncSession
+):
     """
     Fetches a products under a specific category from db
 
@@ -199,7 +216,16 @@ def get_category_specific_products(user_email: str, category_id: int, db: Sessio
         dict: fastapi response
     """
     logger.debug(f"Fetching products for category_id: {category_id}")
-    products = db.query(Product).filter_by(category_id=category_id).all()
+
+    # to repository
+    stmt = (
+        select(Product)
+        .filter_by(category_id=category_id)
+        .options(selectinload(Product.category))
+    )
+    result = await db.execute(stmt)
+    products = result.scalars().all()
+
     logger.info(f"Retrieved {len(products)} products for category_id: {category_id}")
     return {
         "status": ResponseStatus.S.value,
