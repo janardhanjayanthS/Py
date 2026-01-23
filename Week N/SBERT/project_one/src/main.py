@@ -19,6 +19,8 @@ DB_CONNECTION = (
 
 class VectorManager:
     def __init__(self) -> None:
+        self.chunk_size = 500
+        self.chunk_overlap = 50
         self.openai_embeddings: OpenAIEmbeddings = OpenAIEmbeddings(
             model="text-embedding-3-small"
         )
@@ -50,7 +52,7 @@ class VectorManager:
             docs = loader.load()
 
             text_splits = RecursiveCharacterTextSplitter(
-                chunk_size=600, chunk_overlap=100
+                chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap
             )
             chunks = text_splits.split_documents(docs)
 
@@ -62,9 +64,9 @@ class VectorManager:
 
     def query(
         self, query: str, model_type: str = "sbert", k: int = 5
-    ) -> list[Document]:
+    ) -> list[tuple[Document, float]]:
         store = self._get_vector_stores(model_type=model_type)
-        results = store.similarity_search(query, k)
+        results = store.similarity_search_with_score(query, k)
         return results
 
 
@@ -76,10 +78,13 @@ def add_pdfs(manager: VectorManager, model_type: str = "sbert") -> None:
         print("-" * 50)
 
 
-def print_results(results: list[Document]) -> None:
+def print_results(results: list[tuple[Document, float]]) -> None:
     for i, result in enumerate(results, start=1):
+        score = result[-1]
+        result = result[0]
         print(i)
-        print("source: ", result.metadata["source"])
+        print("Source: ", result.metadata["source"])
+        print("Similarity Score: ", round(score, 5))
         print("page content: ", result.page_content)
         print("-" * 100)
 
@@ -90,11 +95,21 @@ if __name__ == "__main__":
     # add_pdfs(manager=v_manager, model_type="sbert")
     # add_pdfs(manager=v_manager, model_type="openai")
 
-    print("-" * 100)
-    llm_query = "what is medical insurance"
-    print(f"QUERY: {llm_query}")
-    print("Results from Openai")
-    print_results(v_manager.query(query=llm_query, model_type="openai"))
-    print("-" * 100)
-    print("Results from SBERT")
-    print_results(v_manager.query(query=llm_query, model_type="sbert"))
+    questions = [
+        "What are parental leave?",
+        "What is TOIL?",
+        "How to apply for paid parental leave?",
+        "What is PTO?",
+        "the types of leave available in India",
+        "Vacation leave poilicy",
+    ]
+
+    for question in questions:
+        print("-" * 100)
+        llm_query = question
+        print(f"QUERY: {llm_query}")
+        print("Results from Openai")
+        print_results(v_manager.query(query=llm_query, model_type="openai"))
+        print("-" * 100)
+        print("Results from SBERT")
+        print_results(v_manager.query(query=llm_query, model_type="sbert"))
