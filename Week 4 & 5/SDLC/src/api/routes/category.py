@@ -64,7 +64,7 @@ async def get_all_category(request: Request, db: AsyncSession = Depends(get_db))
 @category.get("/category", response_model=CategoryResponse)
 @required_roles(UserRole.STAFF, UserRole.MANAGER, UserRole.ADMIN)
 async def get_specifc_category(
-    request: Request, category_id: int, db: Session = Depends(get_db)
+    request: Request, category_id: int, db: AsyncSession = Depends(get_db)
 ):
     """Retrieve a specific category by ID.
 
@@ -77,7 +77,11 @@ async def get_specifc_category(
         CategoryResponse containing the category or error message.
     """
     logger.debug(f"Fetching category with id: {category_id}")
-    category = db.query(Category).filter_by(id=category_id).first()
+
+    stmt = select(Category).filter_by(id=category_id)
+    result = await db.execute(stmt)
+    category = result.scalars().first()
+
     if not category:
         logger.warning(f"Category not found with id: {category_id}")
         return {
@@ -100,7 +104,9 @@ async def get_specifc_category(
 @category.post("/category", response_model=CategoryResponse)
 @required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def add_category(
-    request: Request, category_create: CategoryCreate, db: Session = Depends(get_db)
+    request: Request,
+    category_create: CategoryCreate,
+    db: AsyncSession = Depends(get_db),
 ):
     """Create a new category.
 
@@ -113,10 +119,12 @@ async def add_category(
         CategoryResponse containing the created category.
     """
     logger.debug(f"Create category request: {category_create.name}")
-    check_existing_category_using_name(category=category_create, db=db)
-    check_existing_category_using_id(category=category_create, db=db)
+    await check_existing_category_using_name(category=category_create, db=db)
+    await check_existing_category_using_id(category=category_create, db=db)
+
     db_category = Category(**category_create.model_dump())
-    add_commit_refresh_db(object=db_category, db=db)
+    await add_commit_refresh_db(object=db_category, db=db)
+
     logger.info(f"Created new category: {db_category.name}")
     category_data = CategoryRead.model_validate(db_category)
     return {
@@ -130,7 +138,9 @@ async def add_category(
 @category.put("/category/update", response_model=CategoryResponse)
 @required_roles(UserRole.MANAGER, UserRole.ADMIN)
 async def update_category(
-    request: Request, category_update: CategoryUpdate, db: Session = Depends(get_db)
+    request: Request,
+    category_update: CategoryUpdate,
+    db: AsyncSession = Depends(get_db),
 ):
     """Update an existing category.
 
@@ -143,7 +153,7 @@ async def update_category(
         CategoryResponse containing the updated category or error message.
     """
     logger.debug(f"Update category request for id: {category_update.id}")
-    existing_category = get_category_by_id(category_id=category_update.id, db=db)
+    existing_category = await get_category_by_id(category_id=category_update.id, db=db)
     if not existing_category or existing_category is None:
         logger.warning(f"Category not found with id: {category_update.id}")
         return {
@@ -153,7 +163,9 @@ async def update_category(
             },
         }
 
-    category_by_name = get_category_by_name(category_name=category_update.name, db=db)
+    category_by_name = await get_category_by_name(
+        category_name=category_update.name, db=db
+    )
     if category_by_name is not None and category_by_name.id != category_update.id:
         logger.warning(
             f"Category name '{category_update.name}' already exists with different id"
@@ -168,7 +180,7 @@ async def update_category(
         }
 
     existing_category.name = category_update.name.lower()
-    commit_refresh_db(object=existing_category, db=db)
+    await commit_refresh_db(object=existing_category, db=db)
     logger.info(
         f"Category {category_update.id} updated to name: {existing_category.name}"
     )
@@ -200,7 +212,7 @@ async def delete_category(
         CategoryResponse containing the deleted category or error message.
     """
     logger.debug(f"Delete category request for id: {category_id}")
-    category = get_category_by_id(category_id=category_id, db=db)
+    category = await get_category_by_id(category_id=category_id, db=db)
     if not category or category is None:
         logger.warning(f"Category not found with id: {category_id}")
         return {
@@ -211,7 +223,7 @@ async def delete_category(
         }
 
     category_data = CategoryRead.model_validate(category)
-    delete_commit_db(object=category, db=db)
+    await delete_commit_db(object=category, db=db)
 
     logger.info(f"Category {category.name} (id: {category_id}) deleted")
 

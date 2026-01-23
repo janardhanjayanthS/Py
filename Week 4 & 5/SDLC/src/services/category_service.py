@@ -1,3 +1,5 @@
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from src.core.exceptions import DatabaseException
@@ -9,7 +11,7 @@ from src.services.models import ResponseStatus
 logger = get_logger(__name__)
 
 
-def get_category_by_id(category_id: int, db: Session) -> Category | None:
+async def get_category_by_id(category_id: int, db: Session) -> Category | None:
     """
     Gets category by id
 
@@ -21,10 +23,12 @@ def get_category_by_id(category_id: int, db: Session) -> Category | None:
         returns category object if exists else None
     """
     logger.debug(f"Fetching category by id: {category_id}")
-    return db.query(Category).filter_by(id=category_id).first()
+    stmt = select(Category).filter_by(id=category_id)
+    result = await db.execute(stmt)
+    return result.scalars().first()
 
 
-def check_existing_category_using_name(category: BaseCategory, db: Session):
+async def check_existing_category_using_name(category: BaseCategory, db: Session):
     """Check if category exists by name in database.
 
     Args:
@@ -34,7 +38,7 @@ def check_existing_category_using_name(category: BaseCategory, db: Session):
     Raises:
         DatabaseException: If category already exists.
     """
-    existing_category = get_category_by_name(category_name=category.name, db=db)
+    existing_category = await get_category_by_name(category_name=category.name, db=db)
     if existing_category is not None:
         message = f"Category with name - {category.name} - already exists in db"
         logger.error(message)
@@ -49,7 +53,7 @@ def check_existing_category_using_name(category: BaseCategory, db: Session):
         )
 
 
-def check_existing_category_using_id(category: BaseCategory, db: Session):
+async def check_existing_category_using_id(category: BaseCategory, db: Session):
     """Check if category exists by ID in database.
 
     Args:
@@ -59,7 +63,7 @@ def check_existing_category_using_id(category: BaseCategory, db: Session):
     Raises:
         DatabaseException: If category already exists.
     """
-    existing_category = get_category_by_id(category_id=category.id, db=db)
+    existing_category = await get_category_by_id(category_id=category.id, db=db)
     if existing_category is not None:
         message = f"Category with id - {category.id} - already exists in db"
         logger.error(message)
@@ -74,7 +78,7 @@ def check_existing_category_using_id(category: BaseCategory, db: Session):
         )
 
 
-def get_category_by_name(category_name: str, db: Session) -> Category | None:
+async def get_category_by_name(category_name: str, db: AsyncSession) -> Category | None:
     """Get category by name from database.
 
     Args:
@@ -86,9 +90,11 @@ def get_category_by_name(category_name: str, db: Session) -> Category | None:
     """
 
     logger.debug(f"Fetching category by name: {category_name}")
-    existing_category = (
-        db.query(Category).filter(Category.name == category_name).first()
-    )
+
+    stmt = select(Category).filter_by(name=category_name)
+    result = await db.execute(stmt)
+    existing_category = result.scalars().first()
+
     return existing_category if existing_category else None
 
 
