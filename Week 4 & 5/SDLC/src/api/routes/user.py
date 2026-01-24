@@ -25,7 +25,15 @@ logger = get_logger(__name__)
 user = APIRouter()
 
 
-def get_user_service(db: AsyncSession = Depends(get_db)):
+def get_user_service(db: AsyncSession = Depends(get_db)) -> UserService:
+    """Dependency provider for UserService.
+
+    Args:
+        db: The asynchronous database session.
+
+    Returns:
+        An instance of UserService initialized with a UserRepository.
+    """
     return UserService(repo=UserRepository(session=db))
 
 
@@ -34,19 +42,18 @@ async def register_user(
     create_user: UserRegister,
     user_service: AbstractUserService = Depends(get_user_service),
 ):
-    """Register a new user account.
+    """Registers a new user account in the system.
 
     Args:
-        create_user: User registration data.
-        db: Database session dependency.
+        create_user: Data transfer object containing registration details.
+        user_service: The user service business logic layer.
 
     Returns:
-        WrapperUserResponse containing the created user.
+        A dictionary containing the success status and the registered user data.
 
     Raises:
-        AuthenticationException: If user email already exists.
+        AuthenticationException: If the user email is already registered.
     """
-
     db_user = await user_service.register_user(user=create_user)
     return {"status": "success", "message": {"registered user": db_user}}
 
@@ -55,17 +62,17 @@ async def register_user(
 async def login_user(
     user_login: UserLogin, user_service: AbstractUserService = Depends(get_user_service)
 ):
-    """Authenticate user and return access token.
+    """Authenticates a user and returns a Bearer access token.
 
     Args:
-        user_login: User login credentials.
-        db: Database session dependency.
+        user_login: User credentials (email and password).
+        user_service: The user service business logic layer.
 
     Returns:
-        Access token response.tf
+        A dictionary containing the JWT access token and token type.
 
     Raises:
-        AuthenticationException: If credentials are invalid.
+        AuthenticationException: If the credentials provided are invalid.
     """
     access_token = await user_service.login_user(user=user_login)
     return {"access_tokem": access_token, "token_type": "Bearer"}
@@ -76,14 +83,16 @@ async def login_user(
 async def get_all_users(
     request: Request, user_service: AbstractUserService = Depends(get_user_service)
 ):
-    """Retrieve all users from the database.
+    """Retrieves a list of all users from the database.
+
+    Requires MANAGER, ADMIN, or STAFF roles.
 
     Args:
-        request: HTTP request object.
-        db: Database session dependency.
+        request: The FastAPI request object (used to extract current user email).
+        user_service: The user service business logic layer.
 
     Returns:
-        WrapperUserResponse containing all users.
+        A dictionary containing the list of all users and the requester's email.
     """
     current_user_email = request.state.email
     all_users = await user_service.get_users(user_email=current_user_email)
@@ -102,17 +111,18 @@ async def update_user_detail(
     update_details: UserEdit,
     user_service: AbstractUserService = Depends(get_user_service),
 ):
-    """Update user details (name and/or password).
+    """Updates the details of the currently authenticated user.
+
+    Requires MANAGER or ADMIN roles.
 
     Args:
-        request: HTTP request object.
-        update_details: User details to update.
-        db: Database session dependency.
+        request: The FastAPI request object.
+        update_details: The user fields to be updated.
+        user_service: The user service business logic layer.
 
     Returns:
-        WrapperUserResponse containing updated user details.
+        A dictionary containing the update status message and updated user object.
     """
-
     message, current_user = await user_service.update_user(
         current_user_email=request.state.email, user=update_details
     )
@@ -130,15 +140,17 @@ async def remove_user(
     user_id: int,
     user_service: AbstractUserService = Depends(get_user_service),
 ):
-    """Delete a user by ID.
+    """Deletes a specific user from the system by their ID.
+
+    Requires ADMIN role.
 
     Args:
-        request: HTTP request object.
-        user_id: ID of the user to delete.
-        db: Database session dependency.
+        request: The FastAPI request object.
+        user_id: The unique identifier of the user to delete.
+        user_service: The user service business logic layer.
 
     Returns:
-        WrapperUserResponse containing deletion confirmation.
+        A dictionary confirming the deletion and the email of the requester.
     """
     current_user_email = request.state.email
     deleted_account = await user_service.delete_user(
