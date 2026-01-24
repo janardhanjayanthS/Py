@@ -1,14 +1,11 @@
-from datetime import timedelta
-
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
-from src.core.config import settings
-from src.core.exceptions import AuthenticationException
-from src.core.jwt import create_access_token, required_roles
+from src.core.jwt import required_roles
 from src.core.log import get_logger
+from src.interfaces.user_service import AbstractUserService
 from src.models.user import User
 from src.repository.database import (
     commit_refresh_db,
@@ -26,7 +23,6 @@ from src.schema.user import (
 from src.services.models import ResponseStatus
 from src.services.user_service import (
     UserService,
-    authenticate_user,
     fetch_user_by_email,
     handle_missing_user,
     update_user_name,
@@ -44,7 +40,8 @@ def get_user_service(db: AsyncSession = Depends(get_db)):
 
 @user.post("/user/register", response_model=WrapperUserResponse)
 async def register_user(
-    create_user: UserRegister, user_service: UserService = Depends(get_user_service)
+    create_user: UserRegister,
+    user_service: AbstractUserService = Depends(get_user_service),
 ):
     """Register a new user account.
 
@@ -64,7 +61,9 @@ async def register_user(
 
 
 @user.post("/user/login")
-async def login_user(user_login: UserLogin, db: AsyncSession = Depends(get_db)):
+async def login_user(
+    user_login: UserLogin, user_service: AbstractUserService = Depends(get_user_service)
+):
     """Authenticate user and return access token.
 
     Args:
@@ -77,26 +76,7 @@ async def login_user(user_login: UserLogin, db: AsyncSession = Depends(get_db)):
     Raises:
         AuthenticationException: If credentials are invalid.
     """
-    logger.debug(f"Login attempt for email: {user_login.email}")
-    user = authenticate_user(
-        db=db, email=user_login.email, password=user_login.password
-    )
-    if not user:
-        logger.warning(f"Failed login attempt for email: {user_login.email}")
-        raise AuthenticationException(
-            message="Incorrect email or password",
-            field_errors=[
-                {"field": "email", "message": "Email or password is incorrect"}
-            ],
-        )
-
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.email, "role": user.role},
-        expires_delta=access_token_expires,
-    )
-
-    logger.info(f"User {user.email} logged in successfully")
+    access_token = await user_service.login_user(user=user_login)
     return {"access_tokem": access_token, "token_type": "Bearer"}
 
 

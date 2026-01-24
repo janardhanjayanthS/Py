@@ -1,14 +1,17 @@
+from datetime import timedelta
 from typing import Optional
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core.config import settings
+from src.core.jwt import create_access_token
 from src.core.log import get_logger
 from src.interfaces.user_repo import AbstractUserRepository
 from src.interfaces.user_service import AbstractUserService
 from src.models.user import User
 from src.repository.database import hash_password, verify_password
-from src.schema.user import UserEdit, UserRegister, UserResponse
+from src.schema.user import UserEdit, UserLogin, UserRegister, UserRole
 from src.services.models import ResponseStatus
 
 logger = get_logger(__name__)
@@ -18,7 +21,7 @@ class UserService(AbstractUserService):
     def __init__(self, repo: AbstractUserRepository) -> None:
         self.repo = repo
 
-    async def register_user(self, user: UserRegister) -> UserResponse:
+    async def register_user(self, user: UserRegister) -> User:
         logger.debug(f"Registration attempt for email: {user.email}")
 
         await self.repo.check_existing_user_using_email(user=user)
@@ -26,6 +29,26 @@ class UserService(AbstractUserService):
         created_user = await self.repo.create_user(user=user)
 
         return created_user
+
+    async def login_user(self, user: UserLogin) -> User:
+        logger.debug(f"Login attempt for email: {user.email}")
+        user = await self.repo.authenticate_user(
+            email=user.email, password=user.password
+        )
+        if not user:
+            self.repo.handle_missing_user(email_id=user.email)
+
+        access_token = self._get_new_user_jwt_token(role=user.role, email=user.email)
+
+        logger.info(f"User {user.email} logged in successfully")
+        return access_token
+
+    def _get_new_user_jwt_token(self, role: UserRole, email: str) -> str:
+        access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        return create_access_token(
+            data={"sub": email, "role": role},
+            expires_delta=access_token_expires,
+        )
 
 
 async def check_existing_user_using_email(self, user: UserRegister) -> bool:
