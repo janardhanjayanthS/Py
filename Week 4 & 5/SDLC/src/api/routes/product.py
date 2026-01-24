@@ -1,13 +1,14 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.models.product import Product
-from src.repository.database import get_db
+from src.repository.database import commit_refresh_db, get_db
 from src.schema.product import ProductCreate, ProductUpdate
 from src.schema.user import UserRole
 from src.services.category_service import get_category_by_id
@@ -153,7 +154,7 @@ async def update_product_category(
     request: Request,
     product_id: int,
     category_id: int,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Update product category assignment.
 
@@ -171,7 +172,8 @@ async def update_product_category(
         f"Update product category request: product_id={product_id}, category_id={category_id} by: {current_user_email}"
     )
     check_id_type(id=category_id)
-    category = get_category_by_id(category_id=category_id, db=db)
+    category = await get_category_by_id(category_id=category_id, db=db)
+    logger.debug(f"retrieved category: {category}")
     if not category:
         logger.warning(f"Category not found with id: {category_id}")
         return {
@@ -183,14 +185,20 @@ async def update_product_category(
         }
 
     check_id_type(id=product_id)
-    product = db.query(Product).filter_by(id=product_id).first()
+
+    # REPO
+    stmt = select(Product).where(Product.id == product_id)
+    result = await db.execute(stmt)
+    product = result.scalars().first()
+    logger.debug(f"Product found: {product}")
+
     if not product:
         logger.warning(f"Product not found with id: {product_id}")
         return handle_missing_product(product_id=product_id)
 
     product.category_id = category.id
-    db.commit()
-    db.refresh(product)
+
+    await commit_refresh_db(object=product, db=db)
     logger.info(f"Product {product_id} category updated to {category.name}")
 
     return {
