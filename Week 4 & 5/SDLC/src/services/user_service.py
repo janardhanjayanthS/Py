@@ -4,15 +4,31 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.log import get_logger
+from src.interfaces.user_repo import AbstractUserRepository
+from src.interfaces.user_service import AbstractUserService
 from src.models.user import User
 from src.repository.database import hash_password, verify_password
-from src.schema.user import UserEdit, UserRegister
+from src.schema.user import UserEdit, UserRegister, UserResponse
 from src.services.models import ResponseStatus
 
 logger = get_logger(__name__)
 
 
-async def check_existing_user_using_email(user: UserRegister, db: AsyncSession) -> bool:
+class UserService(AbstractUserService):
+    def __init__(self, repo: AbstractUserRepository) -> None:
+        self.repo = repo
+
+    def register_user(self, user: UserRegister) -> UserResponse:
+        logger.debug(f"Registration attempt for email: {user.email}")
+
+        self.repo.check_existing_user_using_email(user=user)
+
+        created_user = self.repo.create_user(user=user)
+
+        return created_user
+
+
+async def check_existing_user_using_email(self, user: UserRegister) -> bool:
     """
     Checks if user's email address already exists in db
     Args:
@@ -22,11 +38,11 @@ async def check_existing_user_using_email(user: UserRegister, db: AsyncSession) 
     Returns:
         bool: true if user already exists, false otherwise
     """
-    existing_user = await fetch_user_by_email(email_id=user.email, db=db)
+    existing_user = await self.fetch_user_by_email(email_id=user.email)
     return True if existing_user else False
 
 
-async def fetch_user_by_email(email_id: str, db: AsyncSession) -> User | None:
+async def fetch_user_by_email(self, email_id: str) -> User | None:
     """
     gets User object with specific email from db
 
@@ -39,7 +55,7 @@ async def fetch_user_by_email(email_id: str, db: AsyncSession) -> User | None:
     """
     logger.debug(f"Fetching user by email: {email_id}")
     stmt = select(User).filter_by(email=email_id)
-    result = await db.execute(stmt)
+    result = await self.session.execute(stmt)
     return result.scalars().first()
 
 

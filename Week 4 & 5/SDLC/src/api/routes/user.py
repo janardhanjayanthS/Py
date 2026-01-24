@@ -11,12 +11,11 @@ from src.core.jwt import create_access_token, required_roles
 from src.core.log import get_logger
 from src.models.user import User
 from src.repository.database import (
-    add_commit_refresh_db,
     commit_refresh_db,
     delete_commit_db,
     get_db,
-    hash_password,
 )
+from src.repository.user_repo import UserRepository
 from src.schema.user import (
     UserEdit,
     UserLogin,
@@ -26,8 +25,8 @@ from src.schema.user import (
 )
 from src.services.models import ResponseStatus
 from src.services.user_service import (
+    UserService,
     authenticate_user,
-    check_existing_user_using_email,
     fetch_user_by_email,
     handle_missing_user,
     update_user_name,
@@ -39,8 +38,14 @@ logger = get_logger(__name__)
 user = APIRouter()
 
 
+def get_user_service(db: AsyncSession = Depends(get_db)):
+    return UserService(repo=UserRepository(session=db))
+
+
 @user.post("/user/register", response_model=WrapperUserResponse)
-async def register_user(create_user: UserRegister, db: AsyncSession = Depends(get_db)):
+async def register_user(
+    create_user: UserRegister, user_service: UserService = Depends(get_user_service)
+):
     """Register a new user account.
 
     Args:
@@ -53,31 +58,8 @@ async def register_user(create_user: UserRegister, db: AsyncSession = Depends(ge
     Raises:
         AuthenticationException: If user email already exists.
     """
-    logger.debug(f"Registration attempt for email: {create_user.email}")
-    if await check_existing_user_using_email(user=create_user, db=db):
-        message = f"User with email {create_user.email} already exists"
-        logger.error(message)
-        raise AuthenticationException(
-            message=message,
-            field_errors=[
-                {
-                    "field": "email id",
-                    "message": f"{create_user.email} already exists in DB",
-                }
-            ],
-        )
 
-    db_user = User(
-        name=create_user.name,
-        email=create_user.email,
-        password=hash_password(create_user.password),
-        role=create_user.role.value,
-    )
-
-    await add_commit_refresh_db(object=db_user, db=db)
-    logger.debug(f"Created new user with- {db_user.email} - email")
-    logger.warning(f"Created new user with - {db_user.email} - email")
-
+    db_user = await user_service.register_user(user=create_user)
     return {"status": "success", "message": {"registered user": db_user}}
 
 
@@ -90,7 +72,7 @@ async def login_user(user_login: UserLogin, db: AsyncSession = Depends(get_db)):
         db: Database session dependency.
 
     Returns:
-        Access token response.
+        Access token response.tf
 
     Raises:
         AuthenticationException: If credentials are invalid.
