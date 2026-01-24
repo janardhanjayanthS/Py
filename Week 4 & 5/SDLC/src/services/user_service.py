@@ -50,6 +50,17 @@ class UserService(AbstractUserService):
             expires_delta=access_token_expires,
         )
 
+    async def update_user(self, current_user_email: str, user: UserEdit) -> User:
+        logger.debug(f"User update request from: {current_user_email}")
+        current_user = await self.repo.fetch_user_by_email(email_id=current_user_email)
+
+        message = await self.repo.get_update_user_message(
+            current_user=current_user, update_details=user
+        )
+
+        logger.info(f"User {current_user.email} details updated successfully")
+        return message, current_user
+
 
 async def check_existing_user_using_email(self, user: UserRegister) -> bool:
     """

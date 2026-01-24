@@ -9,10 +9,11 @@ from src.interfaces.user_repo import AbstractUserRepository
 from src.models.user import User
 from src.repository.database import (
     add_commit_refresh_db,
+    commit_refresh_db,
     hash_password,
     verify_password,
 )
-from src.schema.user import UserRegister
+from src.schema.user import UserEdit, UserRegister
 
 logger = get_logger(__name__)
 
@@ -106,3 +107,58 @@ class UserRepository(AbstractUserRepository):
                 {"field": "email", "message": "Email or password is incorrect"}
             ],
         )
+
+    async def get_update_user_message(
+        self, current_user: User, update_details: UserEdit
+    ) -> str:
+        message = self.update_user_name(
+            current_user=current_user, update_details=update_details
+        ) + self.update_user_password(
+            current_user=current_user, update_details=update_details
+        )
+        await commit_refresh_db(object=current_user, db=self.session)
+        return message
+
+    def update_user_name(self, current_user: User, update_details: UserEdit) -> str:
+        """
+        Update user's name to a new name
+
+        Args:
+            current_user: current logged in user's db instance
+            update_details: user details to update
+
+        Returns:
+            str: update message if name is updated or empty string
+        """
+        if (
+            update_details.new_name is not None
+            and current_user.name != update_details.new_name
+        ):
+            logger.info(
+                f"Updating user name from '{current_user.name}' to '{update_details.new_name}'"
+            )
+            current_user.name = update_details.new_name
+            return f"updated user's name to {update_details.new_name}. "
+        logger.debug("No name update required - names are identical")
+        return "existing name and new name are same. "
+
+    def update_user_password(self, current_user: User, update_details: UserEdit) -> str:
+        """
+        Update user's password to a new password
+
+        Args:
+            current_user: current logged in user's db instance tf
+            update_details: user details to update
+
+        Returns:
+            str: update message if name is updated or empty string
+        """
+        if (
+            update_details.new_password is not None
+            and current_user.password != hash_password(update_details.new_password)
+        ):
+            current_user.password = hash_password(update_details.new_password)
+            logger.info(f"Password updated for user: {current_user.email}")
+            return "password updated"
+        logger.debug("No password update required")
+        return "same password"

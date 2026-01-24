@@ -8,7 +8,6 @@ from src.core.log import get_logger
 from src.interfaces.user_service import AbstractUserService
 from src.models.user import User
 from src.repository.database import (
-    commit_refresh_db,
     delete_commit_db,
     get_db,
 )
@@ -23,10 +22,7 @@ from src.schema.user import (
 from src.services.models import ResponseStatus
 from src.services.user_service import (
     UserService,
-    fetch_user_by_email,
     handle_missing_user,
-    update_user_name,
-    update_user_password,
 )
 
 logger = get_logger(__name__)
@@ -112,7 +108,7 @@ async def get_all_users(request: Request, db: AsyncSession = Depends(get_db)):
 async def update_user_detail(
     request: Request,
     update_details: UserEdit,
-    db: Session = Depends(get_db),
+    user_service: AbstractUserService = Depends(get_user_service),
 ):
     """Update user details (name and/or password).
 
@@ -124,14 +120,10 @@ async def update_user_detail(
     Returns:
         WrapperUserResponse containing updated user details.
     """
-    logger.debug(f"User update request from: {request.state.email}")
-    current_user = await fetch_user_by_email(email_id=request.state.email, db=db)
 
-    message = update_user_name(
-        current_user=current_user, update_details=update_details
-    ) + update_user_password(current_user=current_user, update_details=update_details)
-    await commit_refresh_db(object=current_user, db=db)
-    logger.info(f"User {current_user.email} details updated successfully")
+    message, current_user = await user_service.update_user(
+        current_user_email=request.state.email, user=update_details
+    )
 
     return {
         "status": ResponseStatus.S.value,
