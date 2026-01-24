@@ -1,5 +1,3 @@
-from typing import Optional
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,10 +19,30 @@ logger = get_logger(__name__)
 
 
 class UserRepository(AbstractUserRepository):
+    """Repository for performing database operations on User entities.
+
+    Attributes:
+        session (AsyncSession): The SQLAlchemy async session for database interaction.
+    """
+
     def __init__(self, session: AsyncSession) -> None:
+        """Initializes the repository with a database session.
+
+        Args:
+            session: An instance of SQLAlchemy AsyncSession.
+        """
         self.session = session
 
-    async def delete_user(self, user_id: int):
+    async def delete_user(self, user_id: int) -> User | dict:
+        """Deletes a user from the database by their ID.
+
+        Args:
+            user_id: The unique identifier of the user to delete.
+
+        Returns:
+            The deleted User object if successful, or a error dictionary
+            via handle_missing_user if not found.
+        """
         stmt = select(User).where(User.id == user_id)
         result = await self.session.execute(stmt)
         user = result.scalars().first()
@@ -37,11 +55,24 @@ class UserRepository(AbstractUserRepository):
         return user
 
     async def fetch_all_users(self) -> list[User]:
+        """Retrieves all user records from the database.
+
+        Returns:
+            A list of all User objects.
+        """
         stmt = select(User)
         result = await self.session.execute(stmt)
         return result.scalars().all()
 
     async def create_user(self, user: UserRegister) -> User:
+        """Hashes the password and persists a new user to the database.
+
+        Args:
+            user: The registration data transfer object.
+
+        Returns:
+            The created User database object.
+        """
         db_user = User(
             name=user.name,
             email=user.email,
@@ -55,50 +86,43 @@ class UserRepository(AbstractUserRepository):
         return db_user
 
     async def check_existing_user_using_email(self, user: UserRegister) -> bool:
-        """
-        Checks if user's email address already exists in db
+        """Checks if a user's email address already exists in the database.
+
         Args:
-            user: User object containing user details
-            db: sqlalchemy db object
+            user: User object containing the email to check.
 
         Returns:
-            bool: true if user already exists, false otherwise
+            True if the email exists, False otherwise.
         """
         existing_user = await self.fetch_user_by_email(email_id=user.email)
         return True if existing_user else False
 
     async def fetch_user_by_email(self, email_id: str) -> User | None:
-        """
-        gets User object with specific email from db
+        """Retrieves a single user from the database by their email.
 
         Args:
-            email_id: email id of user to search
-            db: sqlalchemy db object
+            email_id: The email address to search for.
 
         Returns:
-            User | None: user object if user exists else None
+            The User object if found, otherwise None.
         """
         logger.debug(f"Fetching user by email: {email_id}")
         stmt = select(User).filter_by(email=email_id)
         result = await self.session.execute(stmt)
         return result.scalars().first()
 
-    async def authenticate_user(self, email: str, password: str) -> Optional[User]:
-        """
-        Verify user credentials,
-        return user if authenticate
+    async def authenticate_user(self, email: str, password: str) -> User | None:
+        """Verifies user credentials against the database.
 
         Args:
-            db: sqlalchemy db object
-            email: user's email id
-            password: user's passowrd
+            email: The user's email address.
+            password: The plain-text password to verify.
 
         Returns:
-            User: valid user object with user data
+            The authenticated User object if credentials are valid, else None.
         """
         logger.debug(f"Authenticating user: {email}")
 
-        # REPO
         stmt = select(User).filter_by(email=email)
         result = await self.session.execute(stmt)
         user = result.scalars().first()
@@ -119,6 +143,14 @@ class UserRepository(AbstractUserRepository):
         return user
 
     def handle_unknown_user(self, email_id: str) -> None:
+        """Logs a failed login attempt and raises an authentication error.
+
+        Args:
+            email_id: The email address that failed authentication.
+
+        Raises:
+            AuthenticationException: Always raised to trigger a 401/403 response.
+        """
         logger.warning(f"Failed login attempt for email: {email_id}")
         raise AuthenticationException(
             message="Incorrect email or password",
@@ -130,6 +162,15 @@ class UserRepository(AbstractUserRepository):
     async def get_update_user_message(
         self, current_user: User, update_details: UserEdit
     ) -> str:
+        """Aggregates update operations for name and password.
+
+        Args:
+            current_user: The User database instance to update.
+            update_details: The new details to be applied.
+
+        Returns:
+            A concatenated string of all changes made.
+        """
         message = self.update_user_name(
             current_user=current_user, update_details=update_details
         ) + self.update_user_password(
@@ -139,15 +180,14 @@ class UserRepository(AbstractUserRepository):
         return message
 
     def update_user_name(self, current_user: User, update_details: UserEdit) -> str:
-        """
-        Update user's name to a new name
+        """Updates the user's name if a new one is provided.
 
         Args:
-            current_user: current logged in user's db instance
-            update_details: user details to update
+            current_user: The current User database instance.
+            update_details: Object containing the potential new name.
 
         Returns:
-            str: update message if name is updated or empty string
+            A message indicating if the name was updated or remained the same.
         """
         if (
             update_details.new_name is not None
@@ -162,15 +202,14 @@ class UserRepository(AbstractUserRepository):
         return "existing name and new name are same. "
 
     def update_user_password(self, current_user: User, update_details: UserEdit) -> str:
-        """
-        Update user's password to a new password
+        """Updates and hashes the user's password if a new one is provided.
 
         Args:
-            current_user: current logged in user's db instance tf
-            update_details: user details to update
+            current_user: The current User database instance.
+            update_details: Object containing the potential new password.
 
         Returns:
-            str: update message if name is updated or empty string
+            A message indicating if the password was updated or remained the same.
         """
         if (
             update_details.new_password is not None
@@ -183,14 +222,13 @@ class UserRepository(AbstractUserRepository):
         return "same password"
 
     def handle_missing_user(self, user_id: int) -> dict:
-        """
-        Log and return response for missing user
+        """Logs an error and returns a formatted missing user response.
 
         Args:
-            user_id: missing user's id
+            user_id: The ID of the user that could not be found.
 
         Returns:
-            dict: response describing missing user
+            A dictionary containing the error status and message.
         """
         message = f"Unable to find user with id: {user_id}"
         logger.error(message)
