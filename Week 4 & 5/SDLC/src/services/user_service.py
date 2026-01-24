@@ -18,12 +18,12 @@ class UserService(AbstractUserService):
     def __init__(self, repo: AbstractUserRepository) -> None:
         self.repo = repo
 
-    def register_user(self, user: UserRegister) -> UserResponse:
+    async def register_user(self, user: UserRegister) -> UserResponse:
         logger.debug(f"Registration attempt for email: {user.email}")
 
-        self.repo.check_existing_user_using_email(user=user)
+        await self.repo.check_existing_user_using_email(user=user)
 
-        created_user = self.repo.create_user(user=user)
+        created_user = await self.repo.create_user(user=user)
 
         return created_user
 
