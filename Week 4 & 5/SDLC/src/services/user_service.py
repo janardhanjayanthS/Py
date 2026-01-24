@@ -1,6 +1,7 @@
 from typing import Optional
 
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.log import get_logger
 from src.models.user import User
@@ -11,7 +12,7 @@ from src.services.models import ResponseStatus
 logger = get_logger(__name__)
 
 
-def check_existing_user_using_email(user: UserRegister, db: Session) -> bool:
+async def check_existing_user_using_email(user: UserRegister, db: AsyncSession) -> bool:
     """
     Checks if user's email address already exists in db
     Args:
@@ -21,11 +22,11 @@ def check_existing_user_using_email(user: UserRegister, db: Session) -> bool:
     Returns:
         bool: true if user already exists, false otherwise
     """
-    existing_user = fetch_user_by_email(email_id=user.email, db=db)
+    existing_user = await fetch_user_by_email(email_id=user.email, db=db)
     return True if existing_user else False
 
 
-def fetch_user_by_email(email_id: str, db: Session) -> User | None:
+async def fetch_user_by_email(email_id: str, db: AsyncSession) -> User | None:
     """
     gets User object with specific email from db
 
@@ -37,10 +38,14 @@ def fetch_user_by_email(email_id: str, db: Session) -> User | None:
         User | None: user object if user exists else None
     """
     logger.debug(f"Fetching user by email: {email_id}")
-    return db.query(User).filter_by(email=email_id).first()
+    stmt = select(User).filter_by(email=email_id)
+    result = await db.execute(stmt)
+    return result.scalars().first()
 
 
-def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
+async def authenticate_user(
+    db: AsyncSession, email: str, password: str
+) -> Optional[User]:
     """
     Verify user credentials,
     return user if authenticate
@@ -54,7 +59,12 @@ def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
         User: valid user object with user data
     """
     logger.debug(f"Authenticating user: {email}")
-    user = db.query(User).filter(User.email == email).first()
+
+    # REPO
+    stmt = select(User).filter_by(email=email)
+    result = await db.execute(stmt)
+    user = result.scalars().first()
+
     if not user:
         logger.warning(f"Authentication failed: user not found for email: {email}")
         return None

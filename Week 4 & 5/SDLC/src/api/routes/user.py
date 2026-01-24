@@ -1,7 +1,10 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, Request
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
+
 from src.core.config import settings
 from src.core.exceptions import AuthenticationException
 from src.core.jwt import create_access_token, required_roles
@@ -37,7 +40,7 @@ user = APIRouter()
 
 
 @user.post("/user/register", response_model=WrapperUserResponse)
-async def register_user(create_user: UserRegister, db: Session = Depends(get_db)):
+async def register_user(create_user: UserRegister, db: AsyncSession = Depends(get_db)):
     """Register a new user account.
 
     Args:
@@ -51,7 +54,7 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
         AuthenticationException: If user email already exists.
     """
     logger.debug(f"Registration attempt for email: {create_user.email}")
-    if check_existing_user_using_email(user=create_user, db=db):
+    if await check_existing_user_using_email(user=create_user, db=db):
         message = f"User with email {create_user.email} already exists"
         logger.error(message)
         raise AuthenticationException(
@@ -71,7 +74,7 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
         role=create_user.role.value,
     )
 
-    add_commit_refresh_db(object=db_user, db=db)
+    await add_commit_refresh_db(object=db_user, db=db)
     logger.debug(f"Created new user with- {db_user.email} - email")
     logger.warning(f"Created new user with - {db_user.email} - email")
 
@@ -79,7 +82,7 @@ async def register_user(create_user: UserRegister, db: Session = Depends(get_db)
 
 
 @user.post("/user/login")
-async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
+async def login_user(user_login: UserLogin, db: AsyncSession = Depends(get_db)):
     """Authenticate user and return access token.
 
     Args:
@@ -117,7 +120,7 @@ async def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
 
 @user.get("/user/all", response_model=WrapperUserResponse)
 @required_roles(UserRole.MANAGER, UserRole.ADMIN, UserRole.STAFF)
-async def get_all_users(request: Request, db: Session = Depends(get_db)):
+async def get_all_users(request: Request, db: AsyncSession = Depends(get_db)):
     """Retrieve all users from the database.
 
     Args:
@@ -129,7 +132,12 @@ async def get_all_users(request: Request, db: Session = Depends(get_db)):
     """
     current_user_email = request.state.email
     logger.debug(f"Fetching all users, requested by: {current_user_email}")
-    all_users = db.query(User).all()
+
+    # REPO
+    stmt = select(User)
+    result = await db.execute(stmt)
+    all_users = result.scalars().all()
+
     logger.info(f"Retrieved {len(all_users)} users")
     return {
         "status": ResponseStatus.S.value,
@@ -155,12 +163,12 @@ async def update_user_detail(
         WrapperUserResponse containing updated user details.
     """
     logger.debug(f"User update request from: {request.state.email}")
-    current_user = fetch_user_by_email(email_id=request.state.email, db=db)
+    current_user = await fetch_user_by_email(email_id=request.state.email, db=db)
 
     message = update_user_name(
         current_user=current_user, update_details=update_details
     ) + update_user_password(current_user=current_user, update_details=update_details)
-    commit_refresh_db(object=current_user, db=db)
+    await commit_refresh_db(object=current_user, db=db)
     logger.info(f"User {current_user.email} details updated successfully")
 
     return {
@@ -188,12 +196,18 @@ async def remove_user(
     """
     current_user_email = request.state.email
     logger.debug(f"Delete user request for user_id: {user_id} by: {current_user_email}")
-    user = db.query(User).filter(User.id == user_id).first()
+
+    # REPO
+    stmt = select(User).where(User.id == user_id)
+    result = await db.execute(stmt)
+    user = result.scalars().first()
+
     if not user:
         logger.warning(f"Attempted to delete non-existent user with id: {user_id}")
         return handle_missing_user(user_id=user_id)
 
-    delete_commit_db(object=user, db=db)
+    # REPO
+    await delete_commit_db(object=user, db=db)
     logger.info(f"User {user.email} (id: {user_id}) deleted by {current_user_email}")
 
     return {
