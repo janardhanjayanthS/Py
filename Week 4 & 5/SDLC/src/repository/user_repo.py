@@ -10,10 +10,12 @@ from src.models.user import User
 from src.repository.database import (
     add_commit_refresh_db,
     commit_refresh_db,
+    delete_commit_db,
     hash_password,
     verify_password,
 )
 from src.schema.user import UserEdit, UserRegister
+from src.services.models import ResponseStatus
 
 logger = get_logger(__name__)
 
@@ -21,6 +23,23 @@ logger = get_logger(__name__)
 class UserRepository(AbstractUserRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
+
+    async def delete_user(self, user_id: int):
+        stmt = select(User).where(User.id == user_id)
+        result = await self.session.execute(stmt)
+        user = result.scalars().first()
+
+        if not user:
+            logger.warning(f"Attempted to delete non-existent user with id: {user_id}")
+            return self.handle_missing_user(user_id=user_id)
+
+        await delete_commit_db(object=user, db=self.session)
+        return user
+
+    async def fetch_all_users(self) -> list[User]:
+        stmt = select(User)
+        result = await self.session.execute(stmt)
+        return result.scalars().all()
 
     async def create_user(self, user: UserRegister) -> User:
         db_user = User(
@@ -162,3 +181,20 @@ class UserRepository(AbstractUserRepository):
             return "password updated"
         logger.debug("No password update required")
         return "same password"
+
+    def handle_missing_user(self, user_id: int) -> dict:
+        """
+        Log and return response for missing user
+
+        Args:
+            user_id: missing user's id
+
+        Returns:
+            dict: response describing missing user
+        """
+        message = f"Unable to find user with id: {user_id}"
+        logger.error(message)
+        return {
+            "status": ResponseStatus.E.value,
+            "message": {"response": message},
+        }

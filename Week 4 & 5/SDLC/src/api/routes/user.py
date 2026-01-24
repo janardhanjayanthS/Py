@@ -1,14 +1,10 @@
 from fastapi import APIRouter, Depends, Request
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Session
 
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.interfaces.user_service import AbstractUserService
-from src.models.user import User
 from src.repository.database import (
-    delete_commit_db,
     get_db,
 )
 from src.repository.user_repo import UserRepository
@@ -22,7 +18,6 @@ from src.schema.user import (
 from src.services.models import ResponseStatus
 from src.services.user_service import (
     UserService,
-    handle_missing_user,
 )
 
 logger = get_logger(__name__)
@@ -78,7 +73,9 @@ async def login_user(
 
 @user.get("/user/all", response_model=WrapperUserResponse)
 @required_roles(UserRole.MANAGER, UserRole.ADMIN, UserRole.STAFF)
-async def get_all_users(request: Request, db: AsyncSession = Depends(get_db)):
+async def get_all_users(
+    request: Request, user_service: AbstractUserService = Depends(get_user_service)
+):
     """Retrieve all users from the database.
 
     Args:
@@ -89,12 +86,7 @@ async def get_all_users(request: Request, db: AsyncSession = Depends(get_db)):
         WrapperUserResponse containing all users.
     """
     current_user_email = request.state.email
-    logger.debug(f"Fetching all users, requested by: {current_user_email}")
-
-    # REPO
-    stmt = select(User)
-    result = await db.execute(stmt)
-    all_users = result.scalars().all()
+    all_users = await user_service.get_users(user_email=current_user_email)
 
     logger.info(f"Retrieved {len(all_users)} users")
     return {
@@ -136,7 +128,7 @@ async def update_user_detail(
 async def remove_user(
     request: Request,
     user_id: int,
-    db: Session = Depends(get_db),
+    user_service: AbstractUserService = Depends(get_user_service),
 ):
     """Delete a user by ID.
 
@@ -149,22 +141,14 @@ async def remove_user(
         WrapperUserResponse containing deletion confirmation.
     """
     current_user_email = request.state.email
-    logger.debug(f"Delete user request for user_id: {user_id} by: {current_user_email}")
-
-    # REPO
-    stmt = select(User).where(User.id == user_id)
-    result = await db.execute(stmt)
-    user = result.scalars().first()
-
-    if not user:
-        logger.warning(f"Attempted to delete non-existent user with id: {user_id}")
-        return handle_missing_user(user_id=user_id)
-
-    # REPO
-    await delete_commit_db(object=user, db=db)
-    logger.info(f"User {user.email} (id: {user_id}) deleted by {current_user_email}")
+    deleted_account = await user_service.delete_user(
+        user_id=user_id, user_email=current_user_email
+    )
 
     return {
         "status": ResponseStatus.S.value,
-        "message": {"user email": current_user_email, "deleted account": user},
+        "message": {
+            "user email": current_user_email,
+            "deleted account": deleted_account,
+        },
     }

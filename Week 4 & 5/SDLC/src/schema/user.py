@@ -126,4 +126,4 @@ class WrapperUserResponse(BaseModel):
     """
 
     status: str
-    message: dict[str, str | list[UserResponse] | UserResponse]
+    message: dict[str, str | list[UserResponse] | UserResponse | dict]
