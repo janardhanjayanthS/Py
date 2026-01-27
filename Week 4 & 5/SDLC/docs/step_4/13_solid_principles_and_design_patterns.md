@@ -37,43 +37,100 @@ Our SDLC Inventory Management project demonstrates two architectural approaches:
 
 > **"A class should have one, and only one, reason to change."**
 
-### ❌ Before SRP: The Overloaded Service
+### ❌ Before SRP: The Overloaded User Router
 
-In our initial implementation, service functions handled multiple responsibilities:
+In our initial implementation, the user router handled multiple responsibilities directly:
 
 ```python
-# Initial Implementation - Multiple Responsibilities in One Function
-async def create_product(user_email: str, product: ProductCreate, db: Session) -> dict:
-    # 1. Validation Logic
-    check_existing_product_using_name(product=product, db=db)
-    check_existing_product_using_id(product=product, db=db)
-    
-    # 2. Business Logic
-    category = db.query(Category).filter(Category.id == product.category_id).first()
-    if not category:
-        return handle_missing_category(category_id=product.category_id)
-    
-    # 3. Data Manipulation Logic
-    db_product = Product(**product.model_dump())
-    if product.id is not None:
-        db_product = apply_discount_or_tax(product=db_product)
-    
-    # 4. Database Transaction Management
-    add_commit_refresh_db(object=db_product, db=db)
-    
-    # 5. Response Formatting
-    return {
-        "status": ResponseStatus.S.value,
-        "message": {"user email": user_email, "inserted product": db_product},
-    }
+# Before SOLID - Multiple Responsibilities in Router
+from datetime import timedelta
+from fastapi import APIRouter, Depends, Request
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
+
+from src.core.config import settings
+from src.core.exceptions import AuthenticationException
+from src.core.jwt import create_access_token, required_roles
+from src.core.log import get_logger
+from src.models.user import User
+from src.repository.database import (
+    add_commit_refresh_db,
+    commit_refresh_db,
+    delete_commit_db,
+    get_db,
+    hash_password,
+)
+from src.schema.user import (
+    UserEdit,
+    UserLogin,
+    UserRegister,
+    UserRole,
+    WrapperUserResponse,
+)
+from src.services.models import ResponseStatus
+from src.services.user_service import (
+    authenticate_user,
+    check_existing_user_using_email,
+    fetch_user_by_email,
+    handle_missing_user,
+    update_user_name,
+    update_user_password,
+)
+
+@user.post("/user/register", response_model=WrapperUserResponse)
+async def register_user(create_user: UserRegister, db: AsyncSession = Depends(get_db)):
+    """Register a new user account.
+
+    Args:
+        create_user: User registration data.
+        db: Database session dependency.
+
+    Returns:
+        WrapperUserResponse containing the created user.
+
+    Raises:
+        AuthenticationException: If user email already exists.
+    """
+    # 1. Validation Logic - Mixed in router
+    logger.debug(f"Registration attempt for email: {create_user.email}")
+    if await check_existing_user_using_email(user=create_user, db=db):
+        message = f"User with email {create_user.email} already exists"
+        logger.error(message)
+        raise AuthenticationException(
+            message=message,
+            field_errors=[
+                {
+                    "field": "email id",
+                    "message": f"{create_user.email} already exists in DB",
+                }
+            ],
+        )
+
+    # 2. Data Manipulation Logic - Direct in router
+    db_user = User(
+        name=create_user.name,
+        email=create_user.email,
+        password=hash_password(create_user.password),
+        role=create_user.role.value,
+    )
+
+    # 3. Database Transaction Management - Direct in router
+    await add_commit_refresh_db(object=db_user, db=db)
+    logger.debug(f"Created new user with- {db_user.email} - email")
+    logger.warning(f"Created new user with - {db_user.email} - email")
+
+    # 4. Response Formatting - Direct in router
+    return {"status": "success", "message": {"registered user": db_user}}
 ```
 
 **Problems:**
-- 5+ different reasons to change (validation, business rules, data manipulation, transactions, HTTP responses)
-- Difficult to test individual concerns without database
-- Mixing business logic, data access, and response formatting
-- Direct database dependencies throughout service layer
-- No separation between business rules and data persistence
+- 4+ different reasons to change (validation, business rules, data manipulation, transactions, HTTP responses)
+- Router directly handles database operations and business logic
+- Mixing HTTP handling, business logic, and data access
+- Direct database dependencies throughout router layer
+- No separation between concerns
+- Difficult to test individual components
 
 ### ✅ After SRP: Clear Separation of Concerns
 
@@ -82,81 +139,92 @@ Now each component has a single responsibility:
 **1. API Router** - Only handles HTTP concerns:
 
 ```python
-# src/api/routes/product.py (Current Implementation)
-@product.post("/products")
-@required_roles(UserRole.ADMIN, UserRole.MANAGER)
-async def post_products(
-    request: Request,
-    product: Optional[ProductCreate] = None,
-    db: Session = Depends(get_db),
+# src/api/routes/user.py (Current Implementation)
+@user.post("/user/register", response_model=WrapperUserResponse)
+async def register_user(
+    create_user: UserRegister,
+    user_service: AbstractUserService = Depends(get_user_service),
 ):
-    """Create a new product."""
-    current_user_email: str = request.state.email
-    logger.debug(f"Create product request by: {current_user_email}")
-    logger.info(f"Creating new product: {product.name if product else 'None'}")
-    
+    """Registers a new user account in the system.
+
+    Args:
+        create_user: Data transfer object containing registration details.
+        user_service: The user service business logic layer.
+
+    Returns:
+        A dictionary containing the success status and the registered user data.
+
+    Raises:
+        AuthenticationException: If the user email is already registered.
+    """
     # Only responsibility: HTTP handling and input validation
-    return post_product(user_email=current_user_email, product=product, db=db)
+    db_user = await user_service.register_user(user=create_user)
+    return {"status": "success", "message": {"registered user": db_user}}
 ```
 
 **2. Service Layer** - Only handles business logic:
 
 ```python
-# src/services/product_service.py (Current Implementation)
-def post_product(
-    user_email: str, product: Optional[ProductCreate], db: Session
-) -> dict:
-    """
-    Inserts product into db
+# src/services/user_service.py (Current Implementation)
+class UserService(AbstractUserService):
+    """Service layer for user business logic."""
     
-    Args:
-        user_email: current user's email id
-        product: Pydnatic product model
-        db: sqlalchemy db object
-    
-    Returns:
-        dict: fastapi response
-    """
-    logger.debug(f"Creating product: {product.name if product else 'None'}")
-    
-    # Only responsibility: Business rules and validation
-    check_existing_product_using_name(product=product, db=db)
-    check_existing_product_using_id(product=product, db=db)
-
-    category = db.query(Category).filter(Category.id == product.category_id).first()
-    if not category:
-        return handle_missing_category(category_id=product.category_id)
-
-    db_product = Product(**product.model_dump())
-    if product.id is not None:
-        db_product = apply_discount_or_tax(product=db_product)
-
-    add_commit_refresh_db(object=db_product, db=db)
-    logger.info(f"Product '{db_product.name}' created successfully")
-
-    return {
-        "status": ResponseStatus.S.value,
-        "message": {"user email": user_email, "inserted product": db_product},
-    }
+    async def register_user(self, user: UserRegister) -> User:
+        """Register a new user with validation and business rules.
+        
+        Args:
+            user: User registration data.
+            
+        Returns:
+            Created user entity.
+            
+        Raises:
+            AuthenticationException: If user already exists.
+        """
+        # Only responsibility: Business rules and validation
+        existing_user = await self.repo.get_user_by_email(user.email)
+        if existing_user:
+            raise AuthenticationException(
+                message=f"User with email {user.email} already exists"
+            )
+        
+        # Create user with hashed password
+        hashed_password = hash_password(user.password)
+        return await self.repo.create_user(user, hashed_password)
 ```
 
 **3. Repository Layer** - Only handles data access:
 
 ```python
-# src/repository/database.py (Current Implementation)
-def add_commit_refresh_db(object: BaseModel, db: Session):
-    """Add, commit, and refresh database object.
-
-    Performs the complete database transaction cycle for a new object:
-    add to session, commit transaction, and refresh object with database values.
-
-    Args:
-        object: Pydantic model instance to insert into database.
-        db: SQLAlchemy database session instance.
-    """
-    db.add(object)
-    db.commit()
-    db.refresh(object)
+# src/repository/user_repo.py (Current Implementation)
+class UserRepository:
+    """Repository for user data access operations."""
+    
+    def __init__(self, session: AsyncSession):
+        self.session = session
+    
+    async def create_user(self, user_data: UserRegister, hashed_password: str) -> User:
+        """Create a new user in the database.
+        
+        Args:
+            user_data: User registration data.
+            hashed_password: Hashed password.
+            
+        Returns:
+            Created user entity.
+        """
+        # Only responsibility: Database operations
+        db_user = User(
+            name=user_data.name,
+            email=user_data.email,
+            password=hashed_password,
+            role=user_data.role.value,
+        )
+        
+        self.session.add(db_user)
+        await self.session.commit()
+        await self.session.refresh(db_user)
+        return db_user
 ```
 
 ## Open/Closed Principle (OCP)
