@@ -1,10 +1,11 @@
-# conftest.py - Modified with JWT authentication helpers
+# conftest.py - Modified with JWT authentication helpers and async support
 from datetime import timedelta
 from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, event
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 from src.api.main import app
@@ -14,6 +15,7 @@ from src.models.product import Product
 from src.models.user import User
 from src.repository.database import Base, get_db, hash_password
 
+# Sync database setup for legacy tests
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
@@ -21,6 +23,16 @@ engine = create_engine(
     poolclass=StaticPool,
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Async database setup for new async tests
+ASYNC_SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+async_engine = create_async_engine(
+    ASYNC_SQLALCHEMY_DATABASE_URL,
+    echo=False,
+)
+AsyncTestingSessionLocal = async_sessionmaker(
+    async_engine, class_=AsyncSession, expire_on_commit=False
+)
 
 
 @event.listens_for(engine, "connect")
@@ -54,9 +66,87 @@ def get_csv_filepath() -> str:
 
 
 @pytest.fixture(scope="function")
+async def async_test_db():
+    """
+    Create a fresh async database for each test function.
+    This ensures test isolation - no test affects another.
+    """
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    async with AsyncTestingSessionLocal() as session:
+        try:
+            yield session
+        finally:
+            await session.close()
+
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+
+
+@pytest.fixture(scope="function")
+async def client():
+    """
+    Create a test client with async dependency override.
+    Uses SQLite in-memory database for testing with persistent session.
+    """
+    # Create a persistent session that will be shared across requests
+    persistent_session = AsyncTestingSessionLocal()
+
+    # Override the database dependency to use the persistent session
+    async def override_get_db():
+        # Create tables if they don't exist
+        async with async_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        yield persistent_session
+
+    # Override the engine in database module for testing
+    import src.repository.database
+
+    original_engine = src.repository.database.engine
+    original_session_local = src.repository.database.async_session_local
+
+    # Set test engine and session
+    src.repository.database.engine = async_engine
+    src.repository.database.async_session_local = AsyncTestingSessionLocal
+
+    # Create a test app without lifespan to avoid PostgreSQL connection
+    from fastapi import FastAPI
+    from src.api.routes import category, product, user
+    from src.core.exception_handler import add_exception_handlers_to_app
+
+    test_app = FastAPI()  # No lifespan for testing
+    test_app.include_router(product.product)
+    test_app.include_router(user.user)
+    test_app.include_router(category.category)
+    add_exception_handlers_to_app(app=test_app)
+
+    test_app.dependency_overrides[get_db] = override_get_db
+
+    try:
+        with TestClient(app=test_app) as test_client:
+            yield test_client
+    finally:
+        test_app.dependency_overrides.clear()
+        # Clean up the persistent session
+        await persistent_session.close()
+        # Clean up tables
+        async with async_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.drop_all)
+        # Restore original engine and session
+        src.repository.database.engine = original_engine
+        src.repository.database.async_session_local = original_session_local
+
+
+# ============================================================================
+# LEGACY SYNC FIXTURES - For backward compatibility
+# ============================================================================
+
+
+@pytest.fixture(scope="function")
 def test_db():
     """
-    Create a fresh database for each test function.
+    Create a fresh sync database for each test function.
     This ensures test isolation - no test affects another.
     """
     Base.metadata.create_all(bind=engine)
@@ -78,13 +168,10 @@ def db_session(test_db):
 
 
 @pytest.fixture(scope="function")
-def client(test_db):
+def sync_client(test_db):
     """
-    Create a test client with dependency override.
-    Injects test_db instead of real database.
-
-    Args:
-        test_db: test database instance
+    Create a test client with sync dependency override.
+    For legacy tests that use sync database.
     """
 
     def override_get_db():
@@ -100,61 +187,153 @@ def client(test_db):
 
 
 # ============================================================================
+# ASYNC FIXTURES - For new async architecture tests (using sync DB for simplicity)
+# ============================================================================
+
+
+@pytest.fixture(scope="function")
+def async_test_db(test_db):
+    """
+    Reuse sync test_db for async tests.
+    This simplifies testing by avoiding async SQLite dependencies.
+    """
+    return test_db
+
+
+@pytest.fixture(scope="function")
+def async_client(client):
+    """
+    Reuse sync client for async tests.
+    This simplifies testing by avoiding async SQLite dependencies.
+    """
+    return client
+
+
+@pytest.fixture
+def regular_user(test_db: Session) -> User:
+    """
+    Create a regular user in test database.
+    Regular user with basic permissions (no special roles).
+    """
+    user = User(
+        name="Regular User",
+        email="regular@test.com",
+        password=hash_password("password123"),
+        role="user",  # Regular user role
+    )
+    test_db.add(user)
+    test_db.commit()
+    test_db.refresh(user)
+    return user
+
+
+@pytest.fixture
+def regular_token(regular_user: User) -> str:
+    """
+    Generate JWT token for regular user.
+    Returns token string that can be used in Authorization header.
+    """
+    return create_access_token(
+        data={"sub": regular_user.email, "role": regular_user.role},
+        expires_delta=timedelta(minutes=30),
+    )
+
+
+@pytest.fixture
+def regular_headers(regular_token: str) -> dict:
+    """
+    Create authorization headers for regular user.
+    Returns dict ready to be used in requests: headers=regular_headers
+    """
+    return {"Authorization": f"Bearer {regular_token}"}
+
+
+# ============================================================================
 # USER FIXTURES - Create users with different roles for testing
 # ============================================================================
 
 
 @pytest.fixture
-def staff_user(test_db: Session) -> User:
+async def staff_user(async_test_db):
     """
-    Create a staff user in test database.
+    Create a staff user in async test database.
     Staff can only view products, cannot create/update/delete.
     """
+    from src.models.user import User
+    from src.repository.database import hash_password
+
     user = User(
         name="Staff User",
         email="staff@test.com",
         password=hash_password("password123"),
         role="staff",
     )
-    test_db.add(user)
-    test_db.commit()
-    test_db.refresh(user)
+    async_test_db.add(user)
+    await async_test_db.commit()
+    await async_test_db.refresh(user)
     return user
 
 
 @pytest.fixture
-def manager_user(test_db: Session) -> User:
+async def manager_user(async_test_db):
     """
-    Create a manager user in test database.
+    Create a manager user in async test database.
     Manager can view, create, and update products but cannot delete.
     """
+    from src.models.user import User
+    from src.repository.database import hash_password
+
     user = User(
         name="Manager User",
         email="manager@test.com",
         password=hash_password("password123"),
         role="manager",
     )
-    test_db.add(user)
-    test_db.commit()
-    test_db.refresh(user)
+    async_test_db.add(user)
+    await async_test_db.commit()
+    await async_test_db.refresh(user)
     return user
 
 
 @pytest.fixture
-def admin_user(test_db: Session) -> User:
+async def admin_user(async_test_db):
     """
-    Create an admin user in test database.
+    Create an admin user in async test database.
     Admin has full CRUD access to all resources.
     """
+    from src.models.user import User
+    from src.repository.database import hash_password
+
     user = User(
         name="Admin User",
         email="admin@test.com",
         password=hash_password("password123"),
         role="admin",
     )
-    test_db.add(user)
-    test_db.commit()
-    test_db.refresh(user)
+    async_test_db.add(user)
+    await async_test_db.commit()
+    await async_test_db.refresh(user)
+    return user
+
+
+@pytest.fixture
+async def regular_user(async_test_db):
+    """
+    Create a regular user in async test database.
+    Regular user with basic permissions (no special roles).
+    """
+    from src.models.user import User
+    from src.repository.database import hash_password
+
+    user = User(
+        name="Regular User",
+        email="regular@test.com",
+        password=hash_password("password123"),
+        role="user",  # Regular user role
+    )
+    async_test_db.add(user)
+    await async_test_db.commit()
+    await async_test_db.refresh(user)
     return user
 
 
@@ -164,7 +343,7 @@ def admin_user(test_db: Session) -> User:
 
 
 @pytest.fixture
-def staff_token(staff_user: User) -> str:
+async def staff_token(staff_user):
     """
     Generate JWT token for staff user.
     Returns token string that can be used in Authorization header.
@@ -176,7 +355,7 @@ def staff_token(staff_user: User) -> str:
 
 
 @pytest.fixture
-def manager_token(manager_user: User) -> str:
+async def manager_token(manager_user):
     """Generate JWT token for manager user"""
     return create_access_token(
         data={"sub": manager_user.email, "role": manager_user.role},
@@ -185,10 +364,22 @@ def manager_token(manager_user: User) -> str:
 
 
 @pytest.fixture
-def admin_token(admin_user: User) -> str:
+async def admin_token(admin_user):
     """Generate JWT token for admin user"""
     return create_access_token(
         data={"sub": admin_user.email, "role": admin_user.role},
+        expires_delta=timedelta(minutes=30),
+    )
+
+
+@pytest.fixture
+async def regular_token(regular_user):
+    """
+    Generate JWT token for regular user.
+    Returns token string that can be used in Authorization header.
+    """
+    return create_access_token(
+        data={"sub": regular_user.email, "role": regular_user.role},
         expires_delta=timedelta(minutes=30),
     )
 
@@ -199,7 +390,7 @@ def admin_token(admin_user: User) -> str:
 
 
 @pytest.fixture
-def staff_headers(staff_token: str) -> dict:
+async def staff_headers(staff_token):
     """
     Create authorization headers for staff user.
     Returns dict ready to be used in requests: headers=staff_headers
@@ -208,15 +399,24 @@ def staff_headers(staff_token: str) -> dict:
 
 
 @pytest.fixture
-def manager_headers(manager_token: str) -> dict:
+async def manager_headers(manager_token):
     """Create authorization headers for manager user"""
     return {"Authorization": f"Bearer {manager_token}"}
 
 
 @pytest.fixture
-def admin_headers(admin_token: str) -> dict:
+async def admin_headers(admin_token):
     """Create authorization headers for admin user"""
     return {"Authorization": f"Bearer {admin_token}"}
+
+
+@pytest.fixture
+async def regular_headers(regular_token):
+    """
+    Create authorization headers for regular user.
+    Returns dict ready to be used in requests: headers=regular_headers
+    """
+    return {"Authorization": f"Bearer {regular_token}"}
 
 
 # ============================================================================

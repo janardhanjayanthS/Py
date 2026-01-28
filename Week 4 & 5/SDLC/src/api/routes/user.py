@@ -1,12 +1,9 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.interfaces.user_service import AbstractUserService
-from src.repository.database import (
-    get_db,
-)
+from src.repository.database import get_db
 from src.repository.user_repo import UserRepository
 from src.schema.user import (
     UserEdit,
@@ -16,9 +13,7 @@ from src.schema.user import (
     WrapperUserResponse,
 )
 from src.services.models import ResponseStatus
-from src.services.user_service import (
-    UserService,
-)
+from src.services.user_service import UserService
 
 logger = get_logger(__name__)
 
@@ -75,7 +70,7 @@ async def login_user(
         AuthenticationException: If the credentials provided are invalid.
     """
     access_token = await user_service.login_user(user=user_login)
-    return {"access_tokem": access_token, "token_type": "Bearer"}
+    return {"access_token": access_token, "token_type": "Bearer"}
 
 
 @user.get("/user/all", response_model=WrapperUserResponse)

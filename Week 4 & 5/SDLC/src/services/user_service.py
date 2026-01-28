@@ -2,6 +2,7 @@ from datetime import timedelta
 from typing import Any
 
 from src.core.config import settings
+from src.core.exceptions import DatabaseException
 from src.core.jwt import create_access_token
 from src.core.log import get_logger
 from src.interfaces.user_repo import AbstractUserRepository
@@ -28,7 +29,7 @@ class UserService(AbstractUserService):
         self.repo = repo
 
     async def register_user(self, user: UserRegister) -> User:
-        """Registers a new user after checking for duplicates.
+        """Registers a new user account in the system.
 
         Args:
             user: Data transfer object containing registration details.
@@ -37,7 +38,14 @@ class UserService(AbstractUserService):
             The newly created User object.
         """
         logger.debug(f"Registration attempt for email: {user.email}")
-        await self.repo.check_existing_user_using_email(user=user)
+        user_exists = await self.repo.check_existing_user_using_email(user=user)
+        if user_exists:
+            raise DatabaseException(
+                message="User with this email already exists",
+                field_errors=[
+                    {"field": "email", "message": "Email already registered"}
+                ],
+            )
         created_user = await self.repo.create_user(user=user)
         return created_user
 
@@ -55,7 +63,7 @@ class UserService(AbstractUserService):
             email=user.email, password=user.password
         )
         if not user_obj:
-            self.repo.handle_missing_user(email_id=user.email)
+            self.repo.handle_unknown_user(email_id=user.email)
 
         access_token = self._get_new_user_jwt_token(
             role=user_obj.role, email=user_obj.email
