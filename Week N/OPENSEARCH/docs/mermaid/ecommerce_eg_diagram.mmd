@@ -1,0 +1,72 @@
+%% GENERAL FLOW
+
+%% graph TD
+%%     subgraph Users
+%%         Customer[Customer Browser/App]
+%%     end
+
+%%     subgraph App_Tier["Application Layer (Your Code)"]
+%%         Backend[Python/Node.js Backend]
+%%         ClientLib[OpenSearch Python Client]
+%%     end
+
+%%     subgraph Ingestion_Tier["Ingestion & AI Processing"]
+%%         DB[(Product DB - SQL)]
+%%         DataPrepper[Data Prepper]
+%%         ML_Model[ML Model: BERT/Titan]
+%%     end
+
+%%     subgraph OpenSearch_Cluster["OpenSearch Cluster"]
+%%         SearchEngine[OpenSearch Core]
+%%         VectorStore[Vector Engine]
+%%         Dashboards[OpenSearch Dashboards]
+%%     end
+
+%%     %% Flow for Search
+%%     Customer -->|1. Searches 'Winter Jackets'| Backend
+%%     Backend -->|2. Query API| ClientLib
+%%     ClientLib -->|3. Hybrid Search| SearchEngine
+%%     SearchEngine -->|4. Matches Results| VectorStore
+%%     SearchEngine -->|5. JSON Results| ClientLib
+%%     ClientLib -->|6. Display Products| Customer
+
+%%     %% Flow for Data Sync
+%%     DB -->|Periodic Sync| DataPrepper
+%%     DataPrepper -->|7. Send Text| ML_Model
+%%     ML_Model -->|8. Returns Vector| DataPrepper
+%%     DataPrepper -->|9. Index JSON + Vector| SearchEngine
+
+%% ---------------------------------------------------------------------------
+
+%% OPENSEARCH ARCHI
+
+%% graph LR
+%%     subgraph Cluster["OpenSearch Cluster (Distributed)"]
+%%         subgraph Master_Nodes["Management Tier"]
+%%             M1[Cluster Manager]
+%%             M2[Standby Manager]
+%%         end
+%%
+%%         subgraph Data_Nodes["Storage & Search Tier"]
+%%             D1[Data Node A]
+%%             D2[Data Node B]
+%%             D3[Data Node C]
+%%         end
+%%
+%%         subgraph Sharding_Logic["Data Distribution (Shards)"]
+%%             S1[Shard 1: Products A-M]
+%%             S2[Shard 2: Products N-Z]
+%%             R1[Replica 1: Copy of A-M]
+%%             R2[Replica 2: Copy of N-Z]
+%%         end
+%%     end
+%%
+%%     %% Relationships
+%%     M1 ---|Controls| D1
+%%     M1 ---|Controls| D2
+%%     M1 ---|Controls| D3
+%%
+%%     D1 -.->|Holds| S1
+%%     D2 -.->|Holds| S2
+%%     D3 -.->|Holds| R1
+%%     D3 -.->|Holds| R2
