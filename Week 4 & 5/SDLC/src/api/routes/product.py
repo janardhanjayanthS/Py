@@ -114,7 +114,7 @@ async def update_product(
         f"Update product request for product_id: {product_id} by: {current_user_email}"
     )
     logger.info(f"Updating product with id: {product_id}")
-    return put_product(
+    return await put_product(
         current_user_email=current_user_email,
         product_id=product_id,
         product_update=product_update,

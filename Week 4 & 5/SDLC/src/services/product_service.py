@@ -42,7 +42,7 @@ async def check_existing_product_using_name(
 
     if existing_product is not None:
         message = f"product with name {product.name} already exists"
-        logger.error(message=message)
+        logger.error(message)
         raise DatabaseException(
             message=message,
             field_errors=[
@@ -72,7 +72,7 @@ async def check_existing_product_using_id(
     existing_product = result.scalars().first()
     if existing_product is not None:
         message = f"product with id {product.id} already exists"
-        logger.error(message=message)
+        logger.error(message)
         raise DatabaseException(
             message=message,
         )
@@ -254,7 +254,7 @@ async def get_category_specific_products(
     }
 
 
-def put_product(
+async def put_product(
     current_user_email: str, product_id: int, product_update: BaseModel, db: Session
 ) -> dict:
     """
@@ -280,7 +280,7 @@ def put_product(
     for field, value in update_data.items():
         setattr(db_product, field, value)
 
-    commit_refresh_db(object=db_product, db=db)
+    await commit_refresh_db(object=db_product, db=db)
     logger.info(f"Product '{db_product.name}' updated successfully")
     return {
         "status": ResponseStatus.S.value,

@@ -21,7 +21,8 @@ from src.services.product_service import (
 class TestCheckExistingProductUsingName:
     """Test suite for check_existing_product_using_name function"""
 
-    def test_product_exists_raises_exception(
+    @pytest.mark.asyncio
+    async def test_product_exists_raises_exception(
         self, db_session: Session, sample_product: Product
     ):
         """Test that function raises exception when product exists"""
@@ -32,15 +33,14 @@ class TestCheckExistingProductUsingName:
             quantity=10,
             category_id=sample_product.category_id,
         )
-        # Logger.error() in source code has incorrect signature, causing TypeError
-        # This happens before DatabaseException can be raised
-        with pytest.raises(TypeError) as exc_info:
-            check_existing_product_using_name(product=product_data, db=db_session)
+        with pytest.raises(DatabaseException) as exc_info:
+            await check_existing_product_using_name(product=product_data, db=db_session)
 
-        # Verify it's the logger error
-        assert "missing 1 required positional argument: 'event'" in str(exc_info.value)
+        # Verify it's the correct exception message
+        assert "already exists" in str(exc_info.value)
 
-    def test_product_not_exists_no_exception(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_product_not_exists_no_exception(self, db_session: Session):
         """Test that function doesn't raise exception when product doesn't exist"""
         product_data = ProductCreate(
             name="Nonexistent Product",
@@ -50,19 +50,21 @@ class TestCheckExistingProductUsingName:
             category_id=1,
         )
         # Should not raise exception
-        check_existing_product_using_name(product=product_data, db=db_session)
+        await check_existing_product_using_name(product=product_data, db=db_session)
 
-    def test_none_product_no_exception(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_none_product_no_exception(self, db_session: Session):
         """Test that function handles None product gracefully"""
         # This will raise AttributeError in source code due to missing None check
         with pytest.raises(AttributeError):
-            check_existing_product_using_name(product=None, db=db_session)
+            await check_existing_product_using_name(product=None, db=db_session)
 
 
 class TestCheckExistingProductUsingId:
     """Test suite for check_existing_product_using_id function"""
 
-    def test_product_exists_raises_exception(
+    @pytest.mark.asyncio
+    async def test_product_exists_raises_exception(
         self, db_session: Session, sample_product: Product
     ):
         """Test that function raises exception when product exists"""
@@ -74,15 +76,14 @@ class TestCheckExistingProductUsingId:
             category_id=sample_product.category_id,
             id=sample_product.id,
         )
-        # Logger.error() in source code has incorrect signature, causing TypeError
-        # This happens before DatabaseException can be raised
-        with pytest.raises(TypeError) as exc_info:
-            check_existing_product_using_id(product=product_data, db=db_session)
+        with pytest.raises(DatabaseException) as exc_info:
+            await check_existing_product_using_id(product=product_data, db=db_session)
 
-        # Verify it's the logger error
-        assert "missing 1 required positional argument: 'event'" in str(exc_info.value)
+        # Verify it's the correct exception message
+        assert "already exists" in str(exc_info.value)
 
-    def test_product_not_exists_no_exception(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_product_not_exists_no_exception(self, db_session: Session):
         """Test that function doesn't raise exception when product doesn't exist"""
         product_data = ProductCreate(
             name="Test Product",
@@ -93,13 +94,14 @@ class TestCheckExistingProductUsingId:
             id=999,
         )
         # Should not raise exception
-        check_existing_product_using_id(product=product_data, db=db_session)
+        await check_existing_product_using_id(product=product_data, db=db_session)
 
 
 class TestHandleMissingProduct:
     """Test suite for handle_missing_product function"""
 
-    def test_handle_missing_product(self):
+    @pytest.mark.asyncio
+    async def test_handle_missing_product(self):
         """Test missing product handler response"""
         response = handle_missing_product(product_id="999")
         assert response["status"] == "error"
@@ -109,7 +111,8 @@ class TestHandleMissingProduct:
 class TestPostProduct:
     """Test suite for post_product function"""
 
-    def test_create_product_success(
+    @pytest.mark.asyncio
+    async def test_create_product_success(
         self, db_session: Session, sample_category: Category
     ):
         """Test successful product creation"""
@@ -121,7 +124,7 @@ class TestPostProduct:
             category_id=sample_category.id,
         )
 
-        response = post_product(
+        response = await post_product(
             user_email="test@test.com", product=product_data, db=db_session
         )
 
@@ -135,7 +138,8 @@ class TestPostProduct:
         assert created_product.name == "New Test Product"
         assert created_product.price == 150.0
 
-    def test_create_product_with_discount(
+    @pytest.mark.asyncio
+    async def test_create_product_with_discount(
         self, db_session: Session, sample_category: Category
     ):
         """Test product creation with discount applied"""
@@ -151,7 +155,7 @@ class TestPostProduct:
         # Discount logic uses decorator pattern get_amount() which returns None
         # This causes TypeError when trying to multiply None * float
         with pytest.raises(TypeError) as exc_info:
-            post_product(
+            await post_product(
                 user_email="test@test.com", product=product_data, db=db_session
             )
 
@@ -160,7 +164,8 @@ class TestPostProduct:
             exc_info.value
         )
 
-    def test_create_product_missing_category(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_create_product_missing_category(self, db_session: Session):
         """Test product creation with non-existent category"""
         product_data = ProductCreate(
             name="Orphan Product",
@@ -170,34 +175,37 @@ class TestPostProduct:
             category_id=999,
         )
 
-        response = post_product(
+        response = await post_product(
             user_email="test@test.com", product=product_data, db=db_session
         )
 
         assert response["status"] == "error"
         assert "category" in response["message"]["response"].lower()
 
-    def test_create_none_product(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_create_none_product(self, db_session: Session):
         """Test creating None product"""
         # This will raise AttributeError in source code due to missing None check
         with pytest.raises(AttributeError):
-            post_product(user_email="test@test.com", product=None, db=db_session)
+            await post_product(user_email="test@test.com", product=None, db=db_session)
 
 
 class TestGetAllProducts:
     """Test suite for get_all_products function"""
 
-    def test_get_all_products_empty(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_get_all_products_empty(self, db_session: Session):
         """Test getting all products when none exist"""
-        response = get_all_products(user_email="test@test.com", db=db_session)
+        response = await get_all_products(user_email="test@test.com", db=db_session)
 
         assert response["status"] == "success"
         assert isinstance(response["message"]["products"], list)
         assert len(response["message"]["products"]) == 0
 
-    def test_get_all_products_with_data(self, db_session: Session, multiple_products):
+    @pytest.mark.asyncio
+    async def test_get_all_products_with_data(self, db_session: Session, multiple_products):
         """Test getting all products when products exist"""
-        response = get_all_products(user_email="test@test.com", db=db_session)
+        response = await get_all_products(user_email="test@test.com", db=db_session)
 
         assert response["status"] == "success"
         products = response["message"]["products"]
@@ -208,9 +216,10 @@ class TestGetAllProducts:
 class TestGetSpecificProduct:
     """Test suite for get_specific_product function"""
 
-    def test_get_existing_product(self, db_session: Session, sample_product: Product):
+    @pytest.mark.asyncio
+    async def test_get_existing_product(self, db_session: Session, sample_product: Product):
         """Test getting an existing product by ID"""
-        response = get_specific_product(
+        response = await get_specific_product(
             user_email="test@test.com", product_id=sample_product.id, db=db_session
         )
 
@@ -219,9 +228,10 @@ class TestGetSpecificProduct:
         assert product.id == sample_product.id
         assert product.name == sample_product.name
 
-    def test_get_nonexistent_product(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_get_nonexistent_product(self, db_session: Session):
         """Test getting a non-existent product by ID"""
-        response = get_specific_product(
+        response = await get_specific_product(
             user_email="test@test.com", product_id=999, db=db_session
         )
 
@@ -232,11 +242,12 @@ class TestGetSpecificProduct:
 class TestGetCategorySpecificProducts:
     """Test suite for get_category_specific_products function"""
 
-    def test_get_products_by_existing_category(
+    @pytest.mark.asyncio
+    async def test_get_products_by_existing_category(
         self, db_session: Session, sample_category: Category, sample_product: Product
     ):
         """Test getting products by existing category"""
-        response = get_category_specific_products(
+        response = await get_category_specific_products(
             user_email="test@test.com", category_id=sample_category.id, db=db_session
         )
 
@@ -248,9 +259,10 @@ class TestGetCategorySpecificProducts:
         # Should contain at least our sample product
         assert len(products) >= 1
 
-    def test_get_products_by_nonexistent_category(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_get_products_by_nonexistent_category(self, db_session: Session):
         """Test getting products by non-existent category"""
-        response = get_category_specific_products(
+        response = await get_category_specific_products(
             user_email="test@test.com", category_id=999, db=db_session
         )
 
@@ -263,13 +275,14 @@ class TestGetCategorySpecificProducts:
 class TestPutProduct:
     """Test suite for put_product function"""
 
-    def test_update_existing_product(
+    @pytest.mark.asyncio
+    async def test_update_existing_product(
         self, db_session: Session, sample_product: Product
     ):
         """Test updating an existing product"""
         update_data = ProductUpdate(name="Updated Product Name", price=200.0)
 
-        response = put_product(
+        response = await put_product(
             current_user_email="test@test.com",
             product_id=sample_product.id,
             product_update=update_data,
@@ -281,11 +294,12 @@ class TestPutProduct:
         assert updated_product.name == "Updated Product Name"
         assert updated_product.price == 200.0
 
-    def test_update_nonexistent_product(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_update_nonexistent_product(self, db_session: Session):
         """Test updating a non-existent product"""
         update_data = ProductUpdate(name="Updated Name")
 
-        response = put_product(
+        response = await put_product(
             current_user_email="test@test.com",
             product_id=999,
             product_update=update_data,
@@ -295,7 +309,8 @@ class TestPutProduct:
         assert response["status"] == "error"
         assert "not found" in response["message"]["response"].lower()
 
-    def test_update_product_partial_fields(
+    @pytest.mark.asyncio
+    async def test_update_product_partial_fields(
         self, db_session: Session, sample_product: Product
     ):
         """Test updating product with partial fields"""
@@ -303,7 +318,7 @@ class TestPutProduct:
         # original_description = sample_product.description
         update_data = ProductUpdate(price=300.0)  # Only update price
 
-        response = put_product(
+        response = await put_product(
             current_user_email="test@test.com",
             product_id=sample_product.id,
             product_update=update_data,
@@ -322,13 +337,14 @@ class TestPutProduct:
 class TestDeleteProduct:
     """Test suite for delete_product function"""
 
-    def test_delete_existing_product(
+    @pytest.mark.asyncio
+    async def test_delete_existing_product(
         self, db_session: Session, sample_product: Product
     ):
         """Test deleting an existing product"""
         product_id = sample_product.id
 
-        response = delete_product(
+        response = await delete_product(
             current_user_email="test@test.com", product_id=product_id, db=db_session
         )
 
@@ -342,9 +358,10 @@ class TestDeleteProduct:
         )
         assert deleted_check is None
 
-    def test_delete_nonexistent_product(self, db_session: Session):
+    @pytest.mark.asyncio
+    async def test_delete_nonexistent_product(self, db_session: Session):
         """Test deleting a non-existent product"""
-        response = delete_product(
+        response = await delete_product(
             current_user_email="test@test.com", product_id=999, db=db_session
         )
 
@@ -355,7 +372,8 @@ class TestDeleteProduct:
 class TestProductServiceIntegration:
     """Integration tests for product service functions"""
 
-    def test_complete_product_lifecycle(
+    @pytest.mark.asyncio
+    async def test_complete_product_lifecycle(
         self, db_session: Session, sample_category: Category
     ):
         """Test complete product lifecycle: create, read, update, delete"""
@@ -368,7 +386,7 @@ class TestProductServiceIntegration:
             category_id=sample_category.id,
         )
 
-        create_response = post_product(
+        create_response = await post_product(
             user_email="test@test.com", product=product_data, db=db_session
         )
 
@@ -377,7 +395,7 @@ class TestProductServiceIntegration:
         product_id = created_product.id
 
         # Read - Get specific
-        read_response = get_specific_product(
+        read_response = await get_specific_product(
             user_email="test@test.com", product_id=product_id, db=db_session
         )
 
@@ -387,7 +405,7 @@ class TestProductServiceIntegration:
         # Update
         update_data = ProductUpdate(name="Updated Lifecycle Product", price=150.0)
 
-        update_response = put_product(
+        update_response = await put_product(
             current_user_email="test@test.com",
             product_id=product_id,
             product_update=update_data,
@@ -401,7 +419,7 @@ class TestProductServiceIntegration:
         )
 
         # Delete
-        delete_response = delete_product(
+        delete_response = await delete_product(
             current_user_email="test@test.com", product_id=product_id, db=db_session
         )
 

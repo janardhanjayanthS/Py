@@ -10,37 +10,42 @@ from src.schema.user import UserEdit, UserRegister, UserRole
 from src.services.models import ResponseStatus
 
 
+@pytest.fixture
+def mock_session():
+    """Create a mock async session"""
+    session = AsyncMock(spec=AsyncSession)
+    return session
+
+
+@pytest.fixture
+def user_repo(mock_session):
+    """Create UserRepository instance with mock session"""
+    return UserRepository(session=mock_session)
+
+
+@pytest.fixture
+def sample_user_register():
+    """Sample user registration data"""
+    return UserRegister(
+        name="Test User",
+        email="test@example.com",
+        password="TestPass123!",
+        role=UserRole.STAFF
+    )
+
+
+@pytest.fixture
+def sample_user_edit():
+    """Sample user edit data"""
+    return UserEdit(
+        new_name="Updated Name",
+        new_password="UpdatedPass123!"
+    )
+
+
 class TestUserRepository:
     """Test suite for UserRepository class"""
-
-    @pytest.fixture
-    def mock_session(self):
-        """Create a mock async session"""
-        session = AsyncMock(spec=AsyncSession)
-        return session
-
-    @pytest.fixture
-    def user_repo(self, mock_session):
-        """Create UserRepository instance with mock session"""
-        return UserRepository(session=mock_session)
-
-    @pytest.fixture
-    def sample_user_register(self):
-        """Sample user registration data"""
-        return UserRegister(
-            name="Test User",
-            email="test@example.com",
-            password="TestPass123!",
-            role=UserRole.STAFF
-        )
-
-    @pytest.fixture
-    def sample_user_edit(self):
-        """Sample user edit data"""
-        return UserEdit(
-            new_name="Updated Name",
-            new_password="UpdatedPass123!"
-        )
+    pass
 
 
 class TestUserRepositoryCreate:

@@ -144,25 +144,8 @@ class TestApplyDiscountOrTax:
     """Test apply_discount_or_tax function"""
 
     def test_apply_discount_even_id(self):
-        """Test applying discount to product with even ID"""
+        """Test applying tax to product with even ID"""
         product = Product(id=2, name="Test", price=100, quantity=10, category_id=1)
-
-        # Mock the decorator pattern
-        with patch('src.services.product_service.ConcretePrice') as mock_concrete, \
-             patch('src.services.product_service.DiscountDecorator') as mock_discount:
-
-            mock_price = Mock()
-            mock_price.get_amount.return_value = 80  # 20% discount
-            mock_discount.return_value = mock_price
-            mock_concrete.return_value = Mock()
-
-            result = apply_discount_or_tax(product)
-
-            assert result.price_type == "discounted"
-
-    def test_apply_tax_odd_id(self):
-        """Test applying tax to product with odd ID"""
-        product = Product(id=1, name="Test", price=100, quantity=10, category_id=1)
 
         # Mock the decorator pattern
         with patch('src.services.product_service.ConcretePrice') as mock_concrete, \
@@ -176,6 +159,23 @@ class TestApplyDiscountOrTax:
             result = apply_discount_or_tax(product)
 
             assert result.price_type == "taxed"
+
+    def test_apply_tax_odd_id(self):
+        """Test applying discount to product with odd ID"""
+        product = Product(id=1, name="Test", price=100, quantity=10, category_id=1)
+
+        # Mock the decorator pattern
+        with patch('src.services.product_service.ConcretePrice') as mock_concrete, \
+             patch('src.services.product_service.DiscountDecorator') as mock_discount:
+
+            mock_price = Mock()
+            mock_price.get_amount.return_value = 80  # 20% discount
+            mock_discount.return_value = mock_price
+            mock_concrete.return_value = Mock()
+
+            result = apply_discount_or_tax(product)
+
+            assert result.price_type == "discounted"
 
 
 class TestPostProduct:
@@ -194,19 +194,19 @@ class TestPostProduct:
         )
 
         # Mock no existing product (name check)
-        mock_result_name = AsyncMock()
+        mock_result_name = Mock()
         mock_result_name.scalars.return_value.first.return_value = None
 
         # Mock no existing product (id check)
-        mock_result_id = AsyncMock()
+        mock_result_id = Mock()
         mock_result_id.scalars.return_value.first.return_value = None
 
         # Mock category exists
         mock_category = Category(id=1, name="electronics")
-        mock_result_category = AsyncMock()
+        mock_result_category = Mock()
         mock_result_category.scalars.return_value.first.return_value = mock_category
 
-        mock_db.execute.side_effect = [mock_result_name, mock_result_id, mock_result_category]
+        mock_db.execute = AsyncMock(side_effect=[mock_result_name, mock_result_id, mock_result_category])
 
         # Mock database operations
         mock_db.add = Mock()
@@ -237,18 +237,18 @@ class TestPostProduct:
         )
 
         # Mock no existing product (name check)
-        mock_result_name = AsyncMock()
+        mock_result_name = Mock()
         mock_result_name.scalars.return_value.first.return_value = None
 
         # Mock no existing product (id check)
-        mock_result_id = AsyncMock()
+        mock_result_id = Mock()
         mock_result_id.scalars.return_value.first.return_value = None
 
         # Mock category doesn't exist
-        mock_result_category = AsyncMock()
+        mock_result_category = Mock()
         mock_result_category.scalars.return_value.first.return_value = None
 
-        mock_db.execute.side_effect = [mock_result_name, mock_result_id, mock_result_category]
+        mock_db.execute = AsyncMock(side_effect=[mock_result_name, mock_result_id, mock_result_category])
 
         # Execute
         response = await post_product(
@@ -423,10 +423,10 @@ class TestDeleteProduct:
 
         mock_result = Mock()
         mock_result.scalars.return_value.first.return_value = mock_product
-        mock_db.execute.return_value = mock_result
+        mock_db.execute = AsyncMock(return_value=mock_result)
 
         # Mock delete operations
-        mock_db.delete = Mock()
+        mock_db.delete = AsyncMock()
         mock_db.commit = AsyncMock()
 
         # Execute
@@ -480,18 +480,18 @@ class TestProductServiceIntegration:
         )
 
         # Mock checks and category
-        mock_result_checks = AsyncMock()
+        mock_result_checks = Mock()
         mock_result_checks.scalars.return_value.first.return_value = None
 
         mock_category = Category(id=1, name="electronics")
-        mock_result_category = AsyncMock()
+        mock_result_category = Mock()
         mock_result_category.scalars.return_value.first.return_value = mock_category
 
-        mock_db.execute.side_effect = [
+        mock_db.execute = AsyncMock(side_effect=[
             mock_result_checks,  # Name check
             mock_result_checks,  # ID check
             mock_result_category  # Category check
-        ]
+        ])
 
         mock_db.add = Mock()
         mock_db.commit = AsyncMock()

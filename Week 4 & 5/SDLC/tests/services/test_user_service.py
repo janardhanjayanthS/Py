@@ -248,39 +248,45 @@ from src.services.user_service import UserService
 # New Async Tests for UserService Class
 
 
+@pytest.fixture
+def mock_repo():
+    """Create a mock repository for testing"""
+    repo = AsyncMock(spec=UserRepository)
+    return repo
+
+
+@pytest.fixture
+def user_service(mock_repo):
+    """Create UserService instance with mock repository"""
+    return UserService(repo=mock_repo)
+
+
+@pytest.fixture
+def sample_user_register():
+    """Sample user registration data"""
+    return UserRegister(
+        name="Test User",
+        email="test@example.com",
+        password="TestPass123!",
+        role=UserRole.STAFF,
+    )
+
+
+@pytest.fixture
+def sample_user_login():
+    """Sample user login data"""
+    return UserLogin(email="test@example.com", password="TestPass123!")
+
+
+@pytest.fixture
+def sample_user_edit():
+    """Sample user edit data"""
+    return UserEdit(new_name="Updated Name", new_password="UpdatedPass123!")
+
+
 class TestUserService:
     """Test suite for UserService class with async operations"""
-
-    @pytest.fixture
-    def mock_repo(self):
-        """Create a mock repository for testing"""
-        repo = AsyncMock(spec=UserRepository)
-        return repo
-
-    @pytest.fixture
-    def user_service(self, mock_repo):
-        """Create UserService instance with mock repository"""
-        return UserService(repo=mock_repo)
-
-    @pytest.fixture
-    def sample_user_register(self):
-        """Sample user registration data"""
-        return UserRegister(
-            name="Test User",
-            email="test@example.com",
-            password="TestPass123!",
-            role=UserRole.STAFF,
-        )
-
-    @pytest.fixture
-    def sample_user_login(self):
-        """Sample user login data"""
-        return UserLogin(email="test@example.com", password="TestPass123!")
-
-    @pytest.fixture
-    def sample_user_edit(self):
-        """Sample user edit data"""
-        return UserEdit(new_name="Updated Name", new_password="UpdatedPass123!")
+    pass
 
 
 class TestUserServiceRegister:
@@ -366,7 +372,9 @@ class TestUserServiceLogin:
         """Test login with invalid credentials raises exception"""
         # Setup mock to return None (authentication failed)
         mock_repo.authenticate_user.return_value = None
-        mock_repo.handle_missing_user = Mock()
+        mock_repo.handle_unknown_user = Mock(side_effect=AuthenticationException(
+            message="Incorrect email or password"
+        ))
 
         # Execute and verify
         with pytest.raises(AuthenticationException) as exc_info:
@@ -376,7 +384,7 @@ class TestUserServiceLogin:
         mock_repo.authenticate_user.assert_called_once_with(
             email=sample_user_login.email, password=sample_user_login.password
         )
-        mock_repo.handle_missing_user.assert_called_once_with(
+        mock_repo.handle_unknown_user.assert_called_once_with(
             email_id=sample_user_login.email
         )
 
