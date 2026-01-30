@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from src.core.jwt import required_roles
 from src.core.log import get_logger
 from src.interfaces.user_service import AbstractUserService
+from src.models.user import User
 from src.repository.database import get_db
 from src.repository.user_repo import UserRepository
 from src.schema.user import (
@@ -152,10 +154,14 @@ async def remove_user(
         user_id=user_id, user_email=current_user_email
     )
 
-    return {
-        "status": ResponseStatus.S.value,
-        "message": {
-            "user email": current_user_email,
-            "deleted account": deleted_account,
-        },
-    }
+    return (
+        {
+            "status": ResponseStatus.S.value,
+            "message": {
+                "user email": current_user_email,
+                "deleted account": deleted_account,
+            },
+        }
+        if isinstance(deleted_account, User)
+        else deleted_account
+    )

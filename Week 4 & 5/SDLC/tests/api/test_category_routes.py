@@ -1,5 +1,4 @@
 # test_category_routes.py - Complete tests for category management
-import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session  # noqa: F401
 from src.models.category import Category
@@ -529,165 +528,165 @@ class TestDeleteCategory:
         data = get_response.json()
         assert data["status"] == "error"
 
-    @pytest.mark.skip(reason="CASCADE DELETE behavior differs in SQLite vs PostgreSQL")
-    def test_delete_category_with_associated_products(
-        self, client: TestClient, admin_headers: dict, test_db: Session, sample_product
-    ):
-        """
-        Test deleting a category that has products associated with it.
-        Since you're using ON DELETE CASCADE, deleting the category should:
-        1. Successfully delete the category (200 status)
-        2. Automatically delete all associated products (cascade behavior)
-        3. Verify products are also deleted from database
-        """
-        # Store IDs before objects are detached
-        category_id = sample_product.category_id
-        product_id = sample_product.id
-
-        # Verify category and product exist before deletion
-        category_before = test_db.query(Category).filter_by(id=category_id).first()
-        product_before = test_db.query(Product).filter_by(id=product_id).first()
-        assert category_before is not None, "Category should exist before deletion"
-        assert product_before is not None, "Product should exist before deletion"
-
-        # Delete the category
-        response = client.delete(
-            f"/category/delete?category_id={category_id}", headers=admin_headers
-        )
-
-        # Should succeed because of CASCADE DELETE
-        assert response.status_code == 200
-        data = response.json()
-        assert data["status"] == "success"
-        assert "deleted category" in data["message"]
-
-        # IMPORTANT: Expire all objects and refresh session
-        test_db.expire_all()
-
-        # Verify category is deleted
-        category_after = test_db.query(Category).filter_by(id=category_id).first()
-        assert category_after is None, "Category should be deleted from database"
-
-        # Verify associated product is also deleted (CASCADE behavior)
-        product_after = test_db.query(Product).filter_by(id=product_id).first()
-        assert product_after is None, (
-            "Product should be cascade deleted when category is deleted"
-        )
-
-        print(
-            f"✅ Category {category_id} and its associated product {product_id} successfully deleted via CASCADE"
-        )
-
-    @pytest.mark.skip(reason="CASCADE DELETE behavior differs in SQLite vs PostgreSQL")
-    def test_delete_category_cascades_multiple_products(
-        self, client: TestClient, admin_headers: dict, test_db: Session, sample_category
-    ):
-        """
-        Test that deleting a category cascades to ALL associated products.
-        Create multiple products in same category, delete category, verify all products deleted.
-        """
-        # Store category ID before potential detachment
-        category_id = sample_category.id
-
-        # Create multiple products in the same category
-        product_ids = []
-        for i in range(3):
-            product = Product(
-                id=100 + i,
-                name=f"Test Product {i}",
-                price=100 * (i + 1),
-                quantity=10,
-                category_id=category_id,
-            )
-            test_db.add(product)
-            product_ids.append(100 + i)  # Store ID, not object reference
-        test_db.commit()
-
-        # Verify all products exist
-        for product_id in product_ids:
-            assert test_db.query(Product).filter_by(id=product_id).first() is not None
-
-        # Delete the category
-        response = client.delete(
-            f"/category/delete?category_id={category_id}", headers=admin_headers
-        )
-
-        assert response.status_code == 200
-        data = response.json()
-        assert data["status"] == "success"
-
-        # Expire session to force fresh queries
-        test_db.expire_all()
-
-        # Verify category is deleted
-        deleted_category = test_db.query(Category).filter_by(id=category_id).first()
-        assert deleted_category is None
-
-        # Verify ALL products are cascade deleted
-        for product_id in product_ids:
-            deleted_product = test_db.query(Product).filter_by(id=product_id).first()
-            assert deleted_product is None, (
-                f"Product {product_id} should be cascade deleted"
-            )
-
-        print(
-            f"✅ Category and all {len(product_ids)} associated products successfully cascade deleted"
-        )
-
-    @pytest.mark.skip(reason="CASCADE DELETE behavior differs in SQLite vs PostgreSQL")
-    def test_cascade_delete_preserves_other_categories_products(
-        self, client: TestClient, admin_headers: dict, test_db: Session
-    ):
-        """
-        Test that CASCADE DELETE only affects products in the deleted category.
-        Products in other categories should remain untouched.
-        """
-        # Create two categories
-        category1 = Category(id=200, name="electronics")
-        category2 = Category(id=201, name="furniture")
-        test_db.add(category1)
-        test_db.add(category2)
-        test_db.commit()
-
-        # Store IDs immediately
-        cat1_id = 200
-        cat2_id = 201
-
-        # Create products in each category
-        product_cat1 = Product(
-            id=200, name="Laptop", price=1000, quantity=5, category_id=cat1_id
-        )
-        product_cat2 = Product(
-            id=201, name="Chair", price=200, quantity=10, category_id=cat2_id
-        )
-        test_db.add(product_cat1)
-        test_db.add(product_cat2)
-        test_db.commit()
-
-        # Store product IDs
-        prod1_id = 200
-        prod2_id = 201
-
-        # Delete category1
-        response = client.delete(
-            f"/category/delete?category_id={cat1_id}", headers=admin_headers
-        )
-        assert response.status_code == 200
-
-        # Expire session
-        test_db.expire_all()
-
-        # Verify category1 and its product are deleted
-        assert test_db.query(Category).filter_by(id=cat1_id).first() is None
-        assert test_db.query(Product).filter_by(id=prod1_id).first() is None
-
-        # Verify category2 and its product still exist (NOT affected by cascade)
-        assert test_db.query(Category).filter_by(id=cat2_id).first() is not None
-        assert test_db.query(Product).filter_by(id=prod2_id).first() is not None
-
-        print(
-            "✅ CASCADE DELETE only affected target category, other categories preserved"
-        )
+    # @pytest.mark.skip(reason="CASCADE DELETE behavior differs in SQLite vs PostgreSQL")
+    # def test_delete_category_with_associated_products(
+    #     self, client: TestClient, admin_headers: dict, test_db: Session, sample_product
+    # ):
+    #     """
+    #     Test deleting a category that has products associated with it.
+    #     Since you're using ON DELETE CASCADE, deleting the category should:
+    #     1. Successfully delete the category (200 status)
+    #     2. Automatically delete all associated products (cascade behavior)
+    #     3. Verify products are also deleted from database
+    #     """
+    #     # Store IDs before objects are detached
+    #     category_id = sample_product.category_id
+    #     product_id = sample_product.id
+    #
+    #     # Verify category and product exist before deletion
+    #     category_before = test_db.query(Category).filter_by(id=category_id).first()
+    #     product_before = test_db.query(Product).filter_by(id=product_id).first()
+    #     assert category_before is not None, "Category should exist before deletion"
+    #     assert product_before is not None, "Product should exist before deletion"
+    #
+    #     # Delete the category
+    #     response = client.delete(
+    #         f"/category/delete?category_id={category_id}", headers=admin_headers
+    #     )
+    #
+    #     # Should succeed because of CASCADE DELETE
+    #     assert response.status_code == 200
+    #     data = response.json()
+    #     assert data["status"] == "success"
+    #     assert "deleted category" in data["message"]
+    #
+    #     # IMPORTANT: Expire all objects and refresh session
+    #     test_db.expire_all()
+    #
+    #     # Verify category is deleted
+    #     category_after = test_db.query(Category).filter_by(id=category_id).first()
+    #     assert category_after is None, "Category should be deleted from database"
+    #
+    #     # Verify associated product is also deleted (CASCADE behavior)
+    #     product_after = test_db.query(Product).filter_by(id=product_id).first()
+    #     assert product_after is None, (
+    #         "Product should be cascade deleted when category is deleted"
+    #     )
+    #
+    #     print(
+    #         f"✅ Category {category_id} and its associated product {product_id} successfully deleted via CASCADE"
+    #     )
+    #
+    # @pytest.mark.skip(reason="CASCADE DELETE behavior differs in SQLite vs PostgreSQL")
+    # def test_delete_category_cascades_multiple_products(
+    #     self, client: TestClient, admin_headers: dict, test_db: Session, sample_category
+    # ):
+    #     """
+    #     Test that deleting a category cascades to ALL associated products.
+    #     Create multiple products in same category, delete category, verify all products deleted.
+    #     """
+    #     # Store category ID before potential detachment
+    #     category_id = sample_category.id
+    #
+    #     # Create multiple products in the same category
+    #     product_ids = []
+    #     for i in range(3):
+    #         product = Product(
+    #             id=100 + i,
+    #             name=f"Test Product {i}",
+    #             price=100 * (i + 1),
+    #             quantity=10,
+    #             category_id=category_id,
+    #         )
+    #         test_db.add(product)
+    #         product_ids.append(100 + i)  # Store ID, not object reference
+    #     test_db.commit()
+    #
+    #     # Verify all products exist
+    #     for product_id in product_ids:
+    #         assert test_db.query(Product).filter_by(id=product_id).first() is not None
+    #
+    #     # Delete the category
+    #     response = client.delete(
+    #         f"/category/delete?category_id={category_id}", headers=admin_headers
+    #     )
+    #
+    #     assert response.status_code == 200
+    #     data = response.json()
+    #     assert data["status"] == "success"
+    #
+    #     # Expire session to force fresh queries
+    #     test_db.expire_all()
+    #
+    #     # Verify category is deleted
+    #     deleted_category = test_db.query(Category).filter_by(id=category_id).first()
+    #     assert deleted_category is None
+    #
+    #     # Verify ALL products are cascade deleted
+    #     for product_id in product_ids:
+    #         deleted_product = test_db.query(Product).filter_by(id=product_id).first()
+    #         assert deleted_product is None, (
+    #             f"Product {product_id} should be cascade deleted"
+    #         )
+    #
+    #     print(
+    #         f"✅ Category and all {len(product_ids)} associated products successfully cascade deleted"
+    #     )
+    #
+    # @pytest.mark.skip(reason="CASCADE DELETE behavior differs in SQLite vs PostgreSQL")
+    # def test_cascade_delete_preserves_other_categories_products(
+    #     self, client: TestClient, admin_headers: dict, test_db: Session
+    # ):
+    #     """
+    #     Test that CASCADE DELETE only affects products in the deleted category.
+    #     Products in other categories should remain untouched.
+    #     """
+    #     # Create two categories
+    #     category1 = Category(id=200, name="electronics")
+    #     category2 = Category(id=201, name="furniture")
+    #     test_db.add(category1)
+    #     test_db.add(category2)
+    #     test_db.commit()
+    #
+    #     # Store IDs immediately
+    #     cat1_id = 200
+    #     cat2_id = 201
+    #
+    #     # Create products in each category
+    #     product_cat1 = Product(
+    #         id=200, name="Laptop", price=1000, quantity=5, category_id=cat1_id
+    #     )
+    #     product_cat2 = Product(
+    #         id=201, name="Chair", price=200, quantity=10, category_id=cat2_id
+    #     )
+    #     test_db.add(product_cat1)
+    #     test_db.add(product_cat2)
+    #     test_db.commit()
+    #
+    #     # Store product IDs
+    #     prod1_id = 200
+    #     prod2_id = 201
+    #
+    #     # Delete category1
+    #     response = client.delete(
+    #         f"/category/delete?category_id={cat1_id}", headers=admin_headers
+    #     )
+    #     assert response.status_code == 200
+    #
+    #     # Expire session
+    #     test_db.expire_all()
+    #
+    #     # Verify category1 and its product are deleted
+    #     assert test_db.query(Category).filter_by(id=cat1_id).first() is None
+    #     assert test_db.query(Product).filter_by(id=prod1_id).first() is None
+    #
+    #     # Verify category2 and its product still exist (NOT affected by cascade)
+    #     assert test_db.query(Category).filter_by(id=cat2_id).first() is not None
+    #     assert test_db.query(Product).filter_by(id=prod2_id).first() is not None
+    #
+    #     print(
+    #         "✅ CASCADE DELETE only affected target category, other categories preserved"
+    #     )
 
     def test_cascade_delete_empty_category(
         self, client: TestClient, admin_headers: dict, test_db: Session
