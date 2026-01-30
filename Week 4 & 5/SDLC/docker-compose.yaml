@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTRES_DB: inventory_manager
+      POSTRES_USER: postres
+      POSTRES_PASSWORD: 123456
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  project:
