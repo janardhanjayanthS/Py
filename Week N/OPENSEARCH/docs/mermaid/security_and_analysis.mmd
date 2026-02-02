@@ -1,0 +1,40 @@
+%% graph TD
+%%     %% Styles
+%%     classDef hacker fill:#ffe3e3,stroke:#e03131,color:#610316;
+%%     classDef logs fill:#e1e7eb,stroke:#616e7c,color:#102a43;
+%%     classDef engine fill:#fff3c4,stroke:#f7c948,color:#45260a;
+%%     classDef intel fill:#d0e2ff,stroke:#4c6ef5,color:#001a57;
+%%     classDef alert fill:#ffc9c9,stroke:#f03e3e,color:#c92a2a;
+%%
+%%     subgraph The_Attack
+%%         Hacker["Hacker IP - 5.5.5.5"]:::hacker
+%%     end
+%%
+%%     subgraph Ingestion
+%%         Firewall[Firewall Logs]:::logs
+%%         Server[Server Logs]:::logs
+%%     end
+%%
+%%     subgraph Security_Analytics_Plugin
+%%         IntelFeed["Threat Intel Feed
+%%         List of Bad IPs"]:::intel
+%%         IntelEngine{Threat Intel Lookup}:::engine
+%%         CorrEngine{{Correlation Engine}}:::engine
+%%     end
+%%
+%%     subgraph Output
+%%         Incident["Security Incident
+%%         Critical Threat Detected"]:::alert
+%%     end
+%%
+%%     %% Flow
+%%     Hacker -->|1. Probes Network| Firewall
+%%     Hacker -->|2. Tries Password| Server
+%%
+%%     Firewall -->|Log Stream| IntelEngine
+%%     IntelFeed -.->|Syncs Data| IntelEngine
+%%
+%%     IntelEngine -->|Match Found!| CorrEngine
+%%     Server -->|Log Stream| CorrEngine
+%%
+%%     CorrEngine -->|Links IP Match + Login Attempt| Incident

@@ -1,0 +1,27 @@
+%% graph LR
+%%     %% Styles
+%%     classDef json fill:#f4f4f4,stroke:#333,stroke-dasharray: 5 5,color:#333,font-family:monospace,text-align:left;
+%%     classDef engine fill:#fff3c4,stroke:#f7c948,color:#45260a;
+%%     classDef bucketRed fill:#ffd8d8,stroke:#e65252,color:#610316;
+%%     classDef bucketGreen fill:#d1f7c4,stroke:#5ebc4f,color:#0c2d0a;
+%%     classDef bucketBlue fill:#d0e2ff,stroke:#4c6ef5,color:#001a57;
+%%
+%%     subgraph Request [User Request JSON]
+%%         %% #quot; represents a double quote in Mermaid
+%%         Req("{<br/> &nbsp; #quot;aggs#quot;: {<br/> &nbsp; &nbsp; #quot;brand_sidebar#quot;: {<br/> &nbsp; &nbsp; &nbsp; #quot;terms#quot;: {<br/> &nbsp; &nbsp; &nbsp; &nbsp; #quot;field#quot;: #quot;brand.keyword#quot;<br/> &nbsp; &nbsp; &nbsp; }<br/> &nbsp; &nbsp; }<br/> &nbsp; }<br/>}"):::json
+%%     end
+%%
+%%     subgraph Process [OpenSearch Core]
+%%         Engine{{Aggregation Engine}}:::engine
+%%     end
+%%
+%%     subgraph Response [JSON Response Buckets]
+%%         Res1("{ key: 'Nike', count: 50 }"):::bucketRed
+%%         Res2("{ key: 'Adidas', count: 30 }"):::bucketGreen
+%%         Res3("{ key: 'Puma', count: 20 }"):::bucketBlue
+%%     end
+%%
+%%     Req -->|Send Query| Engine
+%%     Engine -->|Group Data| Res1
+%%     Engine -->|Group Data| Res2
+%%     Engine -->|Group Data| Res3

@@ -1,0 +1,79 @@
+%% ML
+
+%% graph TD
+%%     %% Definitions
+%%     classDef user fill:#e3f2fd,stroke:#2196f3,color:#0d47a1;
+%%     classDef ml fill:#f3e5f5,stroke:#9c27b0,color:#4a148c;
+%%     classDef engine fill:#e8f5e9,stroke:#4caf50,color:#1b5e20;
+%%     classDef result fill:#fff3e0,stroke:#ff9800,color:#e65100;
+%%     classDef vector font-family:monospace,font-size:11px,fill:#fff,stroke:#ddd,stroke-dasharray: 2 2;
+%%
+%%     subgraph Step1 ["1. User Input"]
+%%         Query["User searches:
+%%         'Warm winter coat'"]:::user
+%%     end
+%%
+%%     subgraph Step2 ["2. ML Transformation"]
+%%         Model{{"Embedding Model
+%%         (BERT / Titan)"}}:::ml
+%%         Vec1["Query Vector:
+%%         [0.85, -0.12, 0.44...]"]:::vector
+%%     end
+%%
+%%     subgraph Step3 ["3. The Search Engine"]
+%%         KNN[("k-NN Index
+%%         Vector Space")]:::engine
+%%         Logic{"Calculate
+%%         Distance"}:::engine
+%%     end
+%%
+%%     subgraph Step4 ["4. Results"]
+%%         Match1["Match Found:
+%%         'Heavy Parka Jacket'"]:::result
+%%     end
+%%
+%%     %% Flows
+%%     Query -->|Send Text| Model
+%%     Model -->|Return Vector| Vec1
+%%     Vec1 -->|Search Nearest Neighbors| Logic
+%%     KNN -.->|Compare stored vectors| Logic
+%%     Logic -->|Closest Match| Match1
+
+
+%% Anomaly detection:
+
+%% graph LR
+%%     %% Definitions
+%%     classDef stream fill:#f5f5f5,stroke:#616161,color:#212121;
+%%     classDef algo fill:#fff9c4,stroke:#fbc02d,color:#f57f17;
+%%     classDef check fill:#e0f7fa,stroke:#00bcd4,color:#006064;
+%%     classDef alert fill:#ffcdd2,stroke:#f44336,color:#b71c1c;
+%%     classDef note font-family:monospace,font-size:10px,fill:#fff,stroke:none;
+%%
+%%     subgraph Input [Data Stream]
+%%         Log1[Log 10:00]:::stream
+%%         Log2[Log 10:01]:::stream
+%%         Log3[Log 10:02]:::stream
+%%     end
+%%
+%%     subgraph Intelligence [The Brain]
+%%         RCF{{"Random Cut Forest
+%%         (Unsupervised Model)"}}:::algo
+%%         Score["Anomaly Grade
+%%         (0.0 - 1.0)"]:::check
+%%     end
+%%
+%%     subgraph Action [Response]
+%%         Threshold{"Score > 0.8?"}:::check
+%%         Slack((Alert Sent)):::alert
+%%     end
+%%
+%%     %% Flows
+%%     Log1 & Log2 & Log3 -->|Continuous Feed| RCF
+%%     RCF -->|Updates Normal Model| RCF
+%%
+%%     RCF -->|Calculates Deviation| Score
+%%     Score --> Threshold
+%%
+%%     Threshold -->|Yes - Anomaly| Slack
+%%     Threshold -->|No - Normal| Clean[No Action]:::stream

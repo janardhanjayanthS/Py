@@ -1,0 +1,61 @@
+%% Ecommerce faceting (aggreagation)
+
+%% graph LR
+%%     %% Styles for Minimalism and Color
+%%     classDef start fill:#e1e7eb,stroke:#616e7c,color:#102a43;
+%%     classDef must fill:#d2f4d3,stroke:#40c057,color:#0c2d0a;
+%%     classDef not fill:#ffe3e3,stroke:#f03e3e,color:#610316;
+%%     classDef should fill:#fff3bf,stroke:#fcc419,color:#45260a;
+%%     classDef endState fill:#d0e2ff,stroke:#339af0,color:#001a57;
+%%     classDef excluded fill:#868e96,stroke:#495057,color:#fff;
+%%
+%%     Docs[All Products]:::start --> G1{"MUST / FILTER<br/>Is Phone? Under $1k?"}:::must
+%%
+%%     G1 -->|Fail| Excluded[Excluded]:::excluded
+%%     G1 -->|Pass| G2{"MUST NOT<br/>Is Used?"}:::not
+%%
+%%     G2 -->|Yes - It is used| Excluded
+%%     G2 -->|No - It is new| G3{"SHOULD<br/>Is Apple? Boost"}:::should
+%%
+%%     G3 -->|Yes| Final[High Score Results]:::endState
+%%     G3 -->|No| FinalLower[Lower Score Results]:::endState
+
+
+%% Boolean logic:
+%% graph TD
+%%     %% Styles
+%%     classDef pool fill:#e1e7eb,stroke:#616e7c,color:#102a43;
+%%     classDef must fill:#d2f4d3,stroke:#40c057,color:#0c2d0a;
+%%     classDef not fill:#ffe3e3,stroke:#f03e3e,color:#610316;
+%%     classDef should fill:#fff3bf,stroke:#fcc419,color:#45260a;
+%%     classDef result fill:#d0e2ff,stroke:#339af0,color:#001a57;
+%%     classDef jsonNote fill:#fff,stroke:#333,stroke-dasharray: 2 2,color:#555,font-family:monospace,font-size:10px;
+%%
+%%     Docs[All Products Pool]:::pool --> G1
+%%
+%%     subgraph Step1 [Phase 1: Mandatory Rules]
+%%         JSON1["must: match smartphone<br/>filter: range price lt 1000"]:::jsonNote
+%%         G1{MUST / FILTER<br/>Matches JSON?}:::must
+%%         JSON1 -.- G1
+%%     end
+%%
+%%     G1 -->|No| Excluded[Excluded]:::pool
+%%     G1 -->|Yes| G2
+%%
+%%     subgraph Step2 [Phase 2: Exclusion Rules]
+%%         JSON2["must_not: term status used"]:::jsonNote
+%%         G2{MUST NOT<br/>Matches JSON?}:::not
+%%         JSON2 -.- G2
+%%     end
+%%
+%%     G2 -->|Yes - It is used| Excluded
+%%     G2 -->|No - It is new| G3
+%%
+%%     subgraph Step3 [Phase 3: Ranking Rules]
+%%         JSON3["should: term brand Apple"]:::jsonNote
+%%         G3{SHOULD<br/>Matches JSON?}:::should
+%%         JSON3 -.- G3
+%%     end
+%%
+%%     G3 -->|Yes| Final1[High Score Result<br/>Apple Phone]:::result
+%%     G3 -->|No| Final2[Lower Score Result<br/>Other Phone]:::result

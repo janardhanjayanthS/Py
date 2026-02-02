@@ -1,0 +1,51 @@
+%% graph TD
+%%     %% Color Definitions
+%%     classDef infrastructure fill:#e1e7eb,stroke:#616e7c,color:#102a43,stroke-width:2px;
+%%     classDef collection fill:#d0e2ff,stroke:#4c6ef5,color:#001a57,stroke-width:2px;
+%%     classDef opensearch fill:#fff3c4,stroke:#f7c948,color:#45260a,stroke-width:2px;
+%%     classDef views fill:#d1f7c4,stroke:#5ebc4f,color:#0c2d0a,stroke-width:2px;
+%%
+%%     %% Node Styles
+%%     class App,Server infrastructure;
+%%     class FluentBit,OTel collection;
+%%     class Ingest,Engine,Dashboards opensearch;
+%%     class LogView,PerfView views;
+%%
+%%     subgraph Data_Sources ["Your Infrastructure"]
+%%         App[Application Code]
+%%         Server[Linux Server]
+%%     end
+%%
+%%     subgraph Agents ["Collection Layer"]
+%%         FluentBit[FluentBit - Logs]
+%%         OTel[OpenTelemetry - Metrics/Traces]
+%%     end
+%%
+%%     subgraph OpenSearch_Suite ["OpenSearch Suite"]
+%%         Ingest[Data Prepper]
+%%         Engine[(OpenSearch Engine)]
+%%         Dashboards[OpenSearch Dashboards]
+%%     end
+%%
+%%     %% Flows with Colored Lines
+%%     App -->|Generates Traces/Metrics| OTel
+%%     Server -->|Generates Log Files| FluentBit
+%%
+%%     FluentBit -->|Sends JSON| Engine
+%%     OTel -->|Sends Raw Data| Ingest
+%%     Ingest -->|Process & Index| Engine
+%%
+%%     Engine -->|Query Data| Dashboards
+%%
+%%     subgraph User_Views ["Observability Views"]
+%%         LogView["Log Explorer
+%%         (PPL & Discover)"]
+%%         PerfView["Trace Analytics
+%%         (Service Maps & Gantt)"]
+%%     end
+%%
+%%     Dashboards --> LogView
+%%     Dashboards --> PerfView
+%%
+%%     %% Link Styles for better visibility
+%%     linkStyle 0,1,2,3,4,5,6,7 stroke:#555,stroke-width:2px,fill:none;

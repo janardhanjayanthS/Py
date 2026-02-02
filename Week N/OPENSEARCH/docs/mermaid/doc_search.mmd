@@ -1,0 +1,29 @@
+%% graph TD
+%%     %% Styles
+%%     classDef raw fill:#e1e7eb,stroke:#616e7c,color:#102a43;
+%%     classDef process fill:#fff3c4,stroke:#f7c948,color:#45260a;
+%%     classDef index fill:#d0e2ff,stroke:#4c6ef5,color:#001a57;
+%%     classDef result fill:#d1f7c4,stroke:#5ebc4f,color:#0c2d0a;
+%%     classDef json fill:#f4f4f4,stroke:#333,stroke-dasharray: 5 5,color:#333,font-family:monospace;
+%%
+%%     subgraph Ingestion [Step 1: Ingest & Analyze]
+%%         Doc["Raw Document:<br/>'The foxes are running'"]:::raw
+%%         Analyzer1{{Analyzer Pipeline<br/>1. Lowercase<br/>2. Remove 'The'<br/>3. Stem 'running'->'run'}}:::process
+%%         Index[("Inverted Index:<br/>fox -> Doc 1<br/>run -> Doc 1")]:::index
+%%     end
+%%
+%%     subgraph Querying [Step 2: Search & Highlight]
+%%         UserQ["User Query:<br/>'foxxes runing' (Typos)"]:::raw
+%%         Config("JSON Query:<br/>{<br/> &nbsp; #quot;match#quot;: {<br/> &nbsp; &nbsp; #quot;content#quot;: {<br/> &nbsp; &nbsp; &nbsp; #quot;query#quot;: #quot;foxxes runing#quot;,<br/> &nbsp; &nbsp; &nbsp; #quot;fuzziness#quot;: #quot;AUTO#quot;<br/> &nbsp; &nbsp; }<br/> &nbsp; },<br/> &nbsp; #quot;highlight#quot;: { ... }<br/>}"):::json
+%%         SearchEngine{{Search Engine}}:::process
+%%         FinalResult["Result w/ Highlight:<br/>'The <em>foxes</em> are <em>running</em>'"]:::result
+%%     end
+%%
+%%     %% Flow
+%%     Doc --> Analyzer1
+%%     Analyzer1 --> Index
+%%
+%%     UserQ --> Config
+%%     Config --> SearchEngine
+%%     Index <--> SearchEngine
+%%     SearchEngine --> FinalResult

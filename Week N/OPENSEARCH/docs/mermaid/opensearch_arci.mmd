@@ -1,0 +1,86 @@
+graph TD
+    %% Styles
+    classDef source fill:#e3f2fd,stroke:#1976d2,color:#0d47a1;
+    classDef ingest fill:#fff3e0,stroke:#f57c00,color:#e65100;
+    classDef core fill:#e8f5e9,stroke:#388e3c,color:#1b5e20;
+    classDef plugin fill:#f3e5f5,stroke:#7b1fa2,color:#4a148c;
+    classDef output fill:#fce4ec,stroke:#c2185b,color:#880e4f;
+
+    subgraph DataSources ["Data Sources"]
+        Apps[Applications]:::source
+        Servers[Servers & Infrastructure]:::source
+        Databases[(Databases)]:::source
+    end
+
+    subgraph Ingestion ["Data Ingestion Layer"]
+        Logstash[Logstash]:::ingest
+        FluentBit[Fluent Bit]:::ingest
+        DataPrepper[Data Prepper]:::ingest
+        Beats[Beats]:::ingest
+    end
+
+    subgraph OpenSearchCore ["OpenSearch Core"]
+        Cluster{{"OpenSearch Cluster
+        (Distributed Engine)"}}:::core
+        
+        subgraph Storage ["Storage & Indexing"]
+            Indices[(Indices & Shards)]:::core
+            Replicas[(Replicas)]:::core
+        end
+        
+        subgraph Processing ["Query Processing"]
+            QueryEngine[Query DSL Engine]:::core
+            Aggregations[Aggregations]:::core
+            SearchAPI[Search APIs]:::core
+        end
+    end
+
+    subgraph Plugins ["Key Plugins & Features"]
+        direction TB
+        Security[Security Plugin
+        Authentication & Authorization]:::plugin
+        Alerting[Alerting
+        Monitors & Triggers]:::plugin
+        Anomaly[Anomaly Detection
+        ML-based Monitoring]:::plugin
+        ISM[Index State Management
+        Lifecycle Policies]:::plugin
+        PPL[Piped Processing Language
+        Log Queries]:::plugin
+    end
+
+    subgraph Visualization ["Visualization & Analytics"]
+        Dashboards[OpenSearch Dashboards]:::output
+        Discover[Discover & Explore]:::output
+        Visualize[Visualizations]:::output
+        TraceMaps[Trace Analytics & Maps]:::output
+    end
+
+    %% Data Flow
+    Apps -->|Logs & Metrics| Logstash
+    Servers -->|System Logs| FluentBit
+    Databases -->|Query Logs| Beats
+    Apps -->|Traces| DataPrepper
+
+    Logstash -->|Index Data| Cluster
+    FluentBit -->|Stream Data| Cluster
+    DataPrepper -->|Process & Index| Cluster
+    Beats -->|Ship Data| Cluster
+
+    Cluster -->|Store| Indices
+    Indices -->|Replicate| Replicas
+    
+    Cluster -->|Execute| QueryEngine
+    QueryEngine -->|Process| Aggregations
+    Aggregations -->|Expose| SearchAPI
+
+    Cluster -.->|Secure| Security
+    Cluster -.->|Monitor| Alerting
+    Cluster -.->|Analyze| Anomaly
+    Cluster -.->|Manage| ISM
+    Cluster -.->|Query| PPL
+
+    SearchAPI -->|Visualize| Dashboards
+    Dashboards --> Discover
+    Dashboards --> Visualize
+    Dashboards --> TraceMaps
