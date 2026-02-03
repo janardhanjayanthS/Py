@@ -6,9 +6,9 @@ COPY requirements.txt .
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY /src ./src/
 
-EXPOSE 6000
+EXPOSE 5000
 
 ENV sample=hi_da
 ENV host=0.0.0.0
