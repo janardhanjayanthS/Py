@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from src.core.filepath import ENV_FILE
@@ -24,7 +24,9 @@ class Settings(BaseSettings, metaclass=Singleton):
     )
 
     # POSTGRESQL
-    postgresql_pwd: str = Field(validation_alias="POSTGRESQL_PWD")
+    postgresql_pwd: str = Field(
+        validation_alias=AliasChoices("POSTGRESQL_PWD", "db_password")
+    )
 
     # ENVIRONMENT
     environment: str = Field(validation_alias="ENVIRONMENT")
@@ -45,7 +47,11 @@ class Settings(BaseSettings, metaclass=Singleton):
 
     # .env settings
     model_config = SettingsConfigDict(
-        env_file=ENV_FILE, env_file_encoding="utf-8", env_prefix="", extra="ignore"
+        env_file=ENV_FILE,
+        env_file_encoding="utf-8",
+        secrets_dir="/run/secrets",
+        env_prefix="",
+        extra="ignore",
     )
 
 

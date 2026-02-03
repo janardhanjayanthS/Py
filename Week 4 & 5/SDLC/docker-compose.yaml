@@ -4,7 +4,9 @@ services:
     environment:
       POSTRES_DB: inventory_manager
       POSTRES_USER: postres
-      POSTRES_PASSWORD: 123456
+      POSTRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - POSTGRESQL_PWD
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -12,4 +14,13 @@ services:
     build: ./project
     ports:
       - "5003:5003"
-    environment: ...
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+secrets:
+  # this must match the .env var name
+  POSTGRESQL_PWD:
+    file: ./secrets/db_password.txt
