@@ -9,3 +9,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   project:
+    build: ./project
+    ports:
+      - "5003:5003"
+    environment: ...
