@@ -14,13 +14,18 @@ services:
     build: ./project
     ports:
       - "5003:5003"
+    secrets:
+      - POSTGRESQL_PWD
     env_file:
-      - .env
+      - ./project/.env
     depends_on:
       db:
-        condition: service_healthy
+        condition: service_started
 
 secrets:
   # this must match the .env var name
   POSTGRESQL_PWD:
     file: ./secrets/db_password.txt
+
+volumes:
+  pgdata:
