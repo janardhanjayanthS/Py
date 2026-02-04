@@ -2,29 +2,35 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTRES_DB: inventory_manager
-      POSTRES_USER: postres
-      POSTRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_DB: inventory_manager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
     secrets:
-      - POSTGRESQL_PWD
+      - db_password
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d inventory_manager"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   project:
     build: ./project
     ports:
       - "5003:5003"
     secrets:
-      - POSTGRESQL_PWD
+      - db_password
     env_file:
       - ./project/.env
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
+    environment:
+      - DATABASE_HOST=db # This will be used in your settings
 
 secrets:
-  # this must match the .env var name
-  POSTGRESQL_PWD:
+  db_password:
     file: ./secrets/db_password.txt
 
 volumes:
