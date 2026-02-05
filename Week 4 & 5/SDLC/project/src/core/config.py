@@ -27,6 +27,10 @@ class Settings(BaseSettings, metaclass=Singleton):
     postgresql_pwd: str = Field(
         validation_alias=AliasChoices("POSTGRESQL_PWD", "db_password")
     )
+    db_host: str = Field(
+        default="localhost",
+        validation_alias=AliasChoices("DB_HOST", "db_host")
+    )
 
     # ENVIRONMENT
     environment: str = Field(validation_alias="ENVIRONMENT")
@@ -38,7 +42,7 @@ class Settings(BaseSettings, metaclass=Singleton):
         Returns:
             Database connection string.
         """
-        return f"postgresql+asyncpg://postgres:{self.postgresql_pwd}@localhost:5432/inventory_manager"
+        return f"postgresql+asyncpg://postgres:{self.postgresql_pwd}@{self.db_host}:5432/inventory_manager"
 
     # JWT
     JWT_SECRET_KEY: str = Field(validation_alias="JWT_SECRET_KEY")
