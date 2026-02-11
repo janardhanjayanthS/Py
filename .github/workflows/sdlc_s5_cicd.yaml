@@ -1,0 +1,4 @@
+name: SCLC STEP 5 CI-CD
+
+ON:
+  PUSH:
