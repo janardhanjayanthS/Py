@@ -193,6 +193,8 @@ python -m pytest tests/ -v
 ```bash
 # Start server
 uvicorn src.api.main:app --host 0.0.0.0 --port 5001 --reload
+or
+python -m src.api.main
 
 # Run tests
 python -m pytest tests/
