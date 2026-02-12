@@ -1,4 +1,32 @@
 name: SCLC STEP 5 CI-CD
 
-ON:
-  PUSH:
+on:
+  push:
+    branches: ['feat/inv_manager_SDLC_step5']
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        users: actions/checkout@v5
+
+      - name: Set-up python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install requirements
+        run: |
+          pip install flake8
+          pip install --no-cache-dir -r "Week 4 & 5/SDLC/project/requirements/requirements.txt"
+
+      - name: Lint with flake8
+        run: |
+          flake8 "Week 4 & 5/SDLC/project/src/" --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Run Tests
+        run: |
+          pytest -p no:cacheprovider "Week 4 & 5/SDLC/project/tests/"
