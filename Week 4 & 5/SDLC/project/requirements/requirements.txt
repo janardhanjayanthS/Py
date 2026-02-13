@@ -20,7 +20,6 @@ httpx==0.28.1
 idna==3.11
 immutables==0.21
 iniconfig==2.3.0
-inventory_manager @ file:///C:/Users/jana/Desktop/REC%20python/Python/Week%202/Day%206/package
 Jinja2==3.1.6
 Mako==1.3.10
 MarkupSafe==3.0.3
@@ -53,3 +52,4 @@ urllib3==2.5.0
 uvicorn==0.38.0
 watchfiles==1.1.1
 websockets==15.0.1
+./package/
