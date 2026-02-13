@@ -29,4 +29,6 @@ jobs:
 
       - name: Run Tests
         run: |
-          pytest -p no:cacheprovider "Week 4 & 5/SDLC/project/tests/"
+          pytest -p no:cacheprovider "Week 4 & 5/SDLC/project/tests/core"
+          pytest -p no:cacheprovider "Week 4 & 5/SDLC/project/tests/repoistory"
+          pytest -p no:cacheprovider "Week 4 & 5/SDLC/project/tests/services"

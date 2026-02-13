@@ -4,6 +4,7 @@ from typing import Callable, Optional
 
 from fastapi import Request
 from jose import JWTError, jwt
+
 from src.core.config import settings
 from src.core.exceptions import AuthenticationException
 from src.core.log import get_logger
