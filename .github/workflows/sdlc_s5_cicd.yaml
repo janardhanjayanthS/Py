@@ -4,7 +4,6 @@ on:
   push:
     branches: ['feat/inv_manager_SDLC_step5']
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,9 +17,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install requirements
+      - name: Install package and requirements
         run: |
           pip install flake8
+          pip install -e "Week 4 & 5/SDLC/project/package/"
           pip install --no-cache-dir -r "Week 4 & 5/SDLC/project/requirements/requirements.txt"
 
       - name: Lint with flake8
