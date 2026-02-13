@@ -1,0 +1,762 @@
+{
+  "page_num": 4,
+  "image_width": 10830,
+  "image_height": 7281,
+  "created_at": "2026-02-12T07:48:10.037622+00:00",
+  "blocks": [
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_046",
+      "coordinates": {
+        "x1": 8800.04296875,
+        "y1": 3249.735595703125,
+        "x2": 10627.8310546875,
+        "y2": 4021.767333984375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.9573284983634949,
+      "reading_order": 47,
+      "text": "4. IN AREAS WHERE THE PROJECT DESIGN INCORPORATES FILL ADJACENT TO\nNEIGHBORING LANDOWNERS, THE CONTRACTOR SHALL IMPLEMENT\nGRADING AND/OR PERIMETER RUNOFF CATCHMENT DEVICES\n(E.G.-PERIMETER DITCHES) DURING CONSTRUCTION TO ENSURE THAT\nADJACENT PARCELS BORDERING THE PROJECT SITE DO NOT EXPERIENCE\nINTERIM DRAINAGE FLOWS THAT EXCEED PRE-DEVELOPMENT CONDITIONS\nFOR STORM EVENTS UP TO AND INCLUDING THE CURRENT STORM\nDRAINAGE DESIGN CRITERIA AT THE TIME OF PERMIT OR CARRY SEDIMENT\nGENERATED AS PART O F CONSTRUCTION ACTIVITIES. WHERE APPLICABLE,\nTHESE PRACTICES ARE IN ADDITION TO THE STANDARD STORM WATER\nPOLLUTION PREVENTION DESIGN AND SHALL INCLUDE ADDITIONAL DITCHES\nREDIRECTING SITE DRAINAGE OR TEMPORARY PIPING. THIS NOTE IS NOT\nINTENDED TO ADDRESS ANY LIABILITY OR RESPONSIBILITY UNDER TEXAS\nWATER CODE 11.086."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_002",
+      "coordinates": {
+        "x1": 2485.72412109375,
+        "y1": 302.9526672363281,
+        "x2": 8835.783203125,
+        "y2": 6075.6123046875
+      },
+      "layout_tag": "image",
+      "confidence": 0.9510369300842285,
+      "reading_order": 3,
+      "text": "यह चित्र एक विस्तृत साइट प्लान या इंजीनियरिंग ड्राइंग है, जो संभवतः एक जल अवसंरचना परियोजना (जैसे, एक जल शोधन संयंत्र) के लिए है। इसमें विभिन्न लेबल वाले घटक, आयाम और दिशात्मक तीर शामिल हैं।\n\n**मुख्य विशेषताएं:**\n- **DA1 और DA2:** दो मुख्य पंप स्टेशन (पंपिंग स्टेशन) हैं।\n- **LIFT STATION:** DA1 और DA2 के बीच स्थित है।\n- **CONTROL PANEL:** DA2 के पास स्थित है।\n- **GENERATOR PAD:** DA2 के पास स्थित है।\n- **WATER LINE:** एक ऊर्ध्वाधर रेखा जो जल आपूर्ति के स्रोत को दर्शाती है।\n- **AMANDERA PKWY:** एक सड़क जो परियोजना क्षेत्र के ऊपर से गुजरती है।\n- **मैचिंग पॉइंट्स:** \"MATCH EXISTING\" लेबल वाले कई बिंदु (जैसे, 96.60, 96.80) मौजूदा बुनियादी ढांचे के साथ संरेखण दर्शाते हैं।\n- **स्केल:** नीचे बाईं ओर 1:100 स्केल दिया गया है।\n\n**डेटा निष्कर्षण:**\n| घटक | आयाम/मान |\n| :--- | :--- |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.18% |\n| DA1 पंप | 60 LF SWALE @ 0.1"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_027",
+      "coordinates": {
+        "x1": 2713.673095703125,
+        "y1": 6214.90087890625,
+        "x2": 6232.6044921875,
+        "y2": 6888.8095703125
+      },
+      "layout_tag": "table",
+      "confidence": 0.9503601789474487,
+      "reading_order": 28,
+      "text": "<table>\n<thead>\n<tr>\n<th>INLET</th>\n<th>Required<br/>Capacity<br/>for 100-Yr<br/>(cfs)</th>\n<th>STM SEWER</th>\n<th>Diameter (ft)</th>\n<th>Weir<br/>Coefficient<br/>(C_w)</th>\n<th>Length of<br/>each side<br/>of grating</th>\n<th>Mannings<br/>(n)</th>\n<th>Effective<br/>length</th>\n<th>Depth of<br/>Water<br/>Over<br/>Grate (H)<br/>ft</th>\n<th>Slope<br/>(%)</th>\n<th>Cross<br/>Section<br/>Area (A) ft^2</th>\n<th>Hydraulic<br/>Radius<br/>(R ) ft</th>\n<th>Velocity<br/>(fps)</th>\n<th>Allowable<br/>Capacity Q<br/>(cfs)</th>\n<th>Allowable<br/>Capacity &gt;<br/>Required<br/>Capacity?</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>TYPE A</td>\n<td>0.97</td>\n<td></td>\n<td></td>\n<td>3</td>\n<td>2.5</td>\n<td></td>\n<td>10</td>\n<td>0.2</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td>2.68</td>\n<td>OK</td>\n</tr>\n<tr>\n<td></td>\n<td>0.97</td>\n<td>24-INCH RCP</td>\n<td>2</td>\n<td></td>\n<td></td>\n<td>0.013</td>\n<td></td>\n<td></td>\n<td>0.18%</td>\n<td>3.14</td>\n<td>0.50</td>\n<td>3.06</td>\n<td>9.60</td>\n<td>OK</td>\n</tr>\n<tr>\n<td>TYPE A</td>\n<td>0.97</td>\n<td></td>\n<td></td>\n<td>3</td>\n<td>2.5</td>\n<td></td>\n<td>10</td>\n<td>0.2</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n<td>2.68</td>\n<td>OK</td>\n</tr>\n<tr>\n<td></td>\n<td>0.97</td>\n<td>24-INCH RCP</td>\n<td>2</td>\n<td></td>\n<td></td>\n<td>0.013</td>\n<td></td>\n<td></td>\n<td>0.18%</td>\n<td>3.14</td>\n<td>0.50</td>\n<td>3.06</td>\n<td>9.60</td>\n<td>OK</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_048",
+      "coordinates": {
+        "x1": 9368.470703125,
+        "y1": 4239.80078125,
+        "x2": 10644.376953125,
+        "y2": 4723.013671875
+      },
+      "layout_tag": "table",
+      "confidence": 0.9495842456817627,
+      "reading_order": 49,
+      "text": "<table>\n<thead>\n<tr>\n<th>REV.<br/>NO.</th>\n<th>DATE</th>\n<th>DESCRIPTION</th>\n<th>P.E.<br/>APPR.</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_026",
+      "coordinates": {
+        "x1": 1495.1392822265625,
+        "y1": 6220.14453125,
+        "x2": 2598.451904296875,
+        "y2": 6692.84423828125
+      },
+      "layout_tag": "table",
+      "confidence": 0.941780149936676,
+      "reading_order": 27,
+      "text": "<table>\n<thead>\n<tr>\n<th colspan=\"4\">Impervious Cover</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td></td>\n<td></td>\n<td>SF (ft²)</td>\n<td>Area (ac)</td>\n</tr>\n<tr>\n<td>Driveway</td>\n<td></td>\n<td>1831</td>\n<td>0.0420</td>\n</tr>\n<tr>\n<td>Wet well & Valve Pad</td>\n<td></td>\n<td>343</td>\n<td>0.0079</td>\n</tr>\n<tr>\n<td>Generator Pad</td>\n<td></td>\n<td>154</td>\n<td>0.0035</td>\n</tr>\n<tr>\n<td>Control Panel Pad</td>\n<td></td>\n<td>98</td>\n<td>0.0022</td>\n</tr>\n</tbody>\n<tfoot>\n<tr>\n<td></td>\n<td></td>\n<td>Total =</td>\n<td>0.06</td>\n</tr>\n</tfoot>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_047",
+      "coordinates": {
+        "x1": 8799.939453125,
+        "y1": 4055.840087890625,
+        "x2": 10623.8017578125,
+        "y2": 4223.6259765625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.941404402256012,
+      "reading_order": 48,
+      "text": "5. SELECT FILL SHALL BE IN ACCORDANCE WITH REQUIREMENTS AS STATED IN\nPROJECT GEOTECHNICAL REPORT BY TOLUNAY-WONG ENGINEERS INC.,\nTWE PROJECT # 25.13.055, DATED 05/31/2025."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_028",
+      "coordinates": {
+        "x1": 6304.88818359375,
+        "y1": 6217.89990234375,
+        "x2": 8698.365234375,
+        "y2": 6622.17041015625
+      },
+      "layout_tag": "table",
+      "confidence": 0.9376147985458374,
+      "reading_order": 29,
+      "text": "<table>\n<thead>\n<tr>\n<th>DA</th>\n<th>Drainage<br/>Area (ac)</th>\n<th>Composite<br/>Runoff<br/>Coeff (C)</th>\n<th>Drainage Medium</th>\n<th>T_c (min)</th>\n<th>TC&lt;10<br/>Take<br/>TC10</th>\n<th>Intensity<br/>(i_{100^-yr}<br/>in/hr</th>\n<th>100-yr<br/>Frequency<br/>y Factor<br/>\"Cf\"</th>\n<th>Q100<br/>(cfs)</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1</td>\n<td>0.09</td>\n<td>0.03</td>\n<td>Swale & Overland Flow to Inlet A</td>\n<td>10.00</td>\n<td>10.00</td>\n<td>12.09</td>\n<td>1.25</td>\n<td>0.04</td>\n</tr>\n<tr>\n<td>2</td>\n<td>0.05</td>\n<td>0.57</td>\n<td>Sheet Flow to Inlet A</td>\n<td>10</td>\n<td>10.00</td>\n<td>12.09</td>\n<td>1.25</td>\n<td>0.41</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_024",
+      "coordinates": {
+        "x1": 854.605224609375,
+        "y1": 5851.365234375,
+        "x2": 1835.1363525390625,
+        "y2": 6087.32373046875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.9317801594734192,
+      "reading_order": 25,
+      "text": "SIDE SLOPE FRONT AND BACK: 3H:1V\nn = 0.03 (GRASS LINED)\nCHANNEL SLOPE = 0.18%\nSWALE CAPACITY @ MAX DEPTH: 1.02 CFS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_056",
+      "coordinates": {
+        "x1": 9380.1953125,
+        "y1": 6499.21044921875,
+        "x2": 10644.9296875,
+        "y2": 6987.64599609375
+      },
+      "layout_tag": "table",
+      "confidence": 0.930825412273407,
+      "reading_order": 57,
+      "text": "<table>\n<thead>\n<tr>\n<th colspan=\"2\">JOB NUMBER: 14451-00</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>SUBMITTED: BGE, INC.<br/>SCALE: 1\"=10'<br/>DATE: OCTOBER 2025<br/><br/>SURVEY BY: BGE, INC.<br/>F B NO:</td>\n<td>DESIGNED BY: J.T.S.<br/>DRAWN BY: J.T.S.<br/>SHEET NO 4 OF 22 SHEETS</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_045",
+      "coordinates": {
+        "x1": 8867.19140625,
+        "y1": 2928.093994140625,
+        "x2": 10554.5234375,
+        "y2": 3209.33154296875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8995147347450256,
+      "reading_order": 46,
+      "text": "CONTRACTOR TO DETERMINE PLACEMENT OF EXPANSION JOINTS FOR\nCONCRETE PAVEMENT. PLACE AT ALL CURB RADII AND AT MAXIMUM OF 30\nSPACING. DRIVEWAY APRON CONNECTING THE RIGHT OF WAY (R.O.W.)\nOUTSIDE OF SITE FENCE TO BE 8-INCH THICK OR MATCH THE R.O.W.\nPAVEMENT IF PUBLIC R.O.W. EXISTS."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_044",
+      "coordinates": {
+        "x1": 8844.6552734375,
+        "y1": 2657.68603515625,
+        "x2": 10595.78125,
+        "y2": 2890.702880859375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8887184262275696,
+      "reading_order": 45,
+      "text": "2. CONTRACTOR TO OBTAIN ALL PERMITS REQUIRED BY FORT BEND COUNTY,\nTEXAS PRIOR TO STARTING CONSTRUCTION OF UTILITIES AND/OR\nCULVERTS WITHIN COUNTY ROAD RIGHT-OF-WAY. THE PERMIT IS TO BE\nISSUED IN THE OWNERS NAME."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_029",
+      "coordinates": {
+        "x1": 9491.724609375,
+        "y1": 284.205810546875,
+        "x2": 10615.62890625,
+        "y2": 1065.86572265625
+      },
+      "layout_tag": "image",
+      "confidence": 0.8741986155509949,
+      "reading_order": 30,
+      "text": "The image is a technical illustration, likely a scale drawing or a diagram from a geological or archaeological report. It features a North arrow pointing upwards and to the left, indicating the orientation of the map. Below the North arrow is a cylindrical object, possibly a borehole or a pipe, depicted with hatching to indicate its three-dimensional form. At the bottom of the image, there is a linear scale bar used for measurement. The scale bar is marked with intervals of 0, 5 feet, 10 feet, and 20 feet. The illustration contains no plotted data, axes, or legends to extract."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_035",
+      "coordinates": {
+        "x1": 9758.6416015625,
+        "y1": 1573.737548828125,
+        "x2": 10402.0966796875,
+        "y2": 1695.5784912109375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8568078279495239,
+      "reading_order": 36,
+      "text": "7-IN CONCRETE PAVEMENT\n(SEE DETAIL SHEET 13)"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_032",
+      "coordinates": {
+        "x1": 9761.412109375,
+        "y1": 1254.66943359375,
+        "x2": 10400.13671875,
+        "y2": 1370.2376708984375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8539625406265259,
+      "reading_order": 33,
+      "text": "8-IN CONCRETE DRIVEWAY\n(SEE DETAIL SHEET 13)"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_038",
+      "coordinates": {
+        "x1": 9761.9755859375,
+        "y1": 1815.6943359375,
+        "x2": 10388.98828125,
+        "y2": 1938.27099609375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8514950275421143,
+      "reading_order": 39,
+      "text": "GRADE TO DRAIN\nMATCH NATURAL GROUND"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_033",
+      "coordinates": {
+        "x1": 9762.2822265625,
+        "y1": 1411.403076171875,
+        "x2": 10308.84375,
+        "y2": 1525.6051025390625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8495448231697083,
+      "reading_order": 34,
+      "text": "PROPOSED SIDEWALK\n(SEE DETAIL SHEET 15)"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_054",
+      "coordinates": {
+        "x1": 8759.505859375,
+        "y1": 6345.8916015625,
+        "x2": 9357.517578125,
+        "y2": 6939.33251953125
+      },
+      "layout_tag": "image",
+      "confidence": 0.8421303629875183,
+      "reading_order": 55,
+      "text": "छवि में एक गोलाकार स्टाम्प दिखाया गया है जिसमें \"FORT BEND COUNTY\" लिखा है, जो ऊपर की ओर है। इसके नीचे \"APPROVED\" लिखा है। बीच में लाल रंग में \"OCT 3 1 2025\" की तारीख लिखी है। नीचे की ओर \"Valid One Year\" और \"From Date\" लिखा है। स्टाम्प के नीचे \"ENGINEERING DEPARTMENT\" लिखा है। स्टाम्प के ऊपर \"FBC ENGINEERING APPROVAL\" लिखा है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_043",
+      "coordinates": {
+        "x1": 8838.6904296875,
+        "y1": 2496.8740234375,
+        "x2": 10524.603515625,
+        "y2": 2617.985107421875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8391567468643188,
+      "reading_order": 44,
+      "text": "1. PRIOR TO CONSTRUCTION, SITE WILL BE FILLED TO ELEVATION 97.00 BY\nOTHERS."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_018",
+      "coordinates": {
+        "x1": 892.5716552734375,
+        "y1": 5200.716796875,
+        "x2": 1732.850341796875,
+        "y2": 5270.68603515625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.80498206615448,
+      "reading_order": 19,
+      "text": "A IMPERVIOUS = 0.06 ACRES C = 0.85"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_049",
+      "coordinates": {
+        "x1": 9515.4765625,
+        "y1": 4826.205078125,
+        "x2": 9873.99609375,
+        "y2": 5159.8349609375
+      },
+      "layout_tag": "image",
+      "confidence": 0.8030298352241516,
+      "reading_order": 50,
+      "text": "The image displays a logo consisting of the letters \"BGE\" in a bold, white, sans-serif typeface. The letters are set against a dark, textured background that resembles a grainy surface, likely black or dark grey. The text is horizontally centered within a rectangular frame. The top and bottom portions of the frame are solid dark blocks, while the left and right sides are white, creating a distinct border around the text. The overall design is simple, clean, and high-contrast."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_019",
+      "coordinates": {
+        "x1": 879.854736328125,
+        "y1": 5303.59423828125,
+        "x2": 1100.5860595703125,
+        "y2": 5374.61279296875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8004347085952759,
+      "reading_order": 20,
+      "text": "C_f = 1.25"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_016",
+      "coordinates": {
+        "x1": 937.99755859375,
+        "y1": 5027.56982421875,
+        "x2": 1650.5989990234375,
+        "y2": 5096.46142578125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8000850677490234,
+      "reading_order": 17,
+      "text": "ATLAS 14 100 YR FREQUENCY"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_017",
+      "coordinates": {
+        "x1": 889.0702514648438,
+        "y1": 5116.93994140625,
+        "x2": 1834.6600341796875,
+        "y2": 5186.79638671875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.796722948551178,
+      "reading_order": 18,
+      "text": "A NON-IMPERVIOUS = 0.07 ACRES C = 0.18"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_023",
+      "coordinates": {
+        "x1": 875.875244140625,
+        "y1": 5617.60302734375,
+        "x2": 2084.817138671875,
+        "y2": 5786.646484375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7904549837112427,
+      "reading_order": 24,
+      "text": "Qp= 1.25 X [(0.85 X 12.09 X 0.06) + (0.18 X 12.09 X 0.07)]\n\nQp= 0.97 CFS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_009",
+      "coordinates": {
+        "x1": 880.2914428710938,
+        "y1": 4392.85107421875,
+        "x2": 1103.2962646484375,
+        "y2": 4467.1259765625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7806544899940491,
+      "reading_order": 10,
+      "text": "C_f = 1.25"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_020",
+      "coordinates": {
+        "x1": 891.5455932617188,
+        "y1": 5421.61767578125,
+        "x2": 1161.7620849609375,
+        "y2": 5488.9091796875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7723918557167053,
+      "reading_order": 21,
+      "text": "TC = 10 MIN."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_007",
+      "coordinates": {
+        "x1": 882.9767456054688,
+        "y1": 4202.486328125,
+        "x2": 1838.3521728515625,
+        "y2": 4275.62451171875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7503013610839844,
+      "reading_order": 8,
+      "text": "A NON-IMPERVIOUS = 0.07 ACRES C = 0.18"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_004",
+      "coordinates": {
+        "x1": 970.5567016601562,
+        "y1": 2831.537353515625,
+        "x2": 2014.6829833984375,
+        "y2": 3587.912353515625
+      },
+      "layout_tag": "image",
+      "confidence": 0.727594256401062,
+      "reading_order": 5,
+      "text": "The image is a technical line drawing, likely a section of a land survey or engineering plan. It depicts a horizontal profile line that transitions into a vertical line. The horizontal section is labeled with the value \"96.75\". A dimension arrow labeled \"2%\" indicates a slope or grade of 2% moving from left to right. The vertical section is labeled \"97.00\". A vertical line on the right side is labeled \"FENCE LINE\" and contains five small square markers, indicating a fence line. A vertical line on the far right is labeled \"PROPERTY LINE\". The drawing illustrates the elevation difference between the property line and the fence line at a specific point."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_006",
+      "coordinates": {
+        "x1": 985.1142578125,
+        "y1": 4115.80517578125,
+        "x2": 1643.0726318359375,
+        "y2": 4184.849609375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7267362475395203,
+      "reading_order": 7,
+      "text": "ATLAS 14 2 YR FREQUENCY"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_040",
+      "coordinates": {
+        "x1": 9759.490234375,
+        "y1": 2095.767333984375,
+        "x2": 10277.6123046875,
+        "y2": 2167.363037109375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7222228050231934,
+      "reading_order": 41,
+      "text": "EXISTING ELEVATION"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_021",
+      "coordinates": {
+        "x1": 1580.5672607421875,
+        "y1": 5307.271484375,
+        "x2": 1834.74365234375,
+        "y2": 5480.51708984375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7148052453994751,
+      "reading_order": 22,
+      "text": "b = 42.99\nd = 1.08\ne = 0.5274"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_008",
+      "coordinates": {
+        "x1": 884.755126953125,
+        "y1": 4287.853515625,
+        "x2": 1734.126220703125,
+        "y2": 4357.328125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7068424820899963,
+      "reading_order": 9,
+      "text": "A IMPERVIOUS = 0.06 ACRES C = 0.85"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_039",
+      "coordinates": {
+        "x1": 9767.0244140625,
+        "y1": 1970.767333984375,
+        "x2": 10316.8017578125,
+        "y2": 2044.3006591796875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7018793821334839,
+      "reading_order": 40,
+      "text": "PROPOSED ELEVATION"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_012",
+      "coordinates": {
+        "x1": 890.169677734375,
+        "y1": 4505.46728515625,
+        "x2": 1161.427734375,
+        "y2": 4574.5732421875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7015700936317444,
+      "reading_order": 13,
+      "text": "TC = 10 MIN."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_057",
+      "coordinates": {
+        "x1": 466.2305908203125,
+        "y1": 6998.46044921875,
+        "x2": 868.0109252929688,
+        "y2": 7057.0
+      },
+      "layout_tag": "footer",
+      "confidence": 0.6896178722381592,
+      "reading_order": 58,
+      "text": "Session #: 081-090-548"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_052",
+      "coordinates": {
+        "x1": 9439.3701171875,
+        "y1": 5558.35693359375,
+        "x2": 10579.568359375,
+        "y2": 5639.92626953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6888554692268372,
+      "reading_order": 53,
+      "text": "FORT BEND COUNTY M.U.D. NO. 210"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_051",
+      "coordinates": {
+        "x1": 9417.3994140625,
+        "y1": 5214.58642578125,
+        "x2": 9957.5185546875,
+        "y2": 5459.1806640625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6887502670288086,
+      "reading_order": 52,
+      "text": "BGE, Inc.\n10777 Westheimer, Suite 400\nHouston, TX 77042\nTel: 281-558-8700 • www.bgeinc.com\nTBPE Registration No. F-1046"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_010",
+      "coordinates": {
+        "x1": 1518.7415771484375,
+        "y1": 4389.4873046875,
+        "x2": 1740.8282470703125,
+        "y2": 4456.11572265625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6201200485229492,
+      "reading_order": 11,
+      "text": "b = 45.19"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_022",
+      "coordinates": {
+        "x1": 1605.4798583984375,
+        "y1": 5514.76708984375,
+        "x2": 1928.959716796875,
+        "y2": 5588.4599609375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6147610545158386,
+      "reading_order": 23,
+      "text": "= 12.09 in/hr"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_055",
+      "coordinates": {
+        "x1": 9424.5625,
+        "y1": 6214.3349609375,
+        "x2": 10596.603515625,
+        "y2": 6302.216796875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6126292943954468,
+      "reading_order": 56,
+      "text": "PAVING AND DRAINAGE PLAN"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_011",
+      "coordinates": {
+        "x1": 1519.490966796875,
+        "y1": 4442.2890625,
+        "x2": 1725.1925048828125,
+        "y2": 4510.14794921875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6061809062957764,
+      "reading_order": 12,
+      "text": "d = 8.51"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_050",
+      "coordinates": {
+        "x1": 10034.2421875,
+        "y1": 4802.47998046875,
+        "x2": 10615.734375,
+        "y2": 5466.5478515625
+      },
+      "layout_tag": "image",
+      "confidence": 0.6010928750038147,
+      "reading_order": 51,
+      "text": "The image displays an official seal from the State of Texas, specifically from the city of Alejandro de la Rosa. The seal is circular with a dotted border and features a central star. The text \"STATE OF TEXAS\" is arched along the top inner edge, while \"ALEJANDRO DE LA ROSA\" is centered below it. The number \"140684\" is printed in the middle. Along the bottom inner edge, the text \"LICENSED PROFESSIONAL ENGINEER\" is curved. Below the seal, there is a handwritten signature that reads \"A. DeLaRosa\". The date \"10/23/2025\" is printed at the bottom right."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_014",
+      "coordinates": {
+        "x1": 891.8185424804688,
+        "y1": 4580.951171875,
+        "x2": 1503.4417724609375,
+        "y2": 4690.751953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5958428382873535,
+      "reading_order": 15,
+      "text": "$$ i = \\frac{45.19}{(8.51 + 10)^{0.7122}} $$"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_041",
+      "coordinates": {
+        "x1": 9770.1826171875,
+        "y1": 2207.900390625,
+        "x2": 10288.1640625,
+        "y2": 2275.802001953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5957545042037964,
+      "reading_order": 42,
+      "text": "OFFSITE SHEET FLOW"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_003",
+      "coordinates": {
+        "x1": 596.0247192382812,
+        "y1": 1717.292236328125,
+        "x2": 2465.160400390625,
+        "y2": 2517.531494140625
+      },
+      "layout_tag": "image",
+      "confidence": 0.588720440864563,
+      "reading_order": 4,
+      "text": "यह छवि एक तकनीकी योजनाबद्ध आरेख (technical schematic diagram) है जो एक संपत्ति सीमा और भू-तकनीकी (geotechnical) विशेषताओं को दर्शाती है। इसमें एक ऊर्ध्वाधर रेखा है जिस पर 'PROPERTY LINE' लिखा है, जो संपत्ति की सीमा को दर्शाती है। इस रेखा के बाईं ओर 'FENCE LINE' है, जो संपत्ति की सीमा के समानांतर है। इन दो रेखाओं के बीच का क्षेत्र 'SELECT FILL' (चयनित भराव) है, जिसे हैचिंग (hatching) के साथ दर्शाया गया है। इस क्षेत्र के भीतर तीन विशिष्ट ऊंचाइयों को संख्यात्मक मानों के साथ लेबल किया गया है: 96.75, 97.25, और 97.00। ये मान संपत्ति की सीमा के सापेक्ष जमीन की ऊंचाई का प्रतिनिधित्व करते हैं। 'NATURAL GROUND' (प्राकृतिक जमीन) शब्द को नीचे दाईं ओर एक कोण पर रखा गया है, जो संपत्ति की सीमा से नीचे की ओर इशारा करता है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_036",
+      "coordinates": {
+        "x1": 9768.4091796875,
+        "y1": 1724.9259033203125,
+        "x2": 9982.810546875,
+        "y2": 1790.8365478515625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.588097870349884,
+      "reading_order": 37,
+      "text": "SAWCUT"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_030",
+      "coordinates": {
+        "x1": 9550.564453125,
+        "y1": 1101.3553466796875,
+        "x2": 9947.587890625,
+        "y2": 1199.3294677734375
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.5600360035896301,
+      "reading_order": 31,
+      "text": "LEGEND"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_000",
+      "coordinates": {
+        "x1": 378.40838623046875,
+        "y1": 4753.7578125,
+        "x2": 474.5509948730469,
+        "y2": 6991.55078125
+      },
+      "layout_tag": "sidebar",
+      "confidence": 0.5508230328559875,
+      "reading_order": 1,
+      "text": "\\ttspauldel: \\ttspauldel@ucla.edu\nPlotted Oct 20, 2025 at 4:07pm by spaudel\n\nC:\\Users\\14451-00\\PW\\01_CADDD\\Q1_SHTS\\C-PVDR-PL.dwg-001C-SPvdrn"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_001",
+      "coordinates": {
+        "x1": 1145.0430908203125,
+        "y1": 544.3927001953125,
+        "x2": 1969.2618408203125,
+        "y2": 1286.4351806640625
+      },
+      "layout_tag": "image",
+      "confidence": 0.5495131015777588,
+      "reading_order": 2,
+      "text": "The image is a technical engineering diagram, specifically a profile view of a property line and a fence line. The vertical axis is labeled \"PROPERTY LINE\" and the horizontal axis is labeled \"FENCE LINE\". The diagram illustrates a property boundary with a slope. The property line is depicted as a vertical line with square markers, while the fence line is a sloping line. Two specific data points are labeled on the property line: \"FL 96.41\" (Front Line) and \"HB 96.95\" (Headboard). The slope is annotated with a rise of \"0.4%\" on the left side and a run of \"0.16%\" on the right side. A horizontal dimension line labeled \"1\" and a vertical dimension line labeled \"3\" indicate the horizontal and vertical distances between the fence line and the property line at the point where the slope changes."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_013",
+      "coordinates": {
+        "x1": 1523.6815185546875,
+        "y1": 4504.1806640625,
+        "x2": 1759.5213623046875,
+        "y2": 4567.416015625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5489510893821716,
+      "reading_order": 14,
+      "text": "e = 0.7122"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_034",
+      "coordinates": {
+        "x1": 9322.4912109375,
+        "y1": 1581.352294921875,
+        "x2": 9673.7470703125,
+        "y2": 1695.6051025390625
+      },
+      "layout_tag": "image",
+      "confidence": 0.5466465353965759,
+      "reading_order": 35,
+      "text": "The image contains a collection of various triangle symbols ($\\triangle$) and inverted triangle symbols ($\\bigtriangleup$) scattered randomly within a rectangular border. There is no text, mathematical formulas, or structured data present in the image."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_053",
+      "coordinates": {
+        "x1": 9578.5458984375,
+        "y1": 5815.5048828125,
+        "x2": 10454.3994140625,
+        "y2": 5911.9326171875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5375077128410339,
+      "reading_order": 54,
+      "text": "LIFT STATION NO. 1"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_005",
+      "coordinates": {
+        "x1": 1134.3375244140625,
+        "y1": 3645.302001953125,
+        "x2": 1349.56005859375,
+        "y2": 3867.2314453125
+      },
+      "layout_tag": "image",
+      "confidence": 0.5312539935112,
+      "reading_order": 6,
+      "text": "C\n-"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_015",
+      "coordinates": {
+        "x1": 875.8167724609375,
+        "y1": 4699.71875,
+        "x2": 2044.8736572265625,
+        "y2": 4873.7734375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5262770056724548,
+      "reading_order": 16,
+      "text": "Qp= 1.25 X [(0.85 X 5.65 X 0.06) + (0.18 X 5.65 X 0.07)]\n\nQp= 0.45 CFS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_031",
+      "coordinates": {
+        "x1": 9326.77734375,
+        "y1": 1251.859375,
+        "x2": 9675.4462890625,
+        "y2": 1380.5015869140625
+      },
+      "layout_tag": "image",
+      "confidence": 0.519350528717041,
+      "reading_order": 32,
+      "text": "The image is a black and white line drawing of a rectangular frame or truss structure. It consists of a thick outer border and a series of diagonal cross-braces inside the rectangle, creating a pattern of triangles. There is no text or mathematical content present in the image."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_025",
+      "coordinates": {
+        "x1": 856.7938842773438,
+        "y1": 6123.04296875,
+        "x2": 1679.9158935546875,
+        "y2": 6185.0380859375
+      },
+      "layout_tag": "footnote",
+      "confidence": 0.5148562788963318,
+      "reading_order": 26,
+      "text": "SWALE CAPACITY > MAX SITE FLOW"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_042",
+      "coordinates": {
+        "x1": 8801.8369140625,
+        "y1": 2395.68359375,
+        "x2": 9000.3427734375,
+        "y2": 2468.77685546875
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.5129662156105042,
+      "reading_order": 43,
+      "text": "NOTES:"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_4_block_037",
+      "coordinates": {
+        "x1": 9338.3037109375,
+        "y1": 1806.258056640625,
+        "x2": 9584.1015625,
+        "y2": 1921.7603759765625
+      },
+      "layout_tag": "image",
+      "confidence": 0.5064328908920288,
+      "reading_order": 38,
+      "text": "←"
+    }
+  ]
+}

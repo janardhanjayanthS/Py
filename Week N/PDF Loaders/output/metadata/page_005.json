@@ -1,0 +1,372 @@
+{
+  "page_num": 5,
+  "image_width": 10830,
+  "image_height": 7261,
+  "created_at": "2026-02-12T07:48:10.262837+00:00",
+  "blocks": [
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_004",
+      "coordinates": {
+        "x1": 637.7074584960938,
+        "y1": 4033.166259765625,
+        "x2": 2945.524658203125,
+        "y2": 4201.1767578125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.9524794220924377,
+      "reading_order": 5,
+      "text": "14. REFER TO ARCHITECTURAL, PROCESS, MECHANICAL AND ELECTRICAL DRAWINGS FOR ALL SLEEVES,\nPIPES, CONDUITS AND MISCELLANEOUS ANCHORING DEVICES TO BE INCORPORATED IN THE\nCONSTRUCTION."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_013",
+      "coordinates": {
+        "x1": 3009.090087890625,
+        "y1": 1068.7469482421875,
+        "x2": 4713.103515625,
+        "y2": 1233.0142822265625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.9318162798881531,
+      "reading_order": 14,
+      "text": "LIVE LOAD REDUCTIONS HAVE BEEN TAKEN FOR BEAMS, GIRDERS, AND\nCOLUMNS. THESE REDUCTIONS HAVE BEEN TAKEN ONLY AS ALLOWED BY THE\nBUILDING CODE."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_005",
+      "coordinates": {
+        "x1": 631.0999145507812,
+        "y1": 4239.02099609375,
+        "x2": 1092.870849609375,
+        "y2": 4303.0390625
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.9051539301872253,
+      "reading_order": 6,
+      "text": "STRUCTURAL STEEL"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_021",
+      "coordinates": {
+        "x1": 9566.20703125,
+        "y1": 4769.67236328125,
+        "x2": 9912.3701171875,
+        "y2": 5106.13330078125
+      },
+      "layout_tag": "image",
+      "confidence": 0.8982232213020325,
+      "reading_order": 22,
+      "text": "The image displays a logo consisting of the letters \"BGF\" in a bold, white, sans-serif typeface. The letters are centrally located and superimposed over two solid black rectangular blocks that form a larger square frame. The top and bottom blocks are horizontally oriented, while the left and right blocks are vertically oriented, creating a cross-like structure behind the text. The background of the image is white."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_008",
+      "coordinates": {
+        "x1": 3007.840087890625,
+        "y1": 398.7288818359375,
+        "x2": 3496.152587890625,
+        "y2": 467.6730041503906
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.8969037532806396,
+      "reading_order": 9,
+      "text": "DESIGN DEAD LOADS:"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_012",
+      "coordinates": {
+        "x1": 3010.923828125,
+        "y1": 979.3983764648438,
+        "x2": 3579.863037109375,
+        "y2": 1044.1025390625
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.8935796022415161,
+      "reading_order": 13,
+      "text": "LIVE LOAD REDUCTIONS:"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_001",
+      "coordinates": {
+        "x1": 588.6798706054688,
+        "y1": 580.7589721679688,
+        "x2": 873.6576538085938,
+        "y2": 650.173095703125
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.8878409266471863,
+      "reading_order": 2,
+      "text": "CONCRETE"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_014",
+      "coordinates": {
+        "x1": 3019.703857421875,
+        "y1": 1297.3876953125,
+        "x2": 3363.272705078125,
+        "y2": 1359.50439453125
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.8852663636207581,
+      "reading_order": 15,
+      "text": "FOUNDATIONS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_015",
+      "coordinates": {
+        "x1": 4883.44775390625,
+        "y1": 379.0648498535156,
+        "x2": 5552.5703125,
+        "y2": 448.4576416015625
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.8489442467689514,
+      "reading_order": 16,
+      "text": "STRUCTURAL ABBREVIATIONS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_023",
+      "coordinates": {
+        "x1": 10091.849609375,
+        "y1": 4669.95703125,
+        "x2": 10620.943359375,
+        "y2": 5201.4384765625
+      },
+      "layout_tag": "image",
+      "confidence": 0.838019847869873,
+      "reading_order": 24,
+      "text": "यह छवि एक गोलाकार आधिकारिक मुहर (seal) है, जो संभवतः टेक्सास राज्य से है, और इसे काले और सफेद रंग में प्रस्तुत किया गया है। मुहर में एक सजावटी सीमा (border) है जो बिंदीदार रेखाओं से बनी है और इसके चारों ओर एक लहरदार, रस्सी जैसी आकृति बनाती है। इस सीमा के अंदर, पाठ और एक केंद्रीय ग्राफिक को संकेंद्रित (concentric) वृत्ताकार परतों में व्यवस्थित किया गया है।\n\n### बाहरी सीमा\nसबसे बाहरी परत में एक मोटी, लहरदार रेखा है जो एक सजावटी सीमा के रूप में कार्य करती है। इस सीमा के अंदर, \"STATE OF TEXAS\" शब्द ऊपरी चाप (arc) के साथ एक चाप (arc) में व्यवस्थित हैं। इस चाप के दोनों ओर दो छोटे, पांच-कोणीय तारे हैं।\n\n### केंद्रीय ग्राफिक\nमुहर के केंद्र में एक बड़ा, पांच-कोणीय तारा है। यह तारा एक बिंदीदार रेखा से घिरा हुआ है जो इसे वृत्त के बाकी हिस्सों से अलग करता है।\n\n### मध्य भाग\nतारे के नीचे, एक क्षैतिज बिंदीदार रेखा है जो वृत्त को दो भागों में विभाजित करती है। इस रेखा के ऊपर \"CESAR BARRON CASTRO\" नाम बड़े, बड़े अक्षरों (capitalized) में लिखा है। इस रेखा के नीचे, संख्या \"140574\" उसी बड़े अक्षरों में मुद्रित है।\n\n### निचली सीमा\nसबसे भीतरी परत में \"LICENSED\" और \"PROFESSIONAL ENGINEER\" शब्द शामिल हैं। \"LICENSED\" शब्द नीचे के केंद्र में स्थित है, जबकि \"PROFESSIONAL ENGINEER\" नीचे के किनारे के साथ एक चाप (arc) में घुमावदार है।\n\n### सामान्य विवरण\nयह मुहर एक पेशेवर मुहर प्रतीत होती है जिसका उपयोग टेक्सास राज्य के लाइसेंस प्राप्त इंजीनियर द्वारा किया जाता है। इसमें एक तारा, एक नाम, एक लाइसेंस नंबर और एक पेशेवर पदनाम शामिल है। डिज़ाइन सममित (symmetrical) और औपचारिक है, जो आधिकारिक सरकारी दस्तावेजों की विशिष्टता है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_022",
+      "coordinates": {
+        "x1": 9473.1181640625,
+        "y1": 5157.13818359375,
+        "x2": 9993.0390625,
+        "y2": 5399.57958984375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8189005851745605,
+      "reading_order": 23,
+      "text": "BGE, Inc.\n10777 Westheimer, Suite 400\nHouston, TX 77042\nTel: 281-558-8700 • www.bgeinc.com\nTBPE Registration No. F-1046"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_010",
+      "coordinates": {
+        "x1": 3004.74462890625,
+        "y1": 643.8301391601562,
+        "x2": 3490.71484375,
+        "y2": 707.1004028320312
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.7984411716461182,
+      "reading_order": 11,
+      "text": "DESIGN LIVE LOADS:"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_025",
+      "coordinates": {
+        "x1": 9807.298828125,
+        "y1": 6134.62939453125,
+        "x2": 10318.484375,
+        "y2": 6210.77783203125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7665402293205261,
+      "reading_order": 26,
+      "text": "GENERAL NOTES"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_018",
+      "coordinates": {
+        "x1": 8632.2177734375,
+        "y1": 5470.35986328125,
+        "x2": 9160.2705078125,
+        "y2": 6024.724609375
+      },
+      "layout_tag": "image",
+      "confidence": 0.7598786354064941,
+      "reading_order": 19,
+      "text": "The image displays a circular blue stamp from the \"FORT BEND COUNTY ENGINEERING DEPARTMENT\". The text \"FBC Engineering Approval\" is printed in black at the top. The central feature of the stamp is the text \"APPROVED\" in blue. Below this, the date \"OCT 3 1 2025\" is stamped in red. The bottom section of the stamp reads \"Valid One Year From Date\" in blue."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_000",
+      "coordinates": {
+        "x1": 586.048095703125,
+        "y1": 421.4071350097656,
+        "x2": 1387.22314453125,
+        "y2": 496.105712890625
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.7595987915992737,
+      "reading_order": 1,
+      "text": "GENERAL NOTES FOR STRUCTURES"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_026",
+      "coordinates": {
+        "x1": 9449.3603515625,
+        "y1": 6446.84033203125,
+        "x2": 10699.9990234375,
+        "y2": 6931.447265625
+      },
+      "layout_tag": "table",
+      "confidence": 0.7410826683044434,
+      "reading_order": 27,
+      "text": "<table>\n<thead>\n<tr>\n<th colspan=\"2\">JOB NUMBER:</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>SUBMITTED: BGE, INC.<br/>SCALE:<br/>DATE:<br/>SURVEY BY:BGE, INC.<br/>F B NO:</td>\n<td>DESIGNED BY: CB<br/>DRAWN BY: MB<br/>SHEET NO 5 OF 22 SHEETS</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_024",
+      "coordinates": {
+        "x1": 9656.92578125,
+        "y1": 5763.8388671875,
+        "x2": 10465.9404296875,
+        "y2": 5862.58251953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7378767728805542,
+      "reading_order": 25,
+      "text": "LIFT STATION NO. 1"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_003",
+      "coordinates": {
+        "x1": 2971.904296875,
+        "y1": 1353.75,
+        "x2": 4767.73828125,
+        "y2": 2407.13671875
+      },
+      "layout_tag": "ordered-list",
+      "confidence": 0.724609375,
+      "reading_order": 4,
+      "text": "1. THE GEOTECHNICAL REPORT FOR THIS PROJECT WAS PRODUCED BY TOLUNAY-WONG ENGINEERS, INC., PROJECT NUMBER 25.13.055, DATED MAY 31, 2025.\n\n2. ALLOWABLE SOIL BEARING PRESSURE, EXCAVATION AND BACKFILL FOR FOUNDATIONS AND STRUCTURES SHALL BE AS RECOMMENDED PER PROJECT GEOTECHNICAL REPORT. GENERAL CONTRACTOR SHALL REVIEW GEOTECHNICAL REPORT(S) PRIOR TO CONSTRUCTION AND FOLLOW RECOMMENDATIONS.\n\n3. ALL EXCAVATIONS SHALL BE CARRIED OUT IN THE DRY. AND PROVISIONS SHALL BE MADE TO PREVENT THE BOTTOM OF ALL EXCAVATIONS FROM FREEZING OR FLOODING AT ALL TIMES.\n\n4. ALL FOUNDATIONS SHALL BE CONSTRUCTED IN EXCAVATIONS FREE OF STANDING WATER.\n\n5. BACKFILL MATERIAL, PLACING AND COMPACTION OF BACKFILL SHALL BE IN ACCORDANCE WITH THE GEOTECHNICAL REPORT(S), AND THE CONTRACT SPECIFICATIONS."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_017",
+      "coordinates": {
+        "x1": 4882.404296875,
+        "y1": 476.35064697265625,
+        "x2": 5918.27587890625,
+        "y2": 4801.39697265625
+      },
+      "layout_tag": "table",
+      "confidence": 0.7174468636512756,
+      "reading_order": 18,
+      "text": "<table>\n<tbody>\n<tr>\n<td>ADDITIONAL</td>\n<td>- ADDL</td>\n</tr>\n<tr>\n<td>ALTERNATE</td>\n<td>- ALT</td>\n</tr>\n<tr>\n<td>AND</td>\n<td>- &amp;</td>\n</tr>\n<tr>\n<td>ANCHOR BOLT</td>\n<td>- AB</td>\n</tr>\n<tr>\n<td>APPROXIMATE</td>\n<td>- APPROX</td>\n</tr>\n<tr>\n<td>ARCHITECTURAL</td>\n<td>- ARCH</td>\n</tr>\n<tr>\n<td>AT</td>\n<td>- @</td>\n</tr>\n<tr>\n<td>BEAM</td>\n<td>- BM</td>\n</tr>\n<tr>\n<td>BEARING</td>\n<td>- BRG</td>\n</tr>\n<tr>\n<td>BELOW FINISH FLOOR</td>\n<td>- BFF</td>\n</tr>\n<tr>\n<td>BETWEEN</td>\n<td>- BTWN</td>\n</tr>\n<tr>\n<td>BOTTOM</td>\n<td>- BOT</td>\n</tr>\n<tr>\n<td>BOTTOM OF</td>\n<td>- B/</td>\n</tr>\n<tr>\n<td>BUILDING</td>\n<td>- BLDG</td>\n</tr>\n<tr>\n<td>CAST-IN-PLACE</td>\n<td>- CIP</td>\n</tr>\n<tr>\n<td>CEILING</td>\n<td>- CLG</td>\n</tr>\n<tr>\n<td>CENTER LINE</td>\n<td>- CL</td>\n</tr>\n<tr>\n<td>CENTER TO CENTER</td>\n<td>- C/C</td>\n</tr>\n<tr>\n<td>CLEAR</td>\n<td>- CLR</td>\n</tr>\n<tr>\n<td>COLUMN</td>\n<td>- COL</td>\n</tr>\n<tr>\n<td>COMPRESSION</td>\n<td>- C OR COMP</td>\n</tr>\n<tr>\n<td>CONCRETE</td>\n<td>- CONC</td>\n</tr>\n<tr>\n<td>CONCRETE MASONRY UNIT</td>\n<td>- CMU</td>\n</tr>\n<tr>\n<td>CONNECTION(S)</td>\n<td>- CONN(S)</td>\n</tr>\n<tr>\n<td>CONTINUOUS</td>\n<td>- CONT</td>\n</tr>\n<tr>\n<td>CONSTRUCTION JOINT</td>\n<td>- CJ</td>\n</tr>\n<tr>\n<td>CONSTRUCTION</td>\n<td>- CONST</td>\n</tr>\n<tr>\n<td>DETAIL</td>\n<td>- DET</td>\n</tr>\n<tr>\n<td>DEAD LOAD</td>\n<td>- DL</td>\n</tr>\n<tr>\n<td>DEMOLITION</td>\n<td>- DEMO</td>\n</tr>\n<tr>\n<td>DIAGONAL</td>\n<td>- DIAG</td>\n</tr>\n<tr>\n<td>DIAMETER</td>\n<td>- DIA OR Ø</td>\n</tr>\n<tr>\n<td>DIMENSION(S)</td>\n<td>- DIM(S)</td>\n</tr>\n<tr>\n<td>DRAWING(S)</td>\n<td>- DWG(S)</td>\n</tr>\n<tr>\n<td>DOUBLE</td>\n<td>- DBL</td>\n</tr>\n<tr>\n<td>DOWEL(S)</td>\n<td>- DWL(S)</td>\n</tr>\n<tr>\n<td>EACH</td>\n<td>- EA</td>\n</tr>\n<tr>\n<td>EACH FACE</td>\n<td>- EF</td>\n</tr>\n<tr>\n<td>EACH WAY</td>\n<td>- EW</td>\n</tr>\n<tr>\n<td>ELECTRICAL</td>\n<td>- ELEC</td>\n</tr>\n<tr>\n<td>ELEVATION</td>\n<td>- EL</td>\n</tr>\n<tr>\n<td>EMBEDMENT</td>\n<td>- EMBED</td>\n</tr>\n<tr>\n<td>EQUAL</td>\n<td>- EQ</td>\n</tr>\n<tr>\n<td>EXPANSION JOINT</td>\n<td>- EJ</td>\n</tr>\n<tr>\n<td>EXPANSION</td>\n<td>- EXP</td>\n</tr>\n<tr>\n<td>EXISTING</td>\n<td>- EXIST OR EX</td>\n</tr>\n<tr>\n<td>EXTERIOR</td>\n<td>- EXT</td>\n</tr>\n<tr>\n<td>FACE-TO-FACE</td>\n<td>- F TO F</td>\n</tr>\n<tr>\n<td>FAR SIDE</td>\n<td>- FS</td>\n</tr>\n<tr>\n<td>FINISHED FLOOR</td>\n<td>- FF</td>\n</tr>\n<tr>\n<td>FOUNDATION</td>\n<td>- FDN</td>\n</tr>\n<tr>\n<td>FOOTING</td>\n<td>- FTG</td>\n</tr>\n<tr>\n<td>GAGE OR GAUGE</td>\n<td>- GA</td>\n</tr>\n<tr>\n<td>GALVANIZED</td>\n<td>- GALV</td>\n</tr>\n<tr>\n<td>HEIGHT</td>\n<td>- HT</td>\n</tr>\n<tr>\n<td>HORIZONTAL</td>\n<td>- HORIZ</td>\n</tr>\n<tr>\n<td>HIGH POINT</td>\n<td>- H.P.</td>\n</tr>\n<tr>\n<td>INFORMATION</td>\n<td>- INFO</td>\n</tr>\n<tr>\n<td>INSIDE DIAMETER</td>\n<td>- ID</td>\n</tr>\n<tr>\n<td>INSIDE FACE</td>\n<td>- IF</td>\n</tr>\n<tr>\n<td>INTERIOR</td>\n<td>- INT</td>\n</tr>\n<tr>\n<td>INTERMEDIATE</td>\n<td>- INTERM</td>\n</tr>\n<tr>\n<td>JOINT</td>\n<td>- JT</td>\n</tr>\n<tr>\n<td>JOIST(S)</td>\n<td>- JSY(S)</td>\n</tr>\n<tr>\n<td>LOW POINT</td>\n<td>- L.P.</td>\n</tr>\n<tr>\n<td>LIVE LOAD</td>\n<td>- LL</td>\n</tr>\n<tr>\n<td>LONG</td>\n<td>- LG</td>\n</tr>\n<tr>\n<td>LONGITUDINAL</td>\n<td>- LONG</td>\n</tr>\n<tr>\n<td>MANHOLE</td>\n<td>- MH</td>\n</tr>\n<tr>\n<td>MAXIMUM</td>\n<td>- MAX</td>\n</tr>\n<tr>\n<td>MECHANICAL</td>\n<td>- MECH'L</td>\n</tr>\n<tr>\n<td>MINIMUM</td>\n<td>- MIN</td>\n</tr>\n<tr>\n<td>MISCELLANEOUS</td>\n<td>- MISC</td>\n</tr>\n<tr>\n<td>NEAR SIDE</td>\n<td>- NS</td>\n</tr>\n<tr>\n<td>NOMINAL</td>\n<td>- NOM</td>\n</tr>\n<tr>\n<td>NUMBER</td>\n<td>- NO OR # OR NC</td>\n</tr>\n<tr>\n<td>ON CENTER</td>\n<td>- OC</td>\n</tr>\n<tr>\n<td>OPENING(S)</td>\n<td>- OPNG(S)</td>\n</tr>\n<tr>\n<td>OPPOSITE</td>\n<td>- OPP</td>\n</tr>\n<tr>\n<td>OPPOSITE HAND</td>\n<td>- OH</td>\n</tr>\n<tr>\n<td>OUTSIDE FACE</td>\n<td>- OF</td>\n</tr>\n<tr>\n<td>OUTSIDE DIAMETER</td>\n<td>- OD</td>\n</tr>\n<tr>\n<td>OVERALL</td>\n<td>- OA</td>\n</tr>\n<tr>\n<td>POLYVINYL CHLORIDE</td>\n<td>- PVC</td>\n</tr>\n<tr>\n<td>REINFORCEMENT</td>\n<td>- REINF.</td>\n</tr>\n<tr>\n<td>RADIUS</td>\n<td>- R</td>\n</tr>\n<tr>\n<td>REINFORCED CONCRETE PIPE</td>\n<td>- RCP</td>\n</tr>\n<tr>\n<td>REQUIRED</td>\n<td>- REQ'D</td>\n</tr>\n<tr>\n<td>ROOF DRAIN</td>\n<td>- RD</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_019",
+      "coordinates": {
+        "x1": 8445.8984375,
+        "y1": 6657.99267578125,
+        "x2": 9327.1982421875,
+        "y2": 6926.0234375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6837229132652283,
+      "reading_order": 20,
+      "text": "2405 S. GRAND BLVD., SUITE A,\nPEARLAND, TEXAS 77581\n832-295-3600\nTBPE FIRM No. F-23075"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_009",
+      "coordinates": {
+        "x1": 3002.70263671875,
+        "y1": 488.6890563964844,
+        "x2": 4417.4638671875,
+        "y2": 609.9910278320312
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6056823134422302,
+      "reading_order": 10,
+      "text": "SELFWEIGHT OF STRUCTURE................................... SELF WEIGHT\nMECHANICAL AND CEILING................................10 PSF"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_020",
+      "coordinates": {
+        "x1": 9397.9306640625,
+        "y1": 4185.4296875,
+        "x2": 10662.8330078125,
+        "y2": 4588.46337890625
+      },
+      "layout_tag": "table",
+      "confidence": 0.5713213682174683,
+      "reading_order": 21,
+      "text": "<table>\n<thead>\n<tr>\n<th>REV.<br/>NO.</th>\n<th>DATE</th>\n<th>DESCRIPTION</th>\n<th>P.E.<br/>APPR</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_011",
+      "coordinates": {
+        "x1": 3005.086181640625,
+        "y1": 729.3829956054688,
+        "x2": 4344.93505859375,
+        "y2": 943.8521728515625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5712212324142456,
+      "reading_order": 12,
+      "text": "TOP OF SLAB........................................300 PSF\nMECHANICAL AREAS, STAIRS, ........................100 PSF\nALUMINUM COVER, PLATFORM, AND\nWALKWAYS AT OR BELOW GRADE......................150 PSF"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_016",
+      "coordinates": {
+        "x1": 6158.3271484375,
+        "y1": 456.42596435546875,
+        "x2": 7043.0888671875,
+        "y2": 1888.313720703125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5648887157440186,
+      "reading_order": 17,
+      "text": "SCHEDULE(D)       - SCHED\nSECTION           - SECT\nSHEET             - SHT\nSIMILAR           - SIM\nSPACE             - SP\nSPECIFICATION(S)  - SPEC(S)\nSQUARE FOOT (FEET) - SF\nSTAINLESS STEEL   - SS\nSTANDARD          - STD\nSTEEL             - STL\nSTRAIGHT          - STRA\nSTIRRUPS          - STIR\nSTRUCTURAL        - STRUCT'L\nSYMMETRICAL       - SYMM\nTOP               - TOP\nTOP OF            - T/\nTHICK             - THK\nTOUNGE AND GROOVE - T & G\nTOP OF BEAM       - TOB\nTOP OF FOOTING     - TOF\nTOP OF PIER       - TOP\nTOP OF SLAB       - TOS\nTOP OF WALL       - TOW\nTYPICAL           - TYP\nUNLESS OTHERWISE NOTED    - UON\nVERTICAL          - VERT\nVARIES            - VAR\nWELDED WIRE FABRIC - WWF\nWITH              - W/"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_027",
+      "coordinates": {
+        "x1": 8063.41064453125,
+        "y1": 6314.60302734375,
+        "x2": 9362.837890625,
+        "y2": 6638.96142578125
+      },
+      "layout_tag": "footer",
+      "confidence": 0.5018619298934937,
+      "reading_order": 28,
+      "text": "BARRON\nENGINEERING"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_006",
+      "coordinates": {
+        "x1": 570.0556640625,
+        "y1": 4289.6953125,
+        "x2": 3007.86328125,
+        "y2": 6184.9453125
+      },
+      "layout_tag": "ordered-list",
+      "confidence": 0.396240234375,
+      "reading_order": 7,
+      "text": "1. STRUCTURAL STEEL SHALL CONFORM TO THE LATEST AISC \"SPECIFICATION FOR THE DESIGN,\nFABRICATION AND ERECTION OF STRUCTURAL STEEL FOR BUILDINGS\". ALL STRUCTURAL STEEL\nSHALL BE ASTM A36.\n\n2. ALL METAL COMPONENTS SUBJECT TO A CORROSIVE ENVIRONMENT SHALL BE STAINLESS STEEL\nOR ALUMINUM.\n\n3. ELEVATIONS OF STEEL BEAMS SHOWN ON FRAMING PLANS REFER TO TOP OF FLANGE, UNLESS\nOTHERWISE NOTED.\n\n4. ALL BOLTED CONNECTIONS SHALL BE MADE WITH 3/4\" DIAMETER ASTM A-325 BOLTS EXCEPT AS\nOTHERWISE SHOWN OR NOTED. ALL CONNECTIONS SHALL BE CAPABLE OF SUPPORTING ONE HALF\nTHE MAXIMUM ALLOWABLE UNIFORM LOAD FOR INDICATED BEAM SIZE AND SPAN IN AISC MANUAL\nOF STEEL CONSTRUCTION, EXCEPT AS OTHERWISE NOTED.\n\n5. FIELD CONNECTIONS SHALL BE BOLTED, EXCEPT AS OTHERWISE SHOWN OR NOTED.\n\n6. ALL WELDING SHALL CONFORM TO THE LATEST SPECIFICATION OF THE AMERICAN WELDING\nSOCIETY. ALL WELDED CONNECTIONS SHALL BE MADE WITH AWS A5.1 OR A5.5 E70 XX ELECTRODE.\n\n7. ANCHOR BOLTS AND MISC EMBEDDED STEEL ---------------------------------------ASTM A36.\nANCHOR BOLTS WHICH ARE SUBMERGED , LOCATED ABOVE A LIQUID SURFACE, OR ARE IN A\nCORROSIVE ATMOSPHERE ----------------------------------------------------------316 SS.\n\n8. ALL EQUIPMENT ANCHOR BOLT DIMENSIONS AND LOCATIONS SHALL BE VERIFIED FROM CERTIFIED\nVENDOR DRAWINGS, PRIOR TO CONSTRUCTION.\n\nTHE STRUCTURE IS DESIGNED ACCORDING TO THE REQUIREMENTS OF THE INTERNATIONAL\nBUILDING CODE 2018 (IBC 2018) WITH THE FOLLOWING SPECIFICATIONS:\n\nA.   ACI 318: BUILDING CODE FOR STRUCTURAL CONCRETE\nB.   ACI 350: CODE REQUIREMENTS FOR ENVIRONMENTAL ENGINEERING CONCRETE\n     STRUCTURES.\nC.   ACI 364: GUIDE FOR ASSESSMENT OF CONCRETE STRUCTURES BEFORE REHABILITATION\nD.   ACI 315: DETAILS AND DETAILING OF CONCRETE REINFORCEMENT\nE.   AMERICAN INSTITUTE OF STEEL CONSTRUCTION (AISC) MANUAL OF STEEL CONSTRUCTION.\nF.   ALUMINUM DESIGN MANUAL, THE ALUMINUM ASSOCIATION"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_002",
+      "coordinates": {
+        "x1": 500.2529296875,
+        "y1": 617.6484375,
+        "x2": 2988.826171875,
+        "y2": 4154.3203125
+      },
+      "layout_tag": "ordered-list",
+      "confidence": 0.38330078125,
+      "reading_order": 3,
+      "text": "1. DESIGN SHALL CONFORM TO THE LATEST BUILDING CODE REQUIREMENTS FOR STRUCTURAL\nCONCRETE (ACI-318) WITH SPECIAL REQUIREMENTS OF ENVIRONMENTAL ENGINEERING\nCONCRETE STRUCTURES (ACI - 350).\n\n2. ALL REINFORCING BARS SHALL CONFORM TO ASTM A-615, GRADE 60. ARRANGEMENT\nAND DETAILS OF REINFORCING STEEL, INCLUDING BARS SUPPORTS AND SPACERS, SHALL BE IN\nACCORDANCE WITH THE LATEST ACI DETAILING MANUAL, UNLESS OTHERWISE NOTED.\n\n3. ALL SLAB AND BEAM REINFORCEMENT SHALL HAVE A MINIMUM EXTENSION INTO THE SUPPORT IN\nACCORDANCE WITH THE LATEST ACI CODE. IF SUCH EXTENSION IS NOT POSSIBLE, BARS SHALL\nTERMINATE IN STANDARD HOOKS.\n\n4. HORIZONTAL WALL REINFORCEMENT AND TEMPERATURE REINFORCEMENT SHALL LAP A MINIMUM\nOF 1.7LD AT SPLICES. WALL DOWELS AND WALL BAR EXTENSIONS AND ALL STRESS SPLICES\nSHALL LAP A MINIMUM OF 1.7 LD, UNLESS OTHERWISE NOTED.\n\n5. WALL OR COLUMNS SHALL HAVE DOWELS FROM FOUNDATIONS OR CONSTRUCTION BELOW OF\nSAME SIZE AND SPACING AS WALL OR COLUMN VERTICAL STEEL.\n\n6. UNLESS OTHERWISE NOTED ON THE DRAWINGS, CONCRETE COMPRESSIVE STRENGTH AT 28\nDAYS SHALL NOT BE LESS THAN THE FOLLOWING:\n• STRUCTURAL MEMBERS, FOUNDATIONS, WALLS AND SUSPENDED SLABS-- 4000 PSI\n• SLABS ON GRADE ------------------------------------4000PSI\n• LEAN CONCRETE CLASS B (SEAL SLAB CONCRETE) -----------------------1500 PSI\n• GROUT FILL CLASS H -----------------------------------------3000 PSI\n\n7. WHERE WALL OR SLAB SURFACE OF CONCRETE IS IN CONTACT WITH WASTEWATER, THE\nREINFORCING STEEL COVER SHALL BE 4\" (MIN). UNLESS OTHERWISE SHOWN, THE COVER FOR\nREINFORCING STEEL SHALL BE AS FOLLOWS:\nSLABS\n• TOP AND BOTTOM OF FORMED SLABS ----------------------------2\"\n• TOP OF WALK AND DRIVEWAY SLABS ---------------------------2\"\n• SURFACES IN CONTACT WITH LIQUID -----------------------------2\"\n• BOTTOM OF SLABS ON FILL OR SOIL ------------------------------3\"\n\nFOOTINGS:\n• TOP AND SIDES ------------------------------------------2 1/2\"\n• BOTTOM -----------------------------------------------3\"\n\nWALLS:\n1. LESS THAN 12\" THICK -------------------------------------1 1/2\"\n2. 12\" OR OVER IN THICKNESS WITH POURS LESS THAN 10 FEET HIGH -----2\"\n3. 12\" OR OVER IN THICKNESS WITH POURS MORE THAN 10 FEET HIGH------2 1/2\"\n\nBEAMS AND GIRDERS:\n1. COVER AT TOP, BOTTOM OR SIDES OF LONGITUDINAL REINF-------------------2\"\n\nCOLUMNS\n1. COVER FOR VERTICAL BARS ----------------------------------------2\"\n\n8. HORIZONTAL AND VERTICAL CONSTRUCTION JOINT SHOWN OR NOTED ON THE PLANS ARE\nRECOMMENDED. ANY DEVIATION FROM THOSE SHOWN SHALL HAVE APPROVAL OF THE ENGINEER.\n\n9. ANY STOP IN FRAMED CONCRETE WORK MUST BE MADE IN THE CENTER OF THE SPAN AND\nINCORPORATE AN APPROVED KEYWAY. REINFORCEMENT SHALL EXTEND THESE JOINTS IF REQUIRED\nFOR CONTINUITY.\n10. USE TYPE 'C2' JOINT FOR ALL CONSTRUCTION JOINTS IN WALLS AND SLABS BELOW GRADE AND\nWALLS WHICH SEPARATE AREAS OF SOIL OR LIQUID FROM PERMANENTLY DRY AREAS SUCH AS\nTUNNELS, GALLERIES, BASEMENT ROOMS, ETC. USE TYPE 'C1' JOINT AT ALL OTHER CONSTRUCTION\nJOINTS, UNLESS OTHERWISE NOTED ON DRAWINGS.\n11. CONCRETE WALLS AND PARTITIONS SHALL BE POURED IN MAXIMUM LENGTHS OF 40 FEET BETWEEN\nVERTICAL CONSTRUCTION JOINTS.\n12. ALL CONCRETE SLABS OVER 8\" IN THICKNESS, REINFORCED WITH BARS, AND POURED AGAINST SOIL\nSHALL BE POURED IN A STRIP PATTERN OF 40 FEET OR LESS IN EACH DIRECTION.\n\n13. ALL EXPOSED EDGES OF BEAMS, COLUMNS, SLABS AND WALLS SHALL BE CHAMFERED 3/4\" UNLESS\nMASONRY OR OTHER MEMBERS ARE ERECTED FLUSH WITH THEM.\n\n14. REFER TO ARCHITECTURAL, PROCESS, MECHANICAL AND ELECTRICAL DRAWINGS FOR ALL SLEEVES,\nPIPES, CONDUITS AND MISCELLANEOUS ANCHORING DEVICES TO BE INCORPORATED IN THE"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_5_block_007",
+      "coordinates": {
+        "x1": 9628.546875,
+        "y1": 5469.99609375,
+        "x2": 10500.0234375,
+        "y2": 5609.6015625
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.28466796875,
+      "reading_order": 8,
+      "text": "FORT BEND CO MUD NO. 210"
+    }
+  ]
+}

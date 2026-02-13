@@ -150,7 +150,9 @@ async def delete_commit_db(object: BaseModel, db: Session) -> None:
     await db.commit()
 
 
-pwt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwt_context = CryptContext(
+    schemes=["bcrypt"], deprecated="auto", bcrypt__truncate_error=True
+)
 
 
 def hash_password(password: str) -> str:
@@ -158,6 +160,7 @@ def hash_password(password: str) -> str:
 
     Uses passlib's CryptContext with bcrypt scheme for secure password hashing.
     Includes automatic salt generation and deprecated scheme handling.
+    Truncates passwords longer than 72 bytes to comply with bcrypt limitation.
 
     Args:
         password: Plain text password to hash.
@@ -165,6 +168,9 @@ def hash_password(password: str) -> str:
     Returns:
         str: Bcrypt hash of the password.
     """
+    # Bcrypt has a 72-byte limit, truncate if necessary
+    if len(password.encode("utf-8")) > 72:
+        password = password.encode("utf-8")[:72].decode("utf-8", errors="ignore")
     return pwt_context.hash(password)
 
 
@@ -173,6 +179,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
     Uses passlib's CryptContext to securely compare plain text password
     against stored bcrypt hash with automatic salt extraction.
+    Truncates passwords longer than 72 bytes to comply with bcrypt limitation.
 
     Args:
         plain_password: Plain text password to verify.
@@ -181,4 +188,9 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         bool: True if password matches hash, False otherwise.
     """
+    # Bcrypt has a 72-byte limit, truncate if necessary
+    if len(plain_password.encode("utf-8")) > 72:
+        plain_password = plain_password.encode("utf-8")[:72].decode(
+            "utf-8", errors="ignore"
+        )
     return pwt_context.verify(plain_password, hashed_password)
