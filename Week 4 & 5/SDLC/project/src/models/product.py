@@ -21,4 +21,4 @@ class Product(Base):
         ForeignKey("product_category.id", ondelete="CASCADE"), nullable=False
     )
 
-    category: Mapped["Category"] = relationship("Category", back_populates="products")
+    category: Mapped["Category"] = relationship("Category", back_populates="products")  # noqa: F821
