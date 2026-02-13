@@ -25,15 +25,15 @@ class Settings(BaseSettings, metaclass=Singleton):
 
     # POSTGRESQL
     postgresql_pwd: str = Field(
-        validation_alias=AliasChoices("POSTGRESQL_PWD", "db_password")
+        default="test_password",
+        validation_alias=AliasChoices("POSTGRESQL_PWD", "db_password"),
     )
     db_host: str = Field(
-        default="localhost",
-        validation_alias=AliasChoices("DB_HOST", "db_host")
+        default="localhost", validation_alias=AliasChoices("DB_HOST", "db_host")
     )
 
     # ENVIRONMENT
-    environment: str = Field(validation_alias="ENVIRONMENT")
+    environment: str = Field(default="test", validation_alias="ENVIRONMENT")
 
     @property
     def DATABASE_URL(self) -> str:
@@ -45,7 +45,10 @@ class Settings(BaseSettings, metaclass=Singleton):
         return f"postgresql+asyncpg://postgres:{self.postgresql_pwd}@{self.db_host}:5432/inventory_manager"
 
     # JWT
-    JWT_SECRET_KEY: str = Field(validation_alias="JWT_SECRET_KEY")
+    JWT_SECRET_KEY: str = Field(
+        default="test_secret_key_for_testing_only_change_in_production",
+        validation_alias="JWT_SECRET_KEY",
+    )
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
