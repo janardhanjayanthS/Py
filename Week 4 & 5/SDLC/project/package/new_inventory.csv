@@ -1,0 +1,301 @@
+product_id,product_name,quantity,price,type,days_to_expire,is_vegetarian,warranty_period_in_years
+P001,Cereal Box,100,20.56,food,37.0,Yes,
+P002,Earbuds,34,invalid,electronic,,,1.0
+P003,Pillow,71,128.23,regular,,,
+P004,Canned Tuna,23,22.91,food,77.0,No,
+P005,Graphics Card,10,305.49,electronic,33.0,No,1.0
+P006,Backpack,abc,164.77,regular,,,
+P007,Bread Loaf,128,15.81,food,302.0,Yes,
+P008,,45,712.18,electronic,,,3.0
+P009,Backpack,73,42.5,regular,,,
+P010,Butter,151,40.82,food,344.0,Yes,
+P011,Keyboard,41,666.48,electronic,,,1.0
+P012,Desk Organizer,83,62.44,regular,,,
+P013,Honey Jar,58,31.35,food,221.0,No,
+P014,Tablet,26,1235.34,electronic,,,1.5
+P015,Storage Box,72,23.11,regular,,,
+P016,Jam Bottle,116,invalid,food,364.0,Yes,
+P017,Camera,3,309.01,electronic,,,1.0
+P018,Notebook,19,136.16,regular,,,
+P019,Cookies,118,22.69,food,352.0,No,
+P020,Projector,47,1472.53,electronic,225.0,No,3.0
+P021,Mirror,79,173.42,regular,,,
+P022,Olive Oil,39,14.28,food,224.0,No,
+P023,Laptop,28,1133.69,electronic,,,1.0
+P024,Soap,-2,168.89,regular,,,
+P025,Green Tea,140,35.74,food,39.0,No,
+P026,Printer,41,,electronic,,,2.0
+P027,Tissue Box,71,129.5,regular,,,
+P028,Potato Chips,49,32.38,food,177.0,No,
+P029,Drone,-11,654.75,electronic,,,2.0
+P030,Tape,74,117.03,regular,,,
+P031,Honey Jar,174,37.64,food,262.0,Yes,
+P032,Wireless Charger,33,1392.25,electronic,,,1.0
+P033,Umbrella,56,183.38,regular,,,
+P034,Milk 1L,139,43.19,food,311.0,No,
+P035,Power Bank,32,435.55,electronic,,,1.0
+P036,Book,34,149.92,regular,,,
+P037,Rice Bag,86,4.69,food,344.0,No,
+P038,Headphones,6,1154.84,electronic,,,1.5
+P039,Mirror,57,48.8,regular,,,
+P040,Frozen Pizza,180,23.38,food,325.0,Yes,
+P041,VR Headset,24,374.54,electronic,,,3.0
+P042,Shampoo,5,123.49,regular,,,
+P043,Rice Bag,6,43.0,food,252.0,Yes,
+P044,Wireless Mouse,10,199.17,electronic,,,1.5
+P045,Desk Organizer,77,114.91,regular,,,
+P046,Eggs,49,4.05,food,361.0,No,
+P047,Router,2,128.14,electronic,,,3.0
+P048,Perfume,98,113.56,regular,,,
+P049,Oats Packet,155,47.87,food,185.0,Yes,
+P050,Printer,48,1388.35,electronic,,,1.0
+P051,Laundry Basket,-9,144.26,regular,,,
+P052,Jam Bottle,74,9.31,food,349.0,Yes,
+P053,Keyboard,9,136.36,electronic,,,3.0
+P054,Perfume,-7,99.68,regular,,,
+P055,Pasta,69,24.78,food,2527.0,Yes,2.0
+P056,Webcam,16,-17.73,electronic,,,1.0
+P057,Spoon Set,36,45.83,regular,,,
+P058,Bread Loaf,22,21.53,food,166.0,No,
+P059,VR Headset,9,1290.42,electronic,,,1.5
+P060,Mirror,53,89.02,regular,,,
+P061,Cheese Block,148,42.17,food,193.0,No,
+P062,Projector,10,-10.74,electronic,,,3.0
+P063,Backpack,97,195.08,regular,,,
+P064,Cookies,163,invalid,food,254.0,No,
+P065,Keyboard,39,449.28,electronic,,,1.0
+P066,Dustbin,74,190.82,regular,,,
+P067,Ice Cream,8,40.42,food,73.0,No,
+P068,Laptop,48,1001.99,electronic,,,2.0
+P069,Towel,21,89.96,regular,,,
+P070,Bread Loaf,39,invalid,food,345.0,No,
+P071,Printer,21,1045.78,electronic,,,1.0
+P072,Backpack,abc,167.25,regular,,,
+P073,Jam Bottle,174,invalid,food,241.0,No,
+P074,Microphone,3,972.52,electronic,,,2.0
+P075,Backpack,43,34.85,regular,,,
+P076,Oats Packet,105,-77.79,food,197.0,Yes,
+P077,Wireless Charger,3,752.92,electronic,234.0,Yes,3.0
+P078,Pillow,40,112.6,unknown,,,
+P079,Honey Jar,168,9.1,food,233.0,Yes,
+P080,Smart Thermostat,22,661.5,electronic,,,1.0
+P081,Plate Set,62,64.54,regular,,,
+P082,Butter,133,34.61,food,35.0,No,
+P083,Laptop,32,invalid,electronic,,,1.5
+P084,Mirror,81,89.62,regular,,,
+P085,Yogurt Cup,18,37.74,food,43.0,No,
+P086,External Hard Drive,42,924.74,electronic,,,1.5
+P087,Clock,89,130.06,regular,,,
+P088,Apple,abc,9.99,food,241.0,Yes,
+P089,Router,9,856.02,electronic,,,1.0
+P090,Tape,41,64.51,regular,,,
+P091,Apple,9,5.45,food,325.0,No,
+P092,Smart Light Bulb,49,704.84,electronic,,,1.0
+P093,Water Bottle,61,15.82,regular,,,
+P094,Orange Juice,30,40.9,food,159.0,No,
+P095,Webcam,37,473.73,electronic,,,3.0
+P096,,8,185.21,regular,,,
+P097,Ice Cream,49,40.92,food,296.0,No,
+P098,Wireless Charger,6,447.6,electronic,,,2.0
+P099,Backpack,72,91.48,regular,,,
+P100,Tomato Sauce,68,15.38,food,194.0,No,
+P101,Smartphone,7,119.56,electronic,,,1.5
+P102,Clock,54,18.77,regular,,,
+P103,Yogurt Cup,73,41.97,food,107.0,No,
+P104,Wireless Mouse,39,1478.76,electronic,,,1.0
+P105,Umbrella,11,122.51,unknown,,,
+P106,Orange Juice,59,35.13,food,87.0,Yes,
+P107,Smart Thermostat,10,1210.85,electronic,,,1.5
+P108,Laundry Basket,68,117.8,regular,,,
+P109,Eggs,138,-74.32,food,49.0,Yes,
+P110,Headphones,6,691.84,electronic,,,1.0
+P111,Plate Set,36,53.3,regular,,,
+P112,Frozen Vegetables,87,-31.01,food,38.0,No,
+P113,Projector,33,231.54,electronic,,,1.5
+P114,Pillow,14,118.26,regular,,,
+P115,Soup Can,44,17.68,food,312.0,Yes,
+P116,Smart Thermostat,18,184.89,electronic,,,1.0
+P117,Laundry Basket,29,54.01,regular,,,
+P118,Pasta,35,1.11,food,358.0,Yes,
+P119,SSD Drive,45,463.39,electronic,,,2.0
+P120,Desk Organizer,44,invalid,regular,,,
+P121,Tomato Sauce,130,12.02,food,326.0,Yes,3.0
+P122,Printer,16,965.96,electronic,,,1.5
+P123,Shampoo,78,150.78,regular,,,
+P124,Rice Bag,151,43.31,food,264.0,Yes,
+P125,Router,48,1407.6,electronic,262.0,Yes,1.0
+P126,Soap,93,140.86,regular,,,
+P127,Cheese Block,152,37.36,food,341.0,Yes,
+P128,External Hard Drive,abc,-29.33,electronic,,,1.0
+P129,Plate Set,37,123.98,regular,,,
+P130,Eggs,23,38.34,food,261.0,Yes,
+P131,Microphone,18,1069.69,electronic,,,2.0
+P132,Water Bottle,38,25.18,regular,,,
+P133,Oats Packet,115,22.57,food,249.0,Yes,
+P134,,15,344.91,electronic,,,1.0
+P135,Keychain,65,183.75,regular,,,
+P136,Honey Jar,121,35.48,food,57.0,No,
+P137,Headphones,10,463.43,electronic,,,2.0
+P138,Water Bottle,10,61.87,regular,,,
+P139,Bread Loaf,96,32.84,food,349.0,No,
+P140,Laptop,8,1456.68,electronic,,,1.5
+P141,Pillow,54,141.55,regular,,,
+P142,Frozen Pizza,53,41.29,food,77.0,Yes,
+P143,Microphone,44,255.83,electronic,,,1.0
+P144,Deodorant,68,38.93,regular,,,
+P145,Frozen Vegetables,172,18.92,food,2770.0,No,
+P146,Wireless Mouse,6,709.88,electronic,,,2.0
+P147,,20,102.88,regular,,,
+P148,Eggs,102,18.87,food,176.0,No,
+P149,Router,25,,electronic,,,3.0
+P150,Tissue Box,20,179.49,regular,,,
+P151,Soup Can,17,11.09,food,203.0,No,
+P152,Laptop,-11,1375.25,electronic,,,1.0
+P153,Notebook,11,123.6,regular,,,
+P154,Bread Loaf,96,36.73,food,309.0,Yes,
+P155,Camera,28,572.33,electronic,,,3.0
+P156,Tape,17,169.78,regular,,,
+P157,Tomato Sauce,9,49.04,food,336.0,Yes,
+P158,Smart Light Bulb,abc,964.02,electronic,,,1.5
+P159,Perfume,15,115.96,regular,,,
+P160,Soup Can,30,24.76,unknown,256.0,No,
+P161,Smart TV,29,1173.66,electronic,,,2.0
+P162,Plate Set,56,109.61,regular,,,
+P163,Green Tea,106,4.67,food,267.0,No,
+P164,Camera,22,552.9,electronic,,,3.0
+P165,Keychain,37,183.21,regular,,,
+P166,Banana,39,16.13,food,56.0,Yes,
+P167,Smartphone,6,184.19,electronic,,,1.0
+P168,Book,46,145.07,regular,,,
+P169,Orange Juice,76,40.92,food,352.0,Yes,
+P170,Smartwatch,33,1000.95,electronic,,,3.0
+P171,Deodorant,70,18.2,regular,,,
+P172,Apple,168,32.38,food,199.0,Yes,
+P173,Headphones,47,196.79,electronic,,,2.0
+P174,Towel,41,184.63,regular,,,
+P175,Green Tea,135,38.6,food,180.0,Yes,
+P176,Wireless Charger,46,286.38,electronic,,,2.0
+P177,Backpack,88,6.52,regular,,,
+P178,Bread Loaf,78,1.32,food,172.0,No,
+P179,External Hard Drive,15,466.94,electronic,,,3.0
+P180,Backpack,95,146.31,regular,,,
+P181,Cookies,184,12.16,food,83.0,No,
+P182,Keyboard,31,342.86,electronic,,,3.0
+P183,,50,98.04,regular,,,
+P184,Milk 1L,88,44.63,food,174.0,No,
+P185,Drone,32,1306.11,electronic,,,1.5
+P186,Shampoo,89,41.37,regular,,,
+P187,Ice Cream,119,33.39,food,184.0,Yes,
+P188,Printer,18,1462.34,unknown,,,1.5
+P189,Mirror,18,124.72,regular,,,
+P190,Ice Cream,79,38.03,food,215.0,Yes,1.0
+P191,Bluetooth Speaker,29,1071.46,electronic,,,1.0
+P192,Backpack,8,178.27,regular,,,
+P193,Energy Drink,125,47.78,food,225.0,No,
+P194,Camera,20,736.28,electronic,,,2.0
+P195,Pen,22,134.95,regular,,,
+P196,Energy Drink,152,37.51,food,2237.0,Yes,
+P197,Keyboard,46,593.42,electronic,,,1.5
+P198,Candle,28,60.57,regular,,,
+P199,Potato Chips,170,17.29,food,100.0,Yes,
+P200,Router,34,1357.97,electronic,,,1.5
+P201,Dustbin,-11,150.66,regular,,,
+P202,Green Tea,135,41.7,food,183.0,Yes,
+P203,Smart Light Bulb,abc,invalid,electronic,,,3.0
+P204,Laundry Basket,45,,regular,,,
+P205,Potato Chips,166,34.73,food,274.0,No,
+P206,Projector,41,584.59,electronic,,,2.0
+P207,Soap,58,41.47,regular,,,
+P208,Chocolate Bar,185,16.86,food,213.0,Yes,
+P209,Keyboard,24,432.4,electronic,,,1.0
+P210,Broom,87,31.92,regular,,,
+P211,Milk 1L,35,45.75,food,64.0,No,
+P212,Smart TV,42,849.58,electronic,,,3.0
+P213,,26,29.59,regular,,,
+P214,Frozen Pizza,177,47.77,food,176.0,Yes,
+P215,Drone,30,1188.2,electronic,,,2.0
+P216,Candle,10,48.99,regular,,,
+P217,Ice Cream,161,37.75,food,331.0,Yes,
+P218,Smart Speaker,2,1007.38,electronic,,,3.0
+P219,Umbrella,32,55.08,regular,,,
+P220,Bread Loaf,95,44.15,food,311.0,No,
+P221,Router,1,323.41,electronic,,,1.5
+P222,Water Bottle,38,169.46,regular,,,
+P223,Banana,13,3.55,food,78.0,No,
+P224,Printer,41,667.43,electronic,,,2.0
+P225,Desk Organizer,abc,60.54,regular,,,
+P226,Cheddar Slice,21,17.66,food,43.0,Yes,
+P227,Graphics Card,12,987.43,electronic,,,3.0
+P228,Dustbin,82,116.19,regular,,,
+P229,Yogurt Cup,156,invalid,food,183.0,Yes,
+P230,Wireless Mouse,8,1155.78,electronic,,,1.0
+P231,Notebook,abc,54.93,regular,,,
+P232,Snack Bar,134,39.57,food,9183.0,No,
+P233,Game Console,43,713.91,electronic,,,1.5
+P234,Notebook,79,15.53,regular,,,
+P235,Peanut Butter,115,16.88,food,222.0,Yes,
+P236,Tablet,7,285.09,electronic,,,1.0
+P237,,20,179.37,regular,,,
+P238,Jam Bottle,26,23.06,food,312.0,Yes,
+P239,External Hard Drive,39,620.85,electronic,,,3.0
+P240,Pillow,48,108.83,regular,,,
+P241,Banana,33,24.07,food,19.0,Yes,
+P242,Smart Thermostat,6,,unknown,,,3.0
+P243,Book,-5,193.78,regular,,,
+P244,Peanut Butter,79,48.7,food,9433.0,No,
+P245,Wireless Mouse,19,1377.11,electronic,,,1.0
+P246,Book,92,116.64,regular,,,
+P247,Bread Loaf,97,40.94,food,113.0,No,
+P248,Smart TV,40,693.26,electronic,,,1.0
+P249,Spoon Set,5,34.37,regular,,,
+P250,Tomato Sauce,69,9.98,food,55.0,Yes,
+P251,Tablet,3,183.68,electronic,,,1.0
+P252,Soap,50,11.3,regular,,,
+P253,Yogurt Cup,-20,25.65,food,297.0,No,
+P254,Smartphone,16,583.51,electronic,,,1.5
+P255,,12,94.62,regular,,,
+P256,Energy Drink,abc,48.26,food,213.0,No,
+P257,Microphone,11,1088.66,electronic,,,3.0
+P258,Pillow,12,77.9,regular,,,
+P259,Oats Packet,83,15.17,food,211.0,No,
+P260,Camera,5,857.69,electronic,,,3.0
+P261,Mug,53,54.14,regular,,,
+P262,Potato Chips,105,40.88,food,211.0,No,
+P263,Smart Thermostat,14,169.57,electronic,,,1.5
+P264,Book,25,160.04,regular,,,
+P265,Banana,133,invalid,food,288.0,Yes,
+P266,Projector,13,942.8,electronic,,,3.0
+P267,Storage Box,71,192.88,regular,,,
+P268,Cheese Block,8,8.04,food,185.0,Yes,
+P269,Microphone,10,245.78,electronic,,,2.0
+P270,Book,59,72.16,regular,,,
+P271,Olive Oil,32,43.19,food,245.0,No,
+P272,Smartphone,27,214.63,electronic,,,2.0
+P273,Plate Set,77,153.14,regular,,,
+P274,Milk 1L,133,34.45,food,296.0,Yes,
+P275,Drone,34,992.76,electronic,,,1.0
+P276,Deodorant,74,120.46,regular,,,
+P277,Oats Packet,16,44.06,food,266.0,Yes,
+P278,Smart TV,20,649.03,electronic,,,1.0
+P279,Tape,abc,137.68,regular,,,
+P280,Cheese Block,179,23.43,food,350.0,Yes,
+P281,Camera,20,1296.81,electronic,173.0,No,2.0
+P282,Desk Organizer,38,167.39,regular,,,
+P283,Banana,143,23.08,food,160.0,Yes,
+P284,Laptop,7,1029.23,electronic,,,1.0
+P285,Water Bottle,59,166.8,regular,,,
+P286,Bread Loaf,33,25.18,food,29.0,Yes,
+P287,Drone,12,886.12,electronic,,,1.5
+P288,Notebook,35,192.66,regular,,,
+P289,Rice Bag,27,36.95,food,126.0,Yes,1.0
+P290,Microphone,47,691.33,electronic,,,3.0
+P291,Mirror,6,7.9,regular,,,
+P292,Soup Can,198,43.27,food,51.0,No,
+P293,Smartphone,26,460.56,electronic,,,1.5
+P294,Keychain,94,199.37,regular,,,
+P295,Peanut Butter,168,35.17,food,190.0,Yes,2.0
+P296,External Hard Drive,39,1410.42,electronic,,,2.0
+P297,Water Bottle,22,16.21,regular,,,
+P298,Chocolate Bar,23,32.23,food,283.0,No,
+P299,Smartwatch,12,464.33,electronic,,,3.0
+P300,Candle,99,140.06,regular,,,
