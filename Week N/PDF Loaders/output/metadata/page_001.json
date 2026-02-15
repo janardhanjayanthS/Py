@@ -1,0 +1,359 @@
+{
+  "page_num": 1,
+  "image_width": 10836,
+  "image_height": 7281,
+  "created_at": "2026-02-12T07:48:09.593492+00:00",
+  "blocks": [
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_004",
+      "coordinates": {
+        "x1": 1027.87890625,
+        "y1": 2230.863037109375,
+        "x2": 2641.125244140625,
+        "y2": 3838.849365234375
+      },
+      "layout_tag": "image",
+      "confidence": 0.9754924774169922,
+      "reading_order": 5,
+      "text": "चित्र में एक मानचित्र है जिसमें एक काले आयताकार बॉक्स में \"PROJECT LOCATION\" लिखा है। यह बॉक्स मानचित्र के उत्तर-पश्चिम भाग में स्थित है। एक मोटी काली रेखा इस बॉक्स के ऊपरी-बाएँ कोने से निकलती है और मानचित्र के केंद्र की ओर इशारा करती है। मानचित्र में विभिन्न सड़कें और राजमार्ग शामिल हैं, जैसे कि US 90, US 90A, I-10, I-610, US 59, FM 1960, और SH 225, SH 99, SH 249, SH 322, SH 288, SH 35, SH 9, SH 90A, SH 90, और SH 146। मानचित्र के केंद्र में \"WESTHEIMER\" और \"WESTPARK TILL ROAD\" लेबल वाली सड़कें हैं, और \"FORT BEND\" और \"PROY TILL ROAD\" लेबल वाली सड़कें नीचे के केंद्र के पास हैं। ऊपरी-दाएँ कोने में एक उत्तर तीर है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_007",
+      "coordinates": {
+        "x1": 1039.04638671875,
+        "y1": 4345.470703125,
+        "x2": 2642.103759765625,
+        "y2": 5955.52783203125
+      },
+      "layout_tag": "image",
+      "confidence": 0.9716262221336365,
+      "reading_order": 8,
+      "text": "यह चित्र एक ब्लैक एंड व्हाइट लाइन मैप है जो एक भौगोलिक क्षेत्र को दर्शाता है, जो संभवतः एक भूमि सर्वेक्षण या ज़ोनिंग मानचित्र है। इसमें कोई संख्यात्मक डेटा या बार ग्राफ नहीं है।\n\n**मुख्य विशेषताएं:**\n- **अभिविन्यास:** ऊपर-दाईं ओर एक कम्पास रोज (compass rose) उत्तर (N) को दर्शाता है।\n- **परियोजना स्थान:** एक आयताकार बॉक्स \"PROJECT LOCATION\" लेबल के साथ मानचित्र के निचले-बाएं भाग में स्थित है।\n- **सड़कें:**\n  - \"JONES CREEK\" (जोन्स क्रीक) उत्तर-पश्चिम से दक्षिण-पूर्व की ओर बहती है।\n  - \"STRATMAN RD\" (स्ट्रैटमैन रोड) उत्तर-पश्चिम से दक्षिण-पूर्व की ओर बहती है।\n  - \"BEADLE LN\" (बीडल लेन) मानचित्र के केंद्र में क्षैतिज रूप से चलती है।\n  - \"BRAZOS RIVER\" (ब्राज़ोस नदी) नीचे-मध्य में बहती है।\n- **सीमाएं:**\n  - \"FBCMUD 210\" (FBCMUD 210) लेबल वाला एक बड़ा आयताकार क्षेत्र उत्तर-पश्चिम में स्थित है।\n  - \"F.M. 359\" (एफ.एम. 359) लेबल वाला एक सड़क खंड FBCMUD 210 के पूर्व में स्थित है।\n  - \"F.M. 723\" (एफ.एम. 723) लेबल वाला एक सड़क खंड F.M. 359 के पूर्व में स्थित है।\n- **अन्य:** \"F.M.\" (संभवतः फर्स्ट-मैल) लेबल वाली एक सड़क F.M. 359 और F.M. 723 के बीच स्थित है।\n\n**डेटा सारांश:**\nयह मानचित्र एक विशिष्ट परियोजना स्थान की पहचान करता है जो एक नदी और कई सड़कों से घिरा है। यह एक विशिष्ट क्षेत्र को सीमांकित करता है, जो संभवतः एक विकास या ज़ोनिंग परियोजना है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_021",
+      "coordinates": {
+        "x1": 9048.8779296875,
+        "y1": 5487.82470703125,
+        "x2": 10661.2431640625,
+        "y2": 5980.6357421875
+      },
+      "layout_tag": "table",
+      "confidence": 0.9355937838554382,
+      "reading_order": 22,
+      "text": "<table>\n<thead>\n<tr>\n<th>REV.<br/>NO.</th>\n<th>DATE</th>\n<th>DESCRIPTION</th>\n<th>P.E.<br/>APPR.</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1</td>\n<td>11/25/2025</td>\n<td>IFB</td>\n<td>AD</td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_013",
+      "coordinates": {
+        "x1": 8818.498046875,
+        "y1": 4258.1015625,
+        "x2": 9593.4833984375,
+        "y2": 4573.9912109375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.9279291033744812,
+      "reading_order": 14,
+      "text": "ONE-CALL NOTIFICATION SYSTEM\nCALL BEFORE YOU DIG!!!\nDIAL 811 or 1-(800)-344-8377\nAT LEAST 48 HOURS BEFORE\nPROCEEDING WITH ANY EXCAVATION"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_012",
+      "coordinates": {
+        "x1": 8763.767578125,
+        "y1": 3721.080810546875,
+        "x2": 9616.447265625,
+        "y2": 3963.527099609375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8992038369178772,
+      "reading_order": 13,
+      "text": "THIS SITE LIES ENTIRELY IN ZONE AE.\nBASE FLOOD ELEVATION: 94.2'\nFIRM PANEL 230 OF 575\n48157C0230L"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_009",
+      "coordinates": {
+        "x1": 5191.07861328125,
+        "y1": 2962.206787109375,
+        "x2": 6025.62255859375,
+        "y2": 3084.135498046875
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.8858393430709839,
+      "reading_order": 10,
+      "text": "SEPTEMBER 2025"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_000",
+      "coordinates": {
+        "x1": 9.13547134399414,
+        "y1": 135.15000915527344,
+        "x2": 1243.80029296875,
+        "y2": 376.1874694824219
+      },
+      "layout_tag": "header",
+      "confidence": 0.8520128726959229,
+      "reading_order": 1,
+      "text": "FORT BEND COUNTY\nFort Bend County Fire Marshal's Office\nPlans Approved"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_011",
+      "coordinates": {
+        "x1": 4968.966796875,
+        "y1": 3345.7646484375,
+        "x2": 6419.4775390625,
+        "y2": 5228.2685546875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8426622748374939,
+      "reading_order": 12,
+      "text": "NO. DESCRIPTION\n1 COVER SHEET\n2 GENERAL CONSTRUCTION NOTES\n3 SITE PLAN\n4 PAVING AND DRAINAGE PLAN\n5 GENERAL NOTES (STRUCTURAL)\n6 TYPICAL NOTES (STRUCTURAL)\n7 WET WELL PLAN AND SECTION\n8 GENERATOR AND CONTROL PANEL SLAB\n9 MECHANICAL PLAN\n10 MECHANICAL DETAILS\n11 MISCELLANEOUS DETAILS (SHEET 1 OF 3)\n12 MISCELLANEOUS DETAILS (SHEET 2 OF 3)\n13 MISCELLANEOUS DETAILS (SHEET 3 OF 3)\n14 SANITARY SEWER DETAILS\n15 DRIVEWAY DETAILS FOR RESIDENTIAL DRIVEWAYS\n16 STORM WATER POLLUTION PREVENTION PLAN\n17 STORM WATER POLLUTION PREVENTION PLAN DETAILS\n18 ELECTRICAL SITE PLAN\n19 ELECTRICAL ONE-LINE DIAGRAM\n20 ELECTRICAL CONTROL DIAGRAM\n21 ELECTRICAL DETAILS (SHEET 1 OF 2)\n22 ELECTRICAL DETAILS (SHEET 2 OF 2)"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_015",
+      "coordinates": {
+        "x1": 7423.29345703125,
+        "y1": 5536.330078125,
+        "x2": 8883.2763671875,
+        "y2": 5660.373046875
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.840904176235199,
+      "reading_order": 16,
+      "text": "FORT BEND COUNTY ENGINEER"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_018",
+      "coordinates": {
+        "x1": 7417.0166015625,
+        "y1": 6110.28759765625,
+        "x2": 8623.4052734375,
+        "y2": 6311.19873046875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8330783843994141,
+      "reading_order": 19,
+      "text": "THESE SIGNATURES ARE VOID IF CONSTRUCTION\nHAS NOT COMMENCED IN ONE (1) YEAR FROM DATE\nOF APPROVAL."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_008",
+      "coordinates": {
+        "x1": 1519.9569091796875,
+        "y1": 6027.92333984375,
+        "x2": 2133.00537109375,
+        "y2": 6364.08251953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8211565017700195,
+      "reading_order": 9,
+      "text": "VICINITY MAP\nN.T.S.\nKEY MAP 564 K\n1110 1/2 BEADLE LN\nROSENBERG, TEXAS 77471"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_001",
+      "coordinates": {
+        "x1": 354.416259765625,
+        "y1": 5571.01318359375,
+        "x2": 477.4784851074219,
+        "y2": 7011.580078125
+      },
+      "layout_tag": "sidebar",
+      "confidence": 0.7629501819610596,
+      "reading_order": 2,
+      "text": "BGE, INC.\nO:\\00014451-00\\PWT\\01_SHTS\\C-COVR.dwg Sep 26, 2025-2:30pm dhabet"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_010",
+      "coordinates": {
+        "x1": 4977.45166015625,
+        "y1": 3239.476318359375,
+        "x2": 5558.349609375,
+        "y2": 3343.43115234375
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.7595424056053162,
+      "reading_order": 11,
+      "text": "SHEET INDEX"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_019",
+      "coordinates": {
+        "x1": 7419.30029296875,
+        "y1": 6404.05712890625,
+        "x2": 8485.51953125,
+        "y2": 6550.86962890625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7392711639404297,
+      "reading_order": 20,
+      "text": "APPROVED: Ch At\nDEVELOPMENT COORDINATOR"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_003",
+      "coordinates": {
+        "x1": 9441.0322265625,
+        "y1": 1115.7491455078125,
+        "x2": 9955.21875,
+        "y2": 1813.0400390625
+      },
+      "layout_tag": "image",
+      "confidence": 0.7297989130020142,
+      "reading_order": 4,
+      "text": "यह छवि एक ढाल के आकार के पैच को प्रदर्शित करती है, जो संभवतः एक आधिकारिक प्रतीक या बैज है। इसमें एक मोटी पीली बाहरी सीमा है जिसके बाद एक काली पट्टी है। पैच के शीर्ष पर, 'FORT BEND COUNTY' शब्द बोल्ड, पीले, बड़े अक्षरों में काले रंग की पृष्ठभूमि पर लिखे गए हैं। इसके नीचे, एक केंद्रीय गोलाकार प्रतीक है जो एक मोटी पीली अंगूठी से घिरा हुआ है। इस अंगूठी के अंदर, 'EST. 1945' पाठ शीर्ष पर दिखाई देता है, और 'FIRE & RESCUE' पाठ नीचे की ओर दिखाई देता है। केंद्रीय वृत्त को चार चतुर्थांशों में विभाजित किया गया है: ऊपर-बाएं नीला है जिसमें एक पीला न्याय तराजू है; ऊपर-दाएं नीला है जिसमें एक पीला चिकित्सा क्रॉस है; नीचे-बाएं लाल है जिसमें एक पीला सनबर्स्ट है; और नीचे-दाएं सफेद है जिसमें एक नीला स्टार ऑफ़ लाइफ़ है। केंद्रीय वृत्त के भीतर पृष्ठभूमि को तिरछे रूप से विभाजित किया गया है, जिसमें ऊपर-बाएं नीला और नीचे-दाएं सफेद है। समग्र डिजाइन सममित और आधिकारिक है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_023",
+      "coordinates": {
+        "x1": 9192.025390625,
+        "y1": 6463.3974609375,
+        "x2": 9724.6455078125,
+        "y2": 6705.43994140625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7167956233024597,
+      "reading_order": 24,
+      "text": "BGE, Inc.\n10777 Westheimer, Suite 400\nHouston, TX 77042\nTel: 281-558-8700 • www.bgeinc.com\nTBPE Registration No. F-1046"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_002",
+      "coordinates": {
+        "x1": 1664.1888427734375,
+        "y1": 499.9962158203125,
+        "x2": 9536.5556640625,
+        "y2": 1808.0206298828125
+      },
+      "layout_tag": "headline",
+      "confidence": 0.6996398568153381,
+      "reading_order": 3,
+      "text": "FORT BEND COUNTY M.U.D. NO. 210\nCONSTRUCTION PLANS FOR\nLIFT STATION NO. 1"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_022",
+      "coordinates": {
+        "x1": 9290.529296875,
+        "y1": 6070.9423828125,
+        "x2": 9656.4169921875,
+        "y2": 6418.23388671875
+      },
+      "layout_tag": "image",
+      "confidence": 0.6973397731781006,
+      "reading_order": 23,
+      "text": "यह छवि एक लोगो प्रदर्शित करती है जिसमें बड़े, सफेद, बोल्ड, सैन्स-सेरिफ़ कैपिटल अक्षरों \"BGE\" को एक ठोस काले आयताकार पृष्ठभूमि के बीच में रखा गया है। यह डिज़ाइन एक उच्च-कंट्रास्ट, न्यूनतम सौंदर्य का उपयोग करता है। अक्षर \"B\" में एक विशिष्ट डिज़ाइन है जहाँ इसका ऊर्ध्वाधर तना नीचे की ओर फैला हुआ है और थोड़ा बाईं ओर मुड़ा हुआ है, जो एक शैलीगत विशेषता जोड़ता है। \"G\" और \"E\" मानक सेरिफ़-मुक्त सैन्स-सेरिफ़ फ़ॉन्ट में हैं। समग्र रचना केंद्रित और संतुलित है, जो एक मजबूत दृश्य पहचान बनाती है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_017",
+      "coordinates": {
+        "x1": 7424.49365234375,
+        "y1": 5998.134765625,
+        "x2": 7596.10400390625,
+        "y2": 6080.30322265625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5998599529266357,
+      "reading_order": 18,
+      "text": "DATE :"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_025",
+      "coordinates": {
+        "x1": 9971.7470703125,
+        "y1": 6048.173828125,
+        "x2": 10542.9296875,
+        "y2": 6702.69677734375
+      },
+      "layout_tag": "image",
+      "confidence": 0.5940748453140259,
+      "reading_order": 26,
+      "text": "छवि में टेक्सास राज्य का एक गोलाकार मुहर है। मुहर के शीर्ष पर \"STATE OF TEXAS\" लिखा है। बीच में एक बड़ा तारा है और उसके नीचे \"ALEJANDRO DE LA ROSA\" लिखा है। नाम के नीचे \"140684\" नंबर लिखा है। मुहर के नीचे \"LICENSED PROFESSIONAL ENGINEER\" लिखा है। मुहर के नीचे \"A. DeLaRosa\" लिखा है और नीचे दाईं ओर \"09/29/2025\" तारीख लिखी है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_020",
+      "coordinates": {
+        "x1": 7416.87109375,
+        "y1": 6628.7294921875,
+        "x2": 7967.7685546875,
+        "y2": 6704.56494140625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5807908177375793,
+      "reading_order": 21,
+      "text": "DATE : 10-31-25"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_005",
+      "coordinates": {
+        "x1": 1483.3646240234375,
+        "y1": 3912.549072265625,
+        "x2": 2141.953125,
+        "y2": 4082.503173828125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5640931725502014,
+      "reading_order": 6,
+      "text": "LOCATION MAP\nN.T.S."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_016",
+      "coordinates": {
+        "x1": 7414.91064453125,
+        "y1": 5726.02783203125,
+        "x2": 8892.009765625,
+        "y2": 5934.79541015625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5629022717475891,
+      "reading_order": 17,
+      "text": "ENGINEER: Neil J Stangio, PE, PTOE\nfor J. STACY SLAWINSKI, P.E."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_024",
+      "coordinates": {
+        "x1": 10634.08984375,
+        "y1": 402.55841064453125,
+        "x2": 10728.7998046875,
+        "y2": 1992.0953369140625
+      },
+      "layout_tag": "sidebar",
+      "confidence": 0.5485458374023438,
+      "reading_order": 25,
+      "text": "SHORT PROJECT DESCRIPTION / FBCMUD210/BGE JOB NO. 14451-00"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_014",
+      "coordinates": {
+        "x1": 2810.996826171875,
+        "y1": 6521.1611328125,
+        "x2": 4038.48193359375,
+        "y2": 6722.3017578125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5343388915061951,
+      "reading_order": 15,
+      "text": "CONTRACTOR TO COORDINATE ALL WORK WITHIN THE\nCOUNTY ROAD R.O.W. WITH THE FORT BEND COUNTY\nENGINEERING, 281-633-7500."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_006",
+      "coordinates": {
+        "x1": 9983.2314453125,
+        "y1": 1038.7802734375,
+        "x2": 10596.40234375,
+        "y2": 1927.685546875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.526400625705719,
+      "reading_order": 7,
+      "text": "Digitally\nsigned by\nPawlak, Cuyler\nReason: Plans\nApproved for\nPermit\nDate:\n2025.10.08\n10:46:17-05'00'"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_1_block_026",
+      "coordinates": {
+        "x1": 9464.568359375,
+        "y1": 6789.43115234375,
+        "x2": 10175.681640625,
+        "y2": 6950.2783203125
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.340087890625,
+      "reading_order": 27,
+      "text": "SHEET\nNO: 1 OF 22"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# development requirements
+pytest==9.0.1
+pre_commit==4.5.0
+fastapi-cli==0.0.16
+pre-commit==4.0.1

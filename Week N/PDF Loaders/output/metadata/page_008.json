@@ -1,0 +1,203 @@
+{
+  "page_num": 8,
+  "image_width": 10830,
+  "image_height": 7281,
+  "created_at": "2026-02-12T07:48:10.033799+00:00",
+  "blocks": [
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_004",
+      "coordinates": {
+        "x1": 5082.2451171875,
+        "y1": 4367.80078125,
+        "x2": 8450.45703125,
+        "y2": 6246.509765625
+      },
+      "layout_tag": "image",
+      "confidence": 0.8826613426208496,
+      "reading_order": 5,
+      "text": "The image is a technical drawing labeled \"GENERATOR SLAB SECTION\" with the identifier \"NTS\". It provides detailed specifications for a concrete slab, including dimensions, materials, and construction details. Key elements include:\n\n*   **Dimensions:** The slab is 3 feet wide, with a slope of 1/4\" per foot. The thickness is 1 foot.\n*   **Materials:** The slab is 3 inches thick, with a 3-inch concrete slab reinforced with #3 steel bars. A 10-mil vapor barrier is installed.\n*   **Anchors:** Hilti HIT-HY 200-R V3 has-R SS-adhesive anchors are embedded 3/4\" into the slab.\n*   **Fixtures:** #6 anchors are installed at 12\" O.C.E.W. (Outside Center of Expansion Joint) for the top and bottom. Stirrups are located at 24\" O.C.\n*   **References:** The drawing references a \"Compact Select Fill\" and a \"Reference Geotech Report for Recommendations\".\n*   **Notes:** A note specifies providing a control joint or construction joint at every 4'-0\".\n\nThe drawing includes a top view and cross-sectional views, with arrows pointing to specific details."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_000",
+      "coordinates": {
+        "x1": 1445.9774169921875,
+        "y1": 1160.14697265625,
+        "x2": 3954.229248046875,
+        "y2": 3084.880126953125
+      },
+      "layout_tag": "image",
+      "confidence": 0.8204696178436279,
+      "reading_order": 1,
+      "text": "The image is a technical drawing or architectural plan showing cross-sections of a wall and slab. It includes dimensions and specifications for materials such as \"DAYTON SUPERIOR #6 @ 16\" O.C. DOWEL-IN OR APPROVED EQUAL.\" and \"SEAL SLAB.\" The drawing also shows a \"CAISSON WALL\" and notes to \"SEE CIVIL FOR GROUT FILLET.\" Dimensions include \"1' - 0\" to 3'\" and \"1' - 6\" to 10\".\" The text \"HYDROPITE EXPANDABLE WATERSTOP OR APPROVED EQUAL. TYP.\" is also present."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_009",
+      "coordinates": {
+        "x1": 8603.3779296875,
+        "y1": 5504.75537109375,
+        "x2": 9164.08984375,
+        "y2": 6140.53125
+      },
+      "layout_tag": "image",
+      "confidence": 0.7811597585678101,
+      "reading_order": 10,
+      "text": "FBC Engineering Approval\nFORT BEND COUNTY\nAPPROVED\nOCT 3 1 2025\nValid One Year\nFrom Date\nENGINEERING DEPARTMENT"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_002",
+      "coordinates": {
+        "x1": 1039.7935791015625,
+        "y1": 3697.4013671875,
+        "x2": 4786.9638671875,
+        "y2": 6041.82470703125
+      },
+      "layout_tag": "image",
+      "confidence": 0.7737619876861572,
+      "reading_order": 3,
+      "text": "चित्र में एक जनरेटर के लिए एक तकनीकी लेआउट दिखाया गया है, जो संभवतः एक निर्माण या इंजीनियरिंग योजना है। यह एक आयताकार क्षेत्र दिखाता है जो एक ठोस रेखा से घिरा है, जो जनरेटर के भौतिक स्थान का प्रतिनिधित्व करता है। इस आयत के अंदर, एक छोटा, डैश-लाइन वाला आयत है, जो संभवतः एक योजनाबद्ध या आंतरिक लेआउट का प्रतिनिधित्व करता है।\n\nआरेख में आयाम शामिल हैं:\n- जनरेटर के ऊपर और नीचे की चौड़ाई को \"3' - 0\" (3 फीट) के रूप में लेबल किया गया है।\n- जनरेटर के बाईं और दाईं ओर की ऊंचाई को \"3' - 0\" (3 फीट) के रूप में लेबल किया गया है।\n- जनरेटर के ऊपर और नीचे की कुल चौड़ाई को \"14' - 4\" (14 फीट 4 इंच) के रूप में लेबल किया गया है।\n\nलेबल \"SIDEWALK\" जनरेटर के ऊपर और नीचे के किनारों के साथ स्थित हैं, जो यह दर्शाता है कि जनरेटर इन क्षेत्रों के बीच स्थित है। नीचे-बाएं कोने में एक कम्पास गुलाब \"S4\" लेबल किया गया है, जो अभिविन्यास को इंगित करता है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_003",
+      "coordinates": {
+        "x1": 5116.1044921875,
+        "y1": 642.4406127929688,
+        "x2": 7631.9111328125,
+        "y2": 3413.419677734375
+      },
+      "layout_tag": "image",
+      "confidence": 0.7612885236740112,
+      "reading_order": 4,
+      "text": "यह चित्र एक तकनीकी ड्राइंग है जिसका शीर्षक \"SLAB PLAN\" है, जो एक कंक्रीट स्लैब के लिए विस्तृत आयाम और सामग्री विनिर्देश प्रदान करता है। ड्राइंग में दो मुख्य दृश्य शामिल हैं: एक ऊपर से नीचे का दृश्य और एक साइड क्रॉस-सेक्शनल दृश्य।\n\n**ऊपर से नीचे का दृश्य (स्लैब प्लान):**\n- **समग्र आयाम:** स्लैब की कुल लंबाई 11' 6\" है, जिसकी चौड़ाई 9' 6\" है।\n- **आंतरिक आयाम:** आंतरिक स्लैब क्षेत्र 8' 0\" चौड़ा और 6' 0\" लंबा है।\n- **बाहरी आयाम:** बाहरी स्लैब 1' 0\" मोटा है।\n- **कोनों पर मोटाई:** कोनों पर मोटाई 1' 0\" है।\n\n**साइड क्रॉस-सेक्शनल दृश्य:**\n- **ऊंचाई:** स्लैब की ऊंचाई 1' 0\" है।\n- **आंतरिक संरचना:**\n  - **टॉप और बॉटम:** स्लैब में 12\" O.C.E.W. पर #6 बार हैं।\n  - **स्टिर्रप्स:** 24\" O.C. पर #3 स्टिर्रप्स हैं।\n  - **बॉटम बार्स:** 2\" #5 बॉटम बार्स हैं।\n  - **वैक्यूम बैरियर:** 10 MIL. वाष्प अवरोधक ASTM E1745 के अनुसार है।\n- **भरने की सामग्री:** स्लैब में COMPACT SELECT FILL का उपयोग किया गया है, जिसके लिए सिफारिशों के लिए एक संदर्भ भू-तकनीकी रिपोर्ट की आवश्यकता है।\n\n**मुख्य एनोटेशन:**\n- \"VARSES\" इंगित करता है कि कुछ आयाम भिन्न हो सकते हैं।\n- \"COMPACT SELECT FILL\" और \"REFERENCE GEOTECH REPORT FOR RECOMMENDATIONS\" को दाईं ओर नोट किया गया है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_014",
+      "coordinates": {
+        "x1": 9385.8408203125,
+        "y1": 6486.59375,
+        "x2": 10648.4140625,
+        "y2": 6985.12060546875
+      },
+      "layout_tag": "table",
+      "confidence": 0.696806013584137,
+      "reading_order": 15,
+      "text": "<table>\n<thead>\n<tr>\n<th colspan=\"2\">JOB NUMBER:</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>SUBMITTED: BGE, INC.<br/>SCALE:<br/>DATE:<br/>SURVEY BY:BGE, INC.<br/>F B NO:</td>\n<td>DESIGNED BY: CB<br/>DRAWN BY: MB<br/>SHEET NO 8 OF 22 SHEETS</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_008",
+      "coordinates": {
+        "x1": 10051.927734375,
+        "y1": 4725.1513671875,
+        "x2": 10584.58203125,
+        "y2": 5259.0830078125
+      },
+      "layout_tag": "image",
+      "confidence": 0.6723240613937378,
+      "reading_order": 9,
+      "text": "This image is a circular seal or stamp from the State of Texas. It features a central five-pointed star surrounded by a dotted line. The text is arranged in concentric rings. The top ring reads \"STATE OF TEXAS\". The middle ring contains the name \"CESAR BARRON CASTRO\". The bottom ring contains the number \"140574\". The bottom-most ring reads \"LICENSED\" on the left and \"PROFESSIONAL ENGINEER\" on the right."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_005",
+      "coordinates": {
+        "x1": 9368.568359375,
+        "y1": 4229.275390625,
+        "x2": 10648.34375,
+        "y2": 4714.24853515625
+      },
+      "layout_tag": "table",
+      "confidence": 0.5963848233222961,
+      "reading_order": 6,
+      "text": "<table>\n<thead>\n<tr>\n<th>REV.<br/>NO.</th>\n<th>DATE</th>\n<th>DESCRIPTION</th>\n<th>P.E.<br/>APPR.</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td>9/25/25</td>\n<td>ISSUE FOR AGENCY REVIEW</td>\n<td>CBC</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_006",
+      "coordinates": {
+        "x1": 9509.466796875,
+        "y1": 4809.85595703125,
+        "x2": 9882.1328125,
+        "y2": 5164.42724609375
+      },
+      "layout_tag": "image",
+      "confidence": 0.563411295413971,
+      "reading_order": 7,
+      "text": "यह छवि एक उच्च-कंट्रास्ट वाला ग्राफिक है जिसमें \"BGE\" अक्षर एक बोल्ड, सैन्स-सेरिफ़ टाइपफेस में हैं। अक्षर सफेद हैं और एक ठोस, गहरे भूरे रंग की पृष्ठभूमि पर स्थित हैं। डिज़ाइन में एक विशिष्ट ज्यामितीय व्यवस्था है: अक्षर \"B\" और \"G\" एक बड़े, ठोस गहरे भूरे रंग के आयत के भीतर केंद्रित हैं जो छवि की पूरी चौड़ाई में फैला हुआ है। अक्षर \"E\" भी इसी तरह के गहरे भूरे रंग के आयत के भीतर है, जो \"B\" और \"G\" के नीचे स्थित है। यह लेआउट एक मजबूत दृश्य पदानुक्रम बनाता है, जो सफेद अक्षरों और गहरे रंग की पृष्ठभूमि के बीच के अंतर पर जोर देता है। छवि में एक दानेदार, बनावट वाली गुणवत्ता है, जो मुद्रित मीडिया या स्कैन किए गए दस्तावेज़ की विशेषता है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_011",
+      "coordinates": {
+        "x1": 9560.859375,
+        "y1": 5766.12890625,
+        "x2": 10457.71875,
+        "y2": 5956.5
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.548828125,
+      "reading_order": 12,
+      "text": "LIFT STATION NO. 1"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_001",
+      "coordinates": {
+        "x1": 1399.6448974609375,
+        "y1": 3106.024658203125,
+        "x2": 2433.206787109375,
+        "y2": 3243.38134765625
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.5120065808296204,
+      "reading_order": 2,
+      "text": "③ CAISSON METHOD BASE DETAIL\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_007",
+      "coordinates": {
+        "x1": 9411.9755859375,
+        "y1": 5207.82861328125,
+        "x2": 9954.2822265625,
+        "y2": 5455.041015625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5080336332321167,
+      "reading_order": 8,
+      "text": "BGE, Inc.\n10777 Westheimer, Suite 400\nHouston, TX 77042\nTel: 281-558-8700 • www.bgeinc.com\nTBPE Registration No. F-1046"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_012",
+      "coordinates": {
+        "x1": 9408.5625,
+        "y1": 6142.640625,
+        "x2": 10618.4765625,
+        "y2": 6303.3984375
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.357421875,
+      "reading_order": 13,
+      "text": "GENERATOR AND CONTROL PANEL SLAB"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_010",
+      "coordinates": {
+        "x1": 9594.703125,
+        "y1": 5524.9921875,
+        "x2": 10491.5625,
+        "y2": 5677.2890625
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.32080078125,
+      "reading_order": 11,
+      "text": "FORT BEND CO MUD NO. 210"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_8_block_013",
+      "coordinates": {
+        "x1": 8004.046875,
+        "y1": 6337.2421875,
+        "x2": 8355.17578125,
+        "y2": 6713.75390625
+      },
+      "layout_tag": "image",
+      "confidence": 0.294189453125,
+      "reading_order": 14,
+      "text": "This image contains a logo with the letters \"BE\" inside a circle."
+    }
+  ]
+}

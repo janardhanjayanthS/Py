@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: inventory_manager
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d inventory_manager"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  project:
+    build: ./project
+    ports:
+      - "5003:5003"
+    secrets:
+      - db_password
+    env_file:
+      - ./project/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+
+volumes:
+  pgdata:
