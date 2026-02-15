@@ -1,0 +1,2 @@
+product_id,product_name,quantity,price,type,days_to_expire,is_vegetarian,warranty_period_in_years
+P1,Test product,150,200.00,regular,,,
