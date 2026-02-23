@@ -1,5 +1,5 @@
 # IAM Service
-- IAM - Indentity and access management
+- IAM - Indentity and Access Management
 - AWS service used to control access to AWS **Resources** - It contorls user's **Action** on resources
 - Resources: A specific Entity in AWS -> S3, Lambda functions, Bucket, Object, etc...
 - Action: tasks that we can perform on the Resources -> S3:CreateBucket, etc...
