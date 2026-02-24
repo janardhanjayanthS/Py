@@ -38,3 +38,8 @@ dependencies = [
     "torch>=2.9.1",
     "transformers>=4.57.3",
 ]
+
+[tool.uv.workspace]
+members = [
+    "Week N/AWS/01_AWS_EC2/sample_fastapi_project",
+]
