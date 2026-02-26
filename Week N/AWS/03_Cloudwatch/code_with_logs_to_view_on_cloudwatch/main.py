@@ -1,12 +1,13 @@
 import json
 import os
 import random
+import uuid
 from typing import Literal, Optional
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
-from log import get_logger
+from log import correlation_id, get_logger
 from mangum import Mangum
 from pydantic import BaseModel
 
@@ -29,6 +30,29 @@ if os.path.exists(BOOKS_FILE):
 
 app = FastAPI()
 handler = Mangum(app)
+
+
+@app.middleware("http")
+async def logger_middleware(request: Request, call_next):
+    """Middleware for logging requests with correlation IDs.
+
+    Args:
+        request: Incoming HTTP request.
+        call_next: Next middleware in the chain.
+
+    Returns:
+        HTTP response with correlation ID tracking.
+    """
+    request_id = str(uuid.uuid4())
+    token = correlation_id.set(request_id)
+
+    logger.info("Request started", path=request.url.path, method=request.method)
+
+    try:
+        response = await call_next(request)
+        return response
+    finally:
+        correlation_id.reset(token)
 
 
 @app.get("/")
