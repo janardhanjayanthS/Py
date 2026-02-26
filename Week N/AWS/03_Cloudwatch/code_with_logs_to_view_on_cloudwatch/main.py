@@ -1,12 +1,16 @@
 import json
 import os
+import random
 from typing import Literal, Optional
 from uuid import uuid4
+
 from fastapi import FastAPI, HTTPException
-import random
 from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel
+from log import get_logger
 from mangum import Mangum
+from pydantic import BaseModel
+
+logger = get_logger(__name__)
 
 
 class Book(BaseModel):
