@@ -1,37 +1,6 @@
 from contextvars import ContextVar
-from enum import Enum
 
 import structlog
-from pydantic import Field
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
-ENV_FILE = ""
-
-
-class LogLevel(str, Enum):
-    """Enumeration for logging levels."""
-
-    NOTSET = "NOTSET"
-    DEBUG = "DEBUG"
-    INFO = "INFO"
-    WARNING = "WARNING"
-    ERROR = "ERROR"
-    CRITICAL = "CRITICAL"
-
-
-class LogSettings(BaseSettings):
-    """Configuration settings for logging."""
-
-    # LOGGING
-    LOG_LEVEL: LogLevel = Field(default=LogLevel.INFO, validation_alias="LOG_LEVEL")
-
-    # .env settings
-    model_config = SettingsConfigDict(
-        env_file=ENV_FILE, env_file_encoding="utf-8", env_prefix="", extra="ignore"
-    )
-
-
-log_settings = LogSettings()
 
 # correlation_id is unique for each req, tracks it
 correlation_id: ContextVar[str] = ContextVar("correlation_id", default="N/A")
@@ -56,7 +25,7 @@ def add_context_processor(_, __, event_dict):
 
 def setup_logging():
     """Configure and initialize structured logging."""
-    log_level = log_settings.LOG_LEVEL
+    log_level = "INFO"
 
     # Displayed in log console
     processors = [
