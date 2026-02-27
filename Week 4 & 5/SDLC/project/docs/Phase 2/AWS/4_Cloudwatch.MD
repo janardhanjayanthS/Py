@@ -27,3 +27,4 @@
 - cloudwatch overview - https://www.youtube.com/watch?v=k7wuIrHU4UY
 - tutorial - https://youtu.be/__knpcBRLHg?si=lV9TXxBrgWTP2yT8
 - cloudwatch logs: https://www.youtube.com/watch?v=HRJnhzSSFtk
+- using cloudwatch with fastapi -https://maazbinmustaqeem.medium.com/how-to-upload-fastapi-logs-to-aws-cloudwatch-a-beginners-guide-66b9957078b9
