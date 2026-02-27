@@ -10,7 +10,7 @@ logger = get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
     setup_logging()
-    logger.info("Loggin set up complete")
+    logger.info("Logging set up complete")
 
     yield
 

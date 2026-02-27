@@ -5,12 +5,17 @@ import uuid
 from typing import Literal, Optional
 from uuid import uuid4
 
+import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from log import correlation_id, get_logger
 from mangum import Mangum
 from pydantic import BaseModel
 from utility import lifespan
+
+app = FastAPI(lifespan=lifespan)
+handler = Mangum(app)
+
 
 logger = get_logger(__name__)
 
@@ -28,9 +33,6 @@ BOOKS = []
 if os.path.exists(BOOKS_FILE):
     with open(BOOKS_FILE, "r") as f:
         BOOKS = json.load(f)
-
-app = FastAPI(lifespan=lifespan)
-handler = Mangum(app)
 
 
 @app.middleware("http")
@@ -107,3 +109,7 @@ async def get_book(book_id: str):
 
     logger.error(f"Book with {book_id} not found")
     raise HTTPException(404, f"Book ID {book_id} not found in database.")
+
+
+if __name__ == "__main__":
+    uvicorn.run(app=app, host="127.0.0.1", port=8001)
