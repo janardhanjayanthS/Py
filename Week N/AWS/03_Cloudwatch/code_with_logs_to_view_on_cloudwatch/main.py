@@ -10,6 +10,7 @@ from fastapi.encoders import jsonable_encoder
 from log import correlation_id, get_logger
 from mangum import Mangum
 from pydantic import BaseModel
+from utility import lifespan
 
 logger = get_logger(__name__)
 
@@ -28,7 +29,7 @@ if os.path.exists(BOOKS_FILE):
     with open(BOOKS_FILE, "r") as f:
         BOOKS = json.load(f)
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 handler = Mangum(app)
 
 
