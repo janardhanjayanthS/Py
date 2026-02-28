@@ -1,56 +1,133 @@
-# Cloudwatch
-- Service to monitor all other AWS services
-- Create dashboards for monitoring
+# CloudWatch
 
-#### Concepts:
-- **Metric:** A variable that is being monitored, such as latency, requests, etc..
-- **Dimenstions:** It is a name/value pair that uniquely identifies a metric, it is a category to filter a metric (Eg. CPUUtilization for EC2 insatace ID: 100032, here EC2 instance ID is a dimention and we can add multiple dimenstions(filters))
-- **Statistics:** Aggregation of metric values over time to reveal truth!. in AWS cloudwatch -> the results of mathematical operations performed on your raw metric data over a specific window of time.
-- **Alarm:** Is a trigger that performs a specified action when a metric reaches/crosses a particular threshold. It observes a particular metrich overtime
-- **Logs:** Is a way to view logs created by our services/apps running in AWS - such as EC2 instance's logs, DynamoDB;s logs, etc... (they are by default sent to cloudwatch we can view it there)
-    - Purpose:
-        - View Setup
-        - Monitoring (errors, debugging, metrics)
-    - Different ways to see logs:
-        - Log Stream: Logs that are generated from a service (an EC2 instance, Lambda ect...)
-        - Log Group: Multiple Log Streams combined together in a single log stream (used for a full app that uses EC2, DynamoDB, etc... together)
+**CloudWatch is AWS's monitoring and observability service.** It collects logs, metrics, and events from your AWS infrastructure and applications, giving you visibility into what's happening so you can detect and respond to problems.
 
-#### Working:
-1. Collect ...
-2. Monitor ...
-3. Act ...
-4. Analyse ...
+---
 
-#### Prerequisites:
-- An container - EC2, Lambda or any Cloud Compute instance running an app
-- Cloud watch agent - a service in that instance that sends logs from the cloud computer to cloud watch
+## Core Concepts
 
+### Metrics
+A **metric** is a time-series variable being measured — CPU usage, request count, error rate, etc. AWS services emit metrics automatically; you can also publish custom ones from your application.
 
-#### Example with fastapi app running in EC2 instance:
+### Dimensions
+A **dimension** is a name/value pair that filters a metric down to a specific resource.
 
-**Step 1: Write logs to a file**
-    - Run The application as you would in EC2, make sure that it writes logs to a file - Eg: vars/logs/sampleapp/app.log
-    (check log.py from https://github.com/janardhanjayanthS/fastapi_book_app/blob/main/log.py repo)
+> **Example:** `CPUUtilization` for `InstanceId=i-1234567890` — the instance ID is the dimension. Without it, you'd see CPU aggregated across all instances, which is rarely useful.
 
-**Step 2: Install Cloudwatch agent and verify its installation**
+### Statistics
+A **statistic** is a mathematical aggregation applied to a metric over a time window — `Average`, `Sum`, `Min`, `Max`, `p99`, etc.
 
-    ```bash
-    wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb # download aws cloudwatch agent
+### Alarms
+An **alarm** watches a metric over time and triggers an action when it crosses a threshold.
 
-    sudo dpkg -i amazon-cloudwatch-agent.deb
-
-    sudo systemctl status amazon-cloudwatch-agent
-    ```
-
-**Step 3: Configure AWS Cloudwatch Agent**
-
-```bash
-sudo vim /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json # to open configuration file
+```mermaid
+stateDiagram-v2
+    [*] --> OK
+    OK --> ALARM : metric crosses threshold
+    ALARM --> OK : metric returns to normal
+    OK --> INSUFFICIENT_DATA : not enough data points
+    INSUFFICIENT_DATA --> OK : data resumes
 ```
 
-- Paste the following code in that file
+**What alarms can trigger:**
+- SNS notification (email, SMS, webhook)
+- Stop, reboot, or terminate an EC2 instance
+- Auto Scaling action
+
+### Logs
+
+| Concept | Description |
+|---------|-------------|
+| **Log Event** | A single timestamped line from your app |
+| **Log Stream** | Sequence of log events from one source (one EC2 instance, one Lambda invocation) |
+| **Log Group** | Collection of log streams from the same application or service |
+
+```mermaid
+graph TD
+    A[EC2 Instance A] -->|log stream| LG[Log Group: /ec2/myapp]
+    B[EC2 Instance B] -->|log stream| LG
+    C[Lambda Function] -->|auto-sent| LG2[Log Group: /aws/lambda/myfunction]
+```
+
+> Lambda automatically sends its output to CloudWatch — no agent needed. EC2 requires the CloudWatch Agent (see hands-on below).
+
+---
+
+## How CloudWatch Works
+
+```mermaid
+flowchart LR
+    A[Your App] -->|writes| B[Log File on Disk]
+    B -->|tails| C[CloudWatch Agent]
+    C -->|ships| D[CloudWatch\nLog Group]
+    D --> E[Logs Insights\nQuery & Search]
+    D --> F[Metric Filter\nCount errors, latency, etc.]
+    F --> G[Alarm\nNotify / Act]
+```
+
+1. **Collect** — your app writes logs to disk; the CloudWatch Agent ships them to CloudWatch
+2. **Monitor** — logs are stored in Log Groups; AWS services emit metrics automatically
+3. **Analyse** — use **Logs Insights** to query logs with a SQL-like language
+4. **Act** — alarms fire when metrics breach thresholds and trigger notifications or automated responses
+
+---
+
+## Hands-On: FastAPI on EC2 → CloudWatch Logs
+
+### Prerequisites
+- EC2 instance with FastAPI running (see [EC2 guide](./2_EC2.MD))
+- App must write logs to a file on disk
+
+---
+
+### Step 1: Write logs to a file
+
+Your app must write structured logs to a file. Example using Python's `logging` module:
+
+```python
+import logging
+
+logging.basicConfig(
+    filename="/var/log/myapp/app.log",
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+```
+
+> See a working implementation: [log.py](https://github.com/janardhanjayanthS/fastapi_book_app/blob/main/log.py)
+
+Make sure the log directory exists and is writable by your app user:
 
 ```bash
+sudo mkdir -p /var/log/myapp
+sudo chown ubuntu:ubuntu /var/log/myapp
+```
+
+---
+
+### Step 2: Install the CloudWatch Agent
+
+```bash
+# Download and install
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
+sudo dpkg -i amazon-cloudwatch-agent.deb
+
+# Verify installation
+sudo systemctl status amazon-cloudwatch-agent
+```
+
+---
+
+### Step 3: Configure the agent
+
+```bash
+sudo vim /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+```
+
+Paste this configuration:
+
+```json
 {
   "logs": {
     "logs_collected": {
@@ -70,12 +147,16 @@ sudo vim /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json # to 
 }
 ```
 
-- file_path — the log file on your EC2 disk to watch
-- log_group_name — the "folder" in CloudWatch where logs will appear. Name it however you like, /ec2/myapp is a common convention
-- log_stream_name — within a log group, each EC2 instance gets its own stream. {instance_id} is a variable that auto-fills your instance ID (useful if you have multiple EC2 instances running the same app)
-- retention_in_days — automatically delete old logs after 30 days (saves money)
+| Field | Purpose |
+|-------|---------|
+| `file_path` | Log file on disk for the agent to watch |
+| `log_group_name` | Destination in CloudWatch — `/ec2/myapp` is a common convention |
+| `log_stream_name` | Per-source stream inside the group; `{instance_id}` auto-fills the EC2 instance ID, useful when multiple instances run the same app |
+| `retention_in_days` | Auto-deletes logs after 30 days to control cost |
 
-**Step 4: Start Cloudwatch agent**
+---
+
+### Step 4: Start the agent
 
 ```bash
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
@@ -84,19 +165,45 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
   -s \
   -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
 
-#then check
+# Verify it's running
 sudo systemctl status amazon-cloudwatch-agent
 ```
 
-**Step 5: Vola!**
-
-- The Logs will be seen in Log management tab in AWS Cloudwatch console
-
-
+Logs now appear in the AWS Console under **CloudWatch → Log groups → /ec2/myapp**.
 
 ---
-##### Resources:
-- cloudwatch overview - https://www.youtube.com/watch?v=k7wuIrHU4UY
-- tutorial - https://youtu.be/__knpcBRLHg?si=lV9TXxBrgWTP2yT8
-- cloudwatch logs: https://www.youtube.com/watch?v=HRJnhzSSFtk
-- using cloudwatch with fastapi -https://maazbinmustaqeem.medium.com/how-to-upload-fastapi-logs-to-aws-cloudwatch-a-beginners-guide-66b9957078b9
+
+## Setting Up an Alarm
+
+**Example:** alert when EC2 CPU exceeds 80% for 5 consecutive minutes.
+
+1. Go to **CloudWatch → Alarms → Create alarm**
+2. Select metric: **EC2 → Per-Instance Metrics → CPUUtilization**
+3. Set threshold: **Greater than 80** for **1 consecutive period of 5 minutes**
+4. Action: send notification to an **SNS topic** (email)
+5. Name the alarm and create it
+
+```mermaid
+sequenceDiagram
+    participant EC2
+    participant CloudWatch
+    participant SNS
+    participant You
+
+    EC2->>CloudWatch: CPUUtilization = 85%
+    CloudWatch->>CloudWatch: Threshold breached (> 80%)
+    CloudWatch->>SNS: Trigger alarm action
+    SNS->>You: Send email notification
+```
+
+---
+
+## Resources
+
+### Videos
+- [CloudWatch Overview](https://www.youtube.com/watch?v=k7wuIrHU4UY) — what it is and how it fits into AWS
+- [CloudWatch Tutorial](https://youtu.be/__knpcBRLHg?si=lV9TXxBrgWTP2yT8) — hands-on walkthrough
+- [CloudWatch Logs Deep Dive](https://www.youtube.com/watch?v=HRJnhzSSFtk) — log groups, streams, and Logs Insights
+
+### Blog Posts
+- [FastAPI Logs to CloudWatch](https://maazbinmustaqeem.medium.com/how-to-upload-fastapi-logs-to-aws-cloudwatch-a-beginners-guide-66b9957078b9) — beginner's guide specific to FastAPI on EC2
