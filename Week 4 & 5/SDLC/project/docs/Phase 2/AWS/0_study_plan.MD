@@ -130,18 +130,22 @@ Build the foundational mental model for cloud servers and storage that everythin
 - [ ] Key pairs and SSH access
 - [ ] Elastic IPs
 - [ ] Stop vs. terminate
+- [ ] Nginx as a reverse proxy — routing public traffic to your app's local port
+- [ ] Running the app as a persistent systemd service
 
 #### 📺 Videos
 - [EC2 Crash Course — freeCodeCamp](https://www.youtube.com/results?search_query=EC2+crash+course+aws+freeCodeCamp)
 - [EC2 Tutorial — Stephane Maarek Udemy Course](https://www.udemy.com/course/aws-certified-developer-associate-dva-c01/) *(best structured EC2 coverage)*
 - [AWS EC2 Explained — Abhishek Veeramalla Zero to Hero](https://www.youtube.com/@AbhishekVeeramalla)
+- [Hosting FastAPI application in EC2](https://www.youtube.com/watch?v=SgSnz7kW-Ko) — covers Nginx + systemd deployment end to end
 
 #### 📖 Docs & Reading
 - [EC2 Getting Started — AWS Docs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html)
 - [EC2 Instance Types — AWS](https://aws.amazon.com/ec2/instance-types/)
+- [Nginx Beginner's Guide](https://nginx.org/en/docs/beginners_guide.html) — reverse proxy configuration
 
 #### Practice
-Spin up an EC2 instance and run a simple Node.js or Python HTTP server on it.
+Deploy a FastAPI application on EC2: configure Nginx as a reverse proxy on port 80, run the app with uvicorn on port 8000, and keep it alive across reboots using a systemd service.
 
 ---
 
