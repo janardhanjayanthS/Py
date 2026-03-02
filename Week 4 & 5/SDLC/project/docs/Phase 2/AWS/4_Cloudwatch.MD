@@ -245,6 +245,138 @@ sequenceDiagram
 
 ---
 
+## Dashboards
+
+A **dashboard** is a customisable page in the CloudWatch console that displays your metrics and alarm states in one place — a single pane of glass for your application's health.
+
+### Widget types
+
+| Widget | What it shows |
+|--------|--------------|
+| **Line / Stacked area** | Metric over time (e.g. CPU usage graph) |
+| **Number** | Current value of a metric (e.g. active connections) |
+| **Alarm status** | Visual OK / ALARM / INSUFFICIENT_DATA badge |
+| **Logs table** | Live Logs Insights query result embedded in the dashboard |
+| **Text** | Markdown notes or section headers |
+
+### Creating a dashboard
+
+1. Go to **CloudWatch → Dashboards → Create dashboard**
+2. Give it a name (e.g. `myapp-prod`)
+3. Click **Add widget** → choose a widget type
+4. For a metric widget: select the namespace → dimension → metric (e.g. `EC2 → Per-Instance Metrics → CPUUtilization`)
+5. Repeat for each metric you care about — error rate, request latency, memory, disk
+6. Save the dashboard
+
+> Dashboards are global — one dashboard can show metrics from multiple regions.
+
+### Useful metrics to put on a dashboard
+
+| Metric | Namespace | What to watch for |
+|--------|-----------|------------------|
+| `CPUUtilization` | `AWS/EC2` | Sustained > 80% → scale up or optimise |
+| `StatusCheckFailed` | `AWS/EC2` | Any value > 0 → instance is unhealthy |
+| `Errors` | `AWS/Lambda` | Spikes → something is throwing exceptions |
+| `Duration` | `AWS/Lambda` | P99 creeping up → latency regression |
+| `5XXError` | `AWS/ApiGateway` | > 0 → unhandled server errors reaching users |
+
+---
+
+## Logs Insights
+
+**Logs Insights** is CloudWatch's interactive query engine. You write SQL-like queries directly against your log groups — no need to export logs to another tool.
+
+Navigate to it: **CloudWatch → Logs Insights** → select a log group → write a query → run.
+
+### Query structure
+
+```
+fields @timestamp, @message
+| filter <condition>
+| parse <pattern>
+| stats <aggregation> by <field>
+| sort <field> desc
+| limit <n>
+```
+
+Each line is a **pipe stage** — the output of one stage feeds the next, left to right.
+
+### Key commands
+
+| Command | Purpose | Example |
+|---------|---------|---------|
+| `fields` | Select which fields to display | `fields @timestamp, @message` |
+| `filter` | Keep only matching events | `filter @message like /ERROR/` |
+| `parse` | Extract values from unstructured text into named fields | `parse @message "* * *" as ts, level, msg` |
+| `stats` | Aggregate — count, avg, sum, percentile | `stats count(*) as errors by bin(5m)` |
+| `sort` | Order results | `sort @timestamp desc` |
+| `limit` | Cap result rows | `limit 20` |
+
+### Common queries
+
+**See the most recent 20 log lines:**
+```
+fields @timestamp, @message
+| sort @timestamp desc
+| limit 20
+```
+
+---
+
+**Count errors per 5-minute window (error rate over time):**
+```
+fields @timestamp, @message
+| filter @message like /ERROR/
+| stats count(*) as error_count by bin(5m)
+| sort @timestamp asc
+```
+
+---
+
+**Find the slowest requests (if your app logs response time):**
+```
+fields @timestamp, @message
+| parse @message "* * duration=*ms" as ts, path, duration_ms
+| sort duration_ms desc
+| limit 10
+```
+
+---
+
+**Count log events by level (INFO / WARNING / ERROR):**
+```
+fields @timestamp, level, @message
+| stats count(*) as total by level
+| sort total desc
+```
+
+---
+
+**Search for a specific request ID or user across all log streams:**
+```
+fields @timestamp, @message
+| filter @message like /user_id=42/
+| sort @timestamp asc
+```
+
+### Metric filters
+
+If you want to turn a log pattern into a permanent metric (so you can alarm on it), use a **Metric Filter**:
+
+1. Go to **CloudWatch → Log groups → `/ec2/myapp` → Metric filters → Create metric filter**
+2. Filter pattern: `ERROR` (matches any log line containing the word ERROR)
+3. Assign it to a metric namespace/name: e.g. `MyApp/ErrorCount`
+4. Now create a CloudWatch Alarm on that metric
+
+```mermaid
+flowchart LR
+    A[Log line: ERROR 500] -->|matches filter| B[Metric Filter]
+    B -->|increments| C[MyApp/ErrorCount metric]
+    C -->|threshold crossed| D[Alarm → SNS → Email]
+```
+
+---
+
 ## Resources
 
 ### Videos
