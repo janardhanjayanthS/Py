@@ -104,9 +104,45 @@ sudo mkdir -p /var/log/myapp
 sudo chown ubuntu:ubuntu /var/log/myapp
 ```
 
+### Step 2: Create a AWS CW IAM role for EC2 instance
+
+- Create and attact an IAM role to EC2 instance that allows/connects EC2 with Cloudwatch
+- IAM can be created to an AWS service to allow access to it, here that IAM allows EC2's logs to be seen in CW's log stream
+
+Process:
+- Goto IAM service in AWS Console -> Roles -> Create Role
+  <details>
+  <summary>Creation of IAM Role for AWS service (EC2)</summary>
+
+  ![creation page](./img/aws_cw_iam_role_creation.png)
+
+  </details>
+- Under Step 2:
+  - Search `CloudWatchAgentServerPoilcy` -> click the checkbox before it -> click next
+- Under Step 3:
+  - create a name for it (eg: EC2-CWAgent-role) -> Click create role
+
+
+- **Now**, Go to the EC2 instance where the app is runnig
+- Select it -> Under Actions (top right) -> select Modify IAM Role
+- Select the created role (EC2-CWAgent-role) from the dropdown -> Click update IAM role
+
+```bash
+# Verify if the ROLE is attached to your instance either in its description or via. EC2's terminal:
+
+# The following cmds will print the role attached to EC2 instance
+# IMDSv2 requires a token first
+TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+# Then use that token to get the role name
+curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/ \
+  -H "X-aws-ec2-metadata-token: $TOKEN"
+```
+
 ---
 
-### Step 2: Install the CloudWatch Agent
+### Step 3: Install the CloudWatch Agent
 
 ```bash
 # Download and install
@@ -117,9 +153,14 @@ sudo dpkg -i amazon-cloudwatch-agent.deb
 sudo systemctl status amazon-cloudwatch-agent
 ```
 
+- DEBUG: view aws cloudwatch agent's logs
+```bash
+sudo tail -f /opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log
+```
+
 ---
 
-### Step 3: Configure the agent
+### Step 4: Configure the agent
 
 ```bash
 sudo vim /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
@@ -156,7 +197,7 @@ Paste this configuration:
 
 ---
 
-### Step 4: Start the agent
+### Step 5: Start the agent
 
 ```bash
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
@@ -170,6 +211,12 @@ sudo systemctl status amazon-cloudwatch-agent
 ```
 
 Logs now appear in the AWS Console under **CloudWatch → Log groups → /ec2/myapp**.
+<details>
+<summary>Sample output</summary>
+
+![OP](./img/aws_cw_op.png)
+
+</details>
 
 ---
 
