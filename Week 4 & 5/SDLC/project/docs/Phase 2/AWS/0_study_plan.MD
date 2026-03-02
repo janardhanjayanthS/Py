@@ -6,17 +6,18 @@
 
 ## 🗺️ Overview
 
-| Phase | Topic | Duration |
-|-------|-------|----------|
-| 1 | AWS Fundamentals & IAM | 1–2 weeks |
-| 2 | Core Compute & Storage | 2–3 weeks |
-| 3 | Serverless Core | 2–3 weeks |
-| 4 | Data & Caching | 2–3 weeks |
-| 5 | Security & Secrets | 1–2 weeks |
-| 6 | Observability & Communication | 1–2 weeks |
-| 7 | Capstone Project | Ongoing |
-
-**Total estimated time:** 10–17 weeks at a comfortable pace.
+| Phase | Topic |
+|-------|-------|
+| 1 | AWS Fundamentals & IAM |
+| 2 | Core Compute & Storage |
+| 3 | Serverless Core & Dev Tooling |
+| 4 | Containers |
+| 5 | Data & Caching |
+| 6 | Networking |
+| 7 | Security & Secrets |
+| 8 | Events & Orchestration |
+| 9 | Observability & Communication |
+| 10 | Capstone Project |
 
 ---
 
@@ -75,7 +76,6 @@ These resources cover AWS broadly and are useful throughout every phase. Bookmar
 ---
 
 ## Phase 1 — AWS Fundamentals & IAM
-**Duration:** 1–2 weeks
 
 ### Goals
 Understand how AWS works as a platform before touching any specific service.
@@ -116,10 +116,9 @@ IAM is the backbone of every AWS service. Nothing works securely without it.
 ---
 
 ## Phase 2 — Core Compute & Storage
-**Duration:** 2–3 weeks
 
 ### Goals
-Build the foundational mental model for cloud servers and storage that everything else builds on.
+Build the foundational mental model for cloud servers, storage, and delivery that everything else builds on.
 
 ---
 
@@ -171,6 +170,28 @@ Upload and retrieve files programmatically using the AWS SDK.
 
 ---
 
+### CloudFront
+
+- [ ] What CloudFront is — CDN and global edge delivery
+- [ ] Distributions and origins (S3, EC2, ALB, API Gateway)
+- [ ] Cache behaviours and TTL
+- [ ] HTTPS with ACM certificates
+- [ ] Invalidations — clearing cached content
+- [ ] Restricting S3 bucket access to CloudFront only (OAC)
+
+#### 📺 Videos
+- [Amazon CloudFront Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=amazon+cloudfront+tutorial+aws+tech+talks)
+- [CloudFront with S3 Static Website — Tutorial](https://www.youtube.com/results?search_query=cloudfront+s3+static+website+aws+tutorial)
+
+#### 📖 Docs & Reading
+- [CloudFront Developer Guide — AWS Docs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html)
+- [CloudFront with S3 — AWS Docs](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/GettingStartedCreateDistribution.html)
+
+#### Practice
+Serve your S3-hosted static files through a CloudFront distribution with HTTPS enabled.
+
+---
+
 ### CloudWatch
 
 - [ ] Log groups and log streams
@@ -194,11 +215,10 @@ Set up a CloudWatch alarm that fires when EC2 CPU usage exceeds 80%.
 
 ---
 
-## Phase 3 — Serverless Core
-**Duration:** 2–3 weeks
+## Phase 3 — Serverless Core & Dev Tooling
 
 ### Goals
-Understand the serverless execution model and build your first real API.
+Understand the serverless execution model, build your first real API, and deploy infrastructure as code.
 
 ---
 
@@ -253,7 +273,7 @@ Build a simple CRUD API with API Gateway + Lambda *(mock data, no database yet)*
 
 ---
 
-### Serverless Applications (AWS SAM)
+### AWS SAM (Serverless Application Model)
 
 - [ ] What Infrastructure as Code (IaC) is and why it matters
 - [ ] SAM template structure (`template.yaml`)
@@ -277,8 +297,126 @@ Rebuild your API Gateway + Lambda project using SAM instead of the console.
 
 ---
 
-## Phase 4 — Data & Caching
-**Duration:** 2–3 weeks
+### CloudFormation
+
+SAM is built on top of CloudFormation. Learning CloudFormation gives you full control over any AWS resource — not just serverless.
+
+- [ ] How CloudFormation relates to SAM — SAM transforms into CloudFormation
+- [ ] Template anatomy — `Resources`, `Parameters`, `Outputs`, `Mappings`
+- [ ] Stacks — create, update, delete
+- [ ] Change sets — preview changes before applying them
+- [ ] Drift detection
+- [ ] Nested stacks for large projects
+
+#### 📺 Videos
+- [AWS CloudFormation Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=AWS+cloudformation+tutorial+tech+talks)
+- [CloudFormation for Beginners — freeCodeCamp](https://www.youtube.com/results?search_query=cloudformation+beginners+freeCodeCamp)
+
+#### 📖 Docs & Reading
+- [CloudFormation User Guide — AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
+- [CloudFormation Template Reference — AWS Docs](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-reference.html)
+
+#### Practice
+Deploy an S3 bucket and IAM role using a raw CloudFormation template (without SAM).
+
+---
+
+### AWS CDK (Cloud Development Kit)
+
+Write your infrastructure in Python, TypeScript, or Java instead of YAML.
+
+- [ ] What CDK is and how it differs from CloudFormation/SAM
+- [ ] Constructs — L1, L2, L3 levels
+- [ ] `cdk init`, `cdk synth`, `cdk deploy`
+- [ ] Stacks and apps
+- [ ] CDK vs. SAM — when to choose which
+
+#### 📺 Videos
+- [AWS CDK Full Tutorial — AWS Official Channel](https://www.youtube.com/results?search_query=AWS+CDK+tutorial+official+2024)
+- [CDK Python Tutorial — Abhishek Veeramalla](https://www.youtube.com/@AbhishekVeeramalla)
+
+#### 📖 Docs & Reading
+- [CDK Getting Started — AWS Docs](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html)
+- [CDK API Reference](https://docs.aws.amazon.com/cdk/api/v2/)
+
+#### Practice
+Rewrite one of your SAM stacks using CDK in Python.
+
+---
+
+### AWS Toolkit (IDE Extension)
+
+AWS Toolkit is a free extension for VS Code and JetBrains IDEs that brings Lambda, SAM, and CloudFormation development directly into your editor.
+
+- [ ] Install the AWS Toolkit extension
+- [ ] Browse deployed Lambda functions from the IDE
+- [ ] Invoke Lambda functions locally without leaving the editor
+- [ ] Edit and visualise SAM/CloudFormation templates
+
+#### 📖 Docs & Reading
+- [AWS Toolkit for VS Code — AWS Docs](https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/welcome.html)
+
+---
+
+## Phase 4 — Containers
+
+### Goals
+Run containerised workloads on AWS — from fully managed serverless containers (Fargate) to Kubernetes (EKS).
+
+---
+
+### ECS (Elastic Container Service)
+
+- [ ] Clusters, services, and tasks
+- [ ] EC2 launch type vs. Fargate *(prefer Fargate — no server management)*
+- [ ] Task definitions and container definitions
+- [ ] IAM roles for tasks
+- [ ] Load balancing with an Application Load Balancer (ALB)
+- [ ] Service auto-scaling
+- [ ] ECR (Elastic Container Registry) — storing your Docker images on AWS
+
+#### 📺 Videos
+- [AWS ECS Tutorial for Beginners — TechWorld with Nana](https://www.youtube.com/results?search_query=AWS+ECS+tutorial+beginners+TechWorld+with+Nana)
+- [ECS Fargate Deep Dive — AWS Online Tech Talks](https://www.youtube.com/results?search_query=ECS+fargate+deep+dive+AWS+tech+talks)
+- [ECS vs Lambda — When to Use What](https://www.youtube.com/results?search_query=ECS+vs+Lambda+AWS+when+to+use)
+- [Deploy FastAPI to ECS — Tutorial](https://www.youtube.com/results?search_query=deploy+fastapi+docker+ECS+fargate+tutorial)
+
+#### 📖 Docs & Reading
+- [ECS Developer Guide — AWS Docs](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html)
+- [ECS Fargate Getting Started — AWS Docs](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/getting-started-fargate.html)
+- [ECR User Guide — AWS Docs](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html)
+
+#### Practice
+Containerise your FastAPI app with Docker, push the image to ECR, and deploy it to ECS Fargate behind an ALB.
+
+---
+
+### EKS (Elastic Kubernetes Service)
+
+> Learn ECS first. EKS is for teams already running Kubernetes — if k8s is new to you, treat this as a later-stage topic.
+
+- [ ] Kubernetes fundamentals — pods, deployments, services, namespaces
+- [ ] EKS cluster creation with `eksctl`
+- [ ] Managed node groups vs. Fargate profiles
+- [ ] `kubectl` with EKS
+- [ ] IAM Roles for Service Accounts (IRSA) — the EKS equivalent of ECS task roles
+- [ ] Helm chart deployments
+
+#### 📺 Videos
+- [Kubernetes Crash Course — TechWorld with Nana](https://www.youtube.com/results?search_query=kubernetes+crash+course+TechWorld+with+Nana)
+- [AWS EKS Tutorial — Abhishek Veeramalla Zero to Hero](https://www.youtube.com/@AbhishekVeeramalla)
+- [EKS Getting Started — AWS Official](https://www.youtube.com/results?search_query=AWS+EKS+getting+started+tutorial+official)
+
+#### 📖 Docs & Reading
+- [EKS User Guide — AWS Docs](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
+- [eksctl Documentation](https://eksctl.io) — simplest way to provision EKS clusters
+
+#### Practice
+Deploy a containerised service to EKS using `eksctl` and expose it via a Kubernetes LoadBalancer service.
+
+---
+
+## Phase 5 — Data & Caching
 
 ### Goals
 Add persistent storage and caching to your backend.
@@ -319,6 +457,49 @@ Model a real-world entity (e.g. users + their orders) in a single DynamoDB table
 
 ---
 
+### DocumentDB
+
+Amazon DocumentDB is AWS's managed MongoDB-compatible document database. Use it when your data is naturally document-shaped or when migrating an existing MongoDB workload.
+
+- [ ] When to choose DocumentDB vs. DynamoDB (document/JSON workloads, MongoDB migrations)
+- [ ] Clusters and replica instances
+- [ ] Connecting with MongoDB-compatible drivers (`pymongo`)
+- [ ] Collections, documents, and indexes
+- [ ] VPC-only access — no public endpoint, must be in the same VPC
+
+#### 📺 Videos
+- [Amazon DocumentDB Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=amazon+documentdb+tutorial+aws+tech+talks)
+
+#### 📖 Docs & Reading
+- [DocumentDB Developer Guide — AWS Docs](https://docs.aws.amazon.com/documentdb/latest/developerguide/what-is.html)
+- [DocumentDB vs DynamoDB — AWS Blog](https://aws.amazon.com/blogs/database/how-to-determine-if-amazon-dynamodb-is-appropriate-for-your-needs-and-then-plan-your-migration/)
+
+#### Practice
+Create a DocumentDB cluster and perform CRUD operations using `pymongo` from a Lambda inside the same VPC.
+
+---
+
+### OpenSearch
+
+Amazon OpenSearch Service (formerly Elasticsearch Service) is AWS's managed search and analytics engine. Best for full-text search, log analytics, and Kibana-style dashboards.
+
+- [ ] When to use OpenSearch — full-text search, log analysis, dashboards
+- [ ] Domains, nodes, and shards
+- [ ] Indexing and querying documents via the REST API
+- [ ] OpenSearch Dashboards (replaces Kibana)
+- [ ] Ingesting CloudWatch Logs into OpenSearch via subscription filters
+
+#### 📺 Videos
+- [Amazon OpenSearch Service Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=amazon+opensearch+service+tutorial+aws+tech+talks)
+
+#### 📖 Docs & Reading
+- [OpenSearch Service Developer Guide — AWS Docs](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html)
+
+#### Practice
+Index your application logs in an OpenSearch domain and build a search dashboard.
+
+---
+
 ### ElastiCache & Redis
 
 - [ ] Why caching exists (reduce DB load, speed up reads)
@@ -343,8 +524,74 @@ Add a Redis caching layer in front of a DynamoDB query in your Lambda function.
 
 ---
 
-## Phase 5 — Security & Secrets
-**Duration:** 1–2 weeks
+## Phase 6 — Networking
+
+### Goals
+Understand how AWS networks your infrastructure — isolate resources with VPC, route traffic with Route 53, and secure it with free TLS certificates from ACM.
+
+---
+
+### VPC (Virtual Private Cloud)
+
+- [ ] What a VPC is — a logically isolated network inside AWS
+- [ ] Subnets — public vs. private
+- [ ] Route tables and internet gateways
+- [ ] NAT Gateway — private subnets calling out to the internet
+- [ ] Security Groups vs. Network ACLs
+- [ ] VPC Endpoints — access AWS services without leaving AWS network
+- [ ] VPC Peering
+- [ ] Connecting Lambda and ElastiCache/RDS via VPC
+
+#### 📺 Videos
+- [AWS VPC Tutorial for Beginners — freeCodeCamp](https://www.youtube.com/results?search_query=AWS+VPC+tutorial+beginners+freeCodeCamp)
+- [VPC Deep Dive — Abhishek Veeramalla Zero to Hero](https://www.youtube.com/@AbhishekVeeramalla)
+- [AWS Networking Fundamentals — AWS Online Tech Talks](https://www.youtube.com/results?search_query=AWS+networking+fundamentals+VPC+tech+talks)
+
+#### 📖 Docs & Reading
+- [VPC Getting Started — AWS Docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-getting-started.html)
+- [VPC User Guide — AWS Docs](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html)
+
+#### Practice
+Build a VPC with a public subnet (for EC2/load balancer) and a private subnet (for RDS/ElastiCache). Verify the private subnet cannot be reached directly from the internet.
+
+---
+
+### Route 53
+
+- [ ] What Route 53 is — DNS + health checking + traffic routing
+- [ ] Hosted zones and record types (A, CNAME, ALIAS)
+- [ ] Routing policies — simple, weighted, latency-based, failover
+- [ ] Domain registration or transfer
+- [ ] Pointing a domain to EC2, CloudFront, ALB, or API Gateway
+
+#### 📺 Videos
+- [AWS Route 53 Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=AWS+Route+53+tutorial+tech+talks)
+- [Route 53 with Custom Domain and EC2 — Tutorial](https://www.youtube.com/results?search_query=AWS+Route+53+custom+domain+EC2+tutorial)
+
+#### 📖 Docs & Reading
+- [Route 53 Developer Guide — AWS Docs](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html)
+
+#### Practice
+Point a custom domain in Route 53 to your EC2 instance or CloudFront distribution.
+
+---
+
+### AWS Certificate Manager (ACM)
+
+- [ ] What ACM is — free, managed TLS/SSL certificates for AWS services
+- [ ] Issuing public certificates (DNS validation or email validation)
+- [ ] Attaching certificates to CloudFront, ALB, and API Gateway
+- [ ] Automatic certificate renewal
+
+#### 📖 Docs & Reading
+- [ACM User Guide — AWS Docs](https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html)
+
+#### Practice
+Issue a free ACM certificate for your domain and attach it to your CloudFront distribution to serve your app over HTTPS.
+
+---
+
+## Phase 7 — Security & Secrets
 
 ### Goals
 Handle credentials and user authentication the right way.
@@ -397,8 +644,105 @@ Protect your API Gateway endpoints with a Cognito User Pool Authorizer. Only aut
 
 ---
 
-## Phase 6 — Observability & Communication
-**Duration:** 1–2 weeks
+## Phase 8 — Events & Orchestration
+
+### Goals
+Decouple services with async messaging and coordinate multi-step workflows.
+
+---
+
+### SQS (Simple Queue Service)
+
+- [ ] Queues — Standard vs. FIFO
+- [ ] Producers, consumers, and visibility timeout
+- [ ] Dead-letter queues (DLQ)
+- [ ] Lambda as an SQS consumer
+- [ ] Long polling vs. short polling
+
+#### 📺 Videos
+- [AWS SQS Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=AWS+SQS+tutorial+tech+talks)
+- [SQS + Lambda Trigger — Tutorial](https://www.youtube.com/results?search_query=SQS+lambda+trigger+AWS+tutorial)
+
+#### 📖 Docs & Reading
+- [SQS Developer Guide — AWS Docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html)
+
+#### Practice
+Create an SQS queue and trigger a Lambda function to process each message.
+
+---
+
+### SNS (Simple Notification Service)
+
+- [ ] Topics and subscriptions
+- [ ] Fan-out pattern — one SNS topic, multiple SQS queues
+- [ ] Email, SMS, HTTP/S, and Lambda subscribers
+- [ ] Message filtering with subscription filter policies
+
+#### 📺 Videos
+- [AWS SNS Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=AWS+SNS+tutorial+tech+talks)
+
+#### 📖 Docs & Reading
+- [SNS Developer Guide — AWS Docs](https://docs.aws.amazon.com/sns/latest/dg/welcome.html)
+
+#### Practice
+Set up an SNS topic that fans out to both an SQS queue and an email subscription simultaneously.
+
+---
+
+### EventBridge
+
+- [ ] Events, buses, and rules
+- [ ] AWS-native events vs. custom application events
+- [ ] Event patterns and filtering
+- [ ] Targets — Lambda, SQS, Step Functions, and more
+- [ ] Scheduled events (replaces cron on CloudWatch Events)
+
+#### 📺 Videos
+- [AWS EventBridge Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=AWS+EventBridge+tutorial+tech+talks)
+
+#### 📖 Docs & Reading
+- [EventBridge User Guide — AWS Docs](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html)
+
+#### Practice
+Emit a custom event when a new item is created in DynamoDB and route it to a Lambda handler via EventBridge.
+
+---
+
+### Step Functions
+
+- [ ] What Step Functions is — orchestrate Lambda chains into reliable workflows
+- [ ] State machines — states, transitions, inputs/outputs
+- [ ] State types: Task, Choice, Wait, Parallel, Map
+- [ ] Standard vs. Express workflows
+- [ ] Error handling and automatic retries
+- [ ] Integrating with Lambda, DynamoDB, SQS, and SNS
+
+#### 📺 Videos
+- [AWS Step Functions Tutorial — AWS Online Tech Talks](https://www.youtube.com/results?search_query=AWS+Step+Functions+tutorial+tech+talks)
+- [Step Functions + Lambda Workflow — AWS Demo](https://www.youtube.com/results?search_query=AWS+Step+Functions+lambda+workflow+demo)
+
+#### 📖 Docs & Reading
+- [Step Functions Developer Guide — AWS Docs](https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html)
+
+#### Practice
+Build a multi-step order processing workflow: validate → process payment → send confirmation email, using Step Functions + Lambda + SES.
+
+---
+
+### Kinesis *(awareness only)*
+
+> Kinesis is AWS's real-time data streaming platform. Not essential for most backend apps, but worth knowing it exists for high-throughput streaming use cases.
+
+- [ ] Kinesis Data Streams — real-time event streaming at scale
+- [ ] Kinesis Data Firehose — load streams directly into S3, OpenSearch, or Redshift
+- [ ] When to choose Kinesis vs. SQS
+
+#### 📖 Docs & Reading
+- [Kinesis Data Streams Overview — AWS Docs](https://docs.aws.amazon.com/streams/latest/dev/introduction.html)
+
+---
+
+## Phase 9 — Observability & Communication
 
 ### Goals
 Trace requests across services and send transactional emails.
@@ -451,8 +795,7 @@ Trigger a welcome email via a Cognito post-confirmation Lambda trigger using SES
 
 ---
 
-## Phase 7 — Capstone Project
-**Duration:** Ongoing
+## Phase 10 — Capstone Project
 
 ### Goal
 Build a real project that connects every service and surfaces gaps in your knowledge.
@@ -463,27 +806,37 @@ Build a backend API for a simple app (e.g. a task manager or e-commerce backend)
 
 ```
 Request
-  └── API Gateway (HTTP API)
-        └── Cognito Authorizer (authentication)
-              └── Lambda (business logic)
-                    ├── DynamoDB (primary storage)
-                    ├── ElastiCache / Redis (caching layer)
-                    ├── Secrets Manager (credentials)
-                    ├── SES (transactional emails)
-                    └── S3 (file storage)
+  └── Route 53 (custom domain)
+        └── CloudFront (CDN + HTTPS via ACM)
+              └── API Gateway (HTTP API)
+                    └── Cognito Authorizer (authentication)
+                          └── Lambda (business logic)
+                                ├── DynamoDB (primary storage)
+                                ├── ElastiCache / Redis (caching layer)
+                                ├── Secrets Manager (credentials)
+                                ├── SES (transactional emails)
+                                ├── S3 (file storage)
+                                └── SQS / EventBridge (async events)
+
+Orchestration:
+  └── Step Functions (multi-step workflows)
 
 Observability:
   ├── CloudWatch (logs & metrics)
   └── X-Ray (distributed tracing)
 
 Infrastructure:
-  └── AWS SAM (deployed as code)
+  └── SAM or CDK (deployed as code)
+
+Containers (optional variation):
+  └── ECS Fargate (deploy as a container instead of Lambda)
 ```
 
 ### Capstone Checklist
-- [ ] All infrastructure defined as code with SAM
+- [ ] All infrastructure defined as code with SAM or CDK
 - [ ] All secrets in Secrets Manager — nothing hardcoded
 - [ ] All endpoints protected by Cognito
+- [ ] Custom domain via Route 53 + HTTPS via ACM + CloudFront
 - [ ] CloudWatch alarms set for errors and high latency
 - [ ] X-Ray tracing enabled across all services
 - [ ] At least one async flow (e.g. welcome email on sign-up via SES)
@@ -497,18 +850,15 @@ Infrastructure:
 
 ---
 
-## ➕ Bonus Services to Add (Recommended for Backend Devs)
+## ➕ Awareness — Services to Know Exist
 
-Very common in real backend AWS work — learn these after your capstone or alongside it.
+These are useful to know about but not essential to go deep on for standard backend development.
 
-| Service | Why You Need It | Best Starting Resource |
-|---------|----------------|----------------------|
-| **SQS** | Async job queues, decoupling Lambda functions | [SQS Developer Guide — AWS Docs](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html) |
-| **SNS** | Fan-out messaging, pub/sub patterns | [SNS Developer Guide — AWS Docs](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) |
-| **EventBridge** | Event-driven architecture between services | [EventBridge User Guide — AWS Docs](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html) |
-| **RDS** | When your project needs a SQL database | [RDS Getting Started — AWS Docs](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.html) |
-| **VPC Basics** | Required for ElastiCache and RDS from Lambda | [VPC Getting Started — AWS Docs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-getting-started.html) |
-| **AWS CDK** | Write infrastructure in your own programming language | [CDK Getting Started — AWS Docs](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) |
+| Service | Category | Notes |
+|---------|----------|-------|
+| **RDS** | Database | Managed SQL (PostgreSQL, MySQL, Aurora). Use when your project genuinely needs a relational DB. [RDS Getting Started — AWS Docs](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.html) |
+| **Elastic Beanstalk** | Compute | PaaS — deploys apps automatically. Not really needed; EC2 + ECS give you more control and are more widely used. |
+| **App Runner** | Compute | Simplified container deployment from source code or an image. Not really needed; ECS Fargate is more flexible and better understood by teams. |
 
 ---
 
@@ -527,5 +877,5 @@ Very common in real backend AWS work — learn these after your capstone or alon
 2. **Always ask:** *"How do I see what went wrong?"* — CloudWatch logs and X-Ray traces.
 3. **Build things, break them, read the logs.** That is the fastest way through this list.
 4. **Use the free tier aggressively.** Almost everything here has a free tier allowance.
-5. **Deploy with code from day one.** Get comfortable with SAM early — avoid clicking through the console for everything.
+5. **Deploy with code from day one.** Get comfortable with SAM or CDK early — avoid clicking through the console for everything.
 6. **Delete resources when done.** Always clean up to avoid surprise bills.
