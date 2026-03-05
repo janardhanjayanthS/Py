@@ -54,7 +54,6 @@ cd lib; zip ../lambda_function.zip -r .
 - Add the main.py and books.json to that zip
 
 ```bash
-# Linux
 zip lambda_function.zip -u main.py
 zip lambda_function.zip -u books.json
 ```
