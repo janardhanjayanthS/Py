@@ -24,7 +24,43 @@
 | Best for           | Long-running apps       | Short tasks, APIs, events     |
 | Learning curve     | Steeper                 | Much easier to start          |
 
+---
 
+## Concepts:
+
+**Execution Model:**
+
+- This is what happens when a lambda fucntion runs the code
+```bash
+Event Source → Lambda Service → Execution Environment → Your Handler → Response
+```
+
+- Event Source: the entry point from where the req/trigger enters lambda (eg. APIGateway)
+- Lambda Service: AWS's Orchestration layer -> Decides what to do with the json (received from event source) -> either to cold start an env or pass it to a warm env
+- Execution Environment: Isolated container (server) where the code actually lives/runs
+    - Inside this Env. the handler gets the JSON -> passes it to Fastapi app. then gets the response from it -> send it to Lambda -> api gateway -> user
+
+
+**Cold Starts and how to minimize them**
+- A cold start happens when Lambda has to spin up a brand new execution environment because no warm one is available.
+- Lifecycle of an execution environment:
+```
+Cold Start:  [Init Phase] → [Download code] → [Start runtime] → [Run handler]
+Warm Start:                                                    → [Run handler]
+```
+- How to Minimize Cold Starts
+    | Strategy | How |
+    |---------|-----|
+    | Provisioned Concurrency | Pre-warms N environments — they're always ready, no init phase |
+    | Keep functions warm | Scheduled pings (EventBridge rule every 5 min) — hacky but works |
+    | Reduce package size | Smaller zip = faster download. Tree-shake, don't bundle unused libs |
+    | Choose a faster runtime | Go/Rust < Node.js/Python << Java/C# (JVM/CLR are the worst for cold starts) |
+    | Avoid heavy init outside handler | DB connections, SDK clients initialized at module level persist across warm invocations — but delay the cold start |
+
+
+
+
+---
 ## Example: Hosting Fastapi app with Lambda:
 
 ### Step 1:

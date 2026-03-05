@@ -227,8 +227,6 @@ Understand the serverless execution model, build your first real API, and deploy
 - [ ] Execution model — how Lambda runs your code
 - [ ] Cold starts and how to minimize them
 - [ ] Memory, timeout, and concurrency settings
-- [ ] Environment variables
-- [ ] Layers *(for shared dependencies)*
 - [ ] Deployment: Console → CLI → SAM *(in that order)*
 
 #### 📺 Videos
