@@ -1,0 +1,190 @@
+{
+  "page_num": 7,
+  "image_width": 10833,
+  "image_height": 7280,
+  "created_at": "2026-02-12T07:48:12.735875+00:00",
+  "blocks": [
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_000",
+      "coordinates": {
+        "x1": 355.4577941894531,
+        "y1": 222.1611328125,
+        "x2": 5361.48876953125,
+        "y2": 6973.74365234375
+      },
+      "layout_tag": "image",
+      "confidence": 0.8642578125,
+      "reading_order": 1,
+      "text": "यह चित्र एक लिफ्ट स्टेशन का तकनीकी ड्राइंग है। इसमें दीवार की ऊंचाई, जल निकासी, फर्श और अन्य संरचनात्मक विवरणों के लिए विशिष्ट आयाम और निर्देश शामिल हैं। ड्राइंग में \"लिफ्ट स्टेशन\", \"टॉप ऑफ वेल\", \"ओपनिंग\", \"लिफ्ट स्टेशन\", \"बेस\", \"बॉट. ऑफ स्लैब\" और \"लिंक सील या नॉन-स्प्रिंक\" जैसे लेबल वाले भाग शामिल हैं। ड्राइंग में \"100-YR. फ्लड\", \"वेट वेल\" और \"ग्रीन-स्ट्रीक वाटरस्टॉप\" जैसे विशिष्ट तत्वों के लिए एनोटेशन भी शामिल हैं। ड्राइंग में \"1/2\" = 1'-0\" का स्केल है और यह \"लिफ्ट स्टेशन सेक्शन\" का हिस्सा है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_004",
+      "coordinates": {
+        "x1": 10023.376953125,
+        "y1": 4756.73095703125,
+        "x2": 10560.806640625,
+        "y2": 5283.40869140625
+      },
+      "layout_tag": "image",
+      "confidence": 0.7996656894683838,
+      "reading_order": 5,
+      "text": "This image displays a circular black-and-white seal, specifically the official seal of the State of Texas. The seal is composed of a thick outer border formed by a series of small, evenly spaced dots. Inside this border, the text is arranged in concentric arcs. The top arc reads \"STATE OF TEXAS\". The center features a five-pointed star. The middle arc contains the name \"CESAR BARRON CASTRO\". The bottom arc reads \"LICENSED PROFESSIONAL ENGINEER\". The number \"140574\" is positioned in the center, between the name and the professional title. Small stars are located on the left and right sides, just inside the outer dotted border."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_005",
+      "coordinates": {
+        "x1": 5501.1328125,
+        "y1": 5496.90087890625,
+        "x2": 7545.01513671875,
+        "y2": 6990.67041015625
+      },
+      "layout_tag": "ordered-list",
+      "confidence": 0.71875,
+      "reading_order": 6,
+      "text": "A. SEE SHEET WITH THE STRUCTURAL GENERAL NOTES. SEE SHEET WITH STANDARD\nSTRUCTURAL DETAILS. REVIEW NOTES AND TYPICAL DETAILS FOR APPLICABILITY.\nB. COORDINATE AND REFERENCE DRAWINGS FROM ALL OTHER DISCIPLINES FOR ANY\nDIMENSIONS NOT SHOWN. DRAWINGS SHALL NOT BE SCALED. DRAWING DIMENSIONS ARE\nAS EXPLICITLY DIMENSIONED ON PLAN.\nC. CONTRACTOR TO CONFIRM THE SIZE, TYPE AND, AND LOCATION OF THE ACCESS HATCH\nOPENINGS ACCORDING TO THE MECHANICAL DRAWINGS.\nD. VERIFY ALL PLAN DIMENSIONS, EXTENTS, LOCATIONS, ELEVATIONS, AND SLOPES WITH THE\nCIVIL DRAWINGS.\nE. EXISTING SITE CONDITIONS SHALL BE CONFIRMED BY THE CONTRACTOR. CONTRACTOR\nSHALL NOTIFY THE ENGINEER OF ANY DISCREPANCIES PRIOR TO CONCRETE PLACEMENT.\nF. METAL KEYED CONSTRUCTION JOINTS AND SAWED JOINTS SHALL NOT BE USED. ALL JOINTS\nSHALL HAVE AN APPROVED WATERSTOP.\nG. VERIFY ALL OPENING DIMENSIONS WITH THE CIVIL AND MECHANICAL DRAWINGS.\nH. THE CAST-IN-PLACE WET WELL WALLS SHALL BE PLACED USING THE \"CAISSON\" METHOD.\nI. APPLY A CLASS \"7\" FLOOR FINISH TO THE GROUT SURFACE OF THE WET WELL BOTTOM IN\nACCORDANCE WITH ACI 302.\nJ. GENERAL CONTRACTOR TO REVIEW GEOTECHNICAL REPORT TO FOLLOW CONSTRUCTION\nRECOMMENDATIONS AND CONSIDERATIONS.\nK. GROUND WATER SHALL BE CONTROLLED BEFORE AND DURING CONSTRUCTION USING\nACCEPTABLE DEWATERING METHODS.\nL. IF SAND POCKETS ARE ENCOUNTERED DURING EXCAVATION, SANDY SOILS SHALL BE\nEXCAVATED AT A SLOW AND CONTROLLED RATE. CARE SHALL BE TAKEN DURING\nEXCAVATION TO AVOID EXCESSIVE EXCAVATION AMOUNTS OF SANDY SOILS.\nM. REVIEW AND FOLLOW THE GEOTECHNICAL REPORT FOR CAISSON INSTALLATION METHODS."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_006",
+      "coordinates": {
+        "x1": 8505.28515625,
+        "y1": 5525.71923828125,
+        "x2": 9139.2255859375,
+        "y2": 6181.22412109375
+      },
+      "layout_tag": "image",
+      "confidence": 0.6879811882972717,
+      "reading_order": 7,
+      "text": "FBC Engineering Approval\nFORT BEND COUNTY\nAPPROVED\nOCT 3 1 2025\nValid One Year\nFrom Date\nENGINEERING DEPARTMENT"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_001",
+      "coordinates": {
+        "x1": 5430.974609375,
+        "y1": 391.9629821777344,
+        "x2": 10449.98046875,
+        "y2": 3637.89990234375
+      },
+      "layout_tag": "image",
+      "confidence": 0.6262990832328796,
+      "reading_order": 2,
+      "text": "यह छवि एक तकनीकी इंजीनियरिंग ड्राइंग है, विशेष रूप से एक 'वेल लेआउट प्लान' (Well Layout Plan)। इसमें एक गोलाकार संरचना (संभवतः एक कुआँ) का विस्तृत अनुप्रस्थ काट (cross-section) दिखाया गया है, जिसके चारों ओर विभिन्न यांत्रिक और बुनियादी ढांचागत घटक रखे गए हैं।\n\n### सामान्य विवरण\nयह योजनाबद्ध चित्र एक गोलाकार कुआँ संरचना का अनुप्रस्थ काट दृश्य है। इसमें पाइपिंग, लिफ्ट स्टेशन, थ्रस्ट ब्लॉक, एक सेप्टिक सिस्टम और एक दरवाजा हैच शामिल हैं। ड्राइंग में आयाम, एनोटेशन और दिशात्मक संकेतक (N, S, E, W) शामिल हैं। नीचे एक स्केल बार दिया गया है जो 1/2\" = 1'-0\" दर्शाता है।\n\n### विस्तृत घटक और आयाम\n- **कुआँ संरचना:** केंद्रीय विशेषता एक बड़ा वृत्त है जो कुआँ का प्रतिनिधित्व करता है। इसके केंद्र में एक आयताकार 'लिफ्ट स्टेशन' है।\n- **पाइपिंग:**\n  - एक क्षैतिज पाइप 'पाइपिंग' लेबल के साथ ऊपर बाईं ओर से 2' - 11\" तक फैला हुआ है।\n  - एक और क्षैतिज पाइप 'लिफ्ट स्टेशन' लेबल के साथ ऊपर के केंद्र में 10' - 11\" तक फैला हुआ है।\n  - एक ऊर्ध्वाधर पाइप 'लिफ्ट स्टेशन' से नीचे की ओर 21\" 'इनफ्लुएंट सीवर' (Inflow Sewer) की ओर फैला हुआ है।\n- **यांत्रिक घटक:**\n  - 'थ्रस्ट ब्लॉक' (Thrust Block) को 7'-4\" ऊर्ध्वाधर आयाम के साथ बाईं ओर दिखाया गया है।\n  - 'थ्रस्ट ब्लॉक' के पास '1'-2\" ऊर्ध्वाधर आयाम के साथ 'थ्रस्ट ब्लॉक' लेबल वाला एक आयताकार ब्लॉक है।\n  - 'थ्रस्ट ब्लॉक' के पास '1'-6\" ऊर्ध्वाधर आयाम के साथ 'थ्रस्ट ब्लॉक' लेबल वाला एक और आयताकार ब्लॉक है।\n  - 'लिफ्ट स्टेशन' के पास '1'-6\" ऊर्ध्वाधर आयाम के साथ 'थ्रस्ट ब्लॉक' लेबल वाला एक आयताकार ब्लॉक है।\n  - 'लिफ्ट स्टेशन' के पास '1'-6\" ऊर्ध्वाधर आयाम के साथ 'थ्रस्ट ब्लॉक' लेबल वाला एक और आयताकार ब्लॉक है।\n- **दरवाजा हैच:** 'वन अलम. डोर हैच कवर्स डब्ल्यू/ सेफ्टी नेट' (One Alum. Door Hatch Covers W/ Safety Net) लेबल वाला एक आयताकार क्षेत्र नीचे दाईं ओर स्थित है।\n- **दरवाजा:** '3' और 'S3' लेबल वाला एक गोलाकार दरवाजा हैच दाईं ओर स्थित है।\n- **सेप्टिक सिस्टम:** '21\" इनफ्लुएंट सीवर' (Inflow Sewer) लेबल वाला एक घुमावदार पाइप है।\n- **खुले:**\n  - 'पाइप ओपनिंग' (Pipe Opening) लेबल वाला एक क्षैतिज खुला भाग 1' - 6\" चौड़ा है।\n  - 'मेचएल' (MECHL) लेबल वाला एक ऊर्ध्वाधर खुला भाग 1' - 6\" चौड़ा है।\n  - 'मेचएल' (MECHL) लेबल वाला एक और ऊर्ध्वाधर खुला भाग 1' - 6\" चौड़ा है।\n  - 'मेचएल' (MECHL) लेबल वाला एक तीसरा ऊर्ध्वाधर खुला भाग 5' - 10\" चौड़ा है।\n- **आयाम:**\n  - कुआँ की कुल ऊंचाई 14' - 8\" है।\n  - कुआँ के केंद्र से पाइपिंग तक की दूरी 2' - 11 1/2\" है।\n  - थ्रस्ट ब्लॉक की चौड़ाई 1' - 6\" है।\n  - थ्रस्ट ब्लॉक की ऊंचाई 2' - 11 1/2\" है।\n  - पाइप ओपनिंग की चौड़ाई 1' - 6\" है।\n  - पाइप ओपनिंग की ऊंचाई 2' - 11 1/2\" है।\n  - दरवाजा हैच की चौड़ाई 2' - 11 1/2\" है।\n\n### एनोटेशन और नोट्स\n- **नोट:** ऊपर दाएं कोने में दो नोट्स दिए गए हैं:\n  1. 'मेकएल' (MECHL) लेबल वाले सभी खुले स्थानों की स्थिति, संख्या और विस्तार को सत्यापित करें।\n  2. 'लिफ्ट स्टेशन' ब्लॉक की स्थिति और कंक्रीट डालने से पहले 'मेचएल' (MECHL) ब्लॉक के आकार को सत्यापित करें।\n- **दिशात्मक संकेतक:** नीचे केंद्र में एक कम्पास गुलाब (compass rose) है जो 'N' (उत्तर) को ऊपर की ओर इंगित करता है।\n\n### लेआउट\nयह ड्राइंग एक केंद्रीय ऊर्ध्वाधर अक्ष के चारों ओर सममित है। पाइपिंग और यांत्रिक ब्लॉक कुएं के चारों ओर एक रेडियल पैटर्न में व्यवस्थित हैं। 'मेचएल' (MECHL) ब्लॉक कुएं के केंद्र के पास स्थित हैं, जबकि 'थ्रस्ट ब्लॉक' और 'इनफ्लुएंट सीवर' (Inflow Sewer) बाहर की ओर फैले हुए हैं। 'दरवाजा हैच' और 'सेप्टिक सिस्टम' (septic system) नीचे दाईं ओर स्थित हैं।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_002",
+      "coordinates": {
+        "x1": 5468.74267578125,
+        "y1": 3713.727294921875,
+        "x2": 8992.349609375,
+        "y2": 5221.7705078125
+      },
+      "layout_tag": "image",
+      "confidence": 0.6066031455993652,
+      "reading_order": 3,
+      "text": "The image is a technical architectural or engineering drawing, specifically a cross-section of a well or structure. It is not a data chart with X and Y axes, but rather a schematic showing dimensions and construction details. \n\n**Visual Elements and Data:**\n- **Title:** \"LIFT STATION\"\n- **Structure:** The drawing depicts a rectangular well casing or pipe running horizontally. It is supported by vertical walls on the left and right.\n- **Dimensions:**\n  - **Width:** The total width of the structure is labeled as \"12' - 0\"\". The top and bottom sections are \"2' - 11 1/2\"\" each, with a central \"CONC OPNG\" (Concentric Openning) section of \"8' - 9\"\".\n  - **Height:** The vertical height from the \"TOP OF WELL EL. 98.00'\" to the \"WALL REINFORCEMENT\" is \"1' - 6\"\".\n  - **Depth:** The depth from the \"TOP OF WELL EL. 98.00'\" to the \"WALL REINFORCEMENT\" is \"1' - 4\"\".\n  - **Reinforcement:** Vertical reinforcement bars (#6 @ 12\" O.C.E.W.) are shown at the top and bottom of the wall sections.\n- **Details:**\n  - \"ADD'L (2) - #8\" indicates two #8 diameter bars.\n  - \"SEE DETAIL 8 / S2\" refers to a detail drawing.\n  - \"WALL REINFORCEMENT NOT SHOWN FOR CLARITY\" is a note on the right side.\n  - \"TYP.\" is noted next to the left wall detail.\n\n**Narrative Summary:**\nThis is a detailed engineering cross-section showing a well casing. The structure is 12 feet wide, with a central opening of 8 feet 9 inches. The casing sits 98 feet above the well bottom and 1 foot 6 inches deep. The walls are reinforced with #6 bars spaced 12 inches on center. The drawing includes specific notes about the type of reinforcement and additional details to be referenced elsewhere."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_008",
+      "coordinates": {
+        "x1": 9512.7275390625,
+        "y1": 5801.5791015625,
+        "x2": 10409.8359375,
+        "y2": 5992.0029296875
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.5888671875,
+      "reading_order": 9,
+      "text": "LIFT STATION NO. 1"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_012",
+      "coordinates": {
+        "x1": 9341.322265625,
+        "y1": 6521.150390625,
+        "x2": 10613.4755859375,
+        "y2": 7014.64990234375
+      },
+      "layout_tag": "table",
+      "confidence": 0.5642987489700317,
+      "reading_order": 13,
+      "text": "<table>\n<thead>\n<tr>\n<th colspan=\"2\">JOB NUMBER:</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>SUBMITTED: BGE, INC.<br/>SCALE:<br/>DATE:<br/>SURVEY BY:BGE, INC.<br/>F B NO:</td>\n<td>DESIGNED BY: CB<br/>DRAWN BY: MB<br/>SHEET NO 7 OF 22 SHEETS</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_010",
+      "coordinates": {
+        "x1": 7968.17919921875,
+        "y1": 6368.619140625,
+        "x2": 8306.7099609375,
+        "y2": 6719.84521484375
+      },
+      "layout_tag": "image",
+      "confidence": 0.509765625,
+      "reading_order": 11,
+      "text": "The image displays a circular logo or emblem. It features a large, serif letter \"B\" in blue, positioned centrally. The letter is enclosed within a double-lined circular border. At the bottom of the circle, there is a decorative element resembling a textured band or a small wave pattern. The background of the image is white."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_003",
+      "coordinates": {
+        "x1": 9473.05078125,
+        "y1": 4842.51220703125,
+        "x2": 9851.328125,
+        "y2": 5179.18115234375
+      },
+      "layout_tag": "image",
+      "confidence": 0.5075998306274414,
+      "reading_order": 4,
+      "text": "This image contains the text \"BGE\"."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_007",
+      "coordinates": {
+        "x1": 9546.5810546875,
+        "y1": 5560.37548828125,
+        "x2": 10452.15234375,
+        "y2": 5708.48291015625
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.427978515625,
+      "reading_order": 8,
+      "text": "FORT BEND CO MUD NO. 210"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_011",
+      "coordinates": {
+        "x1": 8315.173828125,
+        "y1": 6368.619140625,
+        "x2": 9301.1455078125,
+        "y2": 6702.91845703125
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.398193359375,
+      "reading_order": 12,
+      "text": "BARRON\nENGINEERING"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_013",
+      "coordinates": {
+        "x1": 8357.490234375,
+        "y1": 6719.84521484375,
+        "x2": 9267.29296875,
+        "y2": 6999.13330078125
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.2705078125,
+      "reading_order": 14,
+      "text": "2405 S. GRAND BLVD., SUITE A,\nPEARLAND, TEXAS 77581\n832-295-3600\nTBPE FIRM No. F-23075"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_7_block_009",
+      "coordinates": {
+        "x1": 9495.8017578125,
+        "y1": 6169.73193359375,
+        "x2": 10443.6884765625,
+        "y2": 6338.99755859375
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.264404296875,
+      "reading_order": 10,
+      "text": "WET WELL PLAN AND SECTION"
+    }
+  ]
+}

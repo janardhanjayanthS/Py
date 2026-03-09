@@ -1,0 +1,684 @@
+{
+  "page_num": 6,
+  "image_width": 10830,
+  "image_height": 7283,
+  "created_at": "2026-02-12T07:48:09.613044+00:00",
+  "blocks": [
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_021",
+      "coordinates": {
+        "x1": 6227.5830078125,
+        "y1": 559.7381591796875,
+        "x2": 7859.50732421875,
+        "y2": 1685.286376953125
+      },
+      "layout_tag": "image",
+      "confidence": 0.9587962627410889,
+      "reading_order": 22,
+      "text": "The image is a technical engineering drawing or architectural detail showing a cross-section of a structural assembly. It does not contain a chart, graph, or plot with X and Y axes, legends, or numerical data trends. The drawing illustrates the connection between a 'WALL OR SLAB' (top) and a 'HEAVY HEX NUTS' (middle). A '3/4\" x 6\" x 14\" PLATE' is positioned between these components. The vertical dimension of the wall/slab is labeled as '3 1/2\"'. Below the plate, a horizontal member is supported by '4\" DIA SS ROD' (stainless steel rods). The drawing specifies that this assembly is '4-#5 x 6' - 0\" ADDITIONAL EA. WAY, TOP & BOT' (4-inch diameter #5 steel bars, 6 feet long, top and bottom). A dimension of '8\"' is shown at the bottom center, and a vertical dimension of '4\"' is shown on the right side."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_038",
+      "coordinates": {
+        "x1": 6259.40576171875,
+        "y1": 4576.28662109375,
+        "x2": 9267.9326171875,
+        "y2": 5454.50341796875
+      },
+      "layout_tag": "table",
+      "confidence": 0.9503266215324402,
+      "reading_order": 39,
+      "text": "<table>\n<thead>\n<tr>\n<th colspan=\"10\">F'c = 3000 psi</th>\n<th colspan=\"8\">F'c = 4000 psi</th>\n</tr>\n<tr>\n<th rowspan=\"2\"></th>\n<th colspan=\"6\">EMBEDMENT</th>\n<th colspan=\"6\">LAP SPLICE</th>\n<th colspan=\"6\">EMBEDMENT</th>\n<th colspan=\"5\">LAP SPLICE</th>\n</tr>\n<tr>\n<th>COMPR</th>\n<th colspan=\"2\">TENSION (LTE)</th>\n<th>COMPR</th>\n<th colspan=\"2\">TENSION (LTS)</th>\n<th>HOOK</th>\n<th>COMPR</th>\n<th colspan=\"2\">TENSION (LTE)</th>\n<th>COMPR</th>\n<th colspan=\"2\">TENSION (LTS)</th>\n<th>COMPR</th>\n<th colspan=\"2\">TENSION (LTS)</th>\n<th>HOOK</th>\n</tr>\n<tr>\n<th>BAR</th>\n<th>(LCE)</th>\n<th>TOP</th>\n<th>OTHER</th>\n<th>(LCS)</th>\n<th>TOP</th>\n<th>OTHER</th>\n<th>(LDH)</th>\n<th>(LCE)</th>\n<th>TOP</th>\n<th>OTHER</th>\n<th>(LCS)</th>\n<th>TOP</th>\n<th>OTHER</th>\n<th>(LCS)</th>\n<th>TOP</th>\n<th>OTHER</th>\n<th>(LDH)</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>#3</td>\n<td>8</td>\n<td>21</td>\n<td>16</td>\n<td>12</td>\n<td>28</td>\n<td>21</td>\n<td>6</td>\n<td>8</td>\n<td>18</td>\n<td>14</td>\n<td>12</td>\n<td>24</td>\n<td>18</td>\n<td>18</td>\n<td>24</td>\n<td>18</td>\n<td>6</td>\n</tr>\n<tr>\n<td>#4</td>\n<td>11</td>\n<td>28</td>\n<td>22</td>\n<td>15</td>\n<td>37</td>\n<td>28</td>\n<td>8</td>\n<td>9</td>\n<td>25</td>\n<td>19</td>\n<td>15</td>\n<td>32</td>\n<td>25</td>\n<td>25</td>\n<td>32</td>\n<td>25</td>\n<td>7</td>\n</tr>\n<tr>\n<td>#5</td>\n<td>14</td>\n<td>36</td>\n<td>27</td>\n<td>19</td>\n<td>46</td>\n<td>36</td>\n<td>10</td>\n<td>12</td>\n<td>31</td>\n<td>24</td>\n<td>19</td>\n<td>40</td>\n<td>31</td>\n<td>31</td>\n<td>40</td>\n<td>31</td>\n<td>8</td>\n</tr>\n<tr>\n<td>#6</td>\n<td>16</td>\n<td>43</td>\n<td>33</td>\n<td>23</td>\n<td>56</td>\n<td>43</td>\n<td>12</td>\n<td>14</td>\n<td>37</td>\n<td>28</td>\n<td>23</td>\n<td>48</td>\n<td>37</td>\n<td>48</td>\n<td>37</td>\n<td>10</td>\n</tr>\n<tr>\n<td>#7</td>\n<td>19</td>\n<td>62</td>\n<td>48</td>\n<td>26</td>\n<td>81</td>\n<td>62</td>\n<td>13</td>\n<td>17</td>\n<td>54</td>\n<td>42</td>\n<td>26</td>\n<td>70</td>\n<td>54</td>\n<td>26</td>\n<td>70</td>\n<td>54</td>\n<td>12</td>\n</tr>\n<tr>\n<td>#8</td>\n<td>22</td>\n<td>71</td>\n<td>55</td>\n<td>30</td>\n<td>93</td>\n<td>71</td>\n<td>15</td>\n<td>19</td>\n<td>62</td>\n<td>47</td>\n<td>30</td>\n<td>80</td>\n<td>62</td>\n<td>30</td>\n<td>80</td>\n<td>62</td>\n<td>13</td>\n</tr>\n<tr>\n<td>#9</td>\n<td>25</td>\n<td>80</td>\n<td>62</td>\n<td>34</td>\n<td>105</td>\n<td>80</td>\n<td>17</td>\n<td>21</td>\n<td>70</td>\n<td>54</td>\n<td>34</td>\n<td>91</td>\n<td>70</td>\n<td>34</td>\n<td>91</td>\n<td>70</td>\n<td>15</td>\n</tr>\n<tr>\n<td>#10</td>\n<td>28</td>\n<td>90</td>\n<td>70</td>\n<td>38</td>\n<td>118</td>\n<td>90</td>\n<td>19</td>\n<td>24</td>\n<td>78</td>\n<td>60</td>\n<td>38</td>\n<td>102</td>\n<td>78</td>\n<td>38</td>\n<td>102</td>\n<td>78</td>\n<td>17</td>\n</tr>\n<tr>\n<td>#11</td>\n<td>31</td>\n<td>100</td>\n<td>77</td>\n<td>42</td>\n<td>131</td>\n<td>100</td>\n<td>22</td>\n<td>27</td>\n<td>87</td>\n<td>67</td>\n<td>42</td>\n<td>113</td>\n<td>87</td>\n<td>87</td>\n<td>19</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_027",
+      "coordinates": {
+        "x1": 3157.459716796875,
+        "y1": 5294.10595703125,
+        "x2": 5983.19091796875,
+        "y2": 6580.65234375
+      },
+      "layout_tag": "image",
+      "confidence": 0.934317409992218,
+      "reading_order": 28,
+      "text": "The image is a technical engineering drawing detailing the reinforcement layout for a concrete slab. It is not a data chart with X and Y axes, but rather a schematic diagram. The drawing specifies the dimensions of the concrete slab (3' - 0\" on each side) and the placement of vertical reinforcement bars. Key elements include #4@8\" TIES, #5@8\" ADDL for a 16\"Ø pipe in the pad, and vertical bars. A table titled \"* VERTICAL BARS\" lists the required number of vertical bars based on the pipe diameter (4\" - 8\", 10\" - 12\", 14\" - 16\", 18\" - 20\"), which is 3 x 2 #5 for the first three sizes and 3 x 4 #5 for the last size. The reinforcement is to be poured after the pipe is installed, as indicated by the text \"CONC POURED AFTER PIPE IS INSTALLED.\""
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_023",
+      "coordinates": {
+        "x1": 4602.5185546875,
+        "y1": 2667.003662109375,
+        "x2": 5760.27099609375,
+        "y2": 3497.68603515625
+      },
+      "layout_tag": "table",
+      "confidence": 0.9157624840736389,
+      "reading_order": 24,
+      "text": "<table>\n<thead>\n<tr>\n<th rowspan=\"2\">BAR<br/>SIZE</th>\n<th rowspan=\"2\">D</th>\n<th>180° HOOKS</th>\n<th>90° HOOKS</th>\n</tr>\n<tr>\n<th>J</th>\n<th>A or G</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>#3</td>\n<td>2 1/4\"</td>\n<td>3\"</td>\n<td>6\"</td>\n</tr>\n<tr>\n<td>#4</td>\n<td>3\"</td>\n<td>4\"</td>\n<td>8\"</td>\n</tr>\n<tr>\n<td>#5</td>\n<td>3 3/4\"</td>\n<td>5\"</td>\n<td>10\"</td>\n</tr>\n<tr>\n<td>#6</td>\n<td>4 1/2\"</td>\n<td>6\"</td>\n<td>1'-0\"</td>\n</tr>\n<tr>\n<td>#7</td>\n<td>5 1/4\"</td>\n<td>7\"</td>\n<td>1'-2\"</td>\n</tr>\n<tr>\n<td>#8</td>\n<td>6\"</td>\n<td>8\"</td>\n<td>1'-4\"</td>\n</tr>\n<tr>\n<td>#9</td>\n<td>9\"</td>\n<td>11 3/4\"</td>\n<td>1'-7\"</td>\n</tr>\n<tr>\n<td>#10</td>\n<td>10\"</td>\n<td>1'-11 1/4\"</td>\n<td>1'-10\"</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_018",
+      "coordinates": {
+        "x1": 620.198974609375,
+        "y1": 5524.083984375,
+        "x2": 2890.36572265625,
+        "y2": 6295.3125
+      },
+      "layout_tag": "image",
+      "confidence": 0.906896710395813,
+      "reading_order": 19,
+      "text": "यह चित्र एक तकनीकी इंजीनियरिंग ड्राइंग है, विशेष रूप से एक अनुभाग दृश्य (sectional view), जो एक संरचनात्मक घटक के निर्माण विवरण को दर्शाता है। ड्राइंग को दो मुख्य भागों में विभाजित किया गया है: बाईं ओर एक अनुभाग दृश्य और दाईं ओर एक विस्तृत क्रॉस-सेक्शन।\n\n**बाईं ओर (अनुभाग दृश्य):**\n- **ऊपरी भाग:** \"NOTE 1\" लेबल वाली एक रेखा दो ऊर्ध्वाधर आयामों को इंगित करती है।\n- **सामग्री:** \"1#5 COUNT\" लेबल वाला एक आयताकार ब्लॉक एक बनावट वाली पृष्ठभूमि के सामने दिखाया गया है, जो कंक्रीट (CONC) का प्रतिनिधित्व करता है।\n- **आयाम:** \"12\" (12 इंच) की एक ऊर्ध्वाधर आयाम रेखा ब्लॉक की ऊंचाई को दर्शाती है।\n- **विवरण:** ब्लॉक के भीतर, एक ऊर्ध्वाधर पाइप या रॉड को दर्शाया गया है। एक आयाम \"12\" से \"0\" (2 फीट) तक की कुल ऊंचाई को इंगित करता है।\n- **होल:** ब्लॉक के निचले दाएं कोने के पास एक गोलाकार छेद दिखाया गया है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।\n- **होल का स्थान:** एक आयाम \"8\" (8 इंच) इंगित करता है, जो उस छेद के व्यास को दर्शाता है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_042",
+      "coordinates": {
+        "x1": 8571.7255859375,
+        "y1": 5514.58251953125,
+        "x2": 9146.7021484375,
+        "y2": 6067.583984375
+      },
+      "layout_tag": "image",
+      "confidence": 0.9025575518608093,
+      "reading_order": 43,
+      "text": "The image is a close-up photograph of a circular blue ink stamp, specifically a \"FBC Engineering Approval\" stamp from Fort Bend County. The stamp features text arranged in a circular fashion around a central date. The top arc reads \"FORT BEND COUNTY\". Below this, the word \"APPROVED\" is centered. The date \"OCT 3 1 2025\" is printed in red ink in the middle. The bottom arc contains the text \"Valid One Year\" on the left and \"From Date\" on the right. The text \"ENGINEERING DEPARTMENT\" is printed along the bottom curve of the stamp. The stamp indicates that the document it was applied to received approval from the Engineering Department of Fort Bend County for one year starting from October 3, 2025."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_026",
+      "coordinates": {
+        "x1": 8608.2900390625,
+        "y1": 721.3273315429688,
+        "x2": 9987.462890625,
+        "y2": 1633.7445068359375
+      },
+      "layout_tag": "image",
+      "confidence": 0.8988610506057739,
+      "reading_order": 27,
+      "text": "The image is a technical architectural drawing showing the layout of reinforcement bars (rebar) within a concrete slab. The drawing outlines a rectangular slab with zigzag notches along the top and bottom edges. Inside the slab, three parallel steel reinforcement bars are depicted. The top bar is labeled \"3-#5 X 4' - 0\" LONG IN TOP OF SLAB\". The middle and bottom bars are spaced apart. Dimension lines indicate the spacing between the bars: the distance from the top bar to the middle bar is labeled \"6\\\"\", the distance from the middle bar to the bottom bar is also labeled \"6\\\"\", and the distance from the bottom bar to the bottom edge of the slab is labeled \"3\"\". The drawing illustrates the standard spacing for reinforcement in a concrete slab."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_033",
+      "coordinates": {
+        "x1": 6293.15283203125,
+        "y1": 2118.659912109375,
+        "x2": 9103.4375,
+        "y2": 3728.493408203125
+      },
+      "layout_tag": "image",
+      "confidence": 0.8986870050430298,
+      "reading_order": 34,
+      "text": "यह चित्र एक तकनीकी वास्तुशिल्प या इंजीनियरिंग ड्राइंग है जो एक संरचनात्मक ग्रिड के भीतर एक केंद्रीय उद्घाटन को दर्शाती है। ड्राइंग में आयामों और विशिष्टताओं को इंगित करने वाले एनोटेशन शामिल हैं।\n\n**सामान्य विवरण:**\nयह एक ब्लैक-एंड-व्हाइट तकनीकी ड्राइंग है जो एक आयताकार ग्रिड लेआउट को प्रदर्शित करती है। केंद्र में, एक गोलाकार उद्घाटन है। इस उद्घाटन के चारों ओर एक आयताकार फ्रेम है जो ग्रिड के भीतर स्थित है। ड्राइंग में आयाम, नोट्स और विशिष्टताएँ शामिल हैं जो यह परिभाषित करती हैं कि उद्घाटन और आसपास के तत्व कैसे स्थित हैं।\n\n**विस्तृत दृश्य विश्लेषण:**\n1.  **केंद्रीय उद्घाटन:** केंद्र में एक वृत्त है जिस पर \"OPENING\" लेबल लगा है।\n2.  **आसपास का फ्रेम:** एक आयताकार फ्रेम उद्घाटन को घेरता है।\n    *   **आयाम:** फ्रेम की चौड़ाई को \"'B'\" और ऊंचाई को \"'A'\" के रूप में लेबल किया गया है।\n    *   **ग्रिड लेआउट:** ड्राइंग एक ग्रिड प्रणाली का उपयोग करती है। ऊर्ध्वाधर और क्षैतिज रेखाएँ एक ग्रिड बनाती हैं।\n    *   **आयाम एनोटेशन:**\n        *   ऊपर बाईं ओर: \"#5 X 4' - 0'\" LONG EACH FACE\"\n        *   ऊपर दाईं ओर: \"#5 X (B+4' - 0\") EACH FACE\"\n        *   नीचे बाईं ओर: \"SEE NOTE 2\"\n        *   नीचे दाईं ओर: \"SEE NOTE 1\"\n        *   ऊपर बाईं ओर: \"SEE NOTE 1\"\n3.  **ग्रिड विवरण:**\n    *   ऊर्ध्वाधर रेखाएँ ग्रिड को चार कॉलम में विभाजित करती हैं।\n    *   क्षैतिज रेखाएँ ग्रिड को पांच पंक्तियों में विभाजित करती हैं।\n    *   ग्रिड के भीतर विकर्ण रेखाएँ दिखाई देती हैं, जो संभवतः संरचनात्मक सदस्यों या कनेक्शन का प्रतिनिधित्व करती हैं।\n4.  **नोट्स:**\n    *   \"SEE NOTE 1\" ऊपर बाईं ओर, ऊपर दाईं ओर और नीचे दाईं ओर स्थित है।\n    *   \"SEE NOTE 2\" नीचे केंद्र में स्थित है।\n\n**डेटा निष्कर्षण:**\n| आयाम लेबल | मान |\n| :--- | :--- |\n| उद्घाटन की चौड़ाई ('A') | अनिर्दिष्ट (लेबल के भीतर) |\n| उद्घाटन की ऊंचाई ('B') | अनिर्दिष्ट (लेबल के भीतर) |\n| फ्रेम की चौड़ाई ('B') | #5 X (B+4' - 0\") |\n| फ्रेम की ऊंचाई ('A') | #5 X 4' - 0' |\n\n**विश्लेषणात्मक विवरण:**\nयह ड्राइंग एक केंद्रीय उद्घाटन के लिए एक सटीक ज्यामितीय लेआउट को परिभाषित करती है। उद्घाटन को एक आयताकार फ्रेम द्वारा सीमांकित किया गया है, और पूरा असेंबली एक बड़े ग्रिड के भीतर स्थित है। एनोटेशन इंगित करते हैं कि फ्रेम की चौड़ाई और ऊंचाई विशिष्ट आयामों द्वारा निर्धारित की जाती है: चौड़ाई \"#5 X 4' - 0'\" और ऊंचाई \"#5 X (B+4' - 0\") है। \"SEE NOTE 1\" और \"SEE NOTE 2\" लेबल बताते हैं कि इन आयामों के लिए अतिरिक्त स्पष्टीकरण या विवरण दस्तावेज़ के अन्य अनुभागों में पाए जा सकते हैं। ड्राइंग एक सममित और व्यवस्थित डिज़ाइन का संचार करती है, जो संभवतः निर्माण या निर्माण उद्देश्यों के लिए है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_011",
+      "coordinates": {
+        "x1": 616.5169677734375,
+        "y1": 2171.153564453125,
+        "x2": 2814.75537109375,
+        "y2": 2793.87744140625
+      },
+      "layout_tag": "image",
+      "confidence": 0.8687949776649475,
+      "reading_order": 12,
+      "text": "यह चित्र एक तकनीकी इंजीनियरिंग आरेख है जो एक 'वेट वेल' (wet well) के निर्माण के लिए विशिष्टताओं को दर्शाता है, जो संभवतः एक सीवर सिस्टम (sewer system) का हिस्सा है। आरेख में एक ऊर्ध्वाधर दीवार खंड दिखाया गया है जो एक क्षैतिज पाइप से जुड़ा है। दीवार के ऊपर, एक आयताकार छेद है जो एक 'इन्फ्लुएंट सीवर साइज टीडीबी' (Influent Sewer Size TBD) से जुड़ा है, जिसकी चौड़ाई '4\" टू 6\"' (4\" to 6\") और ऊंचाई '2' - 0\"' (2' - 0\") है। दीवार के आधार पर, एक क्षैतिज पाइप बाहर की ओर फैला हुआ है, जिसे 'वेट वेल' (WET WELL) के रूप में लेबल किया गया है। दीवार के निचले हिस्से में एक सील (seal) है, जिसे 'सील डब्ल्यू/ लिंक-सील ऑर अप्रूव्ड इक्वल' (SEAL W/ LINK-SEAL OR APPROVED EQUAL) के रूप में चिह्नित किया गया है। दीवार के दाईं ओर, एक कनेक्शन पॉइंट है जिसे 'प्रोवाइड फ्लेक्सिबल जॉइंट्स' (PROVIDE FLEXIBLE JOINTS) के रूप में लेबल किया गया है। एक नोट में 'REFER TO NOTES BELOW AS APPROPRIATE' (उपयुक्त नोट्स के अनुसार देखें) लिखा है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_002",
+      "coordinates": {
+        "x1": 629.0925903320312,
+        "y1": 703.7842407226562,
+        "x2": 3576.398681640625,
+        "y2": 1581.6920166015625
+      },
+      "layout_tag": "image",
+      "confidence": 0.8569478988647461,
+      "reading_order": 3,
+      "text": "यह चित्र एक तकनीकी ड्राइंग है जो एक 'RAISED CONST JOINT' (उभारदार स्थिर जोड़) के लिए निर्माण विवरण दिखाता है। इसमें एक ऊर्ध्वाधर स्तंभ (संभवतः एक स्तंभ या दीवार) है जिसके शीर्ष पर एक क्षैतिज जोड़ है। 'RAISED CONST JOINT' शब्द बाईं ओर लेबल किया गया है, जो जोड़ के ऊपर की ओर इशारा करता है।\n\nचित्र के केंद्र में एक तालिका है जिसका शीर्षक \"'A'\" और \"NORMAL KEY SIZE\" है। यह तालिका जोड़ के आकार के आधार पर आवश्यक की (key) के आकार को निर्दिष्ट करती है:\n- 'A' के लिए:\n  - 8\" तक: 1 - 2\"X3\" KEY\n  - 9\" से 12\" तक: 1 - 2\"X4\" KEY\n  - 13\" से 18\" तक: 1 - 2\"X6\" KEY\n  - 19\" से 24\" तक: 2 - 2\"X4\" KEY\n  - 25\" और उससे अधिक: 2 - 2\"X6\" KEY\n\nचित्र के दाईं ओर, एक ऊर्ध्वाधर अनुप्रस्थ काट (cross-section) है जो जोड़ के आयामों को दर्शाता है। इसमें 'A/3' और '4'' जैसे आयामों के साथ एक 'A' आकार का निशान शामिल है। नीचे, एक क्षैतिज आयाम रेखा '1/4\" TYP' (टाइप) इंगित करती है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_041",
+      "coordinates": {
+        "x1": 8015.919921875,
+        "y1": 6365.1923828125,
+        "x2": 8329.94921875,
+        "y2": 6688.310546875
+      },
+      "layout_tag": "image",
+      "confidence": 0.838075578212738,
+      "reading_order": 42,
+      "text": "This image contains the letters \"BE\" inside a circle."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_016",
+      "coordinates": {
+        "x1": 544.436767578125,
+        "y1": 4937.8486328125,
+        "x2": 2586.380859375,
+        "y2": 5074.47119140625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.8353924751281738,
+      "reading_order": 17,
+      "text": "9 SPLICE LAYOUT FOR HOOP BARS (WET WELL WALL)\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_046",
+      "coordinates": {
+        "x1": 9519.998046875,
+        "y1": 4823.11279296875,
+        "x2": 9877.1689453125,
+        "y2": 5164.69970703125
+      },
+      "layout_tag": "image",
+      "confidence": 0.8343623280525208,
+      "reading_order": 47,
+      "text": "यह छवि एक लोगो प्रदर्शित करती है जिसमें बड़े, सफेद, बिना-तिरछे (sans-serif) बड़े अक्षरों में \"BGE\" अक्षर हैं। अक्षर एक ठोस, गहरे भूरे या काले आयताकार पृष्ठभूमि पर केंद्रित हैं। डिज़ाइन न्यूनतम है, जिसमें पाठ के चारों ओर पर्याप्त सफेद स्थान है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_051",
+      "coordinates": {
+        "x1": 9393.9228515625,
+        "y1": 6556.916015625,
+        "x2": 10649.5654296875,
+        "y2": 6997.9873046875
+      },
+      "layout_tag": "table",
+      "confidence": 0.8308042287826538,
+      "reading_order": 52,
+      "text": "<table>\n<tbody>\n<tr>\n<td>SUBMITTED: BGE, INC.<br/>SCALE:<br/>DATE:<br/>SURVEY BY:BGE, INC.<br/>F B NO:</td>\n<td>DESIGNED BY: CB<br/>DRAWN BY: MB<br/>SHEET NO 6 OF 22 SHEETS</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_010",
+      "coordinates": {
+        "x1": 634.2808227539062,
+        "y1": 2812.46728515625,
+        "x2": 1908.625732421875,
+        "y2": 2881.612060546875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.78777015209198,
+      "reading_order": 11,
+      "text": "FOR OPENINGS TO BE CORED (CAISSON CONSTRUCTION):"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_015",
+      "coordinates": {
+        "x1": 694.9490356445312,
+        "y1": 4383.1328125,
+        "x2": 2513.13916015625,
+        "y2": 4873.58642578125
+      },
+      "layout_tag": "image",
+      "confidence": 0.7859105467796326,
+      "reading_order": 16,
+      "text": "The image is a technical architectural or engineering detail drawing, specifically a section view, rather than a data chart. It illustrates the dimensional requirements for a structural splice. The drawing shows a horizontal line representing a structural member (likely a beam or stud) with two parallel lines running perpendicular to it, indicating a cross-section. A dimension line spans the width of the section, indicating a length of \"3' - 0\" (3 feet). Below this dimension line, the text \"MIN. STAGGER\" is centered, indicating the minimum spacing required between the two parallel lines. To the right, the text \"STD. TENSION LAP SPLICE\" identifies the specific detail being shown. The drawing includes construction lines and a bracket at the bottom left, suggesting it is a detail from a larger assembly. There are no axes, legends, or numerical data points to extract."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_036",
+      "coordinates": {
+        "x1": 6656.68798828125,
+        "y1": 4005.586181640625,
+        "x2": 8457.1845703125,
+        "y2": 4224.5537109375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7758897542953491,
+      "reading_order": 37,
+      "text": "2. PROVIDE ADDL BARS EQUAL TO ONE-HALF OF BARS INTERRUPTED AT EACH\nSIDE OF OPENING AT 3\" O.C. THESE BARS SHALL BE ORIGNAL SIZES AND\nLENGTHS AS THOSE OF THE INTERRUPTED BARS. (TYPICAL FOR OPENINGS\nIN SLABS AND PRESSURE WALLS.)"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_032",
+      "coordinates": {
+        "x1": 8528.4677734375,
+        "y1": 1877.1522216796875,
+        "x2": 9712.6787109375,
+        "y2": 2009.850341796875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7735396027565002,
+      "reading_order": 33,
+      "text": "3 SLAB DETAIL AT RE-ENTRANT CORNER\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_005",
+      "coordinates": {
+        "x1": 543.9832153320312,
+        "y1": 1889.2054443359375,
+        "x2": 1632.491943359375,
+        "y2": 2017.9805908203125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7590101957321167,
+      "reading_order": 6,
+      "text": "11 CONSTUCTION JOINT KEY DETAILS\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_012",
+      "coordinates": {
+        "x1": 574.2861328125,
+        "y1": 2885.1796875,
+        "x2": 2935.9453125,
+        "y2": 4052.7890625
+      },
+      "layout_tag": "ordered-list",
+      "confidence": 0.74462890625,
+      "reading_order": 13,
+      "text": "1. IDENTIFY PIPE PENETRATION LOCATION WITH 1\" DIA PLASTIC PIPE SLEEVE.\n2. DIAMETER OF PENETRATION OPENING SHALL BE EQUAL TO PIPE OUTER DIAMETER PLUS 2 TIME LINK-SEAL THICKNESS.\n3. PROVIDE ADDITIONAL REINFORCEMENT AROUND PENETRARTION OPENING AS PER DETAIL 2 / S2 ON THIS SHEET BEFORE CASTING WALL.\n\nFOR OPENINGS TO BE SLEEVED OF FORMED (CAISSON CONSTRUCTION):\n\n1. IDENTIFY PIPE PENETRATION LOCATION.\n2. DIAMETER OF PENETRATION OPENING SHALL BE EQUAL TO PIPE OUTER DIAMETER PLUS 2 TIMES LINK-SEAL THICKNESS. SEE \"TYPICAL PIPE BLOCK-OUT DETAIL FOR CAISSON CONSTRUCTION,\" THIS SHEET.\n3. PROVIDE ADDTIONAL REINFORCEMENT AROUND PENETRATION OPENING AS PER DETAIL 2 / S2 ON THIS SHEET BEFORE CASTING WALL.\n\nFOR OPENINGS TO BE FORMED OR SLEEVED (OPEN CUT CONSTRUCTION):\n\n1. IDENTIFY PIPE PENETRATION LOCATION.\n2. DIAMETER OF PENETRATION OPENING SHALL BE EQUAL TO PIPE OUTER DIAMETER PLUS 2 TIMES LINK-SEAL THICKNESS.\n3. PROVIDE ADDITIONAL REINFORCEMENT AROUND PENETRARTION OPENING AS PER DETAIL 2 / S2 ON THIS SHEET BEFORE CASTING WALL."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_014",
+      "coordinates": {
+        "x1": 553.7036743164062,
+        "y1": 4056.621337890625,
+        "x2": 1710.0289306640625,
+        "y2": 4131.126953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7417064905166626,
+      "reading_order": 15,
+      "text": "10 TYP INFLUENT SEWER ENTRY DETAIL"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_009",
+      "coordinates": {
+        "x1": 3191.888671875,
+        "y1": 2311.951171875,
+        "x2": 4425.0703125,
+        "y2": 3993.5625
+      },
+      "layout_tag": "image",
+      "confidence": 0.74169921875,
+      "reading_order": 10,
+      "text": "चित्र में दो तकनीकी चित्र हैं जिन पर \"90° HOOK\" और \"180° HOOK\" लिखा है। दोनों चित्रों में एक पाइप का क्रॉस-सेक्शनल दृश्य दिखाया गया है जिसमें एक 90-डिग्री का मोड़ है।\n\n**90° HOOK (ऊपर):**\n- **LDH:** पाइप की कुल लंबाई।\n- **D:** पाइप के मोड़ के केंद्र में व्यास।\n- **12db:** मोड़ के नीचे से मोड़ के केंद्र तक की दूरी।\n- **A or G:** मोड़ के नीचे से पाइप के निचले किनारे तक की ऊर्ध्वाधर दूरी।\n\n**180° HOOK (नीचे):**\n- **LDH:** पाइप की कुल लंबाई।\n- **D:** पाइप के मोड़ के केंद्र में व्यास।\n- **db:** मोड़ के नीचे से मोड़ के केंद्र तक की दूरी।\n- **J:** मोड़ के नीचे से पाइप के निचले किनारे तक की ऊर्ध्वाधर दूरी।\n- **MAX OF 4db OR 2 1/2\":** मोड़ के नीचे से पाइप के निचले किनारे तक की अधिकतम ऊर्ध्वाधर दूरी, जो या तो 4 गुना 'db' या 2 1/2 इंच हो सकती है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_050",
+      "coordinates": {
+        "x1": 9781.1240234375,
+        "y1": 6195.7998046875,
+        "x2": 10254.4677734375,
+        "y2": 6270.22265625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7300816774368286,
+      "reading_order": 51,
+      "text": "TYPICAL NOTES"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_034",
+      "coordinates": {
+        "x1": 6661.083984375,
+        "y1": 3818.16552734375,
+        "x2": 6854.18798828125,
+        "y2": 3882.255126953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7167507410049438,
+      "reading_order": 35,
+      "text": "NOTES:"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_044",
+      "coordinates": {
+        "x1": 8389.193359375,
+        "y1": 6710.23486328125,
+        "x2": 9278.7509765625,
+        "y2": 6978.87841796875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7092898488044739,
+      "reading_order": 45,
+      "text": "2405 S. GRAND BLVD., SUITE A,\nPEARLAND, TEXAS 77581\n832-295-3600\nTBPE FIRM No. F-23075"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_001",
+      "coordinates": {
+        "x1": 4080.287109375,
+        "y1": 590.150390625,
+        "x2": 5664.59765625,
+        "y2": 1548.3515625
+      },
+      "layout_tag": "image",
+      "confidence": 0.70068359375,
+      "reading_order": 2,
+      "text": "The image is a technical drawing or schematic diagram illustrating two different types of construction joints, labeled 'TYPE C1' and 'TYPE C2'. At the top, a note specifies '6\" PVC WATERSTOP' and 'SEE SPECIFICATIONS'. Both diagrams show a cross-section of a wall or floor assembly. The left diagram, labeled 'TYPE C1', depicts a joint where the wall material is separated from the floor material by a gap, with two circular holes visible in the wall. The right diagram, labeled 'TYPE C2', shows a joint where the wall material is bonded to the floor material using a visible screw or fastener. The diagrams use standard engineering line weights and hatching to represent materials."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_035",
+      "coordinates": {
+        "x1": 6664.83642578125,
+        "y1": 3865.3779296875,
+        "x2": 8455.2431640625,
+        "y2": 3978.248291015625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6776719093322754,
+      "reading_order": 36,
+      "text": "1. PROVIDE 2-#6 X (B+4'-0\") ADDITIONAL REBARS @ TOP AND BOTTOM AND 2-#6\nX (A+4'-0\") ADDITIONAL REBARS AT EACH SIDE OF OPENING IN WALLS ONLY."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_047",
+      "coordinates": {
+        "x1": 10052.4443359375,
+        "y1": 4734.39892578125,
+        "x2": 10580.46875,
+        "y2": 5258.17529296875
+      },
+      "layout_tag": "image",
+      "confidence": 0.6658051013946533,
+      "reading_order": 48,
+      "text": "यह छवि एक आधिकारिक मुहर (स्टांप) है, जो विशेष रूप से टेक्सास राज्य से संबंधित है। यह एक गोलाकार डिज़ाइन है जिसमें एक सजावटी बॉर्डर है जो बिंदीदार रेखाओं और छोटे तारों से बना है। वृत्त के शीर्ष पर, \"STATE OF TEXAS\" शब्द एक चाप में व्यवस्थित हैं। इसके नीचे केंद्र में एक बड़ा, पांच-नुकीला तारा है। तारे के नीचे, \"CESAR BARRON CASTRO\" नाम बड़े अक्षरों में मुद्रित है, जिसके बाद \"140574\" संख्या है। वृत्त के निचले आधे भाग में \"LICENSED\" और \"PROFESSIONAL ENGINEER\" शब्द हैं, जो भी बड़े अक्षरों में हैं। मुहर एक पेशेवर मुहर प्रतीत होती है जिसका उपयोग टेक्सास राज्य के भीतर किसी व्यक्ति की पेशेवर स्थिति को प्रमाणित करने के लिए किया जाता है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_031",
+      "coordinates": {
+        "x1": 6129.46630859375,
+        "y1": 1877.977294921875,
+        "x2": 7880.6357421875,
+        "y2": 2014.2947998046875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6646325588226318,
+      "reading_order": 32,
+      "text": "4 TYPICAL WALL AND SLAB LIFTING HOOK\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_020",
+      "coordinates": {
+        "x1": 987.6578369140625,
+        "y1": 6549.341796875,
+        "x2": 2506.41943359375,
+        "y2": 6769.43408203125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6519005298614502,
+      "reading_order": 21,
+      "text": "VERIFY SIZE AND LOCATION OF THE ACCESS HATCH OPENING PER\nSELECTED HATCH AND PUMP MANUFACTURES' REQUIRMENTS. WHEN\nPURCHASED HATCH COVERS ARE USED CONSULT HATCH\nMANUFACTURER'S DRAWINGS FOR DOOR FRAME DETAILS."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_025",
+      "coordinates": {
+        "x1": 3633.2646484375,
+        "y1": 4377.30029296875,
+        "x2": 5601.6923828125,
+        "y2": 5183.55078125
+      },
+      "layout_tag": "image",
+      "confidence": 0.6456504464149475,
+      "reading_order": 26,
+      "text": "चित्र में दो तकनीकी इंजीनियरिंग योजनाएं (technical engineering plans) दिखाई गई हैं, जिन पर क्रमशः \"PLAN - THRUST BLOCK @ TEE\" और \"PLAN - THRUST BLOCK @ ELBOW\" लिखा है। दोनों आरेख एक \"DISHCHARGE PIPE\" (डिशचार्ज पाइप) के चारों ओर केंद्रित हैं, जिसे एक क्षैतिज रेखा द्वारा दर्शाया गया है। प्रत्येक योजना में एक आयताकार ब्लॉक है जिस पर \"¢ HEADER\" (सेंटर हेडर) लिखा है, जो पाइप के सापेक्ष स्थित है।\n\nबाईं ओर की योजना (TEE):\n- हेडर दो भागों में विभाजित है: एक बाईं ओर और एक दाईं ओर।\n- बाईं ओर के हेडर के ऊपर, \"3\" MIN\" (3\" MIN) लिखा है, जो 3 इंच के न्यूनतम आयाम को दर्शाता है।\n- हेडर के ऊपर, \"OD\" (बाहरी व्यास) और \"1' - 0\"\" (1' - 0\") लिखा है, जो हेडर के बाहरी व्यास और कुल लंबाई को दर्शाता है।\n- हेडर के बाईं ओर, \"3\" MIN\" (3\" MIN) लिखा है, जो 3 इंच के न्यूनतम आयाम को दर्शाता है।\n- हेडर के नीचे, \"OD\" (बाहरी व्यास) लिखा है।\n\nदाईं ओर की योजना (ELBOW):\n- हेडर भी दो भागों में विभाजित है: एक बाईं ओर और एक दाईं ओर।\n- हेडर के ऊपर, \"3\" MIN.\" (3\" MIN.) लिखा है, जो 3 इंच के न्यूनतम आयाम को दर्शाता है।\n- हेडर के ऊपर, \"OD\" (बाहरी व्यास) लिखा है।\n- हेडर के नीचे, \"3\" MIN.\" (3\" MIN.) लिखा है, जो 3 इंच के न्यूनतम आयाम को दर्शाता है।\n- हेडर के बाईं ओर, \"OD\" (बाहरी व्यास) लिखा है।\n\nदोनों योजनाओं में हेडर के भीतर आंतरिक संरचनाओं को दर्शाने के लिए बिंदीदार रेखाओं का उपयोग किया गया है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_004",
+      "coordinates": {
+        "x1": 1582.511962890625,
+        "y1": 1660.135009765625,
+        "x2": 3071.32421875,
+        "y2": 1828.5660400390625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6449355483055115,
+      "reading_order": 5,
+      "text": "NUMBER AND SIZE OF KEYS SHOWN APPLY TO JOINTS SLABS AND TO\nBOTH VERTICAL AND HORIZONTAL JOINTS IN WALLS EXCEPT AS\nOTHERWISE NOTED ON DRAWINGS."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_008",
+      "coordinates": {
+        "x1": 3972.3466796875,
+        "y1": 1884.2410888671875,
+        "x2": 4759.9287109375,
+        "y2": 2022.1591796875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6439308524131775,
+      "reading_order": 9,
+      "text": "5 CONSTRUCTION JOINTS\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_045",
+      "coordinates": {
+        "x1": 9366.736328125,
+        "y1": 4241.22509765625,
+        "x2": 10642.740234375,
+        "y2": 4721.65234375
+      },
+      "layout_tag": "table",
+      "confidence": 0.6415573954582214,
+      "reading_order": 46,
+      "text": "<table>\n<thead>\n<tr>\n<th>REV.<br/>NO.</th>\n<th>DATE</th>\n<th>DESCRIPTION</th>\n<th>P.E.<br/>APPR.</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td>9/25/25</td>\n<td>ISSUE FOR AGENCY REVIEW</td>\n<td>CBC</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_022",
+      "coordinates": {
+        "x1": 3114.67041015625,
+        "y1": 4045.811767578125,
+        "x2": 3985.674072265625,
+        "y2": 4180.76416015625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6367188096046448,
+      "reading_order": 23,
+      "text": "6 TYPICAL STANDARD HOOKS\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_040",
+      "coordinates": {
+        "x1": 6316.919921875,
+        "y1": 6292.56884765625,
+        "x2": 7968.29541015625,
+        "y2": 6562.47607421875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6269487142562866,
+      "reading_order": 41,
+      "text": "MULTIPLIERS:\nALL EMBEDMENT AND LAP SPLICE LENGTHS SHALL BE INCREASES AS REQ'D\nBY THE MULTIPLIERS BELOW. APPLY MULTIPLE\nMULTIPLIERS IF APPLICABLE\n1.3 -- IF CONC. CONTAINS LIGHT WEIGHT AGGREGATES\n1.3 -- IF EPOXY COATED REBAR USED"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_039",
+      "coordinates": {
+        "x1": 6295.41162109375,
+        "y1": 5532.3896484375,
+        "x2": 8403.8076171875,
+        "y2": 5637.1962890625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.6094903349876404,
+      "reading_order": 40,
+      "text": "NOTES (PERTAINING TO TABLE).\n1. TOP BARS ARE HORIZONTAL BARS THAT HAVE MORE THAN 12\" OF FRESH CONCRETE CAST\nBELOW THEM."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_049",
+      "coordinates": {
+        "x1": 9599.171875,
+        "y1": 5824.1748046875,
+        "x2": 10438.939453125,
+        "y2": 5925.70654296875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5932502150535583,
+      "reading_order": 50,
+      "text": "LIFT STATION NO. 1"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_000",
+      "coordinates": {
+        "x1": 1659.095703125,
+        "y1": 412.6833801269531,
+        "x2": 2736.9912109375,
+        "y2": 586.1712646484375
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.592860996723175,
+      "reading_order": 1,
+      "text": "RAISE CONSTUCTION JOINT ABOVE STRUCTURAL\nSLAB WHERE WATERSTOP IS REQUIRED EXCEPT\nAS OTHERWISE SHOWN ON DRAWINGS."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_003",
+      "coordinates": {
+        "x1": 9095.5078125,
+        "y1": 1630.845703125,
+        "x2": 9941.6015625,
+        "y2": 1823.33203125
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.5869140625,
+      "reading_order": 4,
+      "text": "SPECIAL REINFORCEMENT TO BE\nPLACED AT ALL INSIDE CORNERS IN\nSLABS OR WALKWAYS."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_043",
+      "coordinates": {
+        "x1": 8366.2275390625,
+        "y1": 6375.67236328125,
+        "x2": 9316.802734375,
+        "y2": 6655.96923828125
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.5794305205345154,
+      "reading_order": 44,
+      "text": "BARRON\nENGINEERING"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_024",
+      "coordinates": {
+        "x1": 4415.61572265625,
+        "y1": 3531.933349609375,
+        "x2": 5969.7119140625,
+        "y2": 3795.206787109375
+      },
+      "layout_tag": "footnote",
+      "confidence": 0.5578100085258484,
+      "reading_order": 25,
+      "text": "[1]A STANDARD HOOK FOR DEFORMED BARS IN TENSION INCLUDES THE\nSPECIFIC INSIDE BEND DIAMETER AND STRAIGHT EXTENSION LENGTH. IT\nSHALL BE PERMITTED TO USE A LONGER STRAIGHT EXTENSION AT THE\nEND OF A HOOK. A LONGER EXTENSION SHALL NOT BE CONSIDERED TO\nINCREASE THE ANCHORAGE CAPACITY OF THE HOOK."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_006",
+      "coordinates": {
+        "x1": 4296.99072265625,
+        "y1": 1607.9632568359375,
+        "x2": 5702.23974609375,
+        "y2": 1729.8123779296875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5499275326728821,
+      "reading_order": 7,
+      "text": "IN JOINTS WITH MORE THAN ONE KEY, PLACE WATERSTOP IN KEY\nNEAREST TO SURFACE AGAINST EARTH OR WATER."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_007",
+      "coordinates": {
+        "x1": 4133.625,
+        "y1": 1750.173583984375,
+        "x2": 5660.88525390625,
+        "y2": 1826.3876953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5402215123176575,
+      "reading_order": 8,
+      "text": "2. REINF. STEEL IS CONTINUOUS THROUGH CONSTRUCTION JOINT."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_037",
+      "coordinates": {
+        "x1": 6137.625,
+        "y1": 4282.06787109375,
+        "x2": 8181.4091796875,
+        "y2": 4419.6962890625
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5394497513771057,
+      "reading_order": 38,
+      "text": "2 ADDITIONAL REINFORCING STEEL AT OPENING IN WALLS AND SLABS\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_030",
+      "coordinates": {
+        "x1": 3072.2880859375,
+        "y1": 6823.53466796875,
+        "x2": 4108.3701171875,
+        "y2": 6960.6845703125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5287218689918518,
+      "reading_order": 31,
+      "text": "7 TYPICAL THURST BLOCK SETAIL\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_048",
+      "coordinates": {
+        "x1": 9428.7177734375,
+        "y1": 5219.69287109375,
+        "x2": 9951.083984375,
+        "y2": 5457.6123046875
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.5166665315628052,
+      "reading_order": 49,
+      "text": "BGE, Inc.\n10777 Westheimer, Suite 400\nHouston, TX 77042\nTel: 281-558-8700 • www.bgeinc.com\nTBPE Registration No. F-1046"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_013",
+      "coordinates": {
+        "x1": 4403.91796875,
+        "y1": 3811.65234375,
+        "x2": 5127.328125,
+        "y2": 3942.796875
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.49609375,
+      "reading_order": 14,
+      "text": "D - INSIDE DIAMETER OF HOOK\ndb - BAR DIAMETER"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_017",
+      "coordinates": {
+        "x1": 6316.08984375,
+        "y1": 5512.30078125,
+        "x2": 7923.66796875,
+        "y2": 6239.94140625
+      },
+      "layout_tag": "ordered-list",
+      "confidence": 0.476806640625,
+      "reading_order": 18,
+      "text": "NOTES (PERTAINING TO TABLE):\n1.      TOP BARS ARE HORIZONTAL BARS THAT HAVE MORE THAN 12\" OF FR\n        BELOW THEM.\n2.      ALL BARS THAT ARE NOT \"TOP BARS\n3.      ABBREVIATIONS:\n        - LCE - COMPRESSION EMBEDMENT LENGTH\n        - LTE - TENSION EMBEDMENT LENGTH\n        - LCS - COMPRESSION LAP SPLICE LENGTH\n        - LTS - TENSION LAP SPLICE LENGTH\n        - LDH - HOOKED BAR TENSION EMBEDMENT LENGTH\nNOTES (GENERAL):\n1.      STAGGER ALL SPLICES 12 db MIN, BUT NOT LESS THAN 12\"\n2.      ALL DIMENSIONS INDICATED IN TABLE ARE IN INCHES\n3.      BARS GREATER THAN #11 SHALL BE MECHANICALLY SPLICED\n4.      ALL SPLICES SHALL BE WIRED IN CONTACT STACKED VERTICAL"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_019",
+      "coordinates": {
+        "x1": 9594.703125,
+        "y1": 5533.453125,
+        "x2": 10483.1015625,
+        "y2": 5681.51953125
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.32421875,
+      "reading_order": 20,
+      "text": "FORT BEND CO MUD NO. 210"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_028",
+      "coordinates": {
+        "x1": 6151.1015625,
+        "y1": 6591.0703125,
+        "x2": 7339.86328125,
+        "y2": 6734.90625
+      },
+      "layout_tag": "folio",
+      "confidence": 0.30078125,
+      "reading_order": 29,
+      "text": "1 SPLICE AND DEVELOPMENT LENGTHS\nNTS"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_6_block_029",
+      "coordinates": {
+        "x1": 568.46923828125,
+        "y1": 6794.1328125,
+        "x2": 1651.998046875,
+        "y2": 6946.4296875
+      },
+      "layout_tag": "folio",
+      "confidence": 0.29248046875,
+      "reading_order": 30,
+      "text": "8 TYPICAL HATCH FRAME SECTIONS\nNTS"
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "page_num": 3,
+  "image_width": 10830,
+  "image_height": 7283,
+  "created_at": "2026-02-12T07:48:09.949852+00:00",
+  "blocks": [
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_006",
+      "coordinates": {
+        "x1": 7616.54541015625,
+        "y1": 4265.94921875,
+        "x2": 8581.8046875,
+        "y2": 6609.513671875
+      },
+      "layout_tag": "table",
+      "confidence": 0.9796837568283081,
+      "reading_order": 7,
+      "text": "<table>\n<thead>\n<tr>\n<th colspan=\"3\">POINT TABLE</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>POINT #</td>\n<td>NORTHING</td>\n<td>EASTING</td>\n</tr>\n<tr>\n<td>1</td>\n<td>13789011.2370</td>\n<td>2976800.6077</td>\n</tr>\n<tr>\n<td>2</td>\n<td>13789085.9712</td>\n<td>2976827.8847</td>\n</tr>\n<tr>\n<td>3</td>\n<td>13788995.5482</td>\n<td>2976839.0288</td>\n</tr>\n<tr>\n<td>4</td>\n<td>13788970.0816</td>\n<td>2976789.0236</td>\n</tr>\n<tr>\n<td>5</td>\n<td>13789000.0281</td>\n<td>2976777.2063</td>\n</tr>\n<tr>\n<td>6</td>\n<td>13789004.6729</td>\n<td>2976764.6862</td>\n</tr>\n<tr>\n<td>7</td>\n<td>13789034.0555</td>\n<td>2976753.0913</td>\n</tr>\n<tr>\n<td>8</td>\n<td>13789068.9600</td>\n<td>2976798.0491</td>\n</tr>\n<tr>\n<td>9</td>\n<td>13789093.2664</td>\n<td>2976814.0988</td>\n</tr>\n<tr>\n<td>10</td>\n<td>13789066.0565</td>\n<td>2976799.2250</td>\n</tr>\n<tr>\n<td>11</td>\n<td>13789075.0655</td>\n<td>2976821.4700</td>\n</tr>\n<tr>\n<td>12</td>\n<td>13789037.4652</td>\n<td>2976821.1319</td>\n</tr>\n<tr>\n<td>13</td>\n<td>13789034.3948</td>\n<td>2976787.3985</td>\n</tr>\n<tr>\n<td>14</td>\n<td>13789027.3831</td>\n<td>2976773.6307</td>\n</tr>\n<tr>\n<td>15</td>\n<td>13789013.0123</td>\n<td>2976780.6693</td>\n</tr>\n<tr>\n<td>16</td>\n<td>13789006.9901</td>\n<td>2976812.6688</td>\n</tr>\n<tr>\n<td>17</td>\n<td>13789014.2512</td>\n<td>2976826.9263</td>\n</tr>\n<tr>\n<td>18</td>\n<td>13789024.7783</td>\n<td>2976821.5651</td>\n</tr>\n<tr>\n<td>19</td>\n<td>13789020.1743</td>\n<td>2976794.7322</td>\n</tr>\n<tr>\n<td>20</td>\n<td>13789015.8015</td>\n<td>2976808.1814</td>\n</tr>\n<tr>\n<td>21</td>\n<td>13789080.2028</td>\n<td>2976760.7521</td>\n</tr>\n<tr>\n<td>22</td>\n<td>13789123.8115</td>\n<td>2976823.9583</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_007",
+      "coordinates": {
+        "x1": 9375.1640625,
+        "y1": 4227.47412109375,
+        "x2": 10651.5869140625,
+        "y2": 4718.3388671875
+      },
+      "layout_tag": "table",
+      "confidence": 0.9550080299377441,
+      "reading_order": 8,
+      "text": "<table>\n<thead>\n<tr>\n<th>REV.<br/>NO.</th>\n<th>DATE</th>\n<th>DESCRIPTION</th>\n<th>P.E.<br/>APPR.</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1</td>\n<td>11/25/2025</td>\n<td>IFB</td>\n<td>AD</td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_000",
+      "coordinates": {
+        "x1": 1247.2666015625,
+        "y1": 343.9151306152344,
+        "x2": 7560.5693359375,
+        "y2": 6979.2294921875
+      },
+      "layout_tag": "image",
+      "confidence": 0.9390691518783569,
+      "reading_order": 1,
+      "text": "यह चित्र एक तकनीकी योजना है जो एक गैस स्टेशन या इसी तरह की सुविधा के लेआउट को दर्शाती है। इसमें विभिन्न घटक शामिल हैं जैसे कि 24\" स्टॉर्म ओवरफ्लो लाइन, 10\" फोर्स मेन, 2\" घरेलू जल आपूर्ति मीटर, 10\" सैन सीवर लाइन, 24\" आरजीपी एसटीएम, 24\" प्रोप एसटीएम, 8' डबल स्विंग गेट, 8' फेंस, 2\" डब्ल्यूएल, आरपी2 बैकफ्लो प्रिवेंटर, और एक लिफ्ट स्टेशन। चित्र में एनोटेशन और नोट्स भी हैं जो विशिष्ट विवरणों को संदर्भित करते हैं, जैसे कि \"कनेक्ट टू 24\" स्टॉर्म ओवरफ्लो लाइन\" और \"मैच एक्जिस्ट पीवीएमटी एलिव\"। लेआउट में एक नियंत्रण पैनल, जनरेटर पैड, प्राकृतिक गैस जनरेटर, होज बिब, स्वेल, आरपी2 बैकफ्लो प्रिवेंटर और एक होज बिब भी शामिल है। लेआउट में विभिन्न पाइपों और नालों के लिए एनआईएस और एनवीएस जैसे लेबल शामिल हैं।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_008",
+      "coordinates": {
+        "x1": 9537.5224609375,
+        "y1": 4821.703125,
+        "x2": 9881.7138671875,
+        "y2": 5148.4931640625
+      },
+      "layout_tag": "image",
+      "confidence": 0.9089969992637634,
+      "reading_order": 9,
+      "text": "The image displays a logo consisting of the letters \"BCE\" in a bold, white, sans-serif typeface. The letters are set against a dark, textured background. The \"B\" and \"C\" are positioned in the upper section, while the \"E\" is located in the lower section. The design is characterized by a high-contrast color scheme and a clean, modern aesthetic."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_010",
+      "coordinates": {
+        "x1": 10051.21484375,
+        "y1": 4811.64208984375,
+        "x2": 10614.466796875,
+        "y2": 5459.677734375
+      },
+      "layout_tag": "image",
+      "confidence": 0.9006714224815369,
+      "reading_order": 11,
+      "text": "यह छवि एक आधिकारिक मुहर (स्टांप) है, विशेष रूप से टेक्सास राज्य से, जो एक दस्तावेज़ पर लगाई गई है। मुहर गोलाकार है और इसमें एक सजावटी बॉर्डर है जिसमें बिंदीदार रेखाएं और तारे बने हैं। मुहर के केंद्र में एक बड़ा, पांच-नुकीला तारा है। तारे के नीचे, \"ALEJANDRO DE LA ROSA\" नाम बड़े अक्षरों में छपा है। नाम के नीचे एक संख्या \"140684\" है। मुहर के निचले हिस्से में, \"LICENSED\" और \"PROFESSIONAL ENGINEER\" शब्द घुमावदार तरीके से लिखे गए हैं। मुहर के नीचे, एक हस्तलिखित हस्ताक्षर है जो \"A. De La Rosa\" पढ़ा जाता है। मुहर के बिल्कुल नीचे, तारीख \"10/23/2025\" मुद्रित है।"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_001",
+      "coordinates": {
+        "x1": 9621.1982421875,
+        "y1": 356.60650634765625,
+        "x2": 10359.3515625,
+        "y2": 1349.75244140625
+      },
+      "layout_tag": "image",
+      "confidence": 0.8862923979759216,
+      "reading_order": 2,
+      "text": "The image is a technical illustration, likely a schematic or archaeological drawing, rather than a data chart. It depicts a vertical object, resembling a spearhead or arrowhead, with a pointed tip and a cylindrical shaft featuring horizontal striations. A compass rose is positioned above the object, indicating the direction 'N' (North) is pointing upwards. Below the illustration is a linear scale bar used for measurement. The scale bar is marked with intervals of 0, 5', 10', and 20'. The visual data consists of a single object and a scale, with no plotted numerical data points or axes."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_012",
+      "coordinates": {
+        "x1": 8781.91015625,
+        "y1": 6335.48486328125,
+        "x2": 9364.09765625,
+        "y2": 6872.50244140625
+      },
+      "layout_tag": "image",
+      "confidence": 0.8857985734939575,
+      "reading_order": 13,
+      "text": "The image displays a circular blue ink stamp from the \"FORT BEND COUNTY ENGINEERING DEPARTMENT\". The text is arranged in a circular fashion around a central date. The top arc reads \"FORT BEND COUNTY\". The upper-middle section contains the word \"APPROVED\" in blue. The date \"OCT 3 1 2025\" is prominently stamped in red in the center. The bottom arc reads \"Valid One Year From Date\". The text \"FBC ENGINEERING APPROVAL\" is visible at the very top of the image, partially cropped."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_002",
+      "coordinates": {
+        "x1": 9465.943359375,
+        "y1": 1498.5313720703125,
+        "x2": 9860.083984375,
+        "y2": 1599.8358154296875
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.8809022307395935,
+      "reading_order": 3,
+      "text": "LEGEND"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_015",
+      "coordinates": {
+        "x1": 9399.5712890625,
+        "y1": 6490.6123046875,
+        "x2": 10671.560546875,
+        "y2": 6978.72265625
+      },
+      "layout_tag": "table",
+      "confidence": 0.8774351477622986,
+      "reading_order": 16,
+      "text": "<table>\n<thead>\n<tr>\n<th colspan=\"2\">JOB NUMBER: 14451-00</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>SUBMITTED: BGE, INC.<br/>SCALE: 1\"=10'<br/>DATE: OCTOBER 2025<br/>SURVEY BY: BGE, INC.<br/>F B NO:</td>\n<td>DESIGNED BY: J.T.S.<br/>DRAWN BY: J.T.S.<br/>SHEET NO 3 OF 22 SHEETS</td>\n</tr>\n</tbody>\n</table>"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_004",
+      "coordinates": {
+        "x1": 8312.142578125,
+        "y1": 2110.8544921875,
+        "x2": 8518.9853515625,
+        "y2": 2184.27001953125
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.858150839805603,
+      "reading_order": 5,
+      "text": "NOTES:"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_003",
+      "coordinates": {
+        "x1": 9195.7255859375,
+        "y1": 1683.9971923828125,
+        "x2": 10210.4912109375,
+        "y2": 1754.223876953125
+      },
+      "layout_tag": "paragraph",
+      "confidence": 0.7551855444908142,
+      "reading_order": 4,
+      "text": "1—————— CONTROL POINT NUMBER"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_016",
+      "coordinates": {
+        "x1": 478.3849792480469,
+        "y1": 7026.2197265625,
+        "x2": 888.1333618164062,
+        "y2": 7087.0498046875
+      },
+      "layout_tag": "footer",
+      "confidence": 0.720521867275238,
+      "reading_order": 17,
+      "text": "Session #: 081-090-548"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_005",
+      "coordinates": {
+        "x1": 8262.10546875,
+        "y1": 2159.654296875,
+        "x2": 10601.5546875,
+        "y2": 3875.109375
+      },
+      "layout_tag": "unordered-list",
+      "confidence": 0.7041015625,
+      "reading_order": 6,
+      "text": "1. POSITION WET WELL VENT ON NORTHWEST SIDE OF THE WET WELL. SEE WET WELL VENTING INSTALLATION DETAIL, SHEET 11.\n\n2. LIFT STATION SITE TO BE RECORDED WITH PLAT ENTITLED FORT BEND COUNTY MUD NO. 210 LIFT STATION NO. 1.\n\n3. AREA WITHIN FENCED LIFT STATION SITE SHALL HAVE A CRUSHED CONCRETE SURFACE, EXCEPT WHERE CONCRETE PAVEMENT IS PROPOSED. (CRUSHED CONCRETE TO BE MIN. 6\" PER TXDOT ITEM 247, GRADE 1, TYPE D).\n\n4. 2\" WATER LINE FROM HOSE BIBB TO 2\" PLUG INCLUDED IN THIS CONTRACT. IF PUBLIC WATER LINE IS NOT INSTALLED, CAP 2\" WATER LINE AND CONNECT WHEN PUBLIC WATER LINE HAS BEEN INSTALLED. WATER LINE FROM MAIN WATER TO DOMESTIC WATER METER SHALL BE CONTINUOUS TYPE K COPPER TUBING.\n\n5. HYDROMULCH AREAS OUTSIDE OF LIFT STATION FENCE TO PROPERTY BOUNDARIES.\n\n6. 10\" FORCE MAIN FROM THE LIFT STATION TO 10\" PLUG IS INCLUDED IN THIS CONTRACT. IF PUBLIC FORCE MAIN EXISTS REMOVE PLUG AND CONNECT.\n\n7. 18\" SANITARY LINE FROM MANHOLE TO 18\" PLUG IS INCLUDED IN THIS CONTRACT. IF PUBLIC SANITARY LINE EXISTS REMOVE PLUG AND CONNECT.\n\n8. 24\" STORM SEWER LINE FROM INLET A TO 24\" PLUG IS INCLUDED IN THIS CONTRACT. IF PUBLIC STORM SEWER LINE EXISTS REMOVE PLUG AND CONNECT.\n\n9. 25' WIDE DRIVEWAY SHALL BE USED FOR LIFT STATION ACCESS ONLY FOLLOWING CONSTRUCTION. SEE \"REPORT OF GEOTECHNICAL CONSULTING SERVICES FOR FORT BEND COUNTY MUNICIPAL DISTRICT NO. 210. LIFT STATION NO. 1 TWE PROJECT #25.13.055, DATED: 05/31/2025. PREPARED BY: TOLUNAY-WONG ENGINEERS INC."
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_011",
+      "coordinates": {
+        "x1": 9433.9453125,
+        "y1": 5512.30078125,
+        "x2": 10643.859375,
+        "y2": 5677.2890625
+      },
+      "layout_tag": "image-caption",
+      "confidence": 0.6513671875,
+      "reading_order": 12,
+      "text": "FORT BEND COUNTY M.U.D. NO. 210"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_014",
+      "coordinates": {
+        "x1": 9819.9453125,
+        "y1": 6200.54541015625,
+        "x2": 10247.8603515625,
+        "y2": 6294.51416015625
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.5741233825683594,
+      "reading_order": 15,
+      "text": "SITE PLAN"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_009",
+      "coordinates": {
+        "x1": 9442.5341796875,
+        "y1": 5209.81689453125,
+        "x2": 9969.6943359375,
+        "y2": 5446.43408203125
+      },
+      "layout_tag": "footnote",
+      "confidence": 0.5517284274101257,
+      "reading_order": 10,
+      "text": "BGE, Inc.\n10777 Westheimer, Suite 400\nHouston, TX 77042\nTel: 281-558-8700 • www.bgeinc.com\nTBPE Registration No. F-1046"
+    },
+    {
+      "block_id": "20260212_fbe2a3b4-7dbb-41ee-99c9-466e99a6c885_3_block_013",
+      "coordinates": {
+        "x1": 9585.5703125,
+        "y1": 5799.6708984375,
+        "x2": 10455.0283203125,
+        "y2": 5903.5458984375
+      },
+      "layout_tag": "section-title",
+      "confidence": 0.5265985727310181,
+      "reading_order": 14,
+      "text": "LIFT STATION NO. 1"
+    }
+  ]
+}

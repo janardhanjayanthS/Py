@@ -1,0 +1,30 @@
+product_id: P017 | product_name: Camera | quantity: 3 | price: 309.01 | type: electronic | warranty_period_in_years: 1.0 | 
+product_id: P038 | product_name: Headphones | quantity: 6 | price: 1154.84 | type: electronic | warranty_period_in_years: 1.5 | 
+product_id: P042 | product_name: Shampoo | quantity: 5 | price: 123.49 | type: regular | 
+product_id: P043 | product_name: Rice Bag | quantity: 6 | price: 43.0 | type: food | days_to_expire: 252 | is_vegetarian: True | 
+product_id: P047 | product_name: Router | quantity: 2 | price: 128.14 | type: electronic | warranty_period_in_years: 3.0 | 
+product_id: P053 | product_name: Keyboard | quantity: 9 | price: 136.36 | type: electronic | warranty_period_in_years: 3.0 | 
+product_id: P059 | product_name: VR Headset | quantity: 9 | price: 1290.42 | type: electronic | warranty_period_in_years: 1.5 | 
+product_id: P067 | product_name: Ice Cream | quantity: 8 | price: 40.42 | type: food | days_to_expire: 73 | is_vegetarian: False | 
+product_id: P074 | product_name: Microphone | quantity: 3 | price: 972.52 | type: electronic | warranty_period_in_years: 2.0 | 
+product_id: P077 | product_name: Wireless Charger | quantity: 3 | price: 752.92 | type: electronic | warranty_period_in_years: 3.0 | 
+product_id: P089 | product_name: Router | quantity: 9 | price: 856.02 | type: electronic | warranty_period_in_years: 1.0 | 
+product_id: P091 | product_name: Apple | quantity: 9 | price: 5.45 | type: food | days_to_expire: 325 | is_vegetarian: False | 
+product_id: P098 | product_name: Wireless Charger | quantity: 6 | price: 447.6 | type: electronic | warranty_period_in_years: 2.0 | 
+product_id: P101 | product_name: Smartphone | quantity: 7 | price: 119.56 | type: electronic | warranty_period_in_years: 1.5 | 
+product_id: P110 | product_name: Headphones | quantity: 6 | price: 691.84 | type: electronic | warranty_period_in_years: 1.0 | 
+product_id: P140 | product_name: Laptop | quantity: 8 | price: 1456.68 | type: electronic | warranty_period_in_years: 1.5 | 
+product_id: P146 | product_name: Wireless Mouse | quantity: 6 | price: 709.88 | type: electronic | warranty_period_in_years: 2.0 | 
+product_id: P157 | product_name: Tomato Sauce | quantity: 9 | price: 49.04 | type: food | days_to_expire: 336 | is_vegetarian: True | 
+product_id: P167 | product_name: Smartphone | quantity: 6 | price: 184.19 | type: electronic | warranty_period_in_years: 1.0 | 
+product_id: P192 | product_name: Backpack | quantity: 8 | price: 178.27 | type: regular | 
+product_id: P218 | product_name: Smart Speaker | quantity: 2 | price: 1007.38 | type: electronic | warranty_period_in_years: 3.0 | 
+product_id: P221 | product_name: Router | quantity: 1 | price: 323.41 | type: electronic | warranty_period_in_years: 1.5 | 
+product_id: P230 | product_name: Wireless Mouse | quantity: 8 | price: 1155.78 | type: electronic | warranty_period_in_years: 1.0 | 
+product_id: P236 | product_name: Tablet | quantity: 7 | price: 285.09 | type: electronic | warranty_period_in_years: 1.0 | 
+product_id: P249 | product_name: Spoon Set | quantity: 5 | price: 34.37 | type: regular | 
+product_id: P251 | product_name: Tablet | quantity: 3 | price: 183.68 | type: electronic | warranty_period_in_years: 1.0 | 
+product_id: P260 | product_name: Camera | quantity: 5 | price: 857.69 | type: electronic | warranty_period_in_years: 3.0 | 
+product_id: P268 | product_name: Cheese Block | quantity: 8 | price: 8.04 | type: food | days_to_expire: 185 | is_vegetarian: True | 
+product_id: P284 | product_name: Laptop | quantity: 7 | price: 1029.23 | type: electronic | warranty_period_in_years: 1.0 | 
+product_id: P291 | product_name: Mirror | quantity: 6 | price: 7.9 | type: regular | 
