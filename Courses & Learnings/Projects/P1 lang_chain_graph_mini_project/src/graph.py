@@ -44,7 +44,7 @@ def create_graph_image(graph) -> None:
     Returns:
         None
     """
-    with open("../data/graph_img_new_new.png", "wb+") as file:
+    with open("../data/graph_archi.png", "wb+") as file:
         file.write(graph.get_graph().draw_mermaid_png())
 
 
