@@ -50,4 +50,4 @@ def get_database_connection_string() -> str:
     else:
         host = "localhost"
 
-    return f"postgresql+psycopg://postgres:{password}@{host}:5432/vector_db"
+    return f"postgresql+psycopg://postgres:{password}@{host}:5433/vector_db"

@@ -21,4 +21,4 @@ lambda_handler = Mangum(app, lifespan="off")
 
 # TO RUN LOCALLY
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5002)
+    uvicorn.run(app, port=5002)
