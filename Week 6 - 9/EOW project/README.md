@@ -74,7 +74,13 @@ flowchart LR
     Client -->|POST /data/upload_web_content\nBearer token| UpWeb[Upload Web Page]
 
     AI --> LLM[(OpenAI)]
-    Chat --> VDB[(PGVector)] & LLM
+
+    Chat -->|1 - check| Cache[(LLM Cache\nPostgreSQL)]
+    Cache -->|hit - return cached| Chat
+    Cache -->|miss| VDB[(PGVector)]
+    VDB -->|context| LLM
+    LLM -->|2 - save response| Cache
+
     UpPDF --> Embed[Embeddings] --> VDB
     UpWeb --> Embed
 ```
